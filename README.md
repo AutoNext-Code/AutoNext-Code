@@ -4,4 +4,3 @@
 
 Sistema de Reserva de Puestos de Carga
 
-Buenas tarfdes
