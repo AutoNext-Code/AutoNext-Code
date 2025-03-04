@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: contrasena  # Contraseña del root 
+      MYSQL_DATABASE: autoNextDB         # Base de datos predeterminada
+      MYSQL_USER: backuser                 # Usuario de base de datos
+      MYSQL_PASSWORD: backcontrasena         # Contraseña para el usuario
+    ports:
+      - "3306:3306"  
+    volumes:
+      - mysql_data:/var/lib/mysql        
+    networks:
+      - mysql_network
+
+volumes:
+  mysql_data:
+
+networks:
+  mysql_network:
+    driver: bridge
