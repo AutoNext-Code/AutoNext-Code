@@ -4,16 +4,17 @@
   
     <!-- Usar ngFor para iterar sobre los puntos y agregar círculos con colores -->
      @for (point of points; track $index) {
-      <svg 
-        [attr.x]="point.x - 23" 
-        [attr.y]="point.y - 25" 
-        width="40" 
-        height="44" 
-        class="interactive-point"
-        [style.filter]="point.color"
+        <g 
+        [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
         (click)="onPointClick(point)">
-        <use xlink:href="./svg/CarIcon.svg#custom-marker"></use>
-       </svg>
+        
+        <!-- Aplicamos el color del filtro -->
+        <use 
+          xlink:href="./svg/CarIcon.svg#custom-marker" 
+          width="35" height="44"
+          [attr.filter]="point.color">
+        </use>
+      </g>
      }
 </svg>
   
