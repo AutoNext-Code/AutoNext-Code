@@ -1,4 +1,4 @@
-package com.autonext.code.autonext_server.controller;
+package com.autonext.code.autonext_server.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
