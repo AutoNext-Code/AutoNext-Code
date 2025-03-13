@@ -4,13 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -37,7 +43,7 @@ public class User {
   private String jobPosition;
 
   @Column(nullable = false)
-  private Role rol;
+  private Role role;
 
   @Column(nullable = false)
   private boolean isBanned;
@@ -48,7 +54,7 @@ public class User {
   private String confirmationToken;
 
   public User() {
-    this.rol = Role.User;
+    this.role = Role.User;
     this.isBanned = false;
     this.emailConfirm = false;
     this.jobPosition = "";
@@ -111,12 +117,12 @@ public class User {
     this.jobPosition = jobPosition;
   }
 
-  public Role getRol() {
-    return rol;
+  public Role getRole() {
+    return role;
   }
 
-  public void setRol(Role rol) {
-    this.rol = rol;
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   public boolean isBanned() {
@@ -139,4 +145,17 @@ public class User {
     return confirmationToken;
   }
 
+  public void setConfirmationToken(String confirmationToken) {
+    this.confirmationToken = confirmationToken;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
 }
