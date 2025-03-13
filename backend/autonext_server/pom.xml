@@ -50,19 +50,33 @@
 		</java.version>
 	</properties>
 	<dependencies>
-
 		<dependency>
-			<groupId>jakarta.persistence</groupId>
-			<artifactId>jakarta.persistence-api</artifactId>
-			<version>3.2.0</version>
+			<groupId>
+				jakarta.persistence
+			</groupId>
+			<artifactId>
+				jakarta.persistence-api
+			</artifactId>
+			<version>
+				3.1.0
+			</version>
 		</dependency>
-
-		<!--
 		<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<groupId>
+				org.springframework.boot
+			</groupId>
+			<artifactId>
+				spring-boot-starter-security
+			</artifactId>
 		</dependency>
-		-->
+		<dependency>
+			<groupId>
+				org.springframework.boot
+			</groupId>
+			<artifactId>
+				spring-boot-starter-data-jpa
+			</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>
 				org.springframework.boot
@@ -99,13 +113,17 @@
 				true
 			</optional>
 		</dependency>
-		<!--
 		<dependency>
-		<groupId>com.mysql</groupId>
-		<artifactId>mysql-connector-j</artifactId>
-		<scope>runtime</scope>
+			<groupId>
+				mysql
+			</groupId>
+			<artifactId>
+				mysql-connector-java
+			</artifactId>
+			<version>
+				8.0.33
+			</version>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>
 				org.springframework.boot
@@ -138,6 +156,20 @@
 			<version>
 				2.2.0
 			</version>
+		</dependency>
+		<dependency>
+			<groupId>
+				org.hibernate
+			</groupId>
+			<artifactId>
+				hibernate-core
+			</artifactId>
+			<version>
+				6.6.10.Final
+			</version>
+			<type>
+				pom
+			</type>
 		</dependency>
 	</dependencies>
 	<build>
