@@ -1,0 +1,19 @@
+<svg width="800" height="600" viewBox="0 0 800 600">
+    <!-- Imagen de fondo -->
+    <image href="./png/mapas/mapa1.png" width="800" height="600" />
+  
+    <!-- Usar ngFor para iterar sobre los puntos y agregar círculos con colores -->
+     @for (point of points; track $index) {
+      <svg 
+        [attr.x]="point.x - 23" 
+        [attr.y]="point.y - 25" 
+        width="40" 
+        height="44" 
+        class="interactive-point"
+        [style.filter]="point.color"
+        (click)="onPointClick(point)">
+        <use xlink:href="./svg/CarIcon.svg#custom-marker"></use>
+       </svg>
+     }
+</svg>
+  
