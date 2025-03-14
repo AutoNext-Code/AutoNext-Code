@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CustomButtonComponent } from '../../../shared/custom-button/custom-button.component';
-
-
+import { InputComponent } from "../../../shared/components/ui/input/input.component";
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'auth-login',
-  imports: [CustomButtonComponent],
+  imports: [InputComponent, CustomButtonComponent, CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
