@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CustomButtonComponent } from '../../../shared/custom-button/custom-button.component';
+import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
 import { InputComponent } from "../../../shared/components/ui/input/input.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
