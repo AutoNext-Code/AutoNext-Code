@@ -9,3 +9,7 @@ export const SWAGGER = `${BASE_URL}swagger-ui/index.html`
 // PRUEBA
 
 export const PRUEBA = `${API_BASE_URL}`;
+
+/* ENDPOINTS DE AUTH */
+
+export const LOGIN_ENDPOINT = `${API_BASE_URL}auth/login`;
