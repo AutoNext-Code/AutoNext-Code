@@ -1,0 +1,46 @@
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+} from '@angular/core';
+
+@Component({
+  selector: 'app-custom-button',
+  templateUrl: './custom-button.component.html',
+  imports: [CommonModule],
+})
+export class CustomButtonComponent {
+  @Input() label: string = 'Click';
+  @Input() type: string = 'button';
+  @Input() disabled?: boolean = false;
+  @Input() color: 'dark-blue' | 'light-blue' | 'gray' | 'red' | 'green' =
+    'dark-blue';
+  @Input() extraClasses?: string = '';
+  @Input() icon?: string = '';
+  @Input() iconSize?: string = '24px';
+
+  @Output() onClick = new EventEmitter<Event>();
+
+  @HostBinding('style.backgroundColor') get backgroundColor() {
+    return `var(--${this.color})`;
+  }
+
+  handleClick(event: Event) {
+      this.onClick.emit(event);
+  }
+
+  get buttonClasses() {
+    const baseClasses =
+      'px-4 py-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none text-white';
+    return `${baseClasses} ${this.extraClasses}`;
+  }
+
+  get buttonStyle() {
+    return {
+      backgroundColor: `var(--${this.color})`,
+    };
+  }
+}
