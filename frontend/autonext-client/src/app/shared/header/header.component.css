@@ -1,7 +1,7 @@
 .bg-mydark-blue {
-    background-color: #0067B8;
+    background-color: var(--dark-blue);
 }
 
 .text-mygray {
-    color: #757575;
+    color: var(--gray);
 }
