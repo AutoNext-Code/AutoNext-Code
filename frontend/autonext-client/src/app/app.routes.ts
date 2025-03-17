@@ -19,7 +19,38 @@ export const routes: Routes = [
     },
     {
         path: 'admin-home',
-        loadComponent: () => import('./admin/pages/home-admin-page/home-admin-page.component').then(m => m.HomeAdminPageComponent)
+        loadComponent: () => import('./admin/layout/admin-layout/home-admin-page.component').then(m => m.HomeAdminPageComponent),
+        children: [
+          {
+            path: 'panel-admin',
+            loadComponent: () => import('./admin/pages/admin-panel-page/admin-panel-page.component').then(m => m.AdminPanelPageComponent),
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () => import('./admin/pages/dashboard-page/dashboard-page.component').then(m => m.DashboardPageComponent),
+          },
+          {
+            path: 'incidents',
+            loadComponent: () => import('./admin/pages/incidents-page/incidents-page.component').then(m => m.IncidentsPageComponent),
+          },
+          {
+            path: 'place-management',
+            loadComponent: () => import('./admin/pages/place-management-page/place-management-page.component').then(m => m.PlaceManagementPageComponent),
+          },
+          {
+            path: 'delegation-management',
+            loadComponent: () => import('./admin/pages/delegation-management-page/delegation-management-page.component').then(m => m.DelegationManagementPageComponent),
+          },
+          {
+            path: 'user-management',
+            loadComponent: () => import('./admin/pages/user-management-page/user-management-page.component').then(m => m.UserManagementPageComponent),
+          },
+          {
+            path: '',
+            redirectTo: 'panel-admin',
+            pathMatch: 'full'
+        }
+        ]
     },
     {
           path: '**',

@@ -9,3 +9,8 @@
 a:hover svg {
     fill: white;
 }
+
+.active {
+    background-color: var(--light-blue);
+    color: white;
+}
