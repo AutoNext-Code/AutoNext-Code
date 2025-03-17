@@ -4,10 +4,16 @@ import { AuthLayoutComponent } from './auth/layouts/auth-layout/auth-layout.comp
 import { LoginComponent } from './auth/pages/login/login.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: MapsComponent,
-  },
+
+    {
+        path: 'home',
+        loadComponent: () => import('./user/pages/home-user-page/home-user-page.component').then(m => m.HomeUserPageComponent)
+    },
+    {
+        path: 'admin-home',
+        loadComponent: () => import('./admin/pages/home-admin-page/home-admin-page.component').then(m => m.HomeAdminPageComponent)
+    },
+    
   {
     path: 'auth',
     redirectTo: 'auth/login',
@@ -24,7 +30,8 @@ export const routes: Routes = [
     ]
   },
   {
-    path: '**',
-    redirectTo: '',
-  }
+        path: '**',
+        redirectTo: 'home'
+   }
 ];
+

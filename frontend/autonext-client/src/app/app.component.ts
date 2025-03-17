@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { SWAGGER } from './config';
-import { HeaderComponent } from "./shared/header/header.component";
-import { MapsComponent } from "./maps/maps/maps.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterModule, RouterOutlet, HeaderComponent],
+
+  imports: [RouterModule, RouterOutlet],
+
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
