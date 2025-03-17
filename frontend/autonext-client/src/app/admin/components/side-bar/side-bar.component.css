@@ -1,0 +1,7 @@
+.bg-mylight-blue:hover {
+    background-color: var(--light-blue);
+}
+
+a:hover svg {
+    fill: white;
+}
