@@ -27,7 +27,7 @@ export class MapsComponent {
   //LISTA DE LOS PUNTOS
   points = [
 
-    { x: 20,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+    { x: 30,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
     { x: 60,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
     { x: 90,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
     { x: 125, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -50,6 +50,7 @@ export class MapsComponent {
     { x: 690, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
     { x: 720, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
     { x: 750, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+    { x: 790, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
 
     { x: 155, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
     { x: 190, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
@@ -88,7 +89,7 @@ export class MapsComponent {
     { x: 585, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
     { x: 620, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
 
-    { x: 20,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+    { x: 30,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
     { x: 60,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
     { x: 90,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
     { x: 125, y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },

@@ -1,20 +1,23 @@
-<svg width="800" height="600" viewBox="0 0 800 600">
+<div  class="lg:flex lg:justify-center w-full overflow-x-auto">
+  
+  <svg width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
     <!-- Imagen de fondo -->
     <image href="./png/mapas/mapa1.png" width="800" height="600" />
-  
+    
     <!-- Usar ngFor para iterar sobre los puntos y agregar círculos con colores -->
-     @for (point of points; track $index) {
-        <g 
-        [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
-        (click)="onPointClick(point)">
-        
-        <!-- Aplicamos el color del filtro -->
-        <use 
-          xlink:href="./svg/CarIcon.svg#custom-marker" 
-          width="35" height="44"
-          [attr.filter]="point.color">
-        </use>
-      </g>
-     }
-</svg>
-  
+    @for (point of points; track $index) {
+      <g 
+      [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
+      (click)="onPointClick(point)">
+      
+      <!-- Aplicamos el color del filtro -->
+      <use 
+        xlink:href="./svg/CarIcon.svg#custom-marker" 
+        width="35" height="44"
+        [attr.filter]="point.color">
+      </use>
+    </g>
+  }
+  </svg>
+
+</div>
