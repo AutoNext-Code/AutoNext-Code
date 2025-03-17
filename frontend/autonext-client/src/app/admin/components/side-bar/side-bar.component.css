@@ -2,6 +2,10 @@
     background-color: var(--light-blue);
 }
 
+.bg-mydark-blue {
+    background-color: var(--dark-blue);
+}
+
 a:hover svg {
     fill: white;
 }
