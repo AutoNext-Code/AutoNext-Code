@@ -4,149 +4,158 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private int id;
+  @Id
+  @GeneratedValue(strategy = IDENTITY)
+  private int id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+  @Column(unique = true, nullable = false)
+  private String email;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(nullable = false)
-    private String surname;
+  @Column(nullable = false)
+  private String surname;
 
+  @Column(nullable = false)
+  private String password;
 
-    @Column(nullable = false)
-    private String password;
+  // private List<Car> cars; TODO:
 
-    // private List<Car> cars; TODO:
+  // private List<Booking> booking; TODO:
 
-    // private List<Booking> booking; TODO:
+  // private WorkCenter workCenter; TODO:
 
-    // private WorkCenter workCenter; TODO:
+  private String jobPosition;
 
-    private String jobPosition;
+  @Column(nullable = false)
+  private Role role;
 
-    @Column(nullable = false)
-    private Role rol;
+  @Column(nullable = false)
+  private boolean isBanned;
 
-    @Column(nullable = false)
-    private boolean isBanned;
-    
-    @Column(nullable = false)
-    private boolean emailConfirm; 
+  @Column(nullable = false)
+  private boolean emailConfirm;
 
-    public int getId() {
-        return id;
-    }
+  private String confirmationToken;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public User() {
+    this.role = Role.User;
+    this.isBanned = false;
+    this.emailConfirm = false;
+    this.jobPosition = "";
+    this.confirmationToken = "";
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public User(String email, String name, String surname, String password) {
+    super();
+    this.email = email;
+    this.name = name;
+    this.surname = surname;
+    this.password = password;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getSurname() {
-        return surname;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getSurname() {
+    return surname;
+  }
 
-    public String getJobPosition() {
-        return jobPosition;
-    }
+  public void setSurname(String surname) {
+    this.surname = surname;
+  }
 
-    public void setJobPosition(String jobPosition) {
-        this.jobPosition = jobPosition;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public Role getRol() {
-        return rol;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setRol(Role rol) {
-        this.rol = rol;
-    }
+  public String getJobPosition() {
+    return jobPosition;
+  }
 
-    public boolean isBanned() {
-        return isBanned;
-    }
+  public void setJobPosition(String jobPosition) {
+    this.jobPosition = jobPosition;
+  }
 
-    public void setBanned(boolean isBanned) {
-        this.isBanned = isBanned;
-    }
+  public Role getRole() {
+    return role;
+  }
 
-    public boolean isEmailConfirm() {
-        return emailConfirm;
-    }
+  public void setRole(Role role) {
+    this.role = role;
+  }
 
-    public void setEmailConfirm(boolean emailConfirm) {
-        this.emailConfirm = emailConfirm;
-    }
+  public boolean isBanned() {
+    return isBanned;
+  }
 
-    public String getConfirmationToken() {
-        return confirmationToken;
-    }
+  public void setBanned(boolean isBanned) {
+    this.isBanned = isBanned;
+  }
 
-    public void setConfirmationToken(String confirmationToken) {
-        this.confirmationToken = confirmationToken;
-    }
+  public boolean isEmailConfirm() {
+    return emailConfirm;
+  }
 
-    private String confirmationToken;
+  public void setEmailConfirm(boolean emailConfirm) {
+    this.emailConfirm = emailConfirm;
+  }
 
-    public User() {
-        this.rol = Role.User;
-        this.isBanned = false;
-        this.emailConfirm = false;
-        this.jobPosition = "";
-        this.confirmationToken = "";
-    }
+  public String getConfirmationToken() {
+    return confirmationToken;
+  }
 
-    public User(String email, String name, String surname, String password) {
-        super();
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
-    }
+  public void setConfirmationToken(String confirmationToken) {
+    this.confirmationToken = confirmationToken;
+  }
 
-    
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.emptyList();
+  }
 
-
-    
+  @Override
+  public String getUsername() {
+    return email;
+  }
 }

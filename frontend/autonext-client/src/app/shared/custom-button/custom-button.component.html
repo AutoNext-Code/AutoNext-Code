@@ -1,0 +1,17 @@
+<button
+  [type]="type"
+  [ngClass]="buttonClasses"
+  [ngStyle]="buttonStyle"
+  (click)="handleClick($event)"
+>
+  <span class="flex items-center gap-2"
+    >{{ label }}
+    <span
+      *ngIf="icon"
+      class="material-icons relative top-[2px]"
+      [style.fontSize]="iconSize"
+    >
+      {{ icon }}
+    </span>
+  </span>
+</button>
