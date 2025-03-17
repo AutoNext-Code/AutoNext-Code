@@ -221,10 +221,90 @@ export class MapsComponent {
   // ];
 
 
+  // ///////////////
+  // // 
+  // // 
+  // // MAPA3
+  // // 
+  // // 
+  // ///////////////
+
+  // points = [
+
+  //   /* Arriba */
+    
+  //     { x: 135,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 170,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 203,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      
+  //     { x: 240,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 275,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 304,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+
+  //     { x: 340,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 375,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+
+  //   /* Centro Izquierda Arriba */
+
+  //     { x: 135,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 170,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 215,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 250,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 315,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 345,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 385,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 420,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //   /* Centro Izquierda Abajo */
+
+  //     { x: 135,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 170,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+
+  //     { x: 385,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 420,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+
+  //   /* Centro Derecha */
+
+  //     { x: 550,  y: 265, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
+  //     { x: 550,  y: 295, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
+
+  //     { x: 540,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+  //     { x: 575,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+
+  //   /* Abajo */
+
+
+  //     { x: 135,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 170,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 215,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 250,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 310,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 345,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 385,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 420,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 455,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 495,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 540,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 575,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  //     { x: 615,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+  //     { x: 655,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+
+  // ];
+
+
   ///////////////
   // 
   // 
-  // MAPA3
+  // MAPA4
   // 
   // 
   ///////////////
@@ -233,70 +313,35 @@ export class MapsComponent {
 
     /* Arriba */
     
-      { x: 135,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 170,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 203,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 160,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 201,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 239,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 277,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 315,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 355,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 394,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 433,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
       
-      { x: 240,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 275,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 304,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 586,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 625,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
+      { x: 665,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
 
-      { x: 340,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 375,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-
-    /* Centro Izquierda Arriba */
-
-      { x: 135,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 170,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 215,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 250,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 315,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 345,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 385,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 420,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-    /* Centro Izquierda Abajo */
-
-      { x: 135,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 170,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-
-      { x: 385,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 420,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-
-    /* Centro Derecha */
-
-      { x: 550,  y: 265, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
-      { x: 550,  y: 295, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
-
-      { x: 540,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-      { x: 575,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
 
     /* Abajo */
 
+      { x: 160,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 201,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 239,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 277,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 315,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 355,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
 
-      { x: 135,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 170,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 215,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 250,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 310,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 345,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 385,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 420,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 455,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 495,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 540,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 575,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-
-      { x: 615,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      { x: 655,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 467,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 506,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 546,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 586,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 625,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
+      { x: 665,  y: 370, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
 
   ];
 
