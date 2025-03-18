@@ -5,7 +5,6 @@ import { AuthService } from '../../auth/services/auth.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'shared-header',
   imports: [CommonModule, CustomButtonComponent],
@@ -38,9 +37,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       } else {
         this.name = null;
       }
-      // prueba hasta que login sea funcional
-      // this.token = "soy un token"
-      // this.name = "User"
     });
   }
 
@@ -48,13 +44,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuOpen = !this.menuOpen;
   }
 
-  public navigate(): void {
-    this.router.navigate(['/']);
+  public navigate(path: string): void {
+    this.router.navigate([path]);
   }
 
   public logout(): void {
     console.log("Logout");
     this.authService.logout();
+    this.navigate('/auth/login');
   }
 
   ngOnDestroy(): void {
