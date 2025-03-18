@@ -1,0 +1,13 @@
+<form [formGroup]="form" class="p-4 border rounded-lg shadow-lg w-96">
+  <!-- Categoría -->
+  <label class="block font-semibold mb-1" [textContent]="catText"></label>
+  <select formControlName="cat" (change)="updateSubCats()" class="border p-2 rounded w-full">
+    <option *ngFor="let cat of cats" [value]="cat">{{ cat }}</option>
+  </select>
+
+  <!-- Subcategoría -->
+  <label class="block mt-4 font-semibold mb-1" [textContent]="subCatText"></label>
+  <select formControlName="subcat" class="border p-2 rounded w-full" >
+    <option *ngFor="let subcat of subCatOptions" [value]="subcat">{{ subcat }}</option>
+  </select>
+</form>

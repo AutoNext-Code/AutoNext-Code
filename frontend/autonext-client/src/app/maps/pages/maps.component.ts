@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Slot } from '../types/slot.type';
+import { SelectDepComponent } from "../../shared/components/ui/select-dep/select-dep.component";
 
 @Component({
   selector: 'app-maps',
@@ -10,11 +11,14 @@ import { Slot } from '../types/slot.type';
 })
 export class MapsComponent implements OnInit {
 
-  myForm!: FormGroup; 
+
+
+
+  myForm!: FormGroup;
 
   ngOnInit() {
     this.myForm = new FormGroup({
-      selectedMap: new FormControl('mapa1') 
+      selectedMap: new FormControl('mapa1')
     });
   }
 
@@ -36,11 +40,11 @@ export class MapsComponent implements OnInit {
 
 
   ///////////////
-  // 
-  // 
+  //
+  //
   // MAPAS
-  // 
-  // 
+  //
+  //
   // ////////////
 
 
@@ -48,9 +52,9 @@ export class MapsComponent implements OnInit {
 
     mapa1: [
 
-        
+
         /* Arriba */
-        
+
         { x: 30,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 60,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 90,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -75,9 +79,9 @@ export class MapsComponent implements OnInit {
         { x: 720, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 750, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 790, y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-        
+
         /* Centro Arriba */
-        
+
         { x: 155, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 190, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 225, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
@@ -93,16 +97,16 @@ export class MapsComponent implements OnInit {
         { x: 555, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 585, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 620, y: 270, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-        
+
         /* Derecha */
-        
+
         { x: 740, y: 260, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
         { x: 740, y: 290, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
         { x: 740, y: 320, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
         { x: 740, y: 350, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
-        
+
         /* Centro Abajo */
-        
+
         { x: 155, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 190, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 225, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -118,9 +122,9 @@ export class MapsComponent implements OnInit {
         { x: 555, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 585, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 620, y: 330, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-        
+
         /* Abajo */
-        
+
         { x: 30,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 60,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 90,  y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
@@ -146,9 +150,9 @@ export class MapsComponent implements OnInit {
       ],
 
       mapa2: [
-      
+
       /* Arriba */
-        
+
       { x: 180,  y: 160, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
       { x: 210,  y: 160, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
 
@@ -191,7 +195,7 @@ export class MapsComponent implements OnInit {
 
       { x: 375,  y: 310, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
       { x: 405,  y: 310, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-      
+
       { x: 507,  y: 310, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
       { x: 535,  y: 310, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
 
@@ -222,72 +226,72 @@ export class MapsComponent implements OnInit {
 
       mapa3: [
         /* Arriba */
-      
+
         { x: 135,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 170,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 203,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-        
+
         { x: 240,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 275,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 304,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-  
+
         { x: 340,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 375,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-  
+
       /* Centro Izquierda Arriba */
-  
+
         { x: 135,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 170,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 215,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 250,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 315,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 345,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 385,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 420,  y: 275, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
       /* Centro Izquierda Abajo */
-  
+
         { x: 135,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 170,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-  
+
         { x: 385,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 420,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-  
+
       /* Centro Derecha */
-  
+
         { x: 550,  y: 265, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
         { x: 550,  y: 295, label: '', color: this.colors.available, direccion: this.direcciones.izquierda },
-  
+
         { x: 540,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 575,  y: 345, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-  
+
       /* Abajo */
-  
-  
+
+
         { x: 135,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 170,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 215,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 250,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 310,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 345,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 385,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 420,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 455,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 495,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 540,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 575,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
         { x: 615,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 655,  y: 500, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
-  
+
       ],
 
       mapa4: [
@@ -302,7 +306,7 @@ export class MapsComponent implements OnInit {
         { x: 355,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 394,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 433,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
-        
+
         { x: 586,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 625,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 665,  y: 200, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -327,9 +331,9 @@ export class MapsComponent implements OnInit {
       ],
 
       mapa5: [
-        
+
       /* Arriba */
-      
+
         { x: 75,   y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 110,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 147,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -349,7 +353,7 @@ export class MapsComponent implements OnInit {
         { x: 655,  y: 140, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
 
     /* Centro Arriba */
-      
+
         { x: 75,   y: 280, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 110,  y: 280, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 147,  y: 280, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
@@ -367,7 +371,7 @@ export class MapsComponent implements OnInit {
         { x: 583,  y: 280, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
 
     /* Centro Abajo */
-      
+
         { x: 75,   y: 350, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 110,  y: 350, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
         { x: 147,  y: 350, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -386,7 +390,7 @@ export class MapsComponent implements OnInit {
 
     /* Abajo */
 
-    
+
         { x: 110,  y: 490, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 147,  y: 490, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
         { x: 185,  y: 490, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
@@ -403,7 +407,7 @@ export class MapsComponent implements OnInit {
 
       ]
 
-      
+
     };
 
 }
