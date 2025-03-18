@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { CustomButtonComponent } from '../../../shared/custom-button/custom-button.component';
 import { InputComponent } from "../../../shared/components/ui/input/input.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +6,7 @@ import { AuthCardComponent } from "../../components/layouts/auth-card/auth-card.
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
 
 @Component({
   selector: 'auth-login',
