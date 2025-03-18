@@ -8,16 +8,12 @@ import { LOGIN_ENDPOINT } from '../../config';
   providedIn: 'root',
 })
 export class AuthHttpService {
+  private http: HttpClient = inject(HttpClient);
 
-  private http: HttpClient = inject(HttpClient)
-
-  constructor() { }
+  constructor() {}
 
   login(email: string, password: string): Observable<string> {
     const body = { email, password };
-
-    return this.http.post<any>(LOGIN_ENDPOINT, body);
+    return this.http.post(LOGIN_ENDPOINT, body, { responseType: 'text' });
   }
-
-
 }
