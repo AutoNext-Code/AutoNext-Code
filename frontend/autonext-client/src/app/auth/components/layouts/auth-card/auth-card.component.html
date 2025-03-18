@@ -1,9 +1,14 @@
-<div class="flex justify-center items-center h-screen">
-  <div class="bg-white rounded-[60px] p-6 w-8/9 md:w-3/7 max-w-[775px]  h-6/9 max-h-[750px] shadow-lg text-center">
-    <h2 class="mb-6 text-2xl text-gray-800">Autonext</h2>
-    <div class="mx-15 mt-20">
-      <ng-content></ng-content>  <!-- Aquí se colocarán los contenidos hijos -->
+<div class="min-h-screen flex items-center justify-center">
+  <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md mx-5">
+    <div class="flex items-center justify-center space-x-3 mb-6">
+      <img src="assets/logo.png" alt="Logo" class="w-12 h-12 rounded-full" />
+      <h1 class="text-3xl font-bold">
+        <span class="color-lightblue">Auto</span>
+        <span class="color-darkblue">Next</span>
+      </h1>
     </div>
-
+    <div>
+      <ng-content></ng-content> <!-- Aquí se colocarán los contenidos hijos -->
+    </div>
   </div>
 </div>

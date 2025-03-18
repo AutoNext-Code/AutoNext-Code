@@ -1,0 +1,7 @@
+.color-lightblue {
+    color: var(--light-blue);
+}
+
+.color-darkblue {
+    color: var(--dark-blue);
+}
