@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ICONS } from '../../../shared/icons';
@@ -14,6 +14,7 @@ export class SideBarComponent {
 
   public menuItems: { route: string; name: string; icon: SafeHtml }[];
 
+  @Output() sidebarToggled = new EventEmitter<boolean>();
   isSidebarOpen = true;
 
   constructor(private sanitizer: DomSanitizer) {
@@ -33,6 +34,7 @@ export class SideBarComponent {
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+    this.sidebarToggled.emit(this.isSidebarOpen);
   }
 
 }

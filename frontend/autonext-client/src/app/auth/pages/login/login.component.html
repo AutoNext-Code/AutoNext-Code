@@ -1,15 +1,35 @@
 <p>login works!</p>
 
 <auth-card>
-  <p>Este es el contenido hijo dentro del card.</p>
-  <app-custom-button
-  label="Entrar"
-  type="submit"
-  color="dark-blue"
-  icon="arrow_forward"
-  iconSize="15px"
-  (onClick)="login()">
-</app-custom-button>
-<shared-input  type="email" icon="mail" placeholder="Correo electrónico"></shared-input>
-<shared-input  type="password" icon="lock" placeholder="Contraseña"></shared-input>
+  <div class="flex flex-col ">
+
+    <h1 class="place-self-start text-4xl font-bold">Iniciar sesión</h1>
+    <div class="m-10">
+
+      <shared-input  type="email" icon="mail" placeholder="Correo electrónico"></shared-input>
+      <shared-input  type="password" icon="lock" placeholder="Contraseña"></shared-input>
+      <div class="flex justify-between">
+        <p class="text-xl">¿Has olvidado la contraseña?</p>
+        <app-custom-button class="h-10"
+        label="Entrar"
+        type="submit"
+        color="dark-blue"
+        icon="arrow_forward"
+        iconSize="15px"
+        (onClick)="login()">
+        </app-custom-button>
+      </div>
+
+
+    </div>
+
+    <div>
+      <p class="place-self-center">¿No tienes una cuenta todavía? <span class="text-blue-400">Regístrate</span></p>
+    </div>
+
+
+
+
+  </div>
+
 </auth-card>

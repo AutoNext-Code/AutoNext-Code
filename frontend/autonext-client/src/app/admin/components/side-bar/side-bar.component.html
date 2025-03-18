@@ -1,12 +1,10 @@
 <nav class="fixed top-16 left-0 h-full bg-white w-64 transition-transform duration-300 shadow-lg"
     [ngClass]="{'transform -translate-x-full': !isSidebarOpen}">
-    <!-- Logo y Cerrar -->
+
     <div class="flex justify-between items-center p-2 m-2 border-b border-gray-500">
         <h2 class="text-lg">AutoNext Code</h2>
-        <button class="p-2 rounded-sm bg-mydark-blue text-white cursor-pointer" (click)="toggleSidebar()">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
-            </svg>
+        <button class="material-icons p-2 rounded-sm bg-mydark-blue text-white cursor-pointer" (click)="toggleSidebar()">
+            close
         </button>
     </div>
 
