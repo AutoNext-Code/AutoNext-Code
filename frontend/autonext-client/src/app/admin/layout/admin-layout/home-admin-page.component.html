@@ -1,7 +1,7 @@
 <shared-header></shared-header>
 <div class="flex">
-    <admin-sidebar></admin-sidebar>
-    <div class="ml-64 w-full p-6 transition-all duration-300">
+    <admin-sidebar (sidebarToggled)="isSidebarOpen = $event"></admin-sidebar>
+    <div [ngClass]="{'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen}" class="w-full p-6 transition-all duration-300">
         <router-outlet></router-outlet>
     </div>
 </div>
