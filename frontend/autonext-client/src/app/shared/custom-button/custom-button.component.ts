@@ -16,11 +16,12 @@ export class CustomButtonComponent {
   @Input() label: string = 'Click';
   @Input() type: string = 'button';
   @Input() disabled?: boolean = false;
-  @Input() color: 'dark-blue' | 'light-blue' | 'gray' | 'red' | 'green' =
+  @Input() color: 'dark-blue' | 'light-blue' | 'gray' | 'red' | 'green' | 'light-gray' =
     'dark-blue';
   @Input() extraClasses?: string = '';
   @Input() icon?: string = '';
   @Input() iconSize?: string = '24px';
+  @Input() iconPosition: 'left' | 'right' = 'left';
 
   @Output() onClick = new EventEmitter<Event>();
 
