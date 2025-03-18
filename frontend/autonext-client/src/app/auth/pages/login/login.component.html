@@ -3,8 +3,8 @@
     <h1 class="text-2xl font-bold">Iniciar sesión</h1>
 
     <div class="space-y-6">
-      <shared-input type="email" icon="mail" placeholder="Correo electrónico"></shared-input>
-      <shared-input type="password" icon="lock" placeholder="Contraseña"></shared-input>
+      <shared-input type="email" icon="mail" [(ngModel)]="email" placeholder="Correo electrónico"></shared-input>
+      <shared-input type="password" icon="lock" [(ngModel)]="password"  placeholder="Contraseña"></shared-input>
 
       <div class="flex justify-between items-center">
         <p class="text-sm sm:text-base">¿Has olvidado la contraseña?</p>
