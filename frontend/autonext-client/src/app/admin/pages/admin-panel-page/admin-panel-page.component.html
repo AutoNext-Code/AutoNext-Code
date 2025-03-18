@@ -1,1 +1,19 @@
-<p>admin-panel-page works!</p>
+<div class="flex flex-wrap justify-center mt-10">
+
+    @for (item of menuItems; track $index) {
+        
+        <div class="p-2 lg:w-1/3">
+
+            <admin-card 
+                [cardData]="{
+                    title: item.title, 
+                    content: item.content, 
+                    url: item.url, 
+                    icon: item.icon
+                }"
+            />
+            
+    </div>
+
+    }
+</div>
