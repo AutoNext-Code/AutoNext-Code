@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { CustomButtonComponent } from "../custom-button/custom-button.component";
+import { CustomButtonComponent } from '../components/ui/custom-button/custom-button.component';
 import { AuthService } from '../../auth/services/auth.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'shared-header',

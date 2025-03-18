@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { AuthLayoutComponent } from './auth/layouts/auth-layout/auth-layout.component';
 import { LoginComponent } from './auth/pages/login/login.component';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
     {
@@ -15,11 +17,13 @@ export const routes: Routes = [
     },
     {
         path: 'home',
-        loadComponent: () => import('./user/pages/home-user-page/home-user-page.component').then(m => m.HomeUserPageComponent)
+        loadComponent: () => import('./user/pages/home-user-page/home-user-page.component').then(m => m.HomeUserPageComponent),
+        canActivate: [AuthGuard]
     },
     {
         path: 'admin-home',
         loadComponent: () => import('./admin/layout/admin-layout/home-admin-page.component').then(m => m.HomeAdminPageComponent),
+        canActivate: [AuthGuard, RoleGuard],
         children: [
           {
             path: 'panel-admin',
