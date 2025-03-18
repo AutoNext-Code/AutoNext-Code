@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { Observable, map } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
-
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +9,15 @@ import { AuthService } from '../auth/services/auth.service';
 export class RoleGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): boolean {
-    if (this.authService.getRole() === 'Admin') {
-      return true; 
-    }
-
-    this.router.navigate(['/home']);
-    return false;
+  canActivate(): Observable<boolean> {
+    return this.authService.token$.pipe(
+      map((token) => {
+        if (token && this.authService.getRole()?.toLowerCase() === 'admin') {
+          return true;
+        }
+        this.router.navigate(['/home']);
+        return false;
+      })
+    );
   }
 }
