@@ -27,12 +27,13 @@ export class LoginComponent {
   constructor( ) {}
 
   login() {
-    console.log('Login');
-
-    console.log(this.email, this.password)
-
-    this.loginResponse$ = this.authService.login(this.email, this.password);
-
-
+    this.authService.login(this.email, this.password).subscribe({
+      next: (token) => {
+        this.router.navigate(['/home']); 
+      },
+      error: (err) => {
+        console.error("Error en el login:", err);
+      }
+    });
   }
 }
