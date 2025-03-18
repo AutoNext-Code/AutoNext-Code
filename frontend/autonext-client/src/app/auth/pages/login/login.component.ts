@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { InputComponent } from "../../../shared/components/ui/input/input.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,11 +29,16 @@ export class LoginComponent {
   login() {
     this.authService.login(this.email, this.password).subscribe({
       next: (token) => {
-        this.router.navigate(['/home']); 
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error("Error en el login:", err);
       }
     });
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  handleEnterKey(event: KeyboardEvent) {
+    this.login();
   }
 }
