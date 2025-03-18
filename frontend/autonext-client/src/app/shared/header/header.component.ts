@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { CustomButtonComponent } from "../custom-button/custom-button.component";
+import { CustomButtonComponent } from '../components/ui/custom-button/custom-button.component';
+
 
 @Component({
   selector: 'shared-header',
