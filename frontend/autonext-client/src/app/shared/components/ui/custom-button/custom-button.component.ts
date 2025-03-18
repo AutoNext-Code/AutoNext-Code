@@ -36,7 +36,8 @@ export class CustomButtonComponent {
   get buttonClasses() {
     const baseClasses =
       'px-4 py-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none text-white';
-    return `${baseClasses} ${this.extraClasses}`;
+      const clickClass = !this.disabled ? 'cursor-pointer' : '';
+    return `${baseClasses} ${this.extraClasses} ${clickClass}`;
   }
 
   get buttonStyle() {
