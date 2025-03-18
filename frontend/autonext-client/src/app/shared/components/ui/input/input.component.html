@@ -1,7 +1,7 @@
 <div class="flex flex-col w-full mb-9">
   <label *ngIf="label" class="text-gray-600 text-sm mb-1">{{ label }}</label>
   <div class="relative flex items-center border-b border-gray-300 focus-within:border-blue-500">
-    <span class="material-icons icon-small" *ngIf="icon" style="color: #8A8A8A; font-size: 25px;">
+    <span class="material-icons icon-small" *ngIf="icon" style="color: #8A8A8A; font-size: 24px;">
       {{ icon }}
     </span>
     <input
@@ -11,7 +11,7 @@
       (input)="onChange(value)"
       (blur)="onTouched()"
       [disabled]="disabled"
-      class="w-full py-2 pl-10 pr-10 text-gray-700 text-xl outline-none"
+      class="w-full py-2 pl-10 pr-10 text-gray-700 text-[18px] outline-none"
     />
     <span
       *ngIf="type === 'password'"
