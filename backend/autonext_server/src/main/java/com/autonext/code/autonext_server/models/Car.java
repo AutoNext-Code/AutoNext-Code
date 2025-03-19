@@ -36,6 +36,12 @@ public class Car {
         this.plugType = PlugType.Undefined;
     }
 
+    public Car(String carPlate, User user) {
+        super();
+        this.carPlate = carPlate;
+        this.user = user;
+    }
+
     public Car(String carPlate, String name, PlugType plugType, User user) {
         this.carPlate = carPlate;
         this.name = name;
