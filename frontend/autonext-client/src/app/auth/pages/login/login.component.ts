@@ -1,13 +1,14 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { InputComponent } from '../../../shared/components/ui/input/input.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
-import { RouterLink } from '@angular/router';
+import { AppComponent } from '../../../app.component';
+import { AuthValidationService } from '../../services/auth-validation.service';
 
 @Component({
   selector: 'auth-login',
@@ -25,6 +26,8 @@ import { RouterLink } from '@angular/router';
 export class LoginComponent {
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
+  private authValidation = inject(AuthValidationService);
+  private appComponent: AppComponent = inject(AppComponent);
 
   email: string = '';
   password: string = '';
@@ -32,20 +35,26 @@ export class LoginComponent {
   loginResponse$: Observable<string | null> | null = null;
 
   constructor() {}
-
   login() {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (token) => {
-        const role = this.authService.getRole();
+    const validationError = this.authValidation.validateLoginFields(this.email, this.password);
+    if (validationError) {
+      this.appComponent.showToast('warn', 'Campos inválidos', validationError, 3000);
+      return;
+    }
 
-        if (role === 'Admin') {
-          this.router.navigate(['/admin-home']);
-        } else {
-          this.router.navigate(['/home']);
-        }
+    this.authService.login(this.email, this.password).subscribe({
+      next: () => {
+        const role = this.authService.getRole();
+        const redirectUrl = role === 'Admin' ? '/admin-home' : '/home';
+        this.router.navigate([redirectUrl]);
       },
-      error: (err) => {
-        console.error('Error en el login:', err);
+      error: () => {
+        this.appComponent.showToast(
+          'error',
+          'Error de autenticación',
+          'Correo o contraseña incorrectos.',
+          3000
+        );
       },
     });
   }
