@@ -1,19 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { SWAGGER } from './config';
+import { ToastComponent } from './shared/toast/toast.component';
 
 @Component({
   selector: 'app-root',
-
-  imports: [RouterModule, RouterOutlet],
-
+  imports: [RouterModule, RouterOutlet, ToastComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'autonext-client';
 
-  public swagger: string = SWAGGER;
+  @ViewChild(ToastComponent) toastComponent!: ToastComponent;
 
 
+  showToast(severity: 'success' | 'error' | 'warn' , summary: string, detail: string, life: number = 3000) {
+    this.toastComponent.showToast(severity, summary, detail, life);
+  }
 }
