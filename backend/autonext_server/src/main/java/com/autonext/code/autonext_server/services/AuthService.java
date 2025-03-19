@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.models.Role;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.UserRepository;
@@ -29,7 +30,7 @@ public class AuthService {
 
     public void register(String email, String name, String surname, String password) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("El usuario ya existe");
+            throw new UserAlreadyExistsException("El usuario ya existe");
         }
 
         User user = new User();
