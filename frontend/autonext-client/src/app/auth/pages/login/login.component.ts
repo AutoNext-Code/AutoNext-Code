@@ -4,10 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
-import { ToastComponent } from '../../../shared/toast/toast.component';
 import { AppComponent } from '../../../app.component';
 import { AuthValidationService } from '../../services/auth-validation.service';
 
