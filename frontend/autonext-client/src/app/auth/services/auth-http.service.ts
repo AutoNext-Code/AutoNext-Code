@@ -18,7 +18,7 @@ export class AuthHttpService {
   }
 
   register(name:string, surname:string, email: string, password:string, carPlate: string, ): Observable<string> {
-    const body = { email, name, surname, password, carPlate };
+    const body = { name, surname, email, password, carPlate };
     return this.http.post<string>(REGISTER_ENDPOINT, body);
   }
 
