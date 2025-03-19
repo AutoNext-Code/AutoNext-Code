@@ -1,33 +1,38 @@
 import { Component, HostListener, inject } from '@angular/core';
-import { InputComponent } from '../../../shared/components/ui/input/input.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
+
+import { InputComponent } from '../../../shared/components/ui/input/input.component';
 import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
-import { RouterLink } from '@angular/router';
+
+import { AuthService } from '../../services/auth.service';
+import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'auth-login',
+  selector: 'auth-register',
   imports: [
-    InputComponent,
-    CustomButtonComponent,
-    CommonModule,
-    FormsModule,
-    AuthCardComponent,
-    RouterLink
+        InputComponent,
+        CustomButtonComponent,
+        CommonModule,
+        FormsModule,
+        AuthCardComponent,
+        RouterLink
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
 })
-export class LoginComponent {
+export class RegisterComponent {
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
 
   email: string = '';
   password: string = '';
+  password2: string = '';
+  name: string = '';
+  surname: string = '';
+  carPlate: string = '';
 
   loginResponse$: Observable<string | null> | null = null;
 
