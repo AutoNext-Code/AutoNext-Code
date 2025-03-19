@@ -1,5 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
+import java.util.regex.Pattern;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,6 +31,18 @@ public class AuthService {
     }
 
     public void register(String email, String name, String surname, String password) {
+        if (name.isEmpty() || surname.isEmpty()) {
+            throw new RuntimeException("Los campos no pueden estar vacíos");
+        }
+
+        if (!isValidEmail(email)) {
+            throw new RuntimeException("El formato de email es incorrecto");
+        }
+
+        if (!isValidPassword(password)) {
+            throw new RuntimeException("La contraseña no cumple con los requisitos de seguridad");
+        }
+
         if (userRepository.findByEmail(email).isPresent()) {
             throw new UserAlreadyExistsException("El usuario ya existe");
         }
@@ -54,4 +68,17 @@ public class AuthService {
 
     return jwtService.generateToken(user);
     }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+        Pattern pattern = Pattern.compile(passwordRegex);
+        return pattern.matcher(password).matches();
+    }
+
 }

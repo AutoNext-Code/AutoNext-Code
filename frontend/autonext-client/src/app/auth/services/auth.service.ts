@@ -27,7 +27,6 @@ export class AuthService {
     return this.authHttp.login(email, password).pipe(
       tap((token: string) => {
         this.setToken(token);
-        console.log(token)
       }),
       catchError((err) => {
         return throwError(() => new Error('Login failed: ' + err.message));
