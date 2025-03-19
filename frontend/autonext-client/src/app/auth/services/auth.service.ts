@@ -3,6 +3,7 @@ import { AuthHttpService } from './auth-http.service';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { clearStorage, getVarSessionStorage, updateSessionStorage } from '../../../utils/storageUtils';
 import { jwtDecode } from 'jwt-decode';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +29,18 @@ export class AuthService {
       tap((token: string) => {
         this.setToken(token);
       }),
-      catchError((err) => {
-        return throwError(() => new Error('Login failed: ' + err.message));
+      catchError((err: HttpErrorResponse) => {
+        let errorMessage = 'Error desconocido';
+        
+        if (err.status === 401) {
+          errorMessage = 'Credenciales incorrectas. Verifica tu usuario y contraseña.';
+        } else if (err.error && typeof err.error === 'string') {
+          errorMessage = err.error; 
+        } else if (err.error?.message) {
+          errorMessage = err.error.message; 
+        }
+  
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
