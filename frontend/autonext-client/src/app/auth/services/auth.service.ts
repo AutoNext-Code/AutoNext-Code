@@ -33,6 +33,14 @@ export class AuthService {
       })
     );
   }
+  public register(name:string, surname:string, email: string, password:string, carPlate: string): Observable<string> {
+    
+    return this.authHttp.register(name, surname, email, password, carPlate).pipe(
+      catchError((err) => {
+        return throwError(() => new Error('Register failed: ' + err.message));
+      })
+    );
+  }
 
   private setToken(token: string): void {
     this.tokenSubject.next(token);

@@ -34,29 +34,41 @@ export class RegisterComponent {
   surname: string = '';
   carPlate: string = '';
 
+  register1: boolean = true;
+  register2: boolean = false;
+
   loginResponse$: Observable<string | null> | null = null;
 
   constructor() {}
 
-  login() {
+  register() {
     this.authService.login(this.email, this.password).subscribe({
       next: (token) => {
-        const role = this.authService.getRole();
 
-        if (role === 'Admin') {
-          this.router.navigate(['/admin-home']);
-        } else {
-          this.router.navigate(['/home']);
-        }
+        this.router.navigate(['/auth/login']);
+
       },
       error: (err) => {
-        console.error('Error en el login:', err);
+        console.error('Error en el registro:', err);
       },
     });
   }
 
+  forward() {
+
+    if((this.password === this.password2) && (this.password.length > 8)){
+      this.register2 = true ;
+      this.register1 = false ;
+    }
+
+  }
+  back() {
+    this.register2 = false ;
+    this.register1 = true ; 
+  }
+
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
-    this.login();
+    this.register();
   }
 }
