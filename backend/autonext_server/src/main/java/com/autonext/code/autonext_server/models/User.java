@@ -153,6 +153,14 @@ public class User implements UserDetails {
     this.confirmationToken = confirmationToken;
   }
 
+  public void setCars(List<Car> cars) {
+      this.cars = cars;
+  }
+
+  public List<Car> getCars() {
+      return cars;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.emptyList();
