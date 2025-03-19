@@ -4,6 +4,8 @@ import { LoginComponent } from './auth/pages/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { RegisterComponent } from './auth/pages/register/register.component';
+import { EmailCofirmationComponent } from './auth/pages/email-cofirmation/email-cofirmation.component';
+
 
 export const routes: Routes = [
     {
@@ -18,6 +20,10 @@ export const routes: Routes = [
           path: 'register',
           component: RegisterComponent,
         },
+        {
+          path: 'email-corfirmation/:token',
+          component: EmailCofirmationComponent,
+        }
       ]
     },
     {
