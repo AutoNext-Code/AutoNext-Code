@@ -7,7 +7,7 @@
 
   <!-- Subcategoría -->
   <label class="block mt-4 font-semibold mb-1" [textContent]="subCatText"></label>
-  <select formControlName="subcat" class="border p-2 rounded w-full" >
+  <select formControlName="subcat" (change)="onSubcategoryChange()" class="border p-2 rounded w-full" >
     <option *ngFor="let subcat of subCatOptions" [value]="subcat">{{ subcat }}</option>
   </select>
 </form>

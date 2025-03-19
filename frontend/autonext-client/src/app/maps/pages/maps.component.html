@@ -6,16 +6,9 @@
 
     <form [formGroup]="myForm" class="mt-10 max-w-sm mx-auto flex justify-center">
 
-      <select formControlName="selectedMap" class="border max-sm:w-50 border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " name="" id="">
-          <option [value]="'mapa1'" selected>Mapa 1</option>
-          <option [value]="'mapa2'">Mapa 2</option>
-          <option [value]="'mapa3'">Mapa 3</option>
-          <option [value]="'mapa4'">Mapa 4</option>
-          <option [value]="'mapa5'">Mapa 5</option>
-      </select>
+      <select-dep [cats]="ciudades" [subcats]="plantasCiudad" [catText]="'Sede'" [subCatText]="'Planta'" (catSubCatSelected)="updateMap($event)"></select-dep>
 
     </form>
-
 
 
   </div>
@@ -27,14 +20,14 @@
       <!-- Imagen de fondo -->
 
       <image
-        [attr.href]="'./assets/img/mapas/' + myForm.get('selectedMap')?.value + '.png'"
+        [attr.href]="'./assets/img/mapas/' +  mapSelected + '.png'"
         width="800"
         height="600"
       />
 
 
       <!-- Usar ngFor para iterar sobre los puntos y agregar círculos con colores -->
-      @for (point of points[myForm.get('selectedMap')?.value]; track $index) {
+      @for (point of points[mapSelected]; track $index) {
         <g
           [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
         >
