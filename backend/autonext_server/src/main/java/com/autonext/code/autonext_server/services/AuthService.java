@@ -1,5 +1,6 @@
 package com.autonext.code.autonext_server.services;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,29 +10,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
+import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.Role;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 
 
 @Service
 public class AuthService {
 
+    private final CarRepository carRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+    public AuthService(UserRepository userRepository, CarRepository carRepository, PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager, JwtService jwtService) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.carRepository = carRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
     }
 
-    public void register(String email, String name, String surname, String password) {
-        if (name.isEmpty() || surname.isEmpty()) {
+    public void register(String email, String name, String surname, String password, String carPlate) {
+        if (name.isEmpty() || surname.isEmpty() || carPlate.isEmpty()) {
             throw new RuntimeException("Los campos no pueden estar vacíos");
         }
 
@@ -57,7 +62,12 @@ public class AuthService {
         user.setEmailConfirm(false);
         user.setConfirmationToken("");
 
+        Car car = new Car(carPlate, user);
+        user.setCars(List.of(car));
+
         userRepository.save(user);
+        carRepository.save(car);
+
     }
 
     public String login(String email, String password) {

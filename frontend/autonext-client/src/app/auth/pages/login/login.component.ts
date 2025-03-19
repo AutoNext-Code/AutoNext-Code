@@ -19,6 +19,7 @@ import { AuthValidationService } from '../../services/auth-validation.service';
     CommonModule,
     FormsModule,
     AuthCardComponent,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',

@@ -31,7 +31,7 @@ public class AuthController {
   public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
     try {
       authService.register(request.getEmail(), request.getName(),
-          request.getSurname(), request.getPassword());
+          request.getSurname(), request.getPassword(), request.getCarPlate());
       return ResponseEntity.ok("Usuario registrado correctamente");
     } catch (UserAlreadyExistsException e) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya existe");
