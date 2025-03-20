@@ -1,6 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class AuthService {
         user.setRole(Role.User); 
         user.setBanned(false);
         user.setEmailConfirm(false);
-        user.setConfirmationToken("");
+        user.setConfirmationToken(UUID.randomUUID().toString());
 
         Car car = new Car(carPlate, user);
         user.setCars(List.of(car));

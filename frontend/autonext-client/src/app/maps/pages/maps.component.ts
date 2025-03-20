@@ -5,13 +5,19 @@ import { SelectDepComponent } from "../../shared/components/ui/select-dep/select
 
 @Component({
   selector: 'app-maps',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, SelectDepComponent],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css'
 })
 export class MapsComponent implements OnInit {
 
+  ciudades = ["Madrid", "Málaga"];
+  plantasCiudad = {
+    "Madrid": ['1','2','3'],
+    "Málaga": ['0','1']
+  };
 
+  mapSelected: string = '';
 
 
   myForm!: FormGroup;
@@ -20,6 +26,10 @@ export class MapsComponent implements OnInit {
     this.myForm = new FormGroup({
       selectedMap: new FormControl('mapa1')
     });
+  }
+
+  updateMap(map: { catSelected: string, subCatSelected:string}) {
+    this.mapSelected = `${map.catSelected}-${map.subCatSelected}`;
   }
 
   //COLORES DE LOS COCHES, SE APLICAN CON UN FILTRO
@@ -50,7 +60,7 @@ export class MapsComponent implements OnInit {
 
   points: { [key: string]: Slot[] } = {
 
-    mapa1: [
+    'Madrid-1': [
 
 
         /* Arriba */
@@ -149,7 +159,7 @@ export class MapsComponent implements OnInit {
         { x: 720, y: 470, label: '', color: this.colors.available, direccion: this.direcciones.arriba },
       ],
 
-      mapa2: [
+      'Madrid-2': [
 
       /* Arriba */
 
@@ -224,7 +234,7 @@ export class MapsComponent implements OnInit {
 
       ],
 
-      mapa3: [
+      'Madrid-3': [
         /* Arriba */
 
         { x: 135,  y: 130, label: '', color: this.colors.available, direccion: this.direcciones.abajo },
@@ -294,7 +304,7 @@ export class MapsComponent implements OnInit {
 
       ],
 
-      mapa4: [
+      'Málaga-0': [
 
       /* Arriba */
 
@@ -330,7 +340,7 @@ export class MapsComponent implements OnInit {
 
       ],
 
-      mapa5: [
+      'Málaga-1': [
 
       /* Arriba */
 

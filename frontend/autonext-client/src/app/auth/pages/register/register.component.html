@@ -1,37 +1,46 @@
-<auth-card  tabindex="0" (keydown.enter)="login()" >
+<auth-card  tabindex="0" (keydown.enter)="register()" >
     <div class="flex flex-col space-y-6">
       <h1 class="text-2xl font-bold">Registro</h1>
   
       <div class="space-y-6">
-        <div class="visible">
+        <div class="{{(register1)?'visible':'hidden'}}">
             <shared-input type="email" icon="mail" [(ngModel)]="email" placeholder="Correo electrónico"></shared-input>
             <shared-input type="password" icon="lock" [(ngModel)]="password"  placeholder="Contraseña"></shared-input>
-            <shared-input type="password" icon="lock" [(ngModel)]="password2"  placeholder="Confirmar Contraseña " (keydown.enter)="login()" ></shared-input>
+            <shared-input type="password" icon="lock" [(ngModel)]="password2"  placeholder="Confirmar Contraseña " (keydown.enter)="register()" ></shared-input>
         </div>
-        <div class="hidden">
+        <div class="{{(register2)?'visible':'hidden'}}">
             <shared-input type="text" icon="edit" [(ngModel)]="name" placeholder="Nombre"></shared-input>
             <shared-input type="text" icon="edit" [(ngModel)]="surname"  placeholder="Apellidos"></shared-input>
-            <shared-input type="text" icon="directions_car_filled" [(ngModel)]="carPlate"  placeholder="Matrícula" (keydown.enter)="login()" ></shared-input>
+            <shared-input type="text" icon="directions_car_filled" [(ngModel)]="carPlate"  placeholder="Matrícula" (keydown.enter)="register()" ></shared-input>
         </div>
   
         <div class="flex justify-between items-center">
           <app-custom-button
-            class="h-10 rounded-lg invisible"
+            class="h-10 rounded-lg {{(register2)?'visible':'invisible'}}"
             label="Anterior"
             type="submit"
             color="light-blue"
             icon="arrow_back"
             iconSize="15px"
-            (onClick)="login()">
+            (onClick)="back()">
           </app-custom-button>
           <app-custom-button
-            class="h-10 rounded-lg"
+            class="h-10 rounded-lg {{(register1)?'visible':'hidden'}}"
             label="Siguiente"
             type="submit"
             color="dark-blue"
             icon="arrow_forward"
             iconSize="15px"
-            (onClick)="login()">
+            (onClick)="forward()">
+          </app-custom-button>
+          <app-custom-button
+            class="h-10 rounded-lg {{(register2)?'visible':'hidden'}}"
+            label="Registrarse"
+            type="submit"
+            color="dark-blue"
+            icon="arrow_forward"
+            iconSize="15px"
+            (onClick)="register()">
           </app-custom-button>
         </div>
       </div>

@@ -17,8 +17,8 @@ export class AuthValidationService {
     return null;
   }
 
-  validateRegisterFields(name: string, surname: string, email: string, password: string): string | null {
-    if (!name.trim() || !surname.trim() || !email.trim() || !password.trim()) {
+  validateRegisterFields(name: string, surname: string, email: string, password: string, carPlate: string): string | null {
+    if (!name.trim() || !surname.trim() || !email.trim() || !password.trim() || !carPlate.trim()) {
       return 'Todos los campos son obligatorios.';
     }
 
@@ -31,6 +31,15 @@ export class AuthValidationService {
     }
 
     return null;
+  }
+
+  validateSwitchFields(email: string, password: string): boolean {
+
+    if ((this.isValidEmail(email)) && (this.isValidPassword(password))) {
+      return true;
+    }
+
+    return false;
   }
 
 

@@ -9,6 +9,8 @@ import { CustomButtonComponent } from '../../../shared/components/ui/custom-butt
 import { AuthService } from '../../services/auth.service';
 import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
 import { Observable } from 'rxjs';
+import { AuthValidationService } from '../../services/auth-validation.service';
+import { AuthHttpService } from '../../services/auth-http.service';
 
 @Component({
   selector: 'auth-register',
@@ -25,6 +27,8 @@ import { Observable } from 'rxjs';
 })
 export class RegisterComponent {
   private authService: AuthService = inject(AuthService);
+  private authHttpService: AuthHttpService = inject(AuthHttpService);
+  private authValidationService: AuthValidationService = inject(AuthValidationService);
   private router: Router = inject(Router);
 
   email: string = '';
@@ -34,29 +38,38 @@ export class RegisterComponent {
   surname: string = '';
   carPlate: string = '';
 
+  register1: boolean = true;
+  register2: boolean = false;
+
   loginResponse$: Observable<string | null> | null = null;
 
   constructor() {}
 
-  login() {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (token) => {
-        const role = this.authService.getRole();
+  register() {
 
-        if (role === 'Admin') {
-          this.router.navigate(['/admin-home']);
-        } else {
-          this.router.navigate(['/home']);
-        }
-      },
-      error: (err) => {
-        console.error('Error en el login:', err);
-      },
-    });
+    if(this.authValidationService.validateRegisterFields(this.name, this.surname, this.email, this.password, this.carPlate)==null) {
+      this.authHttpService.register(this.name, this.surname, this.email, this.password, this.carPlate)
+
+      this.router.navigateByUrl("/auth/login")
+    }
+
+  }
+
+  forward() {
+
+    if((this.password === this.password2) && (this.authValidationService.validateSwitchFields(this.email, this.password))){
+      this.register2 = true ;
+      this.register1 = false ;
+    }
+
+  }
+  back() {
+    this.register2 = false ;
+    this.register1 = true ; 
   }
 
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
-    this.login();
+    this.register();
   }
 }
