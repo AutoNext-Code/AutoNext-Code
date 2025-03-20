@@ -35,29 +35,27 @@ export class LoginComponent {
   loginResponse$: Observable<string | null> | null = null;
 
   constructor() {}
+  
   login() {
     const validationError = this.authValidation.validateLoginFields(this.email, this.password);
     if (validationError) {
       this.appComponent.showToast('warn', 'Campos inválidos', validationError, 3000);
       return;
     }
-
+  
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
         const role = this.authService.getRole();
         const redirectUrl = role === 'Admin' ? '/admin-home' : '/home';
         this.router.navigate([redirectUrl]);
       },
-      error: () => {
-        this.appComponent.showToast(
-          'error',
-          'Error de autenticación',
-          'Correo o contraseña incorrectos.',
-          3000
-        );
+      error: (err) => {
+        console.error('Error en el login:', err);
+        this.appComponent.showToast('error', 'Error de autenticación', err.message, 3000);
       },
     });
   }
+  
 
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
