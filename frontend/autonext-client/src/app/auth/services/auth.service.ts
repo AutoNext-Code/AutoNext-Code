@@ -11,11 +11,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class AuthService {
 
   private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(getVarSessionStorage('token') || null);
-  private registerSub:  BehaviorSubject<string | null> = new BehaviorSubject<string | null>(getVarSessionStorage('register') || null);
+  private registerSub:  BehaviorSubject<string | null> = new BehaviorSubject<string | null>("");
+  private confirmEmailSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>("");
+
   private authHttp: AuthHttpService = inject(AuthHttpService);
 
   public token$ = this.tokenSubject.asObservable();
   public register$ = this.registerSub.asObservable();
+  public confirmEmail$ = this.confirmEmailSubject.asObservable();
 
   public role: string | null = null;
   public name: string | null = null;
@@ -33,22 +36,22 @@ export class AuthService {
       }),
       catchError((err: HttpErrorResponse) => {
         let errorMessage = 'Error desconocido';
-        
+
         if (err.status === 401) {
           errorMessage = 'Credenciales incorrectas. Verifica tu usuario y contraseña.';
         } else if (err.error && typeof err.error === 'string') {
-          errorMessage = err.error; 
+          errorMessage = err.error;
         } else if (err.error?.message) {
-          errorMessage = err.error.message; 
+          errorMessage = err.error.message;
         }
-  
+
         return throwError(() => new Error(errorMessage));
       })
     );
   }
 
   public register(name:string, surname:string, email: string, password:string, carPlate: string): Observable<string> {
-    
+
     return this.authHttp.register(email, name, surname,  password, carPlate).pipe(
       tap((register: string) => {
         this.setRegister(register)
@@ -61,6 +64,21 @@ export class AuthService {
     );
   }
 
+  public confirmEmail(tokenEmail:string): Observable<string> {
+
+    return this.authHttp.confirmEmail(tokenEmail).pipe(
+      tap((message: string) => {
+        this.setconfirmEmail(message)
+        console.log(message)
+      }),
+      catchError((err: HttpErrorResponse) => {
+        console.log(err)
+        return throwError(() => new Error('confirm email failed: ' + err.message));
+      })
+    );
+  }
+
+
   private setToken(token: string): void {
     this.tokenSubject.next(token);
     updateSessionStorage('token', token);
@@ -69,6 +87,11 @@ export class AuthService {
 
   private setRegister(register: string): void {
     this.registerSub.next(register) ;
+  }
+
+
+  private setconfirmEmail(message: string): void {
+    this.confirmEmailSubject.next(message) ;
   }
 
   private decodeToken(): void {
