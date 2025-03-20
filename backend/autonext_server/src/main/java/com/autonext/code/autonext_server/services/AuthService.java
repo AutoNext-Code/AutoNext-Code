@@ -12,15 +12,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.Role;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
-
-import jakarta.mail.MessagingException;
-
 
 @Service
 public class AuthService {
@@ -63,6 +62,10 @@ public class AuthService {
             throw new UserAlreadyExistsException("El usuario ya existe");
         }
 
+        if (carRepository.findByCarPlate(carPlate).isPresent()) {
+            throw new CarPlateAlreadyExistsException("La matrícula ya está registrada");
+        }        
+
         User user = new User();
         user.setEmail(email);
         user.setName(name);
@@ -78,6 +81,8 @@ public class AuthService {
 
         userRepository.save(user);
         carRepository.save(car);
+
+        registerUser(email, user.getConfirmationToken());
 
     }
 
@@ -103,7 +108,6 @@ public class AuthService {
     }
 
      public void registerUser(String email, String token) {
-        // Lógica para registrar al usuario y generar el token de confirmación
 
         String confirmationLink = clientUrl + "/email-confirmation/" + token;
         String htmlContent = "<html>"
@@ -116,8 +120,8 @@ public class AuthService {
 
         try {
             emailSenderService.sendHtmlEmail(email, "Confirmación de Registro", htmlContent);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new ErrorSendEmailException("Error al enviar el email de confirmación");
         }
     }
 
