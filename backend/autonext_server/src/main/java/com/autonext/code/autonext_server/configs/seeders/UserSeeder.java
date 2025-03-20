@@ -25,10 +25,10 @@ public class UserSeeder implements CommandLineRunner {
   public void run(String... args) {
     if (userRepository.count() == 0) { 
       // Crea usuarios
-      User admin = new User("admin@example.com", "Admin", "User", passwordEncoder.encode("admin123"));
+      User admin = new User("admin@example.com", "Admin", "User", passwordEncoder.encode("admin123"), true);
       admin.setRole(Role.Admin);
 
-      User user = new User("user@example.com", "User", "User", passwordEncoder.encode("user123"));
+      User user = new User("user@example.com", "User", "User", passwordEncoder.encode("user123"), true);
       user.setRole(Role.User);
 
       // Guarda en la BD
