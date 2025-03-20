@@ -130,7 +130,7 @@ public class AuthService {
     public String confirmEmail(String token) {
         Optional<User> userOptional = userRepository.findByConfirmationToken(token);
 
-        if (!userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             throw new InvalidTokenException("Token de confirmación inválido");
         }
 
