@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { SelectDepComponent } from "@shared/components/ui/select-dep/select-dep.component";
+
 import { Slot } from '../types/slot.type';
-import { SelectDepComponent } from "../../shared/components/ui/select-dep/select-dep.component";
 
 @Component({
   selector: 'app-maps',

@@ -55,6 +55,7 @@ public class User implements UserDetails {
   @Column(nullable = false)
   private boolean emailConfirm;
 
+  @Column(nullable = true, name = "confirmation_token")
   private String confirmationToken;
 
   public User() {

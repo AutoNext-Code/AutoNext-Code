@@ -1,18 +1,18 @@
-import { Component, HostListener, inject, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, HostListener, inject, OnDestroy } from '@angular/core';
 
-import { InputComponent } from '../../../shared/components/ui/input/input.component';
-import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
+import { InputComponent } from '@shared/components/ui/input/input.component';
+import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
 
 import { AuthService } from '../../services/auth.service';
 import { AuthValidationService } from '../../services/auth-validation.service';
 
 import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+
 import { Observable } from 'rxjs';
-import { AppComponent } from '../../../app.component';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'auth-register',

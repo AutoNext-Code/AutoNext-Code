@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AdminCardComponent } from '../../components/admin-card/admin-card.component';
-import { ICONS } from '../../../shared/icons';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 import { AdminCard } from '../../components/admin-card/interfaces/card.interface';
+import { AdminCardComponent } from '../../components/admin-card/admin-card.component';
 
 @Component({
   imports: [AdminCardComponent],
