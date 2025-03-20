@@ -8,12 +8,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.autonext.code.autonext_server.dto.LoginRequest;
 import com.autonext.code.autonext_server.dto.RegisterRequest;
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
+import com.autonext.code.autonext_server.exceptions.InvalidTokenException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.services.AuthService;
 
@@ -57,6 +59,18 @@ public class AuthController {
           .body(token);
     } catch (BadCredentialsException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+    }
+  }
+
+  @PutMapping("/email-confirmation")
+  public ResponseEntity<String> emailConfirm(@RequestBody String token ) {
+    try {
+      authService.confirmEmail(token) ;
+      return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE).body("Correo Validado");
+    } catch (InvalidTokenException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no válido");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
     }
