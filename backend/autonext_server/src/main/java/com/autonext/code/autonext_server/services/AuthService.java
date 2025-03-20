@@ -1,6 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
+import com.autonext.code.autonext_server.exceptions.InvalidTokenException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.Role;
@@ -89,10 +91,10 @@ public class AuthService {
     public String login(String email, String password) {
          authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
-    User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-    return jwtService.generateToken(user);
+        return jwtService.generateToken(user);
     }
 
     private boolean isValidEmail(String email) {
@@ -109,7 +111,7 @@ public class AuthService {
 
      public void registerUser(String email, String token) {
 
-        String confirmationLink = clientUrl + "/email-confirmation/" + token;
+        String confirmationLink = clientUrl + "/auth/email-confirmation/" + token;
         String htmlContent = "<html>"
                            + "<body>"
                            + "<h1>Confirmación de Registro</h1>"
@@ -123,6 +125,21 @@ public class AuthService {
         } catch (Exception e) {
             throw new ErrorSendEmailException("Error al enviar el email de confirmación");
         }
+    }
+
+    public String confirmEmail(String token) {
+        Optional<User> userOptional = userRepository.findByConfirmationToken(token);
+
+        if (!userOptional.isPresent()) {
+            throw new InvalidTokenException("Token de confirmación inválido");
+        }
+
+        User user = userOptional.orElseThrow();
+        user.setEmailConfirm(true);
+        user.setConfirmationToken("");
+        userRepository.save(user);
+
+        return "Email confirmado con éxito";
     }
 
 }
