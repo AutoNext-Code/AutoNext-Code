@@ -11,9 +11,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class AuthService {
 
   private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(getVarSessionStorage('token') || null);
+  private registerSub:  BehaviorSubject<string | null> = new BehaviorSubject<string | null>(getVarSessionStorage('register') || null);
   private authHttp: AuthHttpService = inject(AuthHttpService);
 
   public token$ = this.tokenSubject.asObservable();
+  public register$ = this.registerSub.asObservable();
 
   public role: string | null = null;
   public name: string | null = null;
@@ -44,10 +46,16 @@ export class AuthService {
       })
     );
   }
+
   public register(name:string, surname:string, email: string, password:string, carPlate: string): Observable<string> {
     
-    return this.authHttp.register(name, surname, email, password, carPlate).pipe(
-      catchError((err) => {
+    return this.authHttp.register(email, name, surname,  password, carPlate).pipe(
+      tap((register: string) => {
+        this.setRegister(register)
+        console.log(register)
+      }),
+      catchError((err: HttpErrorResponse) => {
+        console.log(err)
         return throwError(() => new Error('Register failed: ' + err.message));
       })
     );
@@ -57,6 +65,10 @@ export class AuthService {
     this.tokenSubject.next(token);
     updateSessionStorage('token', token);
     this.decodeToken();
+  }
+
+  private setRegister(register: string): void {
+    this.registerSub.next(register) ;
   }
 
   private decodeToken(): void {
