@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.EmailNotConfirmedException;
 import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
 import com.autonext.code.autonext_server.exceptions.InvalidTokenException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
@@ -89,13 +90,24 @@ public class AuthService {
     }
 
     public String login(String email, String password) {
-         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        Optional<User> userOptional = userRepository.findByEmail(email);
+    
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("Email o contraseña incorrectos.");
+        }
 
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        User user = userOptional.get();
 
+        if (!user.isEmailConfirm()) {
+            throw new EmailNotConfirmedException("Debes confirmar tu correo antes de iniciar sesión.");
+        }
+    
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    
         return jwtService.generateToken(user);
     }
+    
+
 
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
