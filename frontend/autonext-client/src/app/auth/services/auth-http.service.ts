@@ -20,7 +20,11 @@ export class AuthHttpService {
 
   register(email: string, name:string, surname:string, password:string, carPlate: string, ): Observable<string> {
     const body = { email ,name, surname, password, carPlate };
-    return this.http.post<string>(REGISTER_ENDPOINT, body);
+    return this.http.post(REGISTER_ENDPOINT, body, { responseType: 'text' });
+  }
+
+  confirmEmail(token: string): Observable<string> {
+    return this.http.put<string>(`${REGISTER_ENDPOINT}/${token}`, {});
   }
 
 }
