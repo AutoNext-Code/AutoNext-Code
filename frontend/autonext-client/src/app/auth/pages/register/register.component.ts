@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -7,10 +7,12 @@ import { InputComponent } from '../../../shared/components/ui/input/input.compon
 import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
 
 import { AuthService } from '../../services/auth.service';
+import { AuthValidationService } from '../../services/auth-validation.service';
+
 import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
 import { Observable } from 'rxjs';
-import { AuthValidationService } from '../../services/auth-validation.service';
-import { AuthHttpService } from '../../services/auth-http.service';
+import { AppComponent } from '../../../app.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'auth-register',
@@ -27,7 +29,6 @@ import { AuthHttpService } from '../../services/auth-http.service';
 })
 export class RegisterComponent {
   private authService: AuthService = inject(AuthService);
-  private authHttpService: AuthHttpService = inject(AuthHttpService);
   private authValidationService: AuthValidationService = inject(AuthValidationService);
   private router: Router = inject(Router);
 
@@ -41,16 +42,24 @@ export class RegisterComponent {
   register1: boolean = true;
   register2: boolean = false;
 
-  loginResponse$: Observable<string | null> | null = null;
+  registerResponse: Observable<string | null> | null = null;
 
   constructor() {}
+
 
   register() {
 
     if(this.authValidationService.validateRegisterFields(this.name, this.surname, this.email, this.password, this.carPlate)==null) {
-      this.authHttpService.register(this.name, this.surname, this.email, this.password, this.carPlate)
+      this.registerResponse = this.authService.register(this.name, this.surname, this.email, this.password, this.carPlate) ;
 
-      this.router.navigateByUrl("/auth/login")
+      this.registerResponse.subscribe({
+        next: () => {
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('Error en el registro:', err);
+        },
+      }) ;
     }
 
   }
@@ -67,6 +76,7 @@ export class RegisterComponent {
     this.register2 = false ;
     this.register1 = true ; 
   }
+
 
   @HostListener('document:keydown.enter', ['$event'])
   handleEnterKey(event: KeyboardEvent) {
