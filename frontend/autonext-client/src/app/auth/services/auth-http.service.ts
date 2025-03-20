@@ -22,4 +22,8 @@ export class AuthHttpService {
     return this.http.post(REGISTER_ENDPOINT, body, { responseType: 'text' });
   }
 
+  confirmEmail(token: string): Observable<string> {
+    return this.http.put<string>(`${REGISTER_ENDPOINT}/${token}`, {});
+  }
+
 }
