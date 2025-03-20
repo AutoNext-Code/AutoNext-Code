@@ -1,21 +1,25 @@
 package com.autonext.code.autonext_server.services;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.Role;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
-
 
 @Service
 public class AuthService {
@@ -25,6 +29,12 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @Value("${url.client}")
+    private String clientUrl;
 
     public AuthService(UserRepository userRepository, CarRepository carRepository, PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager, JwtService jwtService) {
@@ -52,6 +62,10 @@ public class AuthService {
             throw new UserAlreadyExistsException("El usuario ya existe");
         }
 
+        if (carRepository.findByCarPlate(carPlate).isPresent()) {
+            throw new CarPlateAlreadyExistsException("La matrícula ya está registrada");
+        }        
+
         User user = new User();
         user.setEmail(email);
         user.setName(name);
@@ -60,13 +74,15 @@ public class AuthService {
         user.setRole(Role.User); 
         user.setBanned(false);
         user.setEmailConfirm(false);
-        user.setConfirmationToken("");
+        user.setConfirmationToken(UUID.randomUUID().toString().replace("-", ""));
 
         Car car = new Car(carPlate, user);
         user.setCars(List.of(car));
 
         userRepository.save(user);
         carRepository.save(car);
+
+        registerUser(email, user.getConfirmationToken());
 
     }
 
@@ -89,6 +105,24 @@ public class AuthService {
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         return pattern.matcher(password).matches();
+    }
+
+     public void registerUser(String email, String token) {
+
+        String confirmationLink = clientUrl + "/email-confirmation/" + token;
+        String htmlContent = "<html>"
+                           + "<body>"
+                           + "<h1>Confirmación de Registro</h1>"
+                           + "<p>Gracias por registrarte. Por favor, haz clic en el siguiente enlace para confirmar tu registro:</p>"
+                           + "<a href=\"" + confirmationLink + "\">Confirmar Registro</a>"
+                           + "</body>"
+                           + "</html>";
+
+        try {
+            emailSenderService.sendHtmlEmail(email, "Confirmación de Registro", htmlContent);
+        } catch (Exception e) {
+            throw new ErrorSendEmailException("Error al enviar el email de confirmación");
+        }
     }
 
 }

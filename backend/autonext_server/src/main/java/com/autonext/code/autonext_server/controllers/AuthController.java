@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.autonext.code.autonext_server.dto.LoginRequest;
 import com.autonext.code.autonext_server.dto.RegisterRequest;
+import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.services.AuthService;
 
@@ -35,6 +37,10 @@ public class AuthController {
       return ResponseEntity.ok("Usuario registrado correctamente");
     } catch (UserAlreadyExistsException e) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya existe");
+    } catch (CarPlateAlreadyExistsException e) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("La matrícula ya está registrada");
+    } catch (ErrorSendEmailException e) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Error al enviar el email de confirmación");
     } catch (IllegalArgumentException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Datos de registro inválidos");
     } catch (Exception e) {
