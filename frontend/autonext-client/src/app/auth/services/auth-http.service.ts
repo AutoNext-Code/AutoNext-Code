@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { LOGIN_ENDPOINT, REGISTER_ENDPOINT } from '../../config';
@@ -20,6 +21,10 @@ export class AuthHttpService {
   register(email: string, name:string, surname:string, password:string, carPlate: string, ): Observable<string> {
     const body = { email ,name, surname, password, carPlate };
     return this.http.post(REGISTER_ENDPOINT, body, { responseType: 'text' });
+  }
+
+  confirmEmail(token: string): Observable<string> {
+    return this.http.put<string>(`${REGISTER_ENDPOINT}/${token}`, {});
   }
 
 }

@@ -1,14 +1,18 @@
-import { Component, HostListener, inject, ViewChild } from '@angular/core';
-import { InputComponent } from '../../../shared/components/ui/input/input.component';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
-import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
-import { CustomButtonComponent } from '../../../shared/components/ui/custom-button/custom-button.component';
+import { Component, HostListener, inject, ViewChild } from '@angular/core';
+
+import { InputComponent } from '@shared/components/ui/input/input.component';
+import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
+
 import { AppComponent } from '../../../app.component';
+import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+
+import { AuthService } from '../../services/auth.service';
 import { AuthValidationService } from '../../services/auth-validation.service';
+
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'auth-login',

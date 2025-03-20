@@ -3,6 +3,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@admin/*": ["./src/app/admin/*"],
+      "@auth/*": ["./src/app/auth/*"],
+      "@guards/*": ["./src/app/guards/*"],
+      "@interceptors/*": ["./src/app/interceptors/*"],
+      "@maps/*": ["./src/app/maps/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@user/*": ["./src/app/user/*"],
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

@@ -15,3 +15,5 @@ export const PRUEBA = `${API_BASE_URL}`;
 export const LOGIN_ENDPOINT = `${API_BASE_URL}auth/login`;
 
 export const REGISTER_ENDPOINT = `${API_BASE_URL}auth/register`;
+
+export const CONFIRM_EMAIL_ENDPOINT = `${API_BASE_URL}auth/email-confirmation`;
