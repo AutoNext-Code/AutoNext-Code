@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.autonext.code.autonext_server.dto.LoginRequest;
 import com.autonext.code.autonext_server.dto.RegisterRequest;
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.EmailNotConfirmedException;
 import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
 import com.autonext.code.autonext_server.exceptions.InvalidTokenException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
@@ -59,6 +60,8 @@ public class AuthController {
           .body(token);
     } catch (BadCredentialsException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+    } catch (EmailNotConfirmedException e) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Debes confirmar tu correo antes de iniciar sesión.");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
     }
