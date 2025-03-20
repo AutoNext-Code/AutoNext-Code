@@ -66,12 +66,13 @@ public class User implements UserDetails {
     this.confirmationToken = "";
   }
 
-  public User(String email, String name, String surname, String password) {
+  public User(String email, String name, String surname, String password, boolean emailConfirm) {
     super();
     this.email = email;
     this.name = name;
     this.surname = surname;
     this.password = password;
+    this.emailConfirm = emailConfirm;
   }
 
   public int getId() {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../../../shared/header/header.component';
-import { MapsComponent } from '../../../maps/pages/maps.component';
+import { HeaderComponent } from '@shared/header/header.component';
+import { MapsComponent } from '@maps/pages/maps.component';
 
 @Component({
   imports: [HeaderComponent, MapsComponent],

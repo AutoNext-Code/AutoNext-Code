@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { ICONS } from '../../../shared/icons';
+
+import { ICONS } from '@shared/icons';
 
 @Component({
   selector: 'admin-sidebar',

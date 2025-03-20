@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { AdminCard } from './interfaces/card.interface';
 import { RouterModule } from '@angular/router';
+import { Component, Input } from '@angular/core';
+
+import { AdminCard } from './interfaces/card.interface';
 
 @Component({
   selector: 'admin-card',

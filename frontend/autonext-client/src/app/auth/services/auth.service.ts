@@ -1,9 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthHttpService } from './auth-http.service';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { clearStorage, getVarSessionStorage, updateSessionStorage } from '../../../utils/storageUtils';
-import { jwtDecode } from 'jwt-decode';
 import { HttpErrorResponse } from '@angular/common/http';
+
+import { AuthHttpService } from './auth-http.service';
+import { clearStorage, getVarSessionStorage, updateSessionStorage } from '../../../utils/storageUtils';
+
+import { jwtDecode } from 'jwt-decode';
+
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
