@@ -3,6 +3,7 @@ package com.autonext.code.autonext_server.services;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,8 @@ import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 
+import jakarta.mail.MessagingException;
+
 
 @Service
 public class AuthService {
@@ -25,6 +28,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     public AuthService(UserRepository userRepository, CarRepository carRepository, PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager, JwtService jwtService) {
@@ -89,6 +95,28 @@ public class AuthService {
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         return pattern.matcher(password).matches();
+    }
+
+     public void registerUser(String email, String token) {
+        // Lógica para registrar al usuario y generar el token de confirmación
+
+        // Crear el contenido HTML del correo
+        String confirmationLink = "http://example.com/confirm?token=" + token;
+        String htmlContent = "<html>"
+                           + "<body>"
+                           + "<h1>Confirmación de Registro</h1>"
+                           + "<p>Gracias por registrarte. Por favor, haz clic en el siguiente enlace para confirmar tu registro:</p>"
+                           + "<a href=\"" + confirmationLink + "\">Confirmar Registro</a>"
+                           + "</body>"
+                           + "</html>";
+
+        // Enviar el correo de confirmación
+        try {
+            emailSenderService.sendHtmlEmail(email, "Confirmación de Registro", htmlContent);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            // Manejo de errores
+        }
     }
 
 }
