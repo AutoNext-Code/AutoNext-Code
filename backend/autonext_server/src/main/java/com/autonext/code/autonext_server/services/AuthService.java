@@ -61,7 +61,7 @@ public class AuthService {
         user.setRole(Role.User); 
         user.setBanned(false);
         user.setEmailConfirm(false);
-        user.setConfirmationToken(UUID.randomUUID().toString());
+        user.setConfirmationToken(UUID.randomUUID().toString().replace("-", ""));
 
         Car car = new Car(carPlate, user);
         user.setCars(List.of(car));
