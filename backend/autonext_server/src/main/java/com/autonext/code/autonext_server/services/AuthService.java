@@ -111,7 +111,7 @@ public class AuthService {
 
      public void registerUser(String email, String token) {
 
-        String confirmationLink = clientUrl + "/email-confirmation/" + token;
+        String confirmationLink = clientUrl + "/auth/email-confirmation/" + token;
         String htmlContent = "<html>"
                            + "<body>"
                            + "<h1>Confirmación de Registro</h1>"
