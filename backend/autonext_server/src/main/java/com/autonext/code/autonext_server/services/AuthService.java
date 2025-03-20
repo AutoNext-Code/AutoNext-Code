@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +32,9 @@ public class AuthService {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    @Value("${url.client}")
+    private String clientUrl;
 
     public AuthService(UserRepository userRepository, CarRepository carRepository, PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager, JwtService jwtService) {
@@ -100,8 +104,7 @@ public class AuthService {
      public void registerUser(String email, String token) {
         // Lógica para registrar al usuario y generar el token de confirmación
 
-        // Crear el contenido HTML del correo
-        String confirmationLink = "http://example.com/confirm?token=" + token;
+        String confirmationLink = clientUrl + "/email-confirmation/" + token;
         String htmlContent = "<html>"
                            + "<body>"
                            + "<h1>Confirmación de Registro</h1>"
@@ -110,12 +113,10 @@ public class AuthService {
                            + "</body>"
                            + "</html>";
 
-        // Enviar el correo de confirmación
         try {
             emailSenderService.sendHtmlEmail(email, "Confirmación de Registro", htmlContent);
         } catch (MessagingException e) {
             e.printStackTrace();
-            // Manejo de errores
         }
     }
 
