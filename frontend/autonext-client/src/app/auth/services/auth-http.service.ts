@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { LOGIN_ENDPOINT, REGISTER_ENDPOINT } from '../../config';
+import { CONFIRM_EMAIL_ENDPOINT, LOGIN_ENDPOINT, REGISTER_ENDPOINT } from '../../config';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class AuthHttpService {
   }
 
   confirmEmail(token: string): Observable<string> {
-    return this.http.put<string>(`${REGISTER_ENDPOINT}/${token}`, {});
+    return this.http.put(CONFIRM_EMAIL_ENDPOINT, token, { responseType: 'text'});
   }
 
 }
