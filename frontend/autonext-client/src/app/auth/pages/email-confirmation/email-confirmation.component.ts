@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthCardComponent } from "../../components/layouts/auth-card/auth-card.component";
+import { AuthService } from '@auth/services/auth.service';
+
 
 @Component({
   selector: 'app-email-confirmation',
@@ -15,6 +17,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
   public isConfirmation: boolean;
   private route = inject(ActivatedRoute);
   private closeTimeout: any;
+  private authService = inject(AuthService);
 
   constructor() {
     this.isConfirmation = false;
@@ -24,9 +27,20 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
     this.tokenEmail = this.route.snapshot.paramMap.get("token") || "";
     console.log("Token email: ", this.tokenEmail);
 
+    this.authService.confirmEmail(this.tokenEmail).subscribe((message: string) => {
+      if (message) {
+        this.isConfirmation = true;
+      } else {
+        this.isConfirmation = false;
+      }
+    }, (error: any) => {
+      console.error('Error al confirmar email:', error);
+      this.isConfirmation = false;
+    });
+
     this.closeTimeout = setTimeout(() => {
       window.close();
-    }, 1000);
+    }, 3000000);
   }
 
   ngOnDestroy(): void {
