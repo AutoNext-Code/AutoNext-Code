@@ -76,7 +76,7 @@ export class RegisterComponent {
           this.appComponent.showToast(
             'success',
             'Registro exitoso',
-            'Te has registrado correctamente'
+            'Te has registrado correctamente, verifica tu correo para confirmar tu cuenta.',
           );
           this.router.navigate(['/auth/login']);
         },
@@ -84,8 +84,7 @@ export class RegisterComponent {
           this.appComponent.showToast(
             'error',
             'Error en el registro',
-            err.message,
-            3000
+            err.message
           );
         },
       });
@@ -94,7 +93,7 @@ export class RegisterComponent {
 
   forward() {
     if (this.password !== this.password2) {
-      this.appComponent.showToast('warn', 'Las contraseñas no coinciden', 'Por favor, verifica las contraseñas ingresadas.', 3000);
+      this.appComponent.showToast('warn', 'Las contraseñas no coinciden', 'Por favor, verifica las contraseñas ingresadas.');
       return;
     }
   
