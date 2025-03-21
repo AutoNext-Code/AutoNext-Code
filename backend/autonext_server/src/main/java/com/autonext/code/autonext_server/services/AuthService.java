@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,7 @@ import com.autonext.code.autonext_server.exceptions.EmailNotConfirmedException;
 import com.autonext.code.autonext_server.exceptions.ErrorSendEmailException;
 import com.autonext.code.autonext_server.exceptions.InvalidTokenException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.Role;
 import com.autonext.code.autonext_server.models.User;
@@ -93,7 +93,7 @@ public class AuthService {
         Optional<User> userOptional = userRepository.findByEmail(email);
     
         if (userOptional.isEmpty()) {
-            throw new UsernameNotFoundException("Email o contraseña incorrectos.");
+            throw new UserNotFoundException("Email o contraseña incorrectos.");
         }
 
         User user = userOptional.get();
