@@ -24,7 +24,7 @@ export class AuthHttpService {
   }
 
   confirmEmail(token: string): Observable<string> {
-    return this.http.put<string>(`${CONFIRM_EMAIL_ENDPOINT}/${token}`, {});
+    return this.http.put(CONFIRM_EMAIL_ENDPOINT, token, { responseType: 'text'});
   }
 
 }
