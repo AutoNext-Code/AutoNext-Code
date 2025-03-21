@@ -1,0 +1,7 @@
+.bg-mydark-blue {
+    background-color: var(--dark-blue);
+}
+
+.text-mygray {
+    color: var(--gray);
+}

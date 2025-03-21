@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+:root {
+  /* Main Colors */
+  --dark-blue: #0067B8;
+  --light-blue: #18B5D9;
+  --gray: #757575;
+  --light-gray: #D3D3D3;
+  --red: #E30000;
+  --green: #00C21D;
+
+  /* Font */
+  --font-primary: 'IBM Plex Sans', sans-serif;
+  --font-title: 'IBM Plex Serif', serif;
+}
+
+body {
+  font-family: var(--font-primary);
+}

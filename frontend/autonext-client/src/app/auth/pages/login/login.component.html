@@ -1,0 +1,27 @@
+<auth-card  tabindex="0" (keydown.enter)="login()" >
+  <div class="flex flex-col space-y-6">
+    <h1 class="text-2xl font-bold">Iniciar sesión</h1>
+
+    <div class="space-y-6">
+      <shared-input type="email" icon="mail" [(ngModel)]="email" placeholder="Correo electrónico"></shared-input>
+      <shared-input type="password" icon="lock" [(ngModel)]="password"  placeholder="Contraseña" (keydown.enter)="login()" ></shared-input>
+
+      <div class="flex justify-between items-center">
+        <p class="text-sm sm:text-base">¿Has olvidado la contraseña?</p>
+        <app-custom-button
+          class="h-10 rounded-lg"
+          label="Entrar"
+          type="submit"
+          color="dark-blue"
+          icon="arrow_forward"
+          iconSize="15px"
+          (onClick)="login()">
+        </app-custom-button>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <p class="text-sm sm:text-base">¿No tienes una cuenta todavía? <a class="text-blue-400" [routerLink]="['/auth/register']" >Regístrate</a></p>
+    </div>
+  </div>
+</auth-card>
