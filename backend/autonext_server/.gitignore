@@ -4,7 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Properties y Variables de Entorno ###
+.env
 emailconfig.properties
+application-prod.properties
 
 ### STS ###
 .apt_generated
