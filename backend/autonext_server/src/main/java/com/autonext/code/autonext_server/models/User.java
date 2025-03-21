@@ -63,7 +63,7 @@ public class User implements UserDetails {
     this.isBanned = false;
     this.emailConfirm = false;
     this.jobPosition = "";
-    this.confirmationToken = "";
+    this.confirmationToken = null;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
