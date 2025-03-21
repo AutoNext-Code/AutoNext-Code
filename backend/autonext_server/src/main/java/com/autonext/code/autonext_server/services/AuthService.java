@@ -148,7 +148,7 @@ public class AuthService {
 
         User user = userOptional.orElseThrow();
         user.setEmailConfirm(true);
-        user.setConfirmationToken("");
+        user.setConfirmationToken(null);
         userRepository.save(user);
 
         return "Email confirmado con éxito";
