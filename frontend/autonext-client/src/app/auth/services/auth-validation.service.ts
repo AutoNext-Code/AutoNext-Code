@@ -33,15 +33,16 @@ export class AuthValidationService {
     return null;
   }
 
-  validateSwitchFields(email: string, password: string): boolean {
-
-    if ((this.isValidEmail(email)) && (this.isValidPassword(password))) {
-      return true;
+  validateSwitchFields(email: string, password: string): string | null {
+    if (!this.isValidEmail(email)) {
+      return 'El correo electrónico no es válido.';
     }
-
-    return false;
+    if (!this.isValidPassword(password)) {
+      return 'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números.';
+    }
+    return null; 
   }
-
+  
 
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
