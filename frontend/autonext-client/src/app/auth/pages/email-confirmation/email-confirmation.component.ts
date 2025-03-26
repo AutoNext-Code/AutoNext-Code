@@ -13,6 +13,7 @@ import { AuthService } from '@auth/services/auth.service';
 export class EmailConfirmationComponent implements OnInit, OnDestroy {
   private tokenEmail: string = '';
   public isConfirmation: boolean;
+  public isLoading: boolean = false; // Variable para mostrar mensaje de carga
   private route = inject(ActivatedRoute);
   private closeTimeout: any;
   private authService = inject(AuthService);
@@ -24,15 +25,21 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.tokenEmail = this.route.snapshot.paramMap.get('token') || '';
 
-    this.authService.confirmEmail(this.tokenEmail).subscribe({
-      next: (message: string) => {
-        this.isConfirmation = !!message;
-      },
-      error: (error: any) => {
-        console.error('Error al confirmar email:', error);
-        this.isConfirmation = false;
-      },
-    });
+    this.isLoading = true; // Mostrar mensaje de carga
+
+    setTimeout(() => { // Agregar un pequeño delay
+      this.authService.confirmEmail(this.tokenEmail).subscribe({
+        next: (message: string) => {
+          this.isConfirmation = !!message;
+          this.isLoading = false; // Ocultar mensaje de carga
+        },
+        error: (error: any) => {
+          console.error('Error al confirmar email:', error);
+          this.isConfirmation = false;
+          this.isLoading = false; // Ocultar mensaje de carga
+        },
+      });
+    }, 500); // Delay de 500ms
 
     this.closeTimeout = setTimeout(() => {
       window.close();
