@@ -13,8 +13,10 @@ import { AuthService } from '@auth/services/auth.service';
 export class EmailConfirmationComponent implements OnInit, OnDestroy {
   private tokenEmail: string = '';
   public isConfirmation: boolean;
+  public isLoading: boolean = false;
   private route = inject(ActivatedRoute);
   private closeTimeout: any;
+  private loadTimeout: any;
   private authService = inject(AuthService);
 
   constructor() {
@@ -24,15 +26,21 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.tokenEmail = this.route.snapshot.paramMap.get('token') || '';
 
-    this.authService.confirmEmail(this.tokenEmail).subscribe({
-      next: (message: string) => {
-        this.isConfirmation = !!message;
-      },
-      error: (error: any) => {
-        console.error('Error al confirmar email:', error);
-        this.isConfirmation = false;
-      },
-    });
+    this.isLoading = true;
+
+    this.loadTimeout = setTimeout(() => {
+      this.authService.confirmEmail(this.tokenEmail).subscribe({
+        next: (message: string) => {
+          this.isConfirmation = !!message;
+          this.isLoading = false;
+        },
+        error: (error: any) => {
+          console.error('Error al confirmar email:', error);
+          this.isConfirmation = false;
+          this.isLoading = false;
+        },
+      });
+    }, 500);
 
     this.closeTimeout = setTimeout(() => {
       window.close();
@@ -42,6 +50,9 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
+    }
+    if (this.loadTimeout) {
+      clearTimeout(this.loadTimeout);
     }
   }
 }
