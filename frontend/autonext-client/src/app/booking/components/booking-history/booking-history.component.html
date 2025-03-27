@@ -1,0 +1,35 @@
+<table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg shadow-sm">
+  <thead>
+    <tr class="bg-blue-500 text-white uppercase text-sm tracking-wider">
+      <th class="px-4 py-2 text-left">Fecha</th>
+      <th class="px-4 py-2 text-left">Hora de Reserva</th>
+      <th class="px-4 py-2 text-left">Delegación</th>
+      <th class="px-4 py-2 text-left">Nº Plaza</th>
+      <th class="px-4 py-2 text-left">Estado</th>
+      <th class="px-4 py-2 text-left">Incidencias</th>
+      <th class="px-4 py-2 text-left">Confirmar Reserva</th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <tr *ngFor="let booking of bookings" class="hover:bg-gray-100">
+      <td class="px-4 py-2">{{ booking.date }}</td>
+      <td class="px-4 py-2">{{ booking.reservationTime }}</td>
+      <td class="px-4 py-2">{{ booking.workcenter }}</td>
+      <td class="px-4 py-2">{{ booking.parkingSpace }}</td>
+      <td class="px-4 py-2 font-semibold"
+          [ngClass]="{
+            'text-green-600': booking.status === 'Confirmada',
+            'text-red-600': booking.status === 'Strike',
+            'text-gray-500': booking.status === 'Cancelada',
+            'text-yellow-600': booking.status === 'Reservada'
+          }">
+        {{ booking.status }}
+      </td>
+      <td class="px-4 py-2">{{ booking.issues }}</td>
+      <td class="px-4 py-2 space-x-2">
+        <span *ngIf="booking.canConfirm" class="text-green-600 text-lg">✔️</span>
+        <span *ngIf="booking.canCancel" class="text-red-600 text-lg">❌</span>
+      </td>
+    </tr>
+  </tbody>
+</table>

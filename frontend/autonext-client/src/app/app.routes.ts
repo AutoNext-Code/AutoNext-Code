@@ -30,7 +30,12 @@ export const routes: Routes = [
     {
         path: 'home',
         loadComponent: () => import('./user/pages/home-user-page/home-user-page.component').then(m => m.HomeUserPageComponent),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+    },
+    {
+      path: 'booking',
+      loadComponent: () => import('./booking/pages/booking-page/booking-page.component').then(m => m.BookingPageComponent),
+      canActivate: [AuthGuard],
     },
     {
         path: 'admin-home',
