@@ -47,6 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public navigate(path: string): void {
+    console.log(path);
     this.router.navigate([path]);
   }
 
