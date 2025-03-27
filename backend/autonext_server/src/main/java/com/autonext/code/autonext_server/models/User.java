@@ -40,7 +40,8 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Car> cars;
 
-  // private List<Booking> booking; TODO:
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Booking> bookings;
 
   // private WorkCenter workCenter; TODO:
 
@@ -161,6 +162,14 @@ public class User implements UserDetails {
 
   public List<Car> getCars() {
       return cars;
+  }
+
+  public List<Booking> getBookings() {
+      return bookings;
+  }
+
+  public void setBookings(List<Booking> bookings) {
+      this.bookings = bookings;
   }
 
   @Override
