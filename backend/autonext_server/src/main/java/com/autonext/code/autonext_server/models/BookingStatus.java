@@ -1,8 +1,8 @@
 package com.autonext.code.autonext_server.models;
 
-public enum Status {
+public enum BookingStatus {
     Active,
-    Inactive,
+    Pending,
     Cancelled,
     Blocked,
     Completed

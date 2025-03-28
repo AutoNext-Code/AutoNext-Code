@@ -31,7 +31,7 @@ public class Booking {
     private LocalDate date;
 
     @Column(nullable = false)
-    private Status status;
+    private BookingStatus status;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -41,11 +41,20 @@ public class Booking {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-    @ManyToOne
+    /* @ManyToOne
     @JoinColumn(name = "parking_space_id", nullable = false)
-    private ParkingSpace parkingSpace;
+    private ParkingSpace parkingSpace; */
 
     public Booking() {}
+
+    public Booking(LocalTime startTime, LocalTime endTime, LocalDate date, BookingStatus status, User user, Car car) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.date = date;
+        this.status = BookingStatus.Pending;
+        this.user = user;
+        this.car = car;
+    }
 
     public int getId() {
         return id;
@@ -79,11 +88,11 @@ public class Booking {
         this.date = date;
     }
 
-    public Status getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 
@@ -103,12 +112,12 @@ public class Booking {
         this.car = car;
     }
 
-    public ParkingSpace getParkingSpace() {
+    /* public ParkingSpace getParkingSpace() {
         return parkingSpace;
     }
 
     public void setParkingSpace(ParkingSpace parkingSpace) {
         this.parkingSpace = parkingSpace;
-    }
+    } */
 
 }
