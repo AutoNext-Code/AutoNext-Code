@@ -54,10 +54,10 @@ public class UserSeeder implements CommandLineRunner {
           
           carRepository.saveAll(List.of(carAdmin, carUser));
           
-          Booking booking1 = new Booking(LocalTime.of(9, 0), LocalTime.of(11, 0), LocalDate.now(), BookingStatus.Pending, admin, carAdmin);
-          Booking booking2 = new Booking(LocalTime.of(14, 0), LocalTime.of(16, 0), LocalDate.now().plusDays(1), BookingStatus.Pending, user, carUser);
+         /*  Booking booking1 = new Booking(LocalTime.of(9, 0), LocalTime.of(11, 0), LocalDate.now(), BookingStatus.Pending, admin, carAdmin);
+          Booking booking2 = new Booking(LocalTime.of(14, 0), LocalTime.of(16, 0), LocalDate.now().plusDays(1), BookingStatus.Pending, user, carUser); */
 
-          bookingRepository.saveAll(List.of(booking1, booking2));
+          // bookingRepository.saveAll(List.of(booking1, booking2));
           System.out.println("Database seeded successfully! (Admin & User with Cars created)");
       } else {
           System.out.println("Database already has users. Seeding skipped.");

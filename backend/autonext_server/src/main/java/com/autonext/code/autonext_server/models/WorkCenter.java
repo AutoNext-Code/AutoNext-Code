@@ -2,34 +2,33 @@ package com.autonext.code.autonext_server.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.*;
+import jakarta.persistence.GenerationType;
 
 import java.util.List;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "work_center")
 public class WorkCenter {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id ; 
 
     @Column(unique = true, nullable = false)
     public String name ;
 
     @Column(nullable = false)
-    public int parkingLimit ; 
+    public int parkingLimit ;
 
-    @ManyToOne
-    @JoinColumn(name = "parking_level", nullable = false)
-    public List<ParkingLevel> parkingLevel ;
+    @OneToMany(mappedBy = "workCenter", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<ParkingLevel> parkingLevels;
 
     public WorkCenter(String name) {
         this.name = name ;
@@ -60,14 +59,12 @@ public class WorkCenter {
         this.parkingLimit = parkingLimit;
     }
 
-    public List<ParkingLevel> getParkingLevel() {
-        return parkingLevel;
+    public List<ParkingLevel> getParkingLevels() {
+        return parkingLevels;
     }
 
-    public void setParkingLevel(List<ParkingLevel> parkingLevel) {
-        this.parkingLevel = parkingLevel;
+    public void setParkingLevels(List<ParkingLevel> parkingLevels) {
+        this.parkingLevels = parkingLevels;
     }
-
-    
     
 }

@@ -41,9 +41,9 @@ public class Booking {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-    /* @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "parking_space_id", nullable = false)
-    private ParkingSpace parkingSpace; */
+    private ParkingSpace parkingSpace;
 
     public Booking() {}
 
@@ -112,12 +112,12 @@ public class Booking {
         this.car = car;
     }
 
-    /* public ParkingSpace getParkingSpace() {
+    public ParkingSpace getParkingSpace() {
         return parkingSpace;
     }
 
     public void setParkingSpace(ParkingSpace parkingSpace) {
         this.parkingSpace = parkingSpace;
-    } */
+    }
 
 }
