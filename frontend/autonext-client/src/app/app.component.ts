@@ -14,7 +14,7 @@ export class AppComponent {
   @ViewChild(ToastComponent) toastComponent!: ToastComponent;
 
 
-  showToast(severity: 'success' | 'error' | 'warn' , summary: string, detail: string, life: number = 3000) {
-    this.toastComponent.showToast(severity, summary, detail, life);
+  showToast(severity: 'success' | 'error' | 'warn' , summary: string, detail: string, life: number = 3000, topOffset?: number) {
+    this.toastComponent.showToast(severity, summary, detail, life, topOffset);
   }
 }

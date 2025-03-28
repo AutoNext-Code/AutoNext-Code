@@ -1,0 +1,7 @@
+.txgray {
+  color: var(--gray);
+}
+
+.color-lightgray {
+  color: var(--light-gray);
+}

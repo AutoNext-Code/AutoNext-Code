@@ -1,0 +1,54 @@
+<div class="flex flex-col gap-20 p-20 md:justify-center">
+  <div class="flex flex-col md:flex-row items-center gap-10">
+    <div>
+      <img src="/assets/logo.png" alt="logo" class="object-contain" />
+    </div>
+    <div class="lg:w-1/2">
+      <div class="flex flex-col gap-3 text-left md:text-left lg:text-[20px] md:text-[16px] max-sm:text-[25px]">
+        <p class="text-4xl text-center md:text-left font-bold pb-1">
+          {{ user.name }}
+        </p>
+        <p>Correo electrónico: {{ user.email }}</p>
+        <p>Puesto: {{ user.jobPosition }}</p>
+        <p>Delegación: {{ user.workCenterName }}</p>
+        @if (user.strikes > 0) {
+          <p>Strikes: {{ user.strikes }}</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row text-center items-center gap-7 w-full">
+    <button
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      (click)="warning()"
+    >
+      <span>Editar Perfil</span>
+      <i class="material-icons">edit</i>
+    </button>
+
+    <button
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      (click)="warning()"
+    >
+      <span>Contraseña</span>
+      <i class="material-icons">lock_person</i>
+    </button>
+
+    <button
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      (click)="warning()"
+    >
+      <span>Mis Vehículos</span>
+      <i class="material-icons">directions_car</i>
+    </button>
+
+    <button
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      (click)="navigate('/booking')"
+    >
+      <span>Mis Reservas</span>
+      <i class="material-icons">calendar_month</i>
+    </button>
+  </div>
+</div>
