@@ -4,7 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.models.Booking;
@@ -34,13 +37,15 @@ public class BookingController {
         PageRequest pageable = PageRequest.of(page, size, sort);
         Page<Booking> bookings = bookingService.getAllBookings(pageable);
 
-        List<com.autonext.code.autonext_server.dto.BookingDTO> bookingDTOs = bookings.getContent().stream().map(booking -> 
+        List<BookingDTO> bookingDTOs = bookings.getContent().stream().map(booking -> 
             new BookingDTO(
                 booking.getDate(),
                 booking.getStartTime(),
                 booking.getEndTime(),
-                booking.getUser().getName(), 
-                booking.getCar().getCarPlate()
+                booking.getUser().getName(),
+                booking.getCar().getCarPlate(),
+                booking.getStatus().toString(),
+                booking.getParkingSpace() != null ? booking.getParkingSpace().getSpaceCode() : "N/A"
             )
         ).collect(Collectors.toList());
 

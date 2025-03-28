@@ -2,30 +2,29 @@ package com.autonext.code.autonext_server.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.*;
+import jakarta.persistence.GenerationType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "parking_space")
 public class ParkingSpace {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id ;
 
     @Column(unique = true, nullable = false)
     public String spaceCode ;
-
-    @Column()
-    public Booking[] booking ;
 
     @Column(nullable = false)
     public PlugType plugType ;
@@ -33,17 +32,17 @@ public class ParkingSpace {
     @Column(nullable = false)
     public ParkingState state ;
 
-    @JsonIgnore
+    @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings;
+
     @ManyToOne
     @JoinColumn(name = "parking_level_id", nullable = false)
     public ParkingLevel parkingLevel ;
 
     public ParkingSpace(String spaceCode, PlugType plugType, ParkingState state) {
-
         this.spaceCode = spaceCode ;
         this.plugType = plugType ;
         this.state = state ;
-
     }
 
     public int getId() {
@@ -62,14 +61,6 @@ public class ParkingSpace {
         this.spaceCode = spaceCode;
     }
 
-    public Booking[] getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking[] booking) {
-        this.booking = booking;
-    }
-
     public PlugType getPlugType() {
         return plugType;
     }
@@ -84,6 +75,14 @@ public class ParkingSpace {
 
     public void setState(ParkingState state) {
         this.state = state;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     public ParkingLevel getParkingLevel() {

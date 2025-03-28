@@ -2,34 +2,32 @@ package com.autonext.code.autonext_server.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.*;
+import jakarta.persistence.GenerationType;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "parking_level")
 public class ParkingLevel {
     
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id ; 
 
     @Column(unique = true, nullable = false)
     public String name ;
 
-    @ManyToOne
-    @JoinColumn(name = "parking_space", nullable = false)
-    public List<ParkingSpace> parkingSpace ;
+    @OneToMany(mappedBy = "parkingLevel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParkingSpace> parkingSpaces;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "work_center_id", nullable = false)
     public WorkCenter workCenter ;
@@ -62,16 +60,12 @@ public class ParkingLevel {
         this.workCenter = workCenter;
     }
 
-    public List<ParkingSpace> getParkingSpace() {
-        return parkingSpace;
+    public List<ParkingSpace> getParkingSpaces() {
+        return parkingSpaces;
     }
 
-    public void setParkingSpace(List<ParkingSpace> parkingSpace) {
-        this.parkingSpace = parkingSpace;
+    public void setParkingSpaces(List<ParkingSpace> parkingSpaces) {
+        this.parkingSpaces = parkingSpaces;
     }
-
-    //TODO:CORREGIR PARKING LEVEL REPOSITORY Y TERMINAR LOS REPOSITORIOS ANTES DE PASAR A LOS CONTROLADORES
-
-    // HOY HE EMPEZADO LOS REPOSITORIOS, Y HE CREADO LOS MODELOS. ADEMAS, HEMOS PLANEADO EL SPRINT 2 
 
 }
