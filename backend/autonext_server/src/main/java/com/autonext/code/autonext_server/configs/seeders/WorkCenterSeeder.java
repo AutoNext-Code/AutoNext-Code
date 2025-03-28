@@ -3,11 +3,13 @@ package com.autonext.code.autonext_server.configs.seeders;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.autonext.code.autonext_server.models.WorkCenter;
 import com.autonext.code.autonext_server.repositories.WorkCenterRepository;
 
+@Order(2)
 @Component
 public class WorkCenterSeeder implements CommandLineRunner{
 
