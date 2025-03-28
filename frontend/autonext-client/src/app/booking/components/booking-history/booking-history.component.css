@@ -1,3 +1,32 @@
 :host {
   display: block;
 }
+
+.font-title {
+  font-family: var(--font-title);
+}
+.color-lightblue {
+  color: var(--light-blue);
+}
+.color-green {
+  color: var(--green);
+}
+.color-red {
+  color: var(--red);
+}
+.color-darkblue {
+  color: var(--dark-blue);
+}
+.color-gray {
+  color: var(--gray);
+}
+.color-lightgray {
+  color: var(--light-gray);
+}
+
+.headertable {
+  background-color: var(--table-header);
+}
+.bgtable {
+  background-color: var(--table-background);
+}
