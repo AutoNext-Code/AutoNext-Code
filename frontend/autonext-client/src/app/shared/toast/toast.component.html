@@ -1,11 +1,14 @@
-<div class="toast-container">
-  <div *ngFor="let msg of messages" class="toast" [ngClass]="msg.severity">
-    <span class="material-icons toast-icon">
-      {{ getIcon(msg.severity) }}
-    </span>
-    <div class="toast-content">
-      <strong>{{ msg.summary }}</strong>
-      <p>{{ msg.detail }}</p>
+<ng-container *ngFor="let msg of messages">
+  <div
+    class="toast-container"
+    [ngStyle]="msg.topOffset !== undefined ? { top: msg.topOffset + 'px' } : null"
+  >
+    <div class="toast" [ngClass]="msg.severity">
+      <span class="material-icons toast-icon">{{ getIcon(msg.severity) }}</span>
+      <div class="toast-content">
+        <strong>{{ msg.summary }}</strong>
+        <p>{{ msg.detail }}</p>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
