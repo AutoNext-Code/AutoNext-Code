@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -31,6 +33,7 @@ public class ParkingSpace {
     @Column(nullable = false)
     public ParkingState state ;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parking_level_id", nullable = false)
     public ParkingLevel parkingLevel ;

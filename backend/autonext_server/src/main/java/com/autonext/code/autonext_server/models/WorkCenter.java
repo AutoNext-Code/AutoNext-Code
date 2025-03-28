@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
 
+import java.util.List;
+
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -26,8 +28,8 @@ public class WorkCenter {
     public int parkingLimit ; 
 
     @ManyToOne
-    @JoinColumn(name = "parking_level_id", nullable = false)
-    public ParkingLevel parkingLevel ;
+    @JoinColumn(name = "parking_level", nullable = false)
+    public List<ParkingLevel> parkingLevel ;
 
     public WorkCenter(String name) {
         this.name = name ;
@@ -58,11 +60,11 @@ public class WorkCenter {
         this.parkingLimit = parkingLimit;
     }
 
-    public ParkingLevel getParkingLevel() {
+    public List<ParkingLevel> getParkingLevel() {
         return parkingLevel;
     }
 
-    public void setParkingLevel(ParkingLevel parkingLevel) {
+    public void setParkingLevel(List<ParkingLevel> parkingLevel) {
         this.parkingLevel = parkingLevel;
     }
 

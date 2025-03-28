@@ -4,6 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.*;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -22,9 +26,10 @@ public class ParkingLevel {
     public String name ;
 
     @ManyToOne
-    @JoinColumn(name = "parking_space_id", nullable = false)
-    public ParkingSpace parkingSpace ;
+    @JoinColumn(name = "parking_space", nullable = false)
+    public List<ParkingSpace> parkingSpace ;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "work_center_id", nullable = false)
     public WorkCenter workCenter ;
@@ -49,20 +54,20 @@ public class ParkingLevel {
         this.name = name;
     }
 
-    public ParkingSpace getParkingSpace() {
-        return parkingSpace;
-    }
-
-    public void setParkingSpace(ParkingSpace parkingSpace) {
-        this.parkingSpace = parkingSpace;
-    }
-
     public WorkCenter getWorkCenter() {
         return workCenter;
     }
 
     public void setWorkCenter(WorkCenter workCenter) {
         this.workCenter = workCenter;
+    }
+
+    public List<ParkingSpace> getParkingSpace() {
+        return parkingSpace;
+    }
+
+    public void setParkingSpace(List<ParkingSpace> parkingSpace) {
+        this.parkingSpace = parkingSpace;
     }
 
     //TODO:CORREGIR PARKING LEVEL REPOSITORY Y TERMINAR LOS REPOSITORIOS ANTES DE PASAR A LOS CONTROLADORES
