@@ -5,16 +5,16 @@
   </div>
 
   <div class="hidden md:flex gap-4" *ngIf="token">
-      <app-custom-button label="Bienvenido, {{name}}" icon="person" (onClick)="navigate('/home')" >
+      <app-custom-button label="Bienvenido, {{name}}" icon="person" (onClick)="navigate('/profile')" >
       </app-custom-button>
       <app-custom-button label="Salir" icon="logout" color="red" class="rounded-lg" (onClick)="logout()">
       </app-custom-button>
   </div>
 
-  <button class="md:hidden flex items-center" (onClick)="toggleMenu()"><span class="material-icons scale-120">menu</span></button>
+  <button class="md:hidden flex items-center" (click)="toggleMenu()"><span class="material-icons scale-120">menu</span></button>
 
   <div *ngIf="menuOpen && token" class="absolute top-20 right-4 rounded-lg shadow-lg py-3 px-5 flex flex-col space-y-2 md:hidden">
-      <app-custom-button label="Bienvenido, {{name}}" icon="person" class="rounded-lg" (onClick)="navigate('/home')">
+      <app-custom-button label="Bienvenido, {{name}}" icon="person" class="rounded-lg" (onClick)="navigate('/profile')">
       </app-custom-button>
       <app-custom-button label="Salir" icon="logout" color="red" class="rounded-lg" (onClick)="logout()">
       </app-custom-button>

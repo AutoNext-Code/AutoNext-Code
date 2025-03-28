@@ -5,6 +5,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { EmailConfirmationComponent } from './auth/pages/email-confirmation/email-confirmation.component';
+import { ProfileComponent } from './profile/pages/profile/profile.component';
 
 
 
@@ -24,7 +25,7 @@ export const routes: Routes = [
         {
           path: 'email-confirmation/:token',
           component: EmailConfirmationComponent,
-        }
+        },
       ]
     },
     {
@@ -36,6 +37,11 @@ export const routes: Routes = [
       path: 'booking',
       loadComponent: () => import('./booking/pages/booking-page/booking-page.component').then(m => m.BookingPageComponent),
       canActivate: [AuthGuard],
+    },
+    {
+      path: "profile",
+      loadComponent: () => import('./profile/pages/profile/profile.component').then(m => m.ProfileComponent),
+      canActivate: [AuthGuard]
     },
     {
         path: 'admin-home',
