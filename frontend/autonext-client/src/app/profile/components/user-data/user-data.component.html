@@ -1,15 +1,21 @@
-<div class="flex justify-center items-center">
-  <div class="w-1/2">
-    <img src="/assets/logo.png" alt="logo" class="w-[200px] h-auto object-contain">
+<div class="flex flex-col md:flex-row items-center gap-10 p-20 md:justify-center">
+  <div class="">
+    <img
+      src="/assets/logo.png"
+      alt="logo"
+      class="object-contain"
+    />
   </div>
-  <div class="w-1/2 pl-4">
-    <div class="flex flex-col gap-1">
-      <p class="text-lg font-bold">{{user.name}}</p>
-      <p class="text-sm">Correo electrónico: {{user.email}}</p>
-      <p class="text-sm">Puesto: {{user.jobPosition}}</p>
-      <p class="text-sm">Delegación: {{user.workCenterName}}</p>
-      <p class="text-sm">Strikes: {{user.strikes}}</p>
-      <p class="text-sm">Rol: {{user.role}}</p>
+  <div class="lg:w-1/2">
+    <div class="flex flex-col gap-3 text-left md:text-left lg:text-[20px] md:text-[16px] max-sm:text-[25px] max-sm:justify ">
+      <p class="text-4xl text-center md:text-left font-bold pb-1">{{ user.name }}</p>
+      <p >Correo electrónico: {{ user.email }}</p>
+      <p >Puesto: {{ user.jobPosition }}</p>
+      <p >Delegación: {{ user.workCenterName }}</p>
+      <p >Strikes: {{ user.strikes }}</p>
     </div>
   </div>
+</div>
+<div>
+
 </div>

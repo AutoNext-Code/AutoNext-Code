@@ -14,7 +14,6 @@ export class UserDataComponent {
     jobPosition: "developer",
     workCenterName: "Málaga",
     strikes: 1,
-    role: "user"
   }
 
 
