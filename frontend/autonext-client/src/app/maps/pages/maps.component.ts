@@ -1,69 +1,64 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { SelectDepComponent } from "@shared/components/ui/select-dep/select-dep.component";
+import { LoaderComponent } from "@shared/loader/loader.component";
 
 import { Slot } from '../types/slot.type';
 
 @Component({
   selector: 'app-maps',
-  imports: [ReactiveFormsModule, SelectDepComponent],
+  imports: [ReactiveFormsModule, SelectDepComponent, LoaderComponent],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css'
 })
 export class MapsComponent implements OnInit {
-
   ciudades = ["Madrid", "Málaga"];
   plantasCiudad = {
-    "Madrid": ['1','2','3'],
-    "Málaga": ['0','1']
+    "Madrid": ['1', '2', '3'],
+    "Málaga": ['0', '1']
   };
 
-  mapSelected: string = '';
+  mapSelected: string = 'Madrid-1'; // Valor inicial
+  isLoaded = false;
 
+  @ViewChild('svgElement', { static: false }) svgElement!: ElementRef;
 
   myForm!: FormGroup;
 
   ngOnInit() {
     this.myForm = new FormGroup({
-      selectedMap: new FormControl('mapa1')
+      selectedMap: new FormControl(this.mapSelected) // Iniciar con el valor del mapa por defecto
     });
   }
 
-  updateMap(map: { catSelected: string, subCatSelected:string}) {
+  // Actualizar el mapa cuando se selecciona uno nuevo
+  updateMap(map: { catSelected: string, subCatSelected: string }) {
+    this.isLoaded = false;  // Resetear el estado de carga
     this.mapSelected = `${map.catSelected}-${map.subCatSelected}`;
   }
 
-  //COLORES DE LOS COCHES, SE APLICAN CON UN FILTRO
-  colors = {
-    available: 'invert(20%) sepia(81%) saturate(6120%) hue-rotate(120deg) brightness(96%)  contrast(102%)' ,
-    occupied:  'invert(18%) sepia(90%) saturate(5946%) hue-rotate(357deg) brightness(121%) contrast(127%)' ,
-    blocked:   'invert(0%)  sepia(7%)  saturate(0%)    hue-rotate(126deg) brightness(94%)  contrast(106%)' ,
-    unusable:  'invert(55%) sepia(3%)  saturate(31%)   hue-rotate(339deg) brightness(91%)  contrast(81%)' ,
+  // Manejar la carga de la imagen SVG
+  handleImageLoad() {
+    this.isLoaded = true; // Cuando la imagen esté completamente cargada, actualizamos el estado
   }
 
-  //DIRECCIÓN DE LOS COCHES
+  colors = {
+    available: 'invert(20%) sepia(81%) saturate(6120%) hue-rotate(120deg) brightness(96%) contrast(102%)',
+    occupied: 'invert(18%) sepia(90%) saturate(5946%) hue-rotate(357deg) brightness(121%) contrast(127%)',
+    blocked: 'invert(0%) sepia(7%) saturate(0%) hue-rotate(126deg) brightness(94%) contrast(106%)',
+    unusable: 'invert(55%) sepia(3%) saturate(31%) hue-rotate(339deg) brightness(91%) contrast(81%)',
+  };
+
   direcciones = {
     arriba: 0,
     abajo: 180,
     derecha: 90,
     izquierda: 270
-  }
-
-
-  ///////////////
-  //
-  //
-  // MAPAS
-  //
-  //
-  // ////////////
-
+  };
 
   points: { [key: string]: Slot[] } = {
-
     'Madrid-1': [
-
 
         /* Arriba */
 
