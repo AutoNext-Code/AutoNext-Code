@@ -1,0 +1,19 @@
+<div class="flex items-center justify-between">
+  <span class="text-xl">Página {{ currentPage }} de {{ totalPages }}</span>
+
+  <div class="inline-flex rounded-2xl border color-lightgray overflow-hidden shadow-sm">
+    <ng-container *ngFor="let btn of buttons; let i = index">
+      <button
+        class="w-10 h-10 flex items-center justify-center color-lightgray hover:bg-gray-100"
+        [class.border-l]="i > 0"
+        [disabled]="btn.disabled()"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed pointer-events-none': btn.disabled()
+        }"
+        (click)="btn.goTo()"
+      >
+        <span class="material-icons text-base txgray">{{ btn.icon }}</span>
+      </button>
+    </ng-container>
+  </div>
+</div>
