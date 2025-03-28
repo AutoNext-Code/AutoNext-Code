@@ -30,6 +30,9 @@ public class Booking {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(nullable = false)
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -76,6 +79,14 @@ public class Booking {
         this.date = date;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public User getUser() {
         return user;
     }
@@ -92,6 +103,12 @@ public class Booking {
         this.car = car;
     }
 
+    public ParkingSpace getParkingSpace() {
+        return parkingSpace;
+    }
 
+    public void setParkingSpace(ParkingSpace parkingSpace) {
+        this.parkingSpace = parkingSpace;
+    }
 
 }
