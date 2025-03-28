@@ -1,37 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-import { SelectDepComponent } from "@shared/components/ui/select-dep/select-dep.component";
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Slot } from '../types/slot.type';
 
 @Component({
   selector: 'app-maps',
-  imports: [ReactiveFormsModule, SelectDepComponent],
+  imports: [],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css'
 })
 export class MapsComponent implements OnInit {
 
-  ciudades = ["Madrid", "Málaga"];
-  plantasCiudad = {
-    "Madrid": ['1','2','3'],
-    "Málaga": ['0','1']
-  };
+  @Input() mapSelected: string = '';
 
-  mapSelected: string = '';
-
-
-  myForm!: FormGroup;
-
-  ngOnInit() {
-    this.myForm = new FormGroup({
-      selectedMap: new FormControl('mapa1')
-    });
-  }
-
-  updateMap(map: { catSelected: string, subCatSelected:string}) {
-    this.mapSelected = `${map.catSelected}-${map.subCatSelected}`;
+  ngOnInit(): void {
+    console.log('Mapa seleccionado:', this.mapSelected);
   }
 
   //COLORES DE LOS COCHES, SE APLICAN CON UN FILTRO
