@@ -66,12 +66,16 @@ public class User implements UserDetails {
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
 
+  @Column()
+  private int strikes;
+
   public User() {
     this.role = Role.User;
     this.isBanned = false;
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
+    this.strikes = 0;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
@@ -195,5 +199,13 @@ public class User implements UserDetails {
 
   public void setWorkCenter(WorkCenter workCenter) {
     this.workCenter = workCenter;
+  }
+
+  public int getStrikes() {
+    return strikes;
+  }
+
+  public void setStrikes(int strikes) {
+    this.strikes = strikes;
   }
 }
