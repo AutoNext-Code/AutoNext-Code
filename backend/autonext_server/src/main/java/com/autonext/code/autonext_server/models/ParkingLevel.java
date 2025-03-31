@@ -17,29 +17,33 @@ import jakarta.persistence.OneToMany;
 @Entity
 @Table(name = "parking_level")
 public class ParkingLevel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id ; 
+    public int id;
 
     @Column(nullable = false)
-    public String name ;
+    public String name;
 
     @OneToMany(mappedBy = "parkingLevel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParkingSpace> parkingSpaces;
 
     @ManyToOne
     @JoinColumn(name = "work_center_id", nullable = false)
-    private WorkCenter workCenter ;
+    private WorkCenter workCenter;
 
-    public ParkingLevel(){}
+    @Column(name = "image_name")
+    private String imageName;
+
+    public ParkingLevel() {
+    }
 
     public ParkingLevel(String name) {
         super();
-        this.name = name ;
+        this.name = name;
     }
 
-    public ParkingLevel(String name, WorkCenter workCenter){
+    public ParkingLevel(String name, WorkCenter workCenter) {
         super();
         this.name = name;
         this.workCenter = workCenter;
@@ -75,6 +79,14 @@ public class ParkingLevel {
 
     public void setParkingSpaces(List<ParkingSpace> parkingSpaces) {
         this.parkingSpaces = parkingSpaces;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
 }
