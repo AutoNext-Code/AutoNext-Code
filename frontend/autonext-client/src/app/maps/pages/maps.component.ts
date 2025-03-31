@@ -10,14 +10,14 @@ import { Slot } from '../types/slot.type';
 export class MapsComponent implements OnInit {
 
   @Input() mapSelected: string = '';
-  @Output() mapLoaded = new EventEmitter<boolean>(); // Evento para avisar que el mapa está listo
-  @ViewChild('svgElement') svgElement!: ElementRef; // Referencia al SVG
+  @Output() mapLoaded = new EventEmitter<boolean>();
+  @ViewChild('svgElement') svgElement!: ElementRef;
   
   isLoaded = false;
 
   ngOnInit(): void {
     console.log('Mapa seleccionado:', this.mapSelected);
-    this.isLoaded = false; // Reseteamos el estado al cambiar de mapa
+    this.isLoaded = false;
   }
 
   ngAfterViewInit(): void {
@@ -25,7 +25,7 @@ export class MapsComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-    this.isLoaded = false; // Se oculta cada vez que cambia el mapa
+    this.isLoaded = false;
     this.checkImageLoad();
   }
 
@@ -35,7 +35,7 @@ export class MapsComponent implements OnInit {
 
     image.onload = () => {
       this.isLoaded = true;
-      this.mapLoaded.emit(true); // Emitimos que el mapa está cargado
+      this.mapLoaded.emit(true);
     };
   }
   colors = {
