@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { AuthLayoutComponent } from './auth/layouts/auth-layout/auth-layout.component';
-import { LoginComponent } from './auth/pages/login/login.component';
-import { AuthGuard } from './guards/auth.guard';
-import { RoleGuard } from './guards/role.guard';
-import { RegisterComponent } from './auth/pages/register/register.component';
-import { EmailConfirmationComponent } from './auth/pages/email-confirmation/email-confirmation.component';
-import { ProfileComponent } from './profile/pages/profile/profile.component';
 
+import { LoginComponent } from '@auth/pages/login/login.component';
+import { RegisterComponent } from '@auth/pages/register/register.component';
+import { AuthLayoutComponent } from '@auth/layouts/auth-layout/auth-layout.component';
+import { EmailConfirmationComponent } from '@auth/pages/email-confirmation/email-confirmation.component';
+
+import { AuthGuard } from '@guards/auth.guard';
+import { RoleGuard } from '@guards/role.guard';
 
 
 export const routes: Routes = [
