@@ -1,7 +1,5 @@
 package com.autonext.code.autonext_server.services;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.UserDto;
