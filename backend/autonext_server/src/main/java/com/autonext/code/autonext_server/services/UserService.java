@@ -1,8 +1,13 @@
 package com.autonext.code.autonext_server.services;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.autonext.code.autonext_server.dto.UserDto;
 import com.autonext.code.autonext_server.exceptions.EmailNotConfirmedException;
+import com.autonext.code.autonext_server.mapper.UserMapper;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 
@@ -22,6 +27,10 @@ public class UserService {
         .orElseThrow(() -> new EmailNotConfirmedException("No has confirmado tu correo."));
   }
 
-  
+  public UserDto getProfile(int userId) {
+    return userRepository.findByIdWithWorkCenter(userId)
+        .map(UserMapper::toUserDto)
+        .orElseThrow(() -> new NoSuchElementException("Usuario no existente"));
+  }
 
 }

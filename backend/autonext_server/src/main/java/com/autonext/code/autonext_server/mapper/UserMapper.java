@@ -5,7 +5,7 @@ import com.autonext.code.autonext_server.models.User;
 
 public class UserMapper {
     
-    public static UserDto toDto(User user) {
+    public static UserDto toUserDto(User user) {
         return new UserDto(
             user.getName(),
             user.getEmail(),
