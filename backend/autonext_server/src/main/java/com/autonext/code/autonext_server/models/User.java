@@ -10,6 +10,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.autonext.code.autonext_server.models.enums.Role;
+
 import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

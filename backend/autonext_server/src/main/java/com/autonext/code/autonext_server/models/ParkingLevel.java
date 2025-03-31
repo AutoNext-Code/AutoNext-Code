@@ -32,11 +32,15 @@ public class ParkingLevel {
     @JoinColumn(name = "work_center_id", nullable = false)
     private WorkCenter workCenter ;
 
+    public ParkingLevel(){}
+
     public ParkingLevel(String name) {
+        super();
         this.name = name ;
     }
 
     public ParkingLevel(String name, WorkCenter workCenter){
+        super();
         this.name = name;
         this.workCenter = workCenter;
     }

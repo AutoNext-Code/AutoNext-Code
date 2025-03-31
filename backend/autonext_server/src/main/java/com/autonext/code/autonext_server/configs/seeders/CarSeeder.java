@@ -1,8 +1,8 @@
 package com.autonext.code.autonext_server.configs.seeders;
 
 import com.autonext.code.autonext_server.models.Car;
-import com.autonext.code.autonext_server.models.PlugType;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.PlugType;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;

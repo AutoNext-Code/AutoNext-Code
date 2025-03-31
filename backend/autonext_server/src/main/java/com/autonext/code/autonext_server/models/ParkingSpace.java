@@ -6,6 +6,10 @@ import jakarta.persistence.GenerationType;
 
 import java.util.List;
 
+import com.autonext.code.autonext_server.models.enums.Direction;
+import com.autonext.code.autonext_server.models.enums.ParkingState;
+import com.autonext.code.autonext_server.models.enums.PlugType;
+
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,7 +34,7 @@ public class ParkingSpace {
     public String y ;
 
     @Column( nullable = false)
-    public String direction ;
+    public Direction direction ;
 
     @Column(nullable = false)
     public PlugType plugType ;
@@ -45,12 +49,13 @@ public class ParkingSpace {
     @JoinColumn(name = "parking_level_id", nullable = false)
     public ParkingLevel parkingLevel ;
 
-    public ParkingSpace(String x, String y, String direction, PlugType plugType, ParkingState state) {
+    public ParkingSpace(String x, String y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
         this.x = x ;
         this.y = y ;
         this.direction = direction ;
         this.plugType = plugType ;
         this.state = state ;
+        this.parkingLevel = parkingLevel;
     }
 
     public int getId() {
@@ -79,11 +84,11 @@ public class ParkingSpace {
         this.y = y;
     }
 
-    public String getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(String direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
@@ -117,6 +122,13 @@ public class ParkingSpace {
 
     public void setParkingLevel(ParkingLevel parkingLevel) {
         this.parkingLevel = parkingLevel;
+    }
+
+    public String getSpaceCode() {
+        String position = this.x +""+ this.y+""+this.direction;
+
+        return position;
+        
     }
 
 }
