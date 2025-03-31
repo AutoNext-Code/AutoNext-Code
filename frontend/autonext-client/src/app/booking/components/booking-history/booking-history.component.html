@@ -34,6 +34,7 @@
       <thead class="headertable">
         <tr class="text-black uppercase text-sm tracking-wider">
           <th
+            class="px-4 py-2 min-w-[150px] whitespace-nowrap text-center"
             sortable-th
             label="Fecha"
             column="date"
@@ -41,6 +42,7 @@
             [sortDirection]="sortDirection"
             (sort)="onSort($event)"
           ></th>
+
           <th
             sortable-th
             label="Hora de Reserva"
@@ -61,6 +63,14 @@
             sortable-th
             label="Nº Plaza"
             column="parkingSpace"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th
+            sortable-th
+            label="Coche"
+            column="car"
             [activeSortColumn]="sortColumn"
             [sortDirection]="sortDirection"
             (sort)="onSort($event)"
@@ -90,6 +100,7 @@
           <td class="px-4 py-2 text-center">{{ booking.reservationTime }}</td>
           <td class="px-4 py-2 text-center">{{ booking.workcenter }}</td>
           <td class="px-4 py-2 text-center">{{ booking.parkingSpace }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.car }}</td>
           <td
             class="px-4 py-2 font-semibold text-center"
             [ngClass]="{
