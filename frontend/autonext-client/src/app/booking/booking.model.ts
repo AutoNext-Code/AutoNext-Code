@@ -3,6 +3,7 @@ export type Booking = {
   reservationTime: string;
   workcenter: string;
   parkingSpace: string;
+  car: string;
   status: string;
   issues: string;
   canConfirm: boolean;
