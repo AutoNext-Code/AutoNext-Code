@@ -1,7 +1,7 @@
 package com.autonext.code.autonext_server.configs.seeders;
 
 import com.autonext.code.autonext_server.models.User;
-import com.autonext.code.autonext_server.models.Role;
+import com.autonext.code.autonext_server.models.enums.Role;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
