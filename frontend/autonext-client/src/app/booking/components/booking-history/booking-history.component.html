@@ -1,0 +1,136 @@
+<div class="p-6 space-y-7 max-w-6xl mx-auto">
+  <!-- ENCABEZADO -->
+  <div class="flex items-center justify-center">
+    <h1 class="text-5xl font-title">Historial de reservas de John Doe</h1>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div>
+      <label class="block text-sm font-medium" for="select1">Delegación</label>
+      <select class="w-full border p-2 rounded" id="select1">
+        <option value="malaga">Málaga</option>
+        <option value="madrid">Madrid</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium" for="select1">Coche</label>
+      <select class="w-full border p-2 rounded" id="select1">
+        <option value="coche1">1111AAA</option>
+        <option value="coche2">2222BBB</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium" for="select1">Día</label>
+      <input type="date" class="w-full border p-2 rounded" />
+    </div>
+  </div>
+
+  <!-- TABLA -->
+  <div class="overflow-auto">
+    <table
+      class="divide-y divide-gray-200 border border-gray-300 rounded-lg shadow-sm mx-auto my-10"
+    >
+      <thead class="headertable">
+        <tr class="text-black uppercase text-sm tracking-wider">
+          <th
+            sortable-th
+            label="Fecha"
+            column="date"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th
+            sortable-th
+            label="Hora de Reserva"
+            column="horaReserva"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th
+            sortable-th
+            label="Delegación"
+            column="workcenter"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th
+            sortable-th
+            label="Nº Plaza"
+            column="parkingSpace"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th
+            sortable-th
+            label="Estado"
+            column="status"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th
+            sortable-th
+            label="Incidencias"
+            column="issues"
+            [activeSortColumn]="sortColumn"
+            [sortDirection]="sortDirection"
+            (sort)="onSort($event)"
+          ></th>
+          <th class="px-4 py-2 text-center">Confirmar Reserva</th>
+        </tr>
+      </thead>
+      <tbody class="bgtable divide-y divide-gray-200">
+        <tr *ngFor="let booking of bookings" class="hover:bg-gray-100">
+          <td class="px-4 py-2 text-center">{{ booking.date }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.reservationTime }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.workcenter }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.parkingSpace }}</td>
+          <td
+            class="px-4 py-2 font-semibold text-center"
+            [ngClass]="{
+              'color-green': booking.status === 'Confirmada',
+              'color-red': booking.status === 'Strike',
+              'color-gray': booking.status === 'Cancelada',
+              'color-lightblue': booking.status === 'Reservada'
+            }"
+          >
+            {{ booking.status }}
+          </td>
+          <td class="px-4 py-2 text-center">{{ booking.issues }}</td>
+          <td class="px-4 py-2 space-x-2 text-center">
+            <button
+              *ngIf="booking.canConfirm"
+              class="text-green-600 text-lg cursor-pointer"
+            >
+              <i class="material-icons text-base ml-2">check</i>
+            </button>
+            <button
+              *ngIf="booking.canCancel"
+              class="text-red-600 text-lg cursor-pointer"
+            >
+              <i class="material-icons text-base ml-2">close</i>
+            </button>
+            <span
+              *ngIf="booking.status === 'Cancelada'"
+              class="text-gray-600 text-lg"
+            >
+              ----
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PAGINACIÓN -->
+  <pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (pageChange)="onPageChange($event)"
+  />
+</div>

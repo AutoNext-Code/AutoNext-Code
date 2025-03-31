@@ -1,4 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { SelectDepComponent } from "@shared/components/ui/select-dep/select-dep.component";
 
 import { Slot } from '../types/slot.type';
 
@@ -10,35 +13,28 @@ import { Slot } from '../types/slot.type';
 })
 export class MapsComponent implements OnInit {
 
-  @Input() mapSelected: string = '';
-  @Output() mapLoaded = new EventEmitter<boolean>(); // Evento para avisar que el mapa está listo
-  @ViewChild('svgElement') svgElement!: ElementRef; // Referencia al SVG
-  
-  isLoaded = false;
+  ciudades = ["Madrid", "Málaga"];
+  plantasCiudad = {
+    "Madrid": ['1','2','3'],
+    "Málaga": ['0','1']
+  };
 
-  ngOnInit(): void {
-    console.log('Mapa seleccionado:', this.mapSelected);
-    this.isLoaded = false; // Reseteamos el estado al cambiar de mapa
+  mapSelected: string = '';
+
+
+  myForm!: FormGroup;
+
+  ngOnInit() {
+    this.myForm = new FormGroup({
+      selectedMap: new FormControl('mapa1')
+    });
   }
 
-  ngAfterViewInit(): void {
-    this.checkImageLoad();
+  updateMap(map: { catSelected: string, subCatSelected:string}) {
+    this.mapSelected = `${map.catSelected}-${map.subCatSelected}`;
   }
 
-  ngOnChanges(): void {
-    this.isLoaded = false; // Se oculta cada vez que cambia el mapa
-    this.checkImageLoad();
-  }
-
-  checkImageLoad() {
-    const image = new Image();
-    image.src = `./assets/img/mapas/${this.mapSelected}.png`;
-
-    image.onload = () => {
-      this.isLoaded = true;
-      this.mapLoaded.emit(true); // Emitimos que el mapa está cargado
-    };
-  }
+  //COLORES DE LOS COCHES, SE APLICAN CON UN FILTRO
   colors = {
     available: 'invert(20%) sepia(81%) saturate(6120%) hue-rotate(120deg) brightness(96%) contrast(102%)',
     occupied: 'invert(18%) sepia(90%) saturate(5946%) hue-rotate(357deg) brightness(121%) contrast(127%)',
