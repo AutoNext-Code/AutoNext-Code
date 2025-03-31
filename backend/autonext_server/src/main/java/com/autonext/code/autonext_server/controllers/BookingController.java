@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +39,10 @@ public class BookingController {
     @SecurityRequirement(name = "bearerAuth")
     public Page<BookingDTO> getBookingsByUser(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size,
             @RequestParam(defaultValue = "date") String sortBy,
             @RequestParam(defaultValue = "true") boolean ascending,
             @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false) String delegation,
+            @RequestParam(required = false, name = "delegation") String workCenter,
             @RequestParam(required = false) String carPlate) {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
                 .getContext().getAuthentication();
@@ -53,9 +51,9 @@ public class BookingController {
         int userId = user.getId();
 
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        PageRequest pageable = PageRequest.of(page, size, sort);
+        PageRequest pageable = PageRequest.of(page, 6, sort);
 
-        Page<Booking> bookings = bookingService.getBookingsByUser(userId, pageable, date, delegation, carPlate);
+        Page<Booking> bookings = bookingService.getBookingsByUser(userId, pageable, date, workCenter, carPlate);
 
         List<BookingDTO> bookingDTOs = bookings.getContent().stream()
                 .map(booking -> new BookingDTO(
