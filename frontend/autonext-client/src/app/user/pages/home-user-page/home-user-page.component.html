@@ -1,6 +1,10 @@
 <shared-header></shared-header>
 <user-booking-form (mapSelected)="updateSelectedMap($event)"></user-booking-form>
-
+<div class="justify-center">
+    <loader
+        [hidden]="isMapLoaded"
+    ></loader>
+</div>
 <app-maps
   [mapSelected]="selectedMap"
   [hidden]="!isMapLoaded"

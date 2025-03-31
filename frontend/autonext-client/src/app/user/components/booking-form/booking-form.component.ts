@@ -26,11 +26,11 @@ export class BookingFormComponent {
       this.myForm = new FormGroup({
         selectedMap: new FormControl('mapa1')
       });
+      this.mapSelected.emit(`Madrid-1`);
     }
 
     updateMap(map: { catSelected: string, subCatSelected:string}) {
       this.mapSelected.emit(`${map.catSelected}-${map.subCatSelected}`);
-
     }
 
 }
