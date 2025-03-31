@@ -47,13 +47,10 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Booking> bookings;
 
-  @Column(name = "work_center_id")
-  private Integer workCenterId;
-
   @ManyToOne
-  @JoinColumn(name = "work_center_id", referencedColumnName = "id", nullable = true)
+  @JoinColumn(name = "work_center_id", nullable = true)
   private WorkCenter workCenter;
-
+  
   @Column(name = "job_position")
   private String jobPosition;
 
@@ -75,8 +72,6 @@ public class User implements UserDetails {
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
-    this.workCenterId = -1;
-    this.workCenter = null;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
@@ -192,14 +187,6 @@ public class User implements UserDetails {
   @Override
   public String getUsername() {
     return email;
-  }
-
-  public Integer getWorkCenterId() {
-    return workCenterId;
-  }
-
-  public void setWorkCenterId(Integer workCenterId) {
-    this.workCenterId = workCenterId;
   }
 
   public WorkCenter getWorkCenter() {
