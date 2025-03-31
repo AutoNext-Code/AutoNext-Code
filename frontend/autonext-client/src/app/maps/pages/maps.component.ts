@@ -1,46 +1,19 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-import { SelectDepComponent } from "@shared/components/ui/select-dep/select-dep.component";
-import { LoaderComponent } from "@shared/loader/loader.component";
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Slot } from '../types/slot.type';
 
 @Component({
   selector: 'app-maps',
-  imports: [ReactiveFormsModule, SelectDepComponent, LoaderComponent],
+  imports: [],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css'
 })
 export class MapsComponent implements OnInit {
-  ciudades = ["Madrid", "Málaga"];
-  plantasCiudad = {
-    "Madrid": ['1', '2', '3'],
-    "Málaga": ['0', '1']
-  };
 
-  mapSelected: string = 'Madrid-1'; // Valor inicial
-  isLoaded = false;
+  @Input() mapSelected: string = '';
 
-  @ViewChild('svgElement', { static: false }) svgElement!: ElementRef;
-
-  myForm!: FormGroup;
-
-  ngOnInit() {
-    this.myForm = new FormGroup({
-      selectedMap: new FormControl(this.mapSelected) // Iniciar con el valor del mapa por defecto
-    });
-  }
-
-  // Actualizar el mapa cuando se selecciona uno nuevo
-  updateMap(map: { catSelected: string, subCatSelected: string }) {
-    this.isLoaded = false;  // Resetear el estado de carga
-    this.mapSelected = `${map.catSelected}-${map.subCatSelected}`;
-  }
-
-  // Manejar la carga de la imagen SVG
-  handleImageLoad() {
-    this.isLoaded = true; // Cuando la imagen esté completamente cargada, actualizamos el estado
+  ngOnInit(): void {
+    console.log('Mapa seleccionado:', this.mapSelected);
   }
 
   colors = {
