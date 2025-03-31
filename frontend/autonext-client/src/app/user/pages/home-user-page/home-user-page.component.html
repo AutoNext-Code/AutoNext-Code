@@ -1,3 +1,9 @@
 <shared-header></shared-header>
-<user-booking-form (mapSelected)="selectedMap = $event"></user-booking-form>
-<app-maps [mapSelected]="selectedMap"></app-maps>
+
+<user-booking-form (mapSelected)="updateSelectedMap($event)"></user-booking-form>
+
+<app-maps
+  [mapSelected]="selectedMap"
+  [hidden]="!isMapLoaded"
+  (mapLoaded)="isMapLoaded = true"
+></app-maps>

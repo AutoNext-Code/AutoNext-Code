@@ -10,6 +10,12 @@ import { BookingFormComponent } from '@user/components/booking-form/booking-form
 })
 export class HomeUserPageComponent {
 
-  selectedMap: string = '';
+  selectedMap: string = '';  // Para guardar el mapa seleccionado
+  isMapLoaded = false;       // Para manejar la carga del mapa
+
+  updateSelectedMap(map: string) {
+    this.isMapLoaded = false; // Ocultamos el mapa antes de cambiarlo
+    this.selectedMap = map;
+  }
 
 }

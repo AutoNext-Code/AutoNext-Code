@@ -9,27 +9,18 @@ import { SelectDepComponent } from '@shared/components/ui/select-dep/select-dep.
   styleUrl: './booking-form.component.css'
 })
 export class BookingFormComponent {
-
-   ciudades = ["Madrid", "Málaga"];
-    plantasCiudad = {
-      "Madrid": ['1','2','3'],
-      "Málaga": ['0','1']
-    };
+  ciudades = ["Madrid", "Málaga"];
+  plantasCiudad = { "Madrid": ['1','2','3'], "Málaga": ['0','1'] };
   
-    @Output() mapSelected: EventEmitter<string> = new EventEmitter();
-  
-  
-    myForm!: FormGroup;
-  
-    ngOnInit() {
-      this.myForm = new FormGroup({
-        selectedMap: new FormControl('mapa1')
-      });
-    }
+  @Output() mapSelected: EventEmitter<string> = new EventEmitter();
+  myForm!: FormGroup;
 
-    updateMap(map: { catSelected: string, subCatSelected:string}) {
-      this.mapSelected.emit(`${map.catSelected}-${map.subCatSelected}`);
+  ngOnInit() {
+    this.myForm = new FormGroup({ selectedMap: new FormControl('mapa1') });
+  }
 
-    }
-
+  updateMap(map: { catSelected: string, subCatSelected:string }) {
+    this.mapSelected.emit(`${map.catSelected}-${map.subCatSelected}`);
+  }
 }
+
