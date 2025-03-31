@@ -30,9 +30,13 @@ public class WorkCenter {
     @OneToMany(mappedBy = "workCenter", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<ParkingLevel> parkingLevels;
 
-    public WorkCenter(String name) {
-        this.name = name ;
+    public WorkCenter(){
         this.parkingLimit = 2 ;
+    }
+
+    public WorkCenter(String name) {
+        super();
+        this.name = name ;
     }
 
     public int getId() {

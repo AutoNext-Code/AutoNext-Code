@@ -1,6 +1,7 @@
-package com.autonext.code.autonext_server.models;
+package com.autonext.code.autonext_server.models.enums;
 
 public enum PlugType {
+    NoType,
     Undefined,
     Schuko,
     Type1,
