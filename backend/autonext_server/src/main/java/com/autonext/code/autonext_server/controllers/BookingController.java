@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
