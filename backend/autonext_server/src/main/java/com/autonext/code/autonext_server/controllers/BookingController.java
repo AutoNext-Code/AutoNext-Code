@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.models.Booking;
+import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.BookingService;
 import com.autonext.code.autonext_server.services.JwtService;
 
@@ -43,14 +45,12 @@ public class BookingController {
             @RequestParam(defaultValue = "true") boolean ascending,
             @RequestParam(required = false) LocalDate date,
             @RequestParam(required = false) String delegation,
-            @RequestParam(required = false) String carPlate
-    ) {
-        JwtAuthenticationToken authentication = 
-            (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+            @RequestParam(required = false) String carPlate) {
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
+                .getContext().getAuthentication();
 
-        String token = (String) authentication.getCredentials(); 
-
-        int userId = jwtService.extractUserId(token);
+        User user = (User) authentication.getPrincipal(); 
+        int userId = user.getId();
 
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         PageRequest pageable = PageRequest.of(page, size, sort);
@@ -65,8 +65,7 @@ public class BookingController {
                         booking.getUser().getName(),
                         booking.getCar().getCarPlate(),
                         booking.getStatus().toString(),
-                        booking.getParkingSpace() != null ? booking.getParkingSpace().getSpaceCode() : "N/A"
-                ))
+                        booking.getParkingSpace() != null ? booking.getParkingSpace().getSpaceCode() : "N/A"))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
