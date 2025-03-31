@@ -1,5 +1,17 @@
 package com.autonext.code.autonext_server.mapper;
 
+import com.autonext.code.autonext_server.dto.UserDto;
+import com.autonext.code.autonext_server.models.User;
+
 public class UserMapper {
     
+    public static UserDto toDto(User user) {
+        return new UserDto(
+            user.getName(),
+            user.getEmail(),
+            user.getJobPosition(),
+            user.getWorkCenter() != null ? user.getWorkCenter().getName() : "---",
+            user.getStrikes()
+        );
+    }
 }
