@@ -45,6 +45,10 @@ public class Booking {
     @JoinColumn(name = "parking_space_id", nullable = false)
     private ParkingSpace parkingSpace;
 
+    @ManyToOne
+    @JoinColumn(name = "work_center_id", nullable = false)
+    private WorkCenter workCenter;
+
     public Booking() {}
 
     public Booking(LocalTime startTime, LocalTime endTime, LocalDate date, BookingStatus status, User user, Car car) {
