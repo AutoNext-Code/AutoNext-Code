@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Slot } from '../types/slot.type';
 
 @Component({
@@ -11,41 +10,52 @@ import { Slot } from '../types/slot.type';
 export class MapsComponent implements OnInit {
 
   @Input() mapSelected: string = '';
+  @Output() mapLoaded = new EventEmitter<boolean>(); // Evento para avisar que el mapa está listo
+  @ViewChild('svgElement') svgElement!: ElementRef; // Referencia al SVG
+  
+  isLoaded = false;
 
   ngOnInit(): void {
     console.log('Mapa seleccionado:', this.mapSelected);
+    this.isLoaded = false; // Reseteamos el estado al cambiar de mapa
   }
 
-  //COLORES DE LOS COCHES, SE APLICAN CON UN FILTRO
+  ngAfterViewInit(): void {
+    this.checkImageLoad();
+  }
+
+  ngOnChanges(): void {
+    this.isLoaded = false; // Se oculta cada vez que cambia el mapa
+    this.checkImageLoad();
+  }
+
+  checkImageLoad() {
+    const image = new Image();
+    image.src = `./assets/img/mapas/${this.mapSelected}.png`;
+
+    image.onload = () => {
+      this.isLoaded = true;
+      this.mapLoaded.emit(true); // Emitimos que el mapa está cargado
+    };
+  }
   colors = {
-    available: 'invert(20%) sepia(81%) saturate(6120%) hue-rotate(120deg) brightness(96%)  contrast(102%)' ,
-    occupied:  'invert(18%) sepia(90%) saturate(5946%) hue-rotate(357deg) brightness(121%) contrast(127%)' ,
-    blocked:   'invert(0%)  sepia(7%)  saturate(0%)    hue-rotate(126deg) brightness(94%)  contrast(106%)' ,
-    unusable:  'invert(55%) sepia(3%)  saturate(31%)   hue-rotate(339deg) brightness(91%)  contrast(81%)' ,
-  }
+    available: 'invert(20%) sepia(81%) saturate(6120%) hue-rotate(120deg) brightness(96%) contrast(102%)',
+    occupied: 'invert(18%) sepia(90%) saturate(5946%) hue-rotate(357deg) brightness(121%) contrast(127%)',
+    blocked: 'invert(0%) sepia(7%) saturate(0%) hue-rotate(126deg) brightness(94%) contrast(106%)',
+    unusable: 'invert(55%) sepia(3%) saturate(31%) hue-rotate(339deg) brightness(91%) contrast(81%)',
+  };
 
-  //DIRECCIÓN DE LOS COCHES
+
   direcciones = {
     arriba: 0,
     abajo: 180,
     derecha: 90,
     izquierda: 270
-  }
-
-
-  ///////////////
-  //
-  //
-  // MAPAS
-  //
-  //
-  // ////////////
-
+  };
+  
 
   points: { [key: string]: Slot[] } = {
-
     'Madrid-1': [
-
 
         /* Arriba */
 
