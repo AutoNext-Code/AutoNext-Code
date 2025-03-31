@@ -1,7 +1,6 @@
 package com.autonext.code.autonext_server.services;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
