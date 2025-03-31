@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.UserDto;
 import com.autonext.code.autonext_server.exceptions.EmailNotConfirmedException;
+import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.UserMapper;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.UserRepository;
@@ -29,7 +30,7 @@ public class UserService {
   public UserDto getProfile(int userId) {
     return userRepository.findByIdWithWorkCenter(userId)
         .map(UserMapper::toUserDto)
-        .orElseThrow(() -> new NoSuchElementException("Usuario no existente"));
+        .orElseThrow(() -> new UserNotFoundException("Usuario no existente"));
   }
 
 }
