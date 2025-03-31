@@ -17,8 +17,21 @@ public class BookingService {
     public Page<Booking> getAllBookings(Pageable pageable) {
         return bookingRepository.findAll(pageable);
     }
-    
+
+    public Booking getBookingById(int id) {
+        return bookingRepository.findById(id).orElse(null);
+    }
+
+    public Booking createBooking(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    public Booking updateBooking(int id, Booking booking) {
+        if (bookingRepository.existsById(id)) {
+            booking.setId(id);
+            return bookingRepository.save(booking);
+        } else {
+            return null;
+        }
+    }
 }
-    
-    
-        
