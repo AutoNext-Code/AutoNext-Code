@@ -1,9 +1,14 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { SpaceDataComponent } from "@booking/components/space-data/space-data.component";
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
+
 import { Slot } from '../types/slot.type';
+import { CustomButtonComponent } from "../../shared/components/ui/custom-button/custom-button.component";
 
 @Component({
   selector: 'app-maps',
-  imports: [],
+  imports: [SpaceDataComponent, CustomButtonComponent],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css'
 })
@@ -13,11 +18,14 @@ export class MapsComponent implements OnInit {
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
   
-  isLoaded = false;
+  isLoaded:boolean = false;
+  modal:boolean = true ;
+  carData!: SpaceData ;
 
   ngOnInit(): void {
     console.log('Mapa seleccionado:', this.mapSelected);
     this.isLoaded = false;
+    
   }
 
   ngAfterViewInit(): void {
@@ -38,6 +46,8 @@ export class MapsComponent implements OnInit {
       this.mapLoaded.emit(true);
     };
   }
+
+
   colors = {
     available: 'invert(20%) sepia(81%) saturate(6120%) hue-rotate(120deg) brightness(96%) contrast(102%)',
     occupied: 'invert(18%) sepia(90%) saturate(5946%) hue-rotate(357deg) brightness(121%) contrast(127%)',
@@ -52,6 +62,15 @@ export class MapsComponent implements OnInit {
     derecha: 90,
     izquierda: 270
   };
+
+  toggleModal(carData: SpaceData) { 
+    this.modal = false ;
+    this.carData = carData
+  }
+  
+  closeModal(){
+    this.modal = true ;
+  }
   
 
   points: { [key: string]: Slot[] } = {
