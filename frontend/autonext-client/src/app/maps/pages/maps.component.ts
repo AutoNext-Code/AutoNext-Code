@@ -1,5 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Slot } from '../types/slot.type';
+import { MapLoaderService } from '@maps/services/map-loader.service';
+import { Chart } from '@maps/interfaces/Chart.interface';
+import { Observable } from 'rxjs';
+import { Space } from '@maps/interfaces/Space.interface';
+
 
 @Component({
   selector: 'app-maps',
@@ -9,13 +14,21 @@ import { Slot } from '../types/slot.type';
 })
 export class MapsComponent implements OnInit {
 
+  private mapLoader: MapLoaderService = inject(MapLoaderService);
+  chart: any;
+  imageUrl: String = "";
+  spaces:Space[] = [];
+
+
   @Input() mapSelected: string = '';
   @Output() mapLoaded = new EventEmitter<boolean>(); // Evento para avisar que el mapa está listo
   @ViewChild('svgElement') svgElement!: ElementRef; // Referencia al SVG
-  
+
   isLoaded = false;
 
   ngOnInit(): void {
+    this.chartLoad();
+    this.checkImageLoad
     console.log('Mapa seleccionado:', this.mapSelected);
     this.isLoaded = false; // Reseteamos el estado al cambiar de mapa
   }
@@ -27,11 +40,29 @@ export class MapsComponent implements OnInit {
   ngOnChanges(): void {
     this.isLoaded = false; // Se oculta cada vez que cambia el mapa
     this.checkImageLoad();
+    this.chartLoad();
+
+  }
+
+  chartLoad(){
+    this.mapLoader.mapLoad(this.mapSelected)
+    .subscribe((response) =>{
+      this.chart = response;
+      this.imageUrl= response.imageUrl;
+      this.spaces = response.spaces;
+      console.log(this.spaces);
+    });
+
+
   }
 
   checkImageLoad() {
+
+    this.chartLoad();
+
     const image = new Image();
-    image.src = `./assets/img/mapas/${this.mapSelected}.png`;
+    image.src = this.imageUrl.toString();
+
 
     image.onload = () => {
       this.isLoaded = true;
@@ -52,7 +83,9 @@ export class MapsComponent implements OnInit {
     derecha: 90,
     izquierda: 270
   };
-  
+
+
+
 
   points: { [key: string]: Slot[] } = {
     'Madrid-1': [

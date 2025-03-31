@@ -14,23 +14,23 @@ export class BookingFormComponent {
    ciudades = ["Madrid", "Málaga"];
     plantasCiudad = {
       "Madrid": ['1','2','3'],
-      "Málaga": ['0','1']
+      "Málaga": ['4','5']
     };
-  
+
     @Output() mapSelected: EventEmitter<string> = new EventEmitter();
-  
-  
+
+
     myForm!: FormGroup;
-  
+
     ngOnInit() {
       this.myForm = new FormGroup({
         selectedMap: new FormControl('mapa1')
       });
-      this.mapSelected.emit(`Madrid-1`);
+      this.mapSelected.emit("1");
     }
 
     updateMap(map: { catSelected: string, subCatSelected:string}) {
-      this.mapSelected.emit(`${map.catSelected}-${map.subCatSelected}`);
+      this.mapSelected.emit(`${map.subCatSelected}`);
     }
 
 }
