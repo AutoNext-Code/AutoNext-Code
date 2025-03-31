@@ -49,6 +49,9 @@ public class ParkingSpace {
     @JoinColumn(name = "parking_level_id", nullable = false)
     public ParkingLevel parkingLevel ;
 
+    public ParkingSpace() {
+    }
+
     public ParkingSpace(String x, String y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
         this.x = x ;
         this.y = y ;
