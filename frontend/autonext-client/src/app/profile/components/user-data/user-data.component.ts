@@ -13,7 +13,7 @@ export class UserDataComponent implements AfterViewInit, OnDestroy {
 
   private router: Router = inject(Router);
   private ngZone: NgZone = inject(NgZone);
-    private appComponent: AppComponent = inject(AppComponent);
+  private appComponent: AppComponent = inject(AppComponent);
 
   user = {
     name: "User user",

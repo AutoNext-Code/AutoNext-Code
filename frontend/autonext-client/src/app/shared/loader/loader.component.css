@@ -1,4 +1,4 @@
-span {
+#hourglass {
     animation: spin, spinback;
     animation-delay: 0.25s, 0.25s;
     animation-duration: 1.5s;
