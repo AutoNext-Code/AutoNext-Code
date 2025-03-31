@@ -1,4 +1,4 @@
-package com.autonext.code.autonext_server.models;
+package com.autonext.code.autonext_server.models.enums;
 
 public enum ParkingState {
     Available,

@@ -19,8 +19,8 @@ import com.autonext.code.autonext_server.exceptions.InvalidTokenException;
 import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.Car;
-import com.autonext.code.autonext_server.models.Role;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.Role;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 

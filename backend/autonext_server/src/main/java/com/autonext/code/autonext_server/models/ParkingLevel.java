@@ -22,7 +22,7 @@ public class ParkingLevel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id ; 
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     public String name ;
 
     @OneToMany(mappedBy = "parkingLevel", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -30,10 +30,19 @@ public class ParkingLevel {
 
     @ManyToOne
     @JoinColumn(name = "work_center_id", nullable = false)
-    public WorkCenter workCenter ;
+    private WorkCenter workCenter ;
+
+    public ParkingLevel(){}
 
     public ParkingLevel(String name) {
+        super();
         this.name = name ;
+    }
+
+    public ParkingLevel(String name, WorkCenter workCenter){
+        super();
+        this.name = name;
+        this.workCenter = workCenter;
     }
 
     public int getId() {

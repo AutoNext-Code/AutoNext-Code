@@ -3,6 +3,8 @@ package com.autonext.code.autonext_server.models;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -2,6 +2,8 @@ package com.autonext.code.autonext_server.models;
 
 import java.util.List;
 
+import com.autonext.code.autonext_server.models.enums.PlugType;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
