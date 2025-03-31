@@ -20,6 +20,8 @@ public class UserService {
   public User getUserByEmail(String email) {
     return userRepository.findByEmailAndEmailConfirm(email, true)
         .orElseThrow(() -> new EmailNotConfirmedException("No has confirmado tu correo."));
-}
+  }
+
+  
 
 }
