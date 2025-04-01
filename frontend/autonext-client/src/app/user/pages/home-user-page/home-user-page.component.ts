@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { MapsComponent } from '@maps/pages/maps.component';
 
-import { BookingFormComponent } from '@user/components/booking-form/booking-form.component';
+import { BookingFormComponent } from '@maps/components/booking-form/booking-form.component';
 
 import { HeaderComponent } from '@shared/header/header.component';
 import { LoaderComponent } from "@shared/loader/loader.component";

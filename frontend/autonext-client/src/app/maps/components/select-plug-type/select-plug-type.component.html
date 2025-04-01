@@ -1,0 +1,11 @@
+<label class="block text-sm font-medium mb-1" for="plugTypeSelect">Tipo de cargador:</label>
+<select
+  class="border p-2 rounded w-full"
+  id="plugTypeSelect"
+  [(ngModel)]="selectedPlugType"
+  (ngModelChange)="getSelectedPlugTypeValue()"
+>
+  <option *ngFor="let type of plugTypes" [ngValue]="type">
+    {{ type === "Undefined" ? "Todos los cargadores" : type }}
+  </option>
+</select>

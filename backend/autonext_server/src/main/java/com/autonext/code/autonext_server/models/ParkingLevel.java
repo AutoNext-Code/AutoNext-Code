@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.autonext.code.autonext_server.models.enums.ParkingState;
 
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
@@ -87,6 +90,17 @@ public class ParkingLevel {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public List<ParkingSpace> getActiveSpaces(){
+        ParkingState state = ParkingState.Unusable;
+
+        List<ParkingSpace> activeSpaces = parkingSpaces.stream()
+        .filter(s -> !s.getState().equals(state))
+        .collect(Collectors.toList());
+        
+        
+        return activeSpaces;
     }
 
 }

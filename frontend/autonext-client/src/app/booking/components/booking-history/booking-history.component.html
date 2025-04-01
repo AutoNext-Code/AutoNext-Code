@@ -1,7 +1,7 @@
 <div class="p-6 space-y-7 max-w-6xl mx-auto">
   <!-- ENCABEZADO -->
   <div class="flex items-center justify-center">
-    <h1 class="text-5xl font-title">Historial de reservas de John Doe</h1>
+    <h1 class="text-3xl sm:text-5xl text-center font-title">Historial de reservas de John Doe</h1>
   </div>
 
   <!-- FILTROS -->
@@ -27,7 +27,7 @@
   </div>
 
   <!-- TABLA -->
-  <div class="overflow-auto">
+  <div class="overflow-auto hidden lg:block">
     <table
       class="divide-y divide-gray-200 border border-gray-300 rounded-lg shadow-sm mx-auto my-10"
     >
@@ -136,6 +136,16 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- CARDS -->
+  <div class="block lg:hidden space-y-4">
+    <div
+      *ngFor="let booking of bookings"
+      class="border-card rounded-lg shadow-sm p-4"
+    >
+      <card-booking [booking]="booking"></card-booking>
+    </div>
   </div>
 
   <!-- PAGINACIÓN -->

@@ -3,34 +3,36 @@
   <div class="lg:flex lg:justify-center w-full overflow-x-auto">
     <svg #svgElement width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
       <image
-      [attr.href]="'./assets/img/mapas/' + mapSelected + '.png'"
+      [attr.href]="imageUrl"
       width="800"
       height="600"
       />
-      @for (point of points[mapSelected]; track $index) {
-        <g
-          [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
-          (click)="toggleModal({
-                                workCenter: 'Malaga-101', 
-                                level: 1, 
-                                day: '10/06/2024', 
-                                car: '1111 XXX', 
-                                hour: '9:00-23:00',
-                                plugType: 'CHAdeMO'
-                                }
-                              )"
-        >
-          <use
-            xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-            width="35" height="44"
-            [attr.filter]="point.color">
-          </use>
-        </g>
-      }
-    </svg>
-  </div>
+
+    @for (space of spaces; track $index) {
+      <g
+      [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+      (click)="toggleModal({
+          workCenter: 'Malaga-101',
+          level: 1,
+          day: '10/06/2024',
+          car: '1111 XXX',
+          hour: '9:00-23:00',
+          plugType: 'CHAdeMO'
+          }
+        )"
+      >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35" height="44"
+        [attr.filter]="space.state">
+      </use>
+    </g>
+  }
+  </svg>
+</div>
 
 }
+
 
 <div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30" [hidden]="modal" id="modal">
   <div class="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -48,21 +50,21 @@
 
       </div>
       <div class="bg-gray-200 px-4 py-3 flex">
-        <app-custom-button 
-          (onClick)="closeModal()" 
-          [color]="'gray'" 
+        <app-custom-button
+          (onClick)="closeModal()"
+          [color]="'gray'"
           [icon]="'close'"
           [label]="'Cerrar'"
           class="flex-2 rounded"
         ></app-custom-button>
         <div class="flex-2"></div>
-        <app-custom-button 
-          (onClick)="closeModal()" 
-          [color]="'dark-blue'" 
+        <app-custom-button
+          (onClick)="closeModal()"
+          [color]="'dark-blue'"
           [icon]="'book'"
           [label]="'Reservar'"
           class="flex-2 rounded"
-        ></app-custom-button>      
+        ></app-custom-button>
       </div>
     </div>
   </div>

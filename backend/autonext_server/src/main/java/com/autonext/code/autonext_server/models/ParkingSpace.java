@@ -27,11 +27,14 @@ public class ParkingSpace {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id ;
 
-    @Column( nullable = false)
-    public String x ;
+    @Column (nullable = false)
+    public String name ;
 
     @Column( nullable = false)
-    public String y ;
+    public int x ;
+
+    @Column( nullable = false)
+    public int y ;
 
     @Column( nullable = false)
     public Direction direction ;
@@ -52,13 +55,22 @@ public class ParkingSpace {
     public ParkingSpace() {
     }
 
-    public ParkingSpace(String x, String y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
+        this.name = name ;
         this.x = x ;
         this.y = y ;
         this.direction = direction ;
         this.plugType = plugType ;
         this.state = state ;
         this.parkingLevel = parkingLevel;
+    }
+
+    public String getName() {
+        return name;
+    }  
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
@@ -69,21 +81,19 @@ public class ParkingSpace {
         this.id = id;
     }
 
-    
-
-    public String getX() {
+    public Integer getX() {
         return x;
     }
 
-    public void setX(String x) {
+    public void setX(Integer x) {
         this.x = x;
     }
 
-    public String getY() {
+    public Integer getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(Integer y) {
         this.y = y;
     }
 
