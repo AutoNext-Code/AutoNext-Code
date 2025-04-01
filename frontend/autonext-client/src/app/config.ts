@@ -21,6 +21,8 @@ export const MAP_ENDPOINT = `${API_BASE_URL}parking/level`
 
 export const BOOKINGS_ENDPOINT =  `${API_BASE_URL}bookings`
 
+export const BOOKINGS_ENDPOINT_USER =  `${API_BASE_URL}bookings/booking-list`
+
 /* ENDPOINTS DE USER */
 
 export const DATA_PROFILE_ENDPOINT = `${API_BASE_URL}user/profile`
