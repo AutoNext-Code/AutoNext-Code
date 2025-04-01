@@ -15,7 +15,7 @@ export class BookingFormComponent {
    ciudades = ["Madrid", "Málaga"];
     plantasCiudad = {
       "Madrid": ['1','2','3'],
-      "Málaga": ['4','5']
+      "Málaga": ['0','1']
     };
 
     @Output() mapSelected: EventEmitter<string> = new EventEmitter();
@@ -27,11 +27,10 @@ export class BookingFormComponent {
       this.myForm = new FormGroup({
         selectedMap: new FormControl('mapa1')
       });
-      this.mapSelected.emit("1");
     }
 
     updateMap(map: { catSelected: string, subCatSelected:string}) {
-      this.mapSelected.emit(`${map.subCatSelected}`);
+      this.mapSelected.emit(`${map.catSelected}-${map.subCatSelected}`);
     }
 
 }
