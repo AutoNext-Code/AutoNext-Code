@@ -2,6 +2,7 @@ package com.autonext.code.autonext_server.services;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,15 +10,42 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.autonext.code.autonext_server.dto.BookingDTO;
+import com.autonext.code.autonext_server.dto.MapBookingDTO;
+import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
+import com.autonext.code.autonext_server.exceptions.CarPlateNotExistsException;
+import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
+import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedException;
+import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
+import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
+import com.autonext.code.autonext_server.models.Car;
+import com.autonext.code.autonext_server.models.ParkingLevel;
+import com.autonext.code.autonext_server.models.ParkingSpace;
+import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
+import com.autonext.code.autonext_server.repositories.CarRepository;
+import com.autonext.code.autonext_server.repositories.ParkingLevelRepository;
+import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
+import com.autonext.code.autonext_server.repositories.UserRepository;
 import com.autonext.code.autonext_server.specifications.BookingSpecifications;
 
 @Service
 public class BookingService {
 
     @Autowired
+    private CarRepository carRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private BookingRepository bookingRepository;
+
+    @Autowired
+    private ParkingSpaceRepository parkingSpaceRepository;
+
 
     private Specification<Booking> buildBookingFilter(int userId, LocalDate date, String delegation, String carPlate,
             String plugType, String floor, String startTime, String endTime) {
@@ -50,16 +78,66 @@ public class BookingService {
         return bookingRepository.findById(id).orElse(null);
     }
 
-    public Booking createBooking(Booking booking) {
-        return bookingRepository.save(booking);
+    public void createBooking(MapBookingDTO mapBookingDTO) {
+        
+        Optional<Car> optionalCar = carRepository.findByCarPlate(mapBookingDTO.getCarPlate()) ;
+        Optional<User> optionalUser = userRepository.findById(mapBookingDTO.getUserId()) ;
+        Optional<ParkingSpace> optionalSpace = parkingSpaceRepository.findById(mapBookingDTO.getParkingSpaceId()) ;
+
+        if (!optionalSpace.isPresent()) {
+            throw new ParkingSpaceNotExistsException("La plaza no está registrada");
+        }
+        if (!optionalCar.isPresent()) {
+            throw new CarPlateNotExistsException("La matrícula no está registrada");
+        }        
+        if (!optionalUser.isPresent()) {
+            throw new UserNotFoundException("Usuario No Encontrado") ;
+        }
+
+
+        ParkingSpace parkingSpace = optionalSpace.get() ;
+
+        Booking[] bookings = bookingRepository.findAllByParkingSpaceId(parkingSpace.id) ;
+        Boolean occupiedSpace = false ;
+
+        for (Booking booking : bookings) {
+            if ((booking.getEndTime() == mapBookingDTO.getEndTime())&&(booking.getStartTime() == mapBookingDTO.getStartTime())&&booking.getStatus()!=BookingStatus.Active) {
+                occupiedSpace = true ;
+            }
+        }
+
+        if (occupiedSpace) {
+            throw new ParkingSpaceOccupiedException("La plaza está ocupada");
+        }
+
+        Car car = optionalCar.get() ;
+        User user = optionalUser.get() ;
+
+        Booking booking = new Booking(mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), mapBookingDTO.getDate(), BookingStatus.Pending , user , car ) ;
+
+        bookingRepository.save(booking) ;
+
     }
 
-    public Booking updateBooking(int id, Booking booking) {
-        if (bookingRepository.existsById(id)) {
-            booking.setId(id);
-            return bookingRepository.save(booking);
-        } else {
-            return null;
+    public BookingDTO updateBookingState(int id, int userId, BookingStatus bookingStatus) throws Exception {
+        Booking booking = bookingRepository.getReferenceById(id) ;
+
+        try {
+
+            if (booking == null) {
+                throw new BookingNotFoundException("Reserva no encontrada") ;
+            }
+    
+            if (booking.getUser().getId() != userId) {
+                throw new UserNotFoundException("Usuario no encontrado") ;
+            }
+    
+            booking.setStatus(bookingStatus);
+            BookingDTO bookMap = BookingMapper.toDTO(booking) ;
+            return bookMap;
+            
+        } catch (Exception e) {
+            throw new Exception("Error desconocido") ;
         }
     }
 }

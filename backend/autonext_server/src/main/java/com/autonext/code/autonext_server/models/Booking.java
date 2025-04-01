@@ -126,4 +126,12 @@ public class Booking {
         this.parkingSpace = parkingSpace;
     }
 
+    public WorkCenter getWorkCenter() {
+        return workCenter;
+    }
+
+    public void setWorkCenter(WorkCenter workCenter) {
+        this.workCenter = workCenter;
+    }
+
 }

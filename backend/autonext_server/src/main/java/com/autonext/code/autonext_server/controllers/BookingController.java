@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,28 +16,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
+import com.autonext.code.autonext_server.dto.MapBookingDTO;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.services.BookingService;
-import com.autonext.code.autonext_server.services.JwtService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
 
   private final BookingService bookingService;
-  private final JwtService jwtService;
 
-  public BookingController(BookingService bookingService, JwtService jwtService) {
+  public BookingController(BookingService bookingService) {
     this.bookingService = bookingService;
-    this.jwtService = jwtService;
   }
 
   @GetMapping("/user")
@@ -84,16 +84,25 @@ public class BookingController {
     return bookings.stream().map(BookingMapper::toDTO).toList();
   }
 
-  @PostMapping
-  public BookingDTO createBooking(@RequestParam Booking booking) {
-    Booking createdBooking = bookingService.createBooking(booking);
-    return BookingMapper.toDTO(createdBooking);
+  @PostMapping()
+  public ResponseEntity<String> createBooking(@RequestParam MapBookingDTO booking) {
+	  
+	try {
+
+		bookingService.createBooking(booking);
+
+		return ResponseEntity.ok("Usuario registrado correctamente");
+
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+    }
   }
 
   @PutMapping("/{id}")
-  public BookingDTO updateBooking(@RequestParam int id, @RequestParam Booking booking) {
-    Booking updatedBooking = bookingService.updateBooking(id, booking);
-    return BookingMapper.toDTO(updatedBooking);
+  public BookingDTO updateBooking(@RequestParam int id, @RequestParam BookingStatus bookingStatus) throws Exception {
+    int userId = getAuthenticatedUserId() ;
+    BookingDTO updatedBooking = bookingService.updateBookingState(id, userId, bookingStatus);
+    return updatedBooking;
   }
 
   private int getAuthenticatedUserId() {
