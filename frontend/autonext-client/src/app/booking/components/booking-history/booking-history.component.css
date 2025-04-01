@@ -30,3 +30,7 @@
 .bgtable {
   background-color: var(--table-background);
 }
+
+.border-card {
+  border: 2px solid var(--dark-blue);
+}

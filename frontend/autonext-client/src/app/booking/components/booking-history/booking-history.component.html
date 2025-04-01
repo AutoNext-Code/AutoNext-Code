@@ -1,7 +1,7 @@
 <div class="p-6 space-y-7 max-w-6xl mx-auto">
   <!-- ENCABEZADO -->
   <div class="flex items-center justify-center">
-    <h1 class="text-5xl font-title">Historial de reservas de John Doe</h1>
+    <h1 class="text-3xl sm:text-5xl text-center font-title">Historial de reservas de John Doe</h1>
   </div>
 
   <!-- FILTROS -->
@@ -27,7 +27,7 @@
   </div>
 
   <!-- TABLA -->
-  <div class="overflow-auto">
+  <div class="overflow-auto hidden lg:block">
     <table
       class="divide-y divide-gray-200 border border-gray-300 rounded-lg shadow-sm mx-auto my-10"
     >
@@ -136,6 +136,64 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- CARDS -->
+  <div class="block lg:hidden space-y-4">
+    <div
+      *ngFor="let booking of bookings"
+      class="border-card rounded-lg shadow-sm p-4"
+    >
+      <div class="flex items-center justify-between text-xl border-b border-gray-700 pb-2 mb-2">
+        <h2 class="flex-grow text-center">Reserva - {{ booking.car }}</h2>
+        <button class="material-icons text-gray-500 cursor-pointer">sync_problem</button>
+      </div>
+      <div class="flex justify-between mt-3">
+        <div>
+          <div>{{ booking.parkingSpace }}</div>
+        </div>
+        <div>
+          <div>{{ booking.workcenter }}</div>
+        </div>
+      </div>
+      <div class="flex justify-between mt-3">
+        <div>
+          <div>{{ booking.date }}</div>
+        </div>
+        <div>
+          <div>{{ booking.reservationTime }}</div>
+        </div>
+      </div>
+      <div class="flex justify-between items-center mt-3">
+        <div
+          [ngClass]="{
+            'color-green': booking.status === 'Confirmada',
+            'color-red': booking.status === 'Strike',
+            'color-gray': booking.status === 'Cancelada',
+            'color-lightblue': booking.status === 'Reservada'
+          }"
+        >
+          {{ booking.status }}
+        </div>
+        <div class="flex space-x-2">
+          <button
+            *ngIf="booking.canConfirm"
+            class="text-green-600 text-lg cursor-pointer"
+          >
+            <i class="material-icons text-base ml-2">check</i>
+          </button>
+          <button
+            *ngIf="booking.canCancel"
+            class="text-red-600 text-lg cursor-pointer"
+          >
+            <i class="material-icons text-base ml-2">close</i>
+          </button>
+          <span *ngIf="booking.status === 'Cancelada'" class="text-gray-600 text-lg">
+            ----
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- PAGINACIÓN -->
