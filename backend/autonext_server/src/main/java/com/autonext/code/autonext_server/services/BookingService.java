@@ -31,10 +31,8 @@ public class BookingService {
                 .and(BookingSpecifications.hasEndTime(endTime));
     }
 
-    public List<Booking> getAllFilteredBookings(int userId, LocalDate date, String delegation, String carPlate,
-            String plugType, String floor, String startTime, String endTime) {
-        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, plugType, floor, startTime,
-                endTime);
+    public List<Booking> getFilteredBookings(int userId, LocalDate date, String delegation, String carPlate) {
+        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, null, null, null, null);
         return bookingRepository.findAll(spec);
     }
 

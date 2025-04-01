@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -38,7 +37,7 @@ public class BookingController {
     this.jwtService = jwtService;
   }
 
-  @GetMapping("/user")
+  @GetMapping("/booking-list")
   @SecurityRequirement(name = "bearerAuth")
   public Page<BookingDTO> getBookingsByUser(
       @RequestParam(defaultValue = "0") int page,
@@ -65,23 +64,20 @@ public class BookingController {
     return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
   }
 
-  @GetMapping("/map")
+  @GetMapping("/booking-map")
   @SecurityRequirement(name = "bearerAuth")
   public List<BookingDTO> getBookingsForMap(
       @RequestParam(required = false) LocalDate date,
       @RequestParam(required = false, name = "delegation") String workCenter,
-      @RequestParam(required = false) String carPlate,
-      @RequestParam(required = false) String plugType,
-      @RequestParam(required = false) String floor,
-      @RequestParam(required = false) String startTime,
-      @RequestParam(required = false) String endTime) {
+      @RequestParam(required = false) String carPlate) {
 
     int userId = getAuthenticatedUserId();
 
-    List<Booking> bookings = bookingService.getAllFilteredBookings(
-        userId, date, workCenter, carPlate, plugType, floor, startTime, endTime);
+    List<Booking> bookings = bookingService.getFilteredBookings(userId, date, workCenter, carPlate);
 
-    return bookings.stream().map(BookingMapper::toDTO).toList();
+    return bookings.stream()
+        .map(BookingMapper::toDTO)
+        .toList();
   }
 
   @PostMapping
