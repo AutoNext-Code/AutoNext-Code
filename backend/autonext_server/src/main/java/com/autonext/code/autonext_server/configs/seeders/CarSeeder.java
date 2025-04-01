@@ -6,10 +6,12 @@ import com.autonext.code.autonext_server.models.enums.PlugType;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Order(5)
 @Component
 public class CarSeeder implements CommandLineRunner {
 
