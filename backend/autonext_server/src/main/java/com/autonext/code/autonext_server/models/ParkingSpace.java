@@ -27,6 +27,9 @@ public class ParkingSpace {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id ;
 
+    @Column (nullable = false)
+    public String name ;
+
     @Column( nullable = false)
     public int x ;
 
@@ -52,13 +55,22 @@ public class ParkingSpace {
     public ParkingSpace() {
     }
 
-    public ParkingSpace(Integer x, Integer y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
+        this.name = name ;
         this.x = x ;
         this.y = y ;
         this.direction = direction ;
         this.plugType = plugType ;
         this.state = state ;
         this.parkingLevel = parkingLevel;
+    }
+
+    public String getName() {
+        return name;
+    }  
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
@@ -68,8 +80,6 @@ public class ParkingSpace {
     public void setId(int id) {
         this.id = id;
     }
-
-    
 
     public Integer getX() {
         return x;
