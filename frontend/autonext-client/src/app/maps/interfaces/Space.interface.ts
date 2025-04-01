@@ -1,6 +1,7 @@
 import { Direction } from "@maps/enums/Direction.enum";
-import { PlugType } from "@maps/enums/plugType.enum";
+import { PlugType } from "@maps/enums/PlugType.enum";
 import { State } from "@maps/enums/State.enum";
+
 
 
 export interface Space  {
