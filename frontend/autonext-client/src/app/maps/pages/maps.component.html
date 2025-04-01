@@ -7,21 +7,12 @@
       width="800"
       height="600"
       />
-      <!-- @for (point of points[mapSelected]; track $index) {
-        <g
-        [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
-        >
-        <use
-          xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-          width="35" height="44"
-          [attr.filter]="point.color">
-        </use>
-      </g>
-    } -->
 
     @for (space of spaces; track $index) {
       <g
-      [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y-25) + ') rotate(' + getDirectionValue(space.direction) + ', 17, 22)'"
+      [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+
+
       >
       <use
         xlink:href="./assets/svg/CarIcon.svg#custom-marker"
