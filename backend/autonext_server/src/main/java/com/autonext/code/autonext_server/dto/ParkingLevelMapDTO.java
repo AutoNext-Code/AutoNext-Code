@@ -18,9 +18,10 @@ public class ParkingLevelMapDTO {
     this.name = level.getName();
     this.imageUrl = baseImageUrl + level.getImageName();
     this.workCenterName = level.getWorkCenter().getName();
-    this.spaces = level.getParkingSpaces().stream()
+    this.spaces = level.getActiveSpaces().stream()
         .map(Space::new)
         .collect(Collectors.toList());
+
   }
 
   public int getId() {
