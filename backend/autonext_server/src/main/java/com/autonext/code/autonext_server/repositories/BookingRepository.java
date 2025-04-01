@@ -16,13 +16,17 @@ import org.springframework.data.repository.query.Param;
 
 import org.springframework.stereotype.Repository;
 
-
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking>  {
+public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
 
   Page<Booking> findByUserId(int userId, Pageable pageable);
 
-@Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.startTime BETWEEN :startTime AND :endTime")
-List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+  @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.startTime BETWEEN :startTime AND :endTime")
+  List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
+      @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+
+  @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime BETWEEN :startTime AND :endTime")
+  List<Booking> findReservationsToEndSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
+      @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
 
 }

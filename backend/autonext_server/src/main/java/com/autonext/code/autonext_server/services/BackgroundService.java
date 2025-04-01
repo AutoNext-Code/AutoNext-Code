@@ -43,12 +43,28 @@ public class BackgroundService {
         for (Booking booking : bookings) {
             sendReservationNotification(booking);
         }
+
+        List<Booking> bookingsToEndSoon = bookingRepository.findReservationsToEndSoon(BookingStatus.Active, date,
+                startTime, now.toLocalTime().minusMinutes(15));
+
+        for (Booking booking : bookingsToEndSoon) {
+            sendReservationEndNotification(booking);
+        }
     }
 
     private void sendReservationNotification(Booking booking) {
         String subject = "Notificación de reserva";
-        String body = "La reserva en el puesto de carga " + booking.getParkingSpace() + " está por iniciar a las "
+        String body = "La reserva en el puesto de carga " + booking.getParkingSpace().getName()
+                + " está por iniciar a las "
                 + booking.getStartTime() + " del día " + booking.getDate();
+        emailService.sendEmail(booking.getUser().getEmail(), subject, body);
+    }
+
+    private void sendReservationEndNotification(Booking booking) {
+        String subject = "Notificación de fin de reserva";
+        String body = "La reserva en el puesto de carga " + booking.getParkingSpace().getName()
+                + " está por terminar a las "
+                + booking.getEndTime() + " del día " + booking.getDate() + ". Recuerda liberar el puesto.";
         emailService.sendEmail(booking.getUser().getEmail(), subject, body);
     }
 }
