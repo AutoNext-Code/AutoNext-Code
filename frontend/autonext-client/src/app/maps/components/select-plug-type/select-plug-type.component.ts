@@ -32,32 +32,7 @@ export class SelectPlugTypeComponent implements OnInit {
   }
 
   getSelectedPlugTypeValue(): void {
-    switch (this.selectedPlugType) {
-      case "Schuko":
-        this.selectedPlugTypeValue = PlugType.Schuko;
-        break;
-      case "Type1":
-        this.selectedPlugTypeValue = PlugType.Type1;
-        break;
-      case "Type2":
-        this.selectedPlugTypeValue = PlugType.Type2;
-        break;
-      case "CCS":
-        this.selectedPlugTypeValue = PlugType.CCS;
-        break;
-      case "CHAdeMO":
-        this.selectedPlugTypeValue = PlugType.CHAdeMO;
-        break;
-      case "Undefined":
-      default:
-        this.selectedPlugTypeValue = PlugType.Undefined;
-        break;
-    }
-
-    console.log("Selected PlugType:", this.selectedPlugType);
-    console.log("Numeric Value:", this.selectedPlugTypeValue);
+    this.selectedPlugTypeValue = PlugType[this.selectedPlugType as keyof typeof PlugType] ?? PlugType.Undefined;
   }
-
-
 
 }
