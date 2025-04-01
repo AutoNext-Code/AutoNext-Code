@@ -14,6 +14,9 @@ export const REGISTER_ENDPOINT = `${API_BASE_URL}auth/register`;
 
 export const CONFIRM_EMAIL_ENDPOINT = `${API_BASE_URL}auth/email-confirmation`;
 
+/* ENDPOINTS DE MAP-LOADER  */
+
+export const MAP_ENDPOINT = `${API_BASE_URL}parking/level`
 /* ENDPOINTS DE BOOKINGS */
 
 export const BOOKINGS_ENDPOINT =  `${API_BASE_URL}bookings`

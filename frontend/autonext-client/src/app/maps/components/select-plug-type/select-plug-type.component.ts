@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PlugType } from '@maps/enums/plugType.enum';
+import { PlugType } from '@maps/enums/PlugType.enum';
 
 @Component({
   selector: 'maps-select-plug-type',
