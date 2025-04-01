@@ -28,10 +28,10 @@ public class ParkingSpace {
     public int id ;
 
     @Column( nullable = false)
-    public String x ;
+    public int x ;
 
     @Column( nullable = false)
-    public String y ;
+    public int y ;
 
     @Column( nullable = false)
     public Direction direction ;
@@ -52,7 +52,7 @@ public class ParkingSpace {
     public ParkingSpace() {
     }
 
-    public ParkingSpace(String x, String y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
+    public ParkingSpace(Integer x, Integer y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
         this.x = x ;
         this.y = y ;
         this.direction = direction ;
@@ -71,19 +71,19 @@ public class ParkingSpace {
 
     
 
-    public String getX() {
+    public Integer getX() {
         return x;
     }
 
-    public void setX(String x) {
+    public void setX(Integer x) {
         this.x = x;
     }
 
-    public String getY() {
+    public Integer getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(Integer y) {
         this.y = y;
     }
 

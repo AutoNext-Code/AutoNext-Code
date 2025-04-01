@@ -4,6 +4,7 @@ import { MapLoaderService } from '@maps/services/map-loader.service';
 import { Chart } from '@maps/interfaces/Chart.interface';
 import { Observable } from 'rxjs';
 import { Space } from '@maps/interfaces/Space.interface';
+import { Direction } from '@maps/enums/Direction.enum';
 
 
 @Component({
@@ -42,6 +43,10 @@ export class MapsComponent implements OnInit {
     this.checkImageLoad();
     this.chartLoad();
 
+  }
+
+  getDirectionValue(direction: string): number {
+    return Direction[direction as keyof typeof Direction];
   }
 
   chartLoad(){

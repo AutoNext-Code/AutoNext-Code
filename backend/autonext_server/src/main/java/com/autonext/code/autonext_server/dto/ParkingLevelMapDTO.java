@@ -45,8 +45,8 @@ public class ParkingLevelMapDTO {
 
   public static class Space {
     private int id;
-    private String x;
-    private String y;
+    private int x;
+    private int y;
     private String direction;
     private String plugType;
     private String state;
@@ -64,11 +64,11 @@ public class ParkingLevelMapDTO {
       return id;
     }
 
-    public String getX() {
+    public Integer getX() {
       return x;
     }
 
-    public String getY() {
+    public Integer getY() {
       return y;
     }
 
