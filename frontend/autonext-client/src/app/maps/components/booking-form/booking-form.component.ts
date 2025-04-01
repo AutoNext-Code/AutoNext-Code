@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectDepComponent } from '@shared/components/ui/select-dep/select-dep.component';
+import { SelectPlugTypeComponent } from "../select-plug-type/select-plug-type.component";
 
 @Component({
   selector: 'user-booking-form',
-  imports: [ReactiveFormsModule, SelectDepComponent],
+  imports: [ReactiveFormsModule, SelectDepComponent, SelectPlugTypeComponent],
   templateUrl: './booking-form.component.html',
   styleUrl: './booking-form.component.css'
 })
@@ -16,12 +17,12 @@ export class BookingFormComponent {
       "Madrid": ['1','2','3'],
       "Málaga": ['0','1']
     };
-  
+
     @Output() mapSelected: EventEmitter<string> = new EventEmitter();
-  
-  
+
+
     myForm!: FormGroup;
-  
+
     ngOnInit() {
       this.myForm = new FormGroup({
         selectedMap: new FormControl('mapa1')
