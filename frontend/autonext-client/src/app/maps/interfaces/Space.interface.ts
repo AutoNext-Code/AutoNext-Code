@@ -4,6 +4,7 @@ import { State } from "@maps/enums/State.enum";
 
 
 
+
 export interface Space  {
   id:number;
   x: number;
