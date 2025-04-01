@@ -30,52 +30,82 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
-    private final BookingService bookingService;
-    private final JwtService jwtService;
+  private final BookingService bookingService;
+  private final JwtService jwtService;
 
-    public BookingController(BookingService bookingService, JwtService jwtService) {
-        this.bookingService = bookingService;
-        this.jwtService = jwtService;
-    }
+  public BookingController(BookingService bookingService, JwtService jwtService) {
+    this.bookingService = bookingService;
+    this.jwtService = jwtService;
+  }
 
-    @GetMapping("/user")
-    @SecurityRequirement(name = "bearerAuth")
-    public Page<BookingDTO> getBookingsByUser(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "date") String sortBy,
-            @RequestParam(defaultValue = "true") boolean ascending,
-            @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false, name = "delegation") String workCenter,
-            @RequestParam(required = false) String carPlate) {
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
-                .getContext().getAuthentication();
+  @GetMapping("/user")
+  @SecurityRequirement(name = "bearerAuth")
+  public Page<BookingDTO> getBookingsByUser(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "date") String sortBy,
+      @RequestParam(defaultValue = "true") boolean ascending,
+      @RequestParam(required = false) LocalDate date,
+      @RequestParam(required = false, name = "delegation") String workCenter,
+      @RequestParam(required = false) String carPlate,
+      @RequestParam(required = false) String plugType,
+      @RequestParam(required = false) String floor,
+      @RequestParam(required = false) String startTime,
+      @RequestParam(required = false) String endTime) {
 
-        User user = (User) authentication.getPrincipal(); 
-        int userId = user.getId();
+    int userId = getAuthenticatedUserId();
+    PageRequest pageable = buildPageRequest(page, sortBy, ascending);
 
-        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        PageRequest pageable = PageRequest.of(page, 6, sort);
+    Page<Booking> bookings = bookingService.getFilteredBookingsPaged(
+        userId, pageable, date, workCenter, carPlate, plugType, floor, startTime, endTime);
 
-        Page<Booking> bookings = bookingService.getBookingsByUser(userId, pageable, date, workCenter, carPlate);
+    List<BookingDTO> bookingDTOs = bookings.getContent().stream()
+        .map(BookingMapper::toDTO)
+        .toList();
 
-        List<BookingDTO> bookingDTOs = bookings.getContent().stream()
-            .map(BookingMapper::toDTO)
-            .collect(Collectors.toList());
+    return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
+  }
 
-        return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
-    }
+  @GetMapping("/map")
+  @SecurityRequirement(name = "bearerAuth")
+  public List<BookingDTO> getBookingsForMap(
+      @RequestParam(required = false) LocalDate date,
+      @RequestParam(required = false, name = "delegation") String workCenter,
+      @RequestParam(required = false) String carPlate,
+      @RequestParam(required = false) String plugType,
+      @RequestParam(required = false) String floor,
+      @RequestParam(required = false) String startTime,
+      @RequestParam(required = false) String endTime) {
 
+    int userId = getAuthenticatedUserId();
 
-    @PostMapping
-    public BookingDTO createBooking(@RequestParam Booking booking) {
-        Booking createdBooking = bookingService.createBooking(booking);
-        return BookingMapper.toDTO(createdBooking);
-    }
+    List<Booking> bookings = bookingService.getAllFilteredBookings(
+        userId, date, workCenter, carPlate, plugType, floor, startTime, endTime);
 
-    @PutMapping("/{id}")
-    public BookingDTO updateBooking(@RequestParam int id, @RequestParam Booking booking) {
-        Booking updatedBooking = bookingService.updateBooking(id, booking);
-        return BookingMapper.toDTO(updatedBooking);
-    }
+    return bookings.stream().map(BookingMapper::toDTO).toList();
+  }
+
+  @PostMapping
+  public BookingDTO createBooking(@RequestParam Booking booking) {
+    Booking createdBooking = bookingService.createBooking(booking);
+    return BookingMapper.toDTO(createdBooking);
+  }
+
+  @PutMapping("/{id}")
+  public BookingDTO updateBooking(@RequestParam int id, @RequestParam Booking booking) {
+    Booking updatedBooking = bookingService.updateBooking(id, booking);
+    return BookingMapper.toDTO(updatedBooking);
+  }
+
+  private int getAuthenticatedUserId() {
+    UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
+        .getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+    return user.getId();
+  }
+
+  private PageRequest buildPageRequest(int page, String sortBy, boolean ascending) {
+    Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+    return PageRequest.of(page, 6, sort);
+  }
 
 }
