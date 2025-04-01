@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { SortableThComponent } from '../sortable-th/sortable-th.component';
 import { Booking } from '../../booking.model';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
+import { CardBookingComponent } from '../card-booking/card-booking.component';
 
 @Component({
   selector: 'booking-history',
-  imports: [CommonModule, SortableThComponent, PaginationComponent],
+  imports: [CommonModule, SortableThComponent, PaginationComponent, CardBookingComponent],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
