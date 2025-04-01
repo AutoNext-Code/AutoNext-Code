@@ -6,14 +6,12 @@
     <div class="lg:w-1/2">
       <div class="flex flex-col gap-3 text-left md:text-left lg:text-[20px] md:text-[16px] max-sm:text-[25px]">
         <p class="text-4xl text-center md:text-left font-bold pb-1">
-          {{ user.name }}
+          {{ user?.name }}
         </p>
-        <p>Correo electrónico: {{ user.email }}</p>
-        <p>Puesto: {{ user.jobPosition }}</p>
-        <p>Delegación: {{ user.workCenterName }}</p>
-        @if (user.strikes > 0) {
-          <p>Strikes: {{ user.strikes }}</p>
-        }
+        <p>Correo electrónico: {{ user?.email }}</p>
+        <p>Puesto: {{ user?.jobPosition }}</p>
+        <p>Delegación: {{ user?.delegation }}</p>
+        <p *ngIf="user?.strikes">Strikes: {{ user?.strikes }}</p>
       </div>
     </div>
   </div>
