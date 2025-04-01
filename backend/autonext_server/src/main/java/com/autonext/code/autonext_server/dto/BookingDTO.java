@@ -10,16 +10,14 @@ public class BookingDTO {
     private String userName;
     private String carPlate;
     private String status;
-    private String parkingSpace;
 
-    public BookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String carPlate, String status, String parkingSpace) {
+    public BookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String carPlate, String status) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.userName = userName;
         this.carPlate = carPlate;
         this.status = status;
-        this.parkingSpace = parkingSpace;
     }
 
     public LocalDate getDate() {
@@ -69,13 +67,4 @@ public class BookingDTO {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public String getParkingSpace() {
-        return parkingSpace;
-    }
-
-    public void setParkingSpace(String parkingSpace) {
-        this.parkingSpace = parkingSpace;
-    }
-
 }
