@@ -1,5 +1,13 @@
-<select class="w-full border p-2 rounded" id="plugTypeSelect" [(ngModel)]="selectedPlugType" (ngModelChange)="getSelectedPlugTypeValue()">
-  <option *ngFor="let type of plugTypes" [ngValue]="type">
-    {{ type === 'Undefined' ? 'Todos los cargadores' : type }}
-  </option>
-</select>
+<div class="inline-block">
+  <h1 class="mt-4 text-2xl text-left">Tipo de cargador:</h1>
+  <select
+    class="w-[240px] border p-2 rounded"
+    id="plugTypeSelect"
+    [(ngModel)]="selectedPlugType"
+    (ngModelChange)="getSelectedPlugTypeValue()"
+  >
+    <option *ngFor="let type of plugTypes" [ngValue]="type">
+      {{ type === "Undefined" ? "Todos los cargadores" : type }}
+    </option>
+  </select>
+</div>
