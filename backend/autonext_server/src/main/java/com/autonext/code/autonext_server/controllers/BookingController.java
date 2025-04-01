@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
+import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
+import com.autonext.code.autonext_server.exceptions.CarPlateNotExistsException;
+import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
+import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedException;
+import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
@@ -90,6 +95,14 @@ public class BookingController {
 
 		return ResponseEntity.ok("Usuario registrado correctamente");
 
+    } catch (ParkingSpaceNotExistsException psne) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La plaza no existe");
+    } catch (CarPlateNotExistsException cpne) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El coche no existe");
+    } catch (UserNotFoundException unf) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+    } catch (ParkingSpaceOccupiedException pso) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("La plaza ya esta ocupada");
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
     }
@@ -97,9 +110,15 @@ public class BookingController {
 
   @PutMapping("/{id}")
   public BookingDTO updateBooking(@RequestParam int id, @RequestParam BookingStatus bookingStatus) throws Exception {
-    int userId = getAuthenticatedUserId() ;
-    BookingDTO updatedBooking = bookingService.updateBookingState(id, userId, bookingStatus);
-    return updatedBooking;
+	try {
+		int userId = getAuthenticatedUserId() ;
+		BookingDTO updatedBooking = bookingService.updateBookingState(id, userId, bookingStatus);
+		return updatedBooking;
+	} catch (BookingNotFoundException bnf) {
+        throw new Exception("Reserva no encontrada");
+	} catch (UserNotFoundException bnf) {
+        throw new Exception("Usuario no encontrado");
+	}
   }
 
   private int getAuthenticatedUserId() {
