@@ -1,63 +1,103 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import bookinksData from '../../data/bookings.json';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SortableThComponent } from '../sortable-th/sortable-th.component';
-import { Booking } from '../../booking.model';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
 import { CardBookingComponent } from '../card-booking/card-booking.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+
+import { BookingService } from '@booking/services/booking.service';
+import { BookingDTO } from '@booking/interfaces/booking.interface';
 
 @Component({
   selector: 'booking-history',
+  standalone: true,
   imports: [CommonModule, SortableThComponent, PaginationComponent, CardBookingComponent],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingHistoryComponent {
-  bookings: Booking[] = bookinksData;
 
-  sortColumn: keyof Booking | null = null;
-  sortDirection: 'asc' | 'desc' | null = null;
+  private bookingService = inject(BookingService);
+  
+  // Signals para paginación y filtros
+  currentPage = signal(1);
+  sortColumn = signal<string>('date');
+  sortDirection = signal<'asc' | 'desc'>('asc');
+  delegation = signal<string | null>(null);
+  carPlate = signal<string | null>(null);
+  date = signal<string | null>(null);
 
-  currentPage = 1;
-  totalPages = 3; // o el total real que tengas
+  bookings$ = this.bookingService.bookingList$;
+  total$ = this.bookingService.total$;
 
-  onPageChange(page: number) {
-    this.currentPage = page;
-    // Aquí puedes cargar los datos de esa página si aplicas paginación real
+  total = toSignal(this.bookingService.total$, { initialValue: 0 });
+  totalPages = computed(() => Math.ceil(this.total() / 6));
+
+
+  constructor() {
+    effect(() => {
+      this.loadBookings();
+    });
   }
 
   onSort(column: string) {
-    if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    if (this.sortColumn() === column) {
+      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
     } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
+      this.sortColumn.set(column);
+      this.sortDirection.set('asc');
     }
-
-    // Ordenación local (datos mock desde JSON)
-    this.bookings = [...this.bookings].sort((a, b) => {
-      const aValue = a[column];
-      const bValue = b[column];
-
-      if (aValue == null) return 1;
-      if (bValue == null) return -1;
-
-      if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-
-    // TODO: Ordenar desde backend más adelante
-    // this.loadData(this.sortColumn, this.sortDirection);
   }
 
-  // loadData(column: string | null, direction: 'asc' | 'desc' | null) {
-  //   // Aquí harías una petición HTTP al backend pasando los parámetros de ordenación
-  //   // this.bookingService.getBookings({ sortBy: column, sortDirection: direction }).subscribe(data => {
-  //   //   this.bookings = data;
-  //   // });
-  // }
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
 
+  onDelegationChange(value: string) {
+    this.delegation.set(value || null);
+    this.currentPage.set(1);
+  }
+
+  onCarChange(value: string) {
+    this.carPlate.set(value || null);
+    this.currentPage.set(1);
+  }
+
+  onDateChange(value: string) {
+    this.date.set(value || null);
+    this.currentPage.set(1);
+  }
+
+  private loadBookings() {
+    this.bookingService.getBookingsByUser({
+      page: this.currentPage() - 1,
+      sortBy: this.sortColumn(),
+      ascending: this.sortDirection() === 'asc',
+      delegation: this.delegation() ?? undefined,
+      carPlate: this.carPlate() ?? undefined,
+      date: this.date() ?? undefined
+    });
+  }
+
+  getStatusLabel(status: string | null): string {
+    switch (status) {
+      case 'Active':
+        return 'Activa';
+      case 'Pending':
+        return 'Reservada';
+      case 'Cancelled':
+        return 'Cancelada';
+      case 'Strike':
+        return 'Strike'; // puedes traducirlo si quieres
+      case 'Completed':
+        return 'Finalizada';
+      case 'Blocked':
+        return 'Bloqueada';
+      default:
+        return 'Desconocido';
+    }
+  }
   
 }
