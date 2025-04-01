@@ -81,7 +81,7 @@ public class BookingController {
         .toList();
   }
 
-  @PostMapping()
+  @PostMapping
   public ResponseEntity<String> createBooking(@RequestParam MapBookingDTO booking) {
 	  
 	try {

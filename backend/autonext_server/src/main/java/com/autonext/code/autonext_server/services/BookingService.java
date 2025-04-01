@@ -95,17 +95,16 @@ public class BookingService {
 
         ParkingSpace parkingSpace = optionalSpace.get() ;
 
-        Booking[] bookings = bookingRepository.findAllByParkingSpaceId(parkingSpace.id) ;
-        Boolean occupiedSpace = false ;
+        List<Booking> bookings = bookingRepository.findAllReservationsByDateAndSpace(mapBookingDTO.getDate(), parkingSpace) ;
 
         for (Booking booking : bookings) {
-            if ((booking.getEndTime() == mapBookingDTO.getEndTime())&&(booking.getStartTime() == mapBookingDTO.getStartTime())&&booking.getStatus()!=BookingStatus.Active) {
-                occupiedSpace = true ;
-            }
-        }
 
-        if (occupiedSpace) {
-            throw new ParkingSpaceOccupiedException("La plaza está ocupada");
+            boolean overlap = !(mapBookingDTO.getEndTime().isBefore(booking.getStartTime()) || 
+                                mapBookingDTO.getStartTime().isAfter(booking.getEndTime()));
+
+            if (overlap && booking.getStatus() != BookingStatus.Active) {
+                throw new ParkingSpaceOccupiedException("La plaza está ocupada en el horario seleccionado");
+            }
         }
 
         Car car = optionalCar.get() ;
