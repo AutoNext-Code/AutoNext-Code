@@ -11,8 +11,15 @@
     @for (space of spaces; track $index) {
       <g
       [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-
-
+      (click)="toggleModal({
+          workCenter: 'Malaga-101',
+          level: 1,
+          day: '10/06/2024',
+          car: '1111 XXX',
+          hour: '9:00-23:00',
+          plugType: 'CHAdeMO'
+          }
+        )"
       >
       <use
         xlink:href="./assets/svg/CarIcon.svg#custom-marker"
@@ -25,3 +32,40 @@
 </div>
 
 }
+
+
+<div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30" [hidden]="modal" id="modal">
+  <div class="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 transition-opacity">
+      <div class="absolute inset-0 bg-gray-900 opacity-75" (click)="closeModal()"></div>
+    </div>
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+    <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+      <div class="bg-blue-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <h1 class="text-white text-center text-3xl">Reserva Vehículo | Puesto 133</h1>
+      </div>
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+
+        <space-data [spaceData]="this.carData" />
+
+      </div>
+      <div class="bg-gray-200 px-4 py-3 flex">
+        <app-custom-button
+          (onClick)="closeModal()"
+          [color]="'gray'"
+          [icon]="'close'"
+          [label]="'Cerrar'"
+          class="flex-2 rounded"
+        ></app-custom-button>
+        <div class="flex-2"></div>
+        <app-custom-button
+          (onClick)="closeModal()"
+          [color]="'dark-blue'"
+          [icon]="'book'"
+          [label]="'Reservar'"
+          class="flex-2 rounded"
+        ></app-custom-button>
+      </div>
+    </div>
+  </div>
+</div>

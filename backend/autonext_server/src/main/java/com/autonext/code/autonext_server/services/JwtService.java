@@ -26,7 +26,8 @@ public class JwtService {
 
   public String generateToken(User user) {
     return Jwts.builder()
-        .subject(user.getName())
+        .subject(user.getEmail())
+        .claim("id", user.getId())
         .claim("role", user.getRole())
         .claim("name", user.getName())
         .issuedAt(new Date())
@@ -50,6 +51,10 @@ public class JwtService {
       throw new InvalidJwtException("Token inválido o expirado");
     }
 
+  }
+
+  public int extractUserId(String token) {
+    return extractClaim(token, claims -> claims.get("id", Integer.class));
   }
 
   public String extractUsername(String token) {

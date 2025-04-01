@@ -8,9 +8,14 @@ import { Direction } from '@maps/enums/Direction.enum';
 import { State } from '@maps/enums/State.enum';
 
 
+import { SpaceDataComponent } from "@booking/components/space-data/space-data.component";
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
+
+import { CustomButtonComponent } from "../../shared/components/ui/custom-button/custom-button.component";
+
 @Component({
   selector: 'app-maps',
-  imports: [],
+  imports: [SpaceDataComponent, CustomButtonComponent],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css'
 })
@@ -23,16 +28,19 @@ export class MapsComponent implements OnInit {
 
 
   @Input() mapSelected: string = '';
-  @Output() mapLoaded = new EventEmitter<boolean>(); // Evento para avisar que el mapa está listo
-  @ViewChild('svgElement') svgElement!: ElementRef; // Referencia al SVG
+  @Output() mapLoaded = new EventEmitter<boolean>();
+  @ViewChild('svgElement') svgElement!: ElementRef;
 
-  isLoaded = false;
+  isLoaded:boolean = false;
+  modal:boolean = true ;
+  carData!: SpaceData ;
 
   ngOnInit(): void {
     this.chartLoad();
     this.checkImageLoad
     console.log('Mapa seleccionado:', this.mapSelected);
-    this.isLoaded = false; // Reseteamos el estado al cambiar de mapa
+    this.isLoaded = false;
+
   }
 
   ngAfterViewInit(): void {
@@ -40,7 +48,7 @@ export class MapsComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-    this.isLoaded = false; 
+    this.isLoaded = false;
     this.checkImageLoad();
     this.chartLoad();
 
@@ -50,7 +58,7 @@ export class MapsComponent implements OnInit {
     this.mapLoader.mapLoad(this.mapSelected).subscribe((response) => {
       this.chart = response;
       this.imageUrl = response.imageUrl;
-  
+
       this.spaces = response.spaces.map((space: any) => ({
         ...space,
         direction: typeof space.direction === 'string'
@@ -62,7 +70,7 @@ export class MapsComponent implements OnInit {
       }));
     });
   }
-  
+
 
   checkImageLoad() {
 
@@ -74,8 +82,19 @@ export class MapsComponent implements OnInit {
 
     image.onload = () => {
       this.isLoaded = true;
-      this.mapLoaded.emit(true); // Emitimos que el mapa está cargado
+      this.mapLoaded.emit(true);
     };
   }
+
+  toggleModal(carData: SpaceData) {
+    this.modal = false ;
+    this.carData = carData
+  }
+
+  closeModal(){
+    this.modal = true ;
+  }
+
+
 
 }

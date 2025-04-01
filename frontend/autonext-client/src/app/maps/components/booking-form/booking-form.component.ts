@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectDepComponent } from '@shared/components/ui/select-dep/select-dep.component';
+import { SelectPlugTypeComponent } from "../select-plug-type/select-plug-type.component";
 
 @Component({
   selector: 'user-booking-form',
-  imports: [ReactiveFormsModule, SelectDepComponent],
+  imports: [ReactiveFormsModule, SelectDepComponent, SelectPlugTypeComponent],
   templateUrl: './booking-form.component.html',
   styleUrl: './booking-form.component.css'
 })
