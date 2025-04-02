@@ -4,16 +4,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "bookings")
@@ -51,15 +53,21 @@ public class Booking {
     @JoinColumn(name = "work_center_id", nullable = false)
     private WorkCenter workCenter;
 
-    public Booking() {}
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ConfirmationStatus confirmationStatus;
 
-    public Booking(LocalTime startTime, LocalTime endTime, LocalDate date, BookingStatus status, User user, Car car) {
+    public Booking() {
+    }
+
+    public Booking(LocalTime startTime, LocalTime endTime, LocalDate date, User user, Car car) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
         this.status = BookingStatus.Pending;
         this.user = user;
         this.car = car;
+        this.confirmationStatus = ConfirmationStatus.Inactive;
     }
 
     public int getId() {
@@ -132,6 +140,14 @@ public class Booking {
 
     public void setWorkCenter(WorkCenter workCenter) {
         this.workCenter = workCenter;
+    }
+
+    public ConfirmationStatus getConfirmationStatus() {
+        return confirmationStatus;
+    }
+
+    public void setConfirmationStatus(ConfirmationStatus confirmationStatus) {
+        this.confirmationStatus = confirmationStatus;
     }
 
 }

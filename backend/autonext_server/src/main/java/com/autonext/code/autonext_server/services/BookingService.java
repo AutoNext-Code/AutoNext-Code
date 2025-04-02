@@ -44,6 +44,27 @@ public class BookingService {
 
   @Autowired
   private BookingRepository bookingRepository;
+    public List<Booking> getFilteredBookings(int userId,
+            LocalDate date,
+            String delegation,
+            String carPlate,
+            String plugType,
+            String floor,
+            String startTime,
+            String endTime) {
+        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, plugType, floor, startTime,
+                endTime);
+        return bookingRepository.findAll(spec);
+    }
+
+    public Page<Booking> getFilteredBookingsPaged(int userId,
+            Pageable pageable,
+            LocalDate date,
+            String delegation,
+            String carPlate) {
+        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, null, null, null, null);
+        return bookingRepository.findAll(spec, pageable);
+    }
 
   @Autowired
   private ParkingSpaceRepository parkingSpaceRepository;
@@ -122,8 +143,7 @@ public class BookingService {
       WorkCenter workCenter = parkingSpace.getParkingLevel().getWorkCenter();
 
       // Creamos la entidad de Booking
-      Booking booking = new Booking(mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), mapBookingDTO.getDate(),
-          BookingStatus.Pending, user, car);
+      Booking booking = new Booking(mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), mapBookingDTO.getDate(), user, car);
       booking.setParkingSpace(parkingSpace);
       booking.setWorkCenter(workCenter); // Asociamos el WorkCenter de la ParkingSpace a la reserva
 

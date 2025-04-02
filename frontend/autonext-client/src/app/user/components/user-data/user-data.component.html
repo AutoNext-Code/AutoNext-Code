@@ -18,7 +18,7 @@
 
   <div class="flex flex-col md:flex-row text-center items-center gap-7 w-full">
     <button
-      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
       (click)="warning()"
     >
       <span>Editar Perfil</span>
@@ -26,7 +26,7 @@
     </button>
 
     <button
-      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
       (click)="warning()"
     >
       <span>Contraseña</span>
@@ -34,15 +34,15 @@
     </button>
 
     <button
-      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
-      (click)="warning()"
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
+      (click)="navigate('/vehicles')"
     >
       <span>Mis Vehículos</span>
       <i class="material-icons">directions_car</i>
     </button>
 
     <button
-      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6"
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
       (click)="navigate('/booking')"
     >
       <span>Mis Reservas</span>

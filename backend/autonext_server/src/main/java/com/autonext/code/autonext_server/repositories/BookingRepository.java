@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -20,18 +18,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
 
-    Page<Booking> findByUserId(int userId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.startTime BETWEEN :startTime AND :endTime")
     List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
-        @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+            @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
 
     @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime BETWEEN :startTime AND :endTime")
     List<Booking> findReservationsToEndSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
-        @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+            @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+
+    @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime <= :currentTime")
+    List<Booking> findCompletedBookings(@Param("status") BookingStatus status, @Param("date") LocalDate date,
+            @Param("currentTime") LocalTime currentTime);
 
     @Query("SELECT b FROM Booking b WHERE b.date = :date AND b.parkingSpace = :space")
     List<Booking> findAllReservationsByDateAndSpace(@Param("date") LocalDate date, @Param("space") ParkingSpace space);
-        
+    
 
 }

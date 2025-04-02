@@ -8,16 +8,23 @@ public class BookingDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private String userName;
-    private String carPlate;
+    private String nameSpace;
+    private String delegation;
     private String status;
+    private String confirmationStatus;
+    private String carName;
 
-    public BookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String carPlate, String status) {
+    public BookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String nameSpace,
+            String delegation, String status, String confirmationStatus, String carName) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.userName = userName;
-        this.carPlate = carPlate;
+        this.nameSpace = nameSpace;
+        this.delegation = delegation;
         this.status = status;
+        this.confirmationStatus = confirmationStatus;
+        this.carName = carName;
     }
 
     public LocalDate getDate() {
@@ -52,12 +59,12 @@ public class BookingDTO {
         this.userName = userName;
     }
 
-    public String getCarPlate() {
-        return carPlate;
+    public String getNameSpace() {
+        return nameSpace;
     }
 
-    public void setCarPlate(String carPlate) {
-        this.carPlate = carPlate;
+    public void setNameSpace(String nameSpace) {
+        this.nameSpace = nameSpace;
     }
 
     public String getStatus() {
@@ -66,5 +73,29 @@ public class BookingDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDelegation() {
+        return delegation;
+    }
+
+    public void setDelegation(String delegation) {
+        this.delegation = delegation;
+    }
+
+    public String getConfirmationStatus() {
+        return confirmationStatus;
+    }
+
+    public void setConfirmationStatus(String confirmationStatus) {
+        this.confirmationStatus = confirmationStatus;
+    }
+
+    public String getCarName() {
+        return carName;
+    }
+    
+    public void setCarName(String carName) {
+        this.carName = carName;
     }
 }
