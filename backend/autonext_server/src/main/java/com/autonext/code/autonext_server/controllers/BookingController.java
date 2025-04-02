@@ -37,12 +37,9 @@ public class BookingController {
     this.jwtService = jwtService;
   }
 
-  @GetMapping("/booking-list")
+  @GetMapping("/booking-map")
   @SecurityRequirement(name = "bearerAuth")
-  public Page<BookingDTO> getBookingsByUser(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "date") String sortBy,
-      @RequestParam(defaultValue = "true") boolean ascending,
+  public List<BookingDTO> getBookingsForMap(
       @RequestParam(required = false) LocalDate date,
       @RequestParam(required = false, name = "delegation") String workCenter,
       @RequestParam(required = false) String carPlate,
@@ -52,10 +49,30 @@ public class BookingController {
       @RequestParam(required = false) String endTime) {
 
     int userId = getAuthenticatedUserId();
+
+    List<Booking> bookings = bookingService.getFilteredBookings(
+        userId, date, workCenter, carPlate, plugType, floor, startTime, endTime);
+
+    return bookings.stream()
+        .map(BookingMapper::toDTO)
+        .toList();
+  }
+
+  @GetMapping("/booking-list")
+  @SecurityRequirement(name = "bearerAuth")
+  public Page<BookingDTO> getBookingsByUser(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "date") String sortBy,
+      @RequestParam(defaultValue = "true") boolean ascending,
+      @RequestParam(required = false) LocalDate date,
+      @RequestParam(required = false, name = "delegation") String workCenter,
+      @RequestParam(required = false) String carPlate) {
+
+    int userId = getAuthenticatedUserId();
     PageRequest pageable = buildPageRequest(page, sortBy, ascending);
 
     Page<Booking> bookings = bookingService.getFilteredBookingsPaged(
-        userId, pageable, date, workCenter, carPlate, plugType, floor, startTime, endTime);
+        userId, pageable, date, workCenter, carPlate);
 
     List<BookingDTO> bookingDTOs = bookings.getContent().stream()
         .map(BookingMapper::toDTO)
@@ -63,24 +80,6 @@ public class BookingController {
 
     return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
   }
-
-  @GetMapping("/booking-map")
-  @SecurityRequirement(name = "bearerAuth")
-  public List<BookingDTO> getBookingsForMap(
-      @RequestParam(required = false) LocalDate date,
-      @RequestParam(required = false, name = "delegation") String workCenter,
-      @RequestParam(required = false) String carPlate) {
-
-    int userId = getAuthenticatedUserId();
-
-    List<Booking> bookings = bookingService.getFilteredBookings(userId, date, workCenter, carPlate);
-
-    return bookings.stream()
-        .map(BookingMapper::toDTO)
-        .toList();
-  }
-
-
 
   @PostMapping
   public BookingDTO createBooking(@RequestParam Booking booking) {
