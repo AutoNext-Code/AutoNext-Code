@@ -8,22 +8,16 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Slot } from '../types/slot.type';
 import { MapLoaderService } from '@maps/services/map-loader.service';
-import { Chart } from '@maps/interfaces/Chart.interface';
-import { Observable } from 'rxjs';
 import { Space } from '@maps/interfaces/Space.interface';
 import { Direction } from '@maps/enums/Direction.enum';
 import { State } from '@maps/enums/State.enum';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
-
-import { CustomButtonComponent } from '../../shared/components/ui/custom-button/custom-button.component';
-
 @Component({
   selector: 'app-maps',
-  imports: [SpaceDataComponent, CustomButtonComponent],
+  imports: [SpaceDataComponent],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
 })
@@ -93,4 +87,6 @@ export class MapsComponent implements OnInit {
   closeModal() {
     this.modal = true;
   }
+
+
 }
