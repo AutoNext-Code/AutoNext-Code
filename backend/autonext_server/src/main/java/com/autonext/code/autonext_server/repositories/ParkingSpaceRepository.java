@@ -14,5 +14,4 @@ public interface ParkingSpaceRepository extends CrudRepository<ParkingSpace, Int
     @Query("Select p from ParkingSpace p where p.state!=3")
         List<ParkingSpace> findByState();
 
-
 }
