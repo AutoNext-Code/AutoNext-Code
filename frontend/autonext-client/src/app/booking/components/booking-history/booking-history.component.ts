@@ -1,26 +1,36 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SortableThComponent } from '../sortable-th/sortable-th.component';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
 import { CardBookingComponent } from '../card-booking/card-booking.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-
 import { BookingService } from '@booking/services/booking.service';
-import { BookingDTO } from '@booking/interfaces/booking.interface';
+import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 
 @Component({
   selector: 'booking-history',
   standalone: true,
-  imports: [CommonModule, SortableThComponent, PaginationComponent, CardBookingComponent],
+  imports: [
+    CommonModule,
+    SortableThComponent,
+    PaginationComponent,
+    CardBookingComponent,
+  ],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingHistoryComponent {
-
   private bookingService = inject(BookingService);
-  
+
   // Signals para paginación y filtros
   currentPage = signal(1);
   sortColumn = signal<string>('date');
@@ -34,7 +44,6 @@ export class BookingHistoryComponent {
 
   total = toSignal(this.bookingService.total$, { initialValue: 0 });
   totalPages = computed(() => Math.ceil(this.total() / 6));
-
 
   constructor() {
     effect(() => {
@@ -77,8 +86,8 @@ export class BookingHistoryComponent {
       ascending: this.sortDirection() === 'asc',
       delegation: this.delegation() ?? undefined,
       carPlate: this.carPlate() ?? undefined,
-      date: this.date() ?? undefined
-    });
+      date: this.date() ?? undefined,
+    }).subscribe();;
   }
 
   getStatusLabel(status: string | null): string {
@@ -90,7 +99,7 @@ export class BookingHistoryComponent {
       case 'Cancelled':
         return 'Cancelada';
       case 'Strike':
-        return 'Strike'; // puedes traducirlo si quieres
+        return 'Strike'; 
       case 'Completed':
         return 'Finalizada';
       case 'Blocked':
@@ -99,5 +108,4 @@ export class BookingHistoryComponent {
         return 'Desconocido';
     }
   }
-  
 }

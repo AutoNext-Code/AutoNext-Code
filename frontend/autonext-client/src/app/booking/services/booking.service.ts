@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { BookingHttpService } from './booking-http.service';
-import { BookingDTO } from '@booking/interfaces/booking.interface';
+import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
 
 @Injectable({

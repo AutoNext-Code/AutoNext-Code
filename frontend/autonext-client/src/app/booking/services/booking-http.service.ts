@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BOOKINGS_LIST_ENDPOINT } from '../../config';
-import { BookingDTO } from '@booking/interfaces/booking.interface';
+import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
 
 

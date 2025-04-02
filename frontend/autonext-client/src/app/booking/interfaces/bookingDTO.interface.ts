@@ -6,5 +6,8 @@ export interface BookingDTO {
   nameSpace: string | null;     
   delegation: string | null;     
   status: string | null;
+  issues?: string | null;
+  confirmationStatus: string | null;
+  carName: string | null;
 }
 
