@@ -3,7 +3,6 @@ package com.autonext.code.autonext_server.dto;
 import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.ParkingLevel;
 
-import java.util.stream.Collectors;
 import java.util.List;
 
 public class ParkingLevelMapDTO {
@@ -18,10 +17,6 @@ public class ParkingLevelMapDTO {
     this.name = level.getName();
     this.imageUrl = baseImageUrl + level.getImageName();
     this.workCenterName = level.getWorkCenter().getName();
-    this.spaces = level.getActiveSpaces().stream()
-        .map(Space::new)
-        .collect(Collectors.toList());
-
   }
 
   public int getId() {
@@ -58,7 +53,6 @@ public class ParkingLevelMapDTO {
       this.y = space.getY();
       this.direction = space.getDirection().name();
       this.plugType = space.getPlugType().name();
-      this.state = space.getState().name();
     }
 
     public int getId() {

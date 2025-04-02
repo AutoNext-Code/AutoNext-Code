@@ -32,12 +32,11 @@ public class BookingSeeder implements CommandLineRunner {
     private final WorkCenterRepository workCenterRepository;
 
     public BookingSeeder(
-        BookingRepository bookingRepository,
-        UserRepository userRepository,
-        CarRepository carRepository,
-        ParkingSpaceRepository parkingSpaceRepository,
-        WorkCenterRepository workCenterRepository
-    ) {
+            BookingRepository bookingRepository,
+            UserRepository userRepository,
+            CarRepository carRepository,
+            ParkingSpaceRepository parkingSpaceRepository,
+            WorkCenterRepository workCenterRepository) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.carRepository = carRepository;
@@ -53,29 +52,28 @@ public class BookingSeeder implements CommandLineRunner {
             User user = userRepository.findByEmail("user@example.com").orElseThrow();
             Car userCar = carRepository.findByUser(user).get(0);
 
-            ParkingSpace space1 = parkingSpaceRepository.findById(1).orElseThrow();
+            // Por ejemplo, la plaza id=12, que es la MAD1-12 con PlugType.Schuko
+            ParkingSpace space1 = parkingSpaceRepository.findById(12).orElseThrow();
             ParkingSpace space2 = parkingSpaceRepository.findById(2).orElseThrow();
 
             WorkCenter center1 = workCenterRepository.findById(1).orElseThrow(); // Madrid
             WorkCenter center2 = workCenterRepository.findById(2).orElseThrow(); // Málaga
 
             Booking booking1 = new Booking(
-                LocalTime.of(9, 0),
-                LocalTime.of(11, 0),
-                LocalDate.now().plusDays(1),
-                user,
-                userCar
-            );
+                    LocalTime.of(9, 0),
+                    LocalTime.of(11, 0),
+                    LocalDate.now().plusDays(1),
+                    user,
+                    userCar);
             booking1.setParkingSpace(space1);
             booking1.setWorkCenter(center1);
 
             Booking booking2 = new Booking(
-                LocalTime.of(12, 0),
-                LocalTime.of(14, 0),
-                LocalDate.now().minusDays(2),
-                user,
-                userCar
-            );
+                    LocalTime.of(12, 0),
+                    LocalTime.of(14, 0),
+                    LocalDate.now().minusDays(2),
+                    user,
+                    userCar);
             booking2.setParkingSpace(space2);
             booking2.setWorkCenter(center2);
             booking2.setStatus(BookingStatus.Completed);

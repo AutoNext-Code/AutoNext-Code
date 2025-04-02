@@ -37,27 +37,6 @@ public class BookingController {
     this.jwtService = jwtService;
   }
 
-  @GetMapping("/booking-map")
-  @SecurityRequirement(name = "bearerAuth")
-  public List<BookingDTO> getBookingsForMap(
-      @RequestParam(required = false) LocalDate date,
-      @RequestParam(required = false, name = "delegation") String workCenter,
-      @RequestParam(required = false) String carPlate,
-      @RequestParam(required = false) String plugType,
-      @RequestParam(required = false) String floor,
-      @RequestParam(required = false) String startTime,
-      @RequestParam(required = false) String endTime) {
-
-    int userId = getAuthenticatedUserId();
-
-    List<Booking> bookings = bookingService.getFilteredBookings(
-        userId, date, workCenter, carPlate, plugType, floor, startTime, endTime);
-
-    return bookings.stream()
-        .map(BookingMapper::toDTO)
-        .toList();
-  }
-
   @GetMapping("/booking-list")
   @SecurityRequirement(name = "bearerAuth")
   public Page<BookingDTO> getBookingsByUser(
