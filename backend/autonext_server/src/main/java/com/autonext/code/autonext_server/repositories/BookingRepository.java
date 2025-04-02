@@ -7,8 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
-
-  Page<Booking> findByUserId(int userId, Pageable pageable);
 
   @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.startTime BETWEEN :startTime AND :endTime")
   List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
