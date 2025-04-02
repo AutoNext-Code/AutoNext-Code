@@ -13,8 +13,10 @@ public class BookingMapper {
             booking.getStartTime(),
             booking.getEndTime(),
             booking.getUser().getName() + " " + booking.getUser().getSurname(),
-            booking.getCar().getCarPlate(),
-            booking.getStatus().name()
+            booking.getParkingSpace().getName(),
+            booking.getWorkCenter().getName(),
+            booking.getStatus().name(),
+            booking.getConfirmationStatus().name()
         );
     }
 }
