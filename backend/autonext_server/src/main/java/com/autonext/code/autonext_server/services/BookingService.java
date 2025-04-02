@@ -13,7 +13,6 @@ import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.specifications.BookingSpecifications;
 
-
 @Service
 public class BookingService {
 
@@ -32,16 +31,25 @@ public class BookingService {
                 .and(BookingSpecifications.hasEndTime(endTime));
     }
 
-    public List<Booking> getFilteredBookings(int userId, LocalDate date, String delegation, String carPlate) {
-        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, null, null, null, null);
+    public List<Booking> getFilteredBookings(int userId,
+            LocalDate date,
+            String delegation,
+            String carPlate,
+            String plugType,
+            String floor,
+            String startTime,
+            String endTime) {
+        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, plugType, floor, startTime,
+                endTime);
         return bookingRepository.findAll(spec);
     }
 
-    public Page<Booking> getFilteredBookingsPaged(int userId, Pageable pageable,
-            LocalDate date, String delegation, String carPlate,
-            String plugType, String floor, String startTime, String endTime) {
-        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, plugType, floor, startTime,
-                endTime);
+    public Page<Booking> getFilteredBookingsPaged(int userId,
+            Pageable pageable,
+            LocalDate date,
+            String delegation,
+            String carPlate) {
+        Specification<Booking> spec = buildBookingFilter(userId, date, delegation, carPlate, null, null, null, null);
         return bookingRepository.findAll(spec, pageable);
     }
 
