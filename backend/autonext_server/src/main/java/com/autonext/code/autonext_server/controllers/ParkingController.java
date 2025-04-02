@@ -37,37 +37,23 @@ public class ParkingController {
     this.centersService = centersService;
   }
 
-  @GetMapping("/availability")
+  @GetMapping("/level/{id}")
   @SecurityRequirement(name = "bearerAuth")
-  public List<ParkingSpaceDTO> getAvailableSpaces(
+  public ResponseEntity<?> getLevelWithAvailability(
+      @PathVariable int id,
       @RequestParam(required = false) LocalDate date,
       @RequestParam(required = false) Integer plugType,
-      @RequestParam(required = false) Integer levelId,
       @RequestParam(required = false) String startTime,
       @RequestParam(required = false) String endTime) {
-    User user = getAuthenticatedUser();
-    return parkingService.getFilteredForMap(date, plugType, levelId, startTime, endTime, user);
-  }
 
-  private User getAuthenticatedUser() {
-    UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
-        .getContext().getAuthentication();
-    return (User) authentication.getPrincipal();
-  }
-
-  @GetMapping("/level/{id}")
-  public ResponseEntity<?> getMapByLevel(@PathVariable int id) {
     try {
-      ParkingLevelMapDTO dto = parkingService.getLevelMap(id);
+      User user = getAuthenticatedUser();
+      ParkingLevelMapDTO dto = parkingService.getFilteredLevelMap(id, date, plugType, startTime, endTime, user);
       return ResponseEntity.ok(dto);
     } catch (RuntimeException e) {
-      return ResponseEntity
-          .status(404)
-          .body("No se encontró el mapa con id " + id + ": " + e.getMessage());
+      return ResponseEntity.status(404).body("No se encontró el mapa con id " + id + ": " + e.getMessage());
     } catch (Exception e) {
-      return ResponseEntity
-          .status(500)
-          .body("Error inesperado al obtener el mapa: " + e.getMessage());
+      return ResponseEntity.status(500).body("Error inesperado al obtener el mapa: " + e.getMessage());
     }
   }
 
@@ -88,6 +74,13 @@ public class ParkingController {
           .body("Error inesperado al obtener los mapas: " + e.getMessage());
     }
 
+  }
+
+  private User getAuthenticatedUser() {
+    UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
+        .getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+    return user;
   }
 
 }

@@ -33,34 +33,31 @@ public class ParkingService {
     this.parkingLevelRepository = parkingLevelRepository;
   }
 
-  public List<ParkingSpaceDTO> getFilteredForMap(LocalDate date,
+  public ParkingLevelMapDTO getFilteredLevelMap(int levelId,
+      LocalDate date,
       Integer plugType,
-      Integer levelId,
       String startTime,
       String endTime,
       User user) {
-    Specification<ParkingSpace> spec = Specification.where(ParkingSpaceSpecifications.isElectric());
 
-    if (levelId != null)
-      spec = spec.and(ParkingSpaceSpecifications.hasLevel(levelId));
+    ParkingLevel level = parkingLevelRepository.findById(levelId)
+        .orElseThrow(() -> new RuntimeException("No se ha encontrado el nivel con id: " + levelId));
 
-    if (plugType != null)
+    Specification<ParkingSpace> spec = Specification
+        .where(ParkingSpaceSpecifications.isElectric())
+        .and(ParkingSpaceSpecifications.hasLevel(levelId));
+
+    if (plugType != null) {
       spec = spec.and(ParkingSpaceSpecifications.hasPlugType(plugType));
+    }
 
     List<ParkingSpace> spaces = parkingSpaceRepository.findAll(spec);
 
-    return spaces.stream()
-        .map(space -> ParkingSpaceMapper.toDTO(space, date, startTime, endTime, user))
-
+    List<ParkingLevelMapDTO.Space> spaceDTOs = spaces.stream()
+        .map(space -> ParkingSpaceMapper.toSpaceDTO(space, date, startTime, endTime, user))
         .toList();
+
+    return new ParkingLevelMapDTO(level, imageBaseUrl, spaceDTOs);
   }
 
-  public ParkingLevelMapDTO getLevelMap(int levelId) {
-    ParkingLevel level = parkingLevelRepository.findById(levelId)
-        .orElseThrow(() -> new RuntimeException("No se ha encontrado el nivel de aparcamiento con id: " + levelId));
-
-    level.getParkingSpaces().size();
-
-    return new ParkingLevelMapDTO(level, imageBaseUrl);
-  }
 }
