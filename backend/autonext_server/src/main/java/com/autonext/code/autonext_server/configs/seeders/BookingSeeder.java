@@ -50,10 +50,7 @@ public class BookingSeeder implements CommandLineRunner {
         if (bookingRepository.count() == 0) {
             System.out.println("Creando bookings...");
 
-            User admin = userRepository.findByEmail("admin@example.com").orElseThrow();
             User user = userRepository.findByEmail("user@example.com").orElseThrow();
-
-            Car adminCar = carRepository.findByUser(admin).get(0);
             Car userCar = carRepository.findByUser(user).get(0);
 
             ParkingSpace space1 = parkingSpaceRepository.findById(1).orElseThrow();
@@ -66,8 +63,8 @@ public class BookingSeeder implements CommandLineRunner {
                 LocalTime.of(9, 0),
                 LocalTime.of(11, 0),
                 LocalDate.now().plusDays(1),
-                admin,
-                adminCar
+                user,
+                userCar
             );
             booking1.setParkingSpace(space1);
             booking1.setWorkCenter(center1);
