@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Slot } from '../types/slot.type';
 import { MapLoaderService } from '@maps/services/map-loader.service';
 import { Chart } from '@maps/interfaces/Chart.interface';
@@ -7,40 +16,33 @@ import { Space } from '@maps/interfaces/Space.interface';
 import { Direction } from '@maps/enums/Direction.enum';
 import { State } from '@maps/enums/State.enum';
 
-
-import { SpaceDataComponent } from "@booking/components/space-data/space-data.component";
+import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
-import { CustomButtonComponent } from "../../shared/components/ui/custom-button/custom-button.component";
+import { CustomButtonComponent } from '../../shared/components/ui/custom-button/custom-button.component';
 
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent, CustomButtonComponent],
   templateUrl: './maps.component.html',
-  styleUrl: './maps.component.css'
+  styleUrl: './maps.component.css',
 })
 export class MapsComponent implements OnInit {
-
   private mapLoader: MapLoaderService = inject(MapLoaderService);
   chart: any;
-  imageUrl: String = "";
-  spaces:Space[] = [];
-
+  imageUrl: String = '';
+  spaces: Space[] = [];
 
   @Input() mapSelected: string = '';
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
 
-  isLoaded:boolean = false;
-  modal:boolean = true ;
-  carData!: SpaceData ;
+  isLoaded: boolean = false;
+  modal: boolean = true;
+  carData!: SpaceData;
 
   ngOnInit(): void {
-    this.chartLoad();
-    this.checkImageLoad
-    console.log('Mapa seleccionado:', this.mapSelected);
     this.isLoaded = false;
-
   }
 
   ngAfterViewInit(): void {
@@ -49,9 +51,7 @@ export class MapsComponent implements OnInit {
 
   ngOnChanges(): void {
     this.isLoaded = false;
-    this.checkImageLoad();
     this.chartLoad();
-
   }
 
   chartLoad() {
@@ -61,24 +61,23 @@ export class MapsComponent implements OnInit {
 
       this.spaces = response.spaces.map((space: any) => ({
         ...space,
-        direction: typeof space.direction === 'string'
-          ? Direction[space.direction as keyof typeof Direction]
-          : space.direction,
-        state: typeof space.state === 'string'
-          ? State[space.state as keyof typeof State]
-          : space.state
+        direction:
+          typeof space.direction === 'string'
+            ? Direction[space.direction as keyof typeof Direction]
+            : space.direction,
+        state:
+          typeof space.state === 'string'
+            ? State[space.state as keyof typeof State]
+            : space.state,
       }));
+
+      this.checkImageLoad();
     });
   }
 
-
   checkImageLoad() {
-
-    this.chartLoad();
-
     const image = new Image();
     image.src = this.imageUrl.toString();
-
 
     image.onload = () => {
       this.isLoaded = true;
@@ -87,14 +86,11 @@ export class MapsComponent implements OnInit {
   }
 
   toggleModal(carData: SpaceData) {
-    this.modal = false ;
-    this.carData = carData
+    this.modal = false;
+    this.carData = carData;
   }
 
-  closeModal(){
-    this.modal = true ;
+  closeModal() {
+    this.modal = true;
   }
-
-
-
 }
