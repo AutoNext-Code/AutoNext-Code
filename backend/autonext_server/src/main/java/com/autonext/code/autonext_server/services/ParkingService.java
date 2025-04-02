@@ -3,12 +3,15 @@ package com.autonext.code.autonext_server.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.ParkingLevelMapDTO;
-import com.autonext.code.autonext_server.dto.ParkingSpaceDTO;
 import com.autonext.code.autonext_server.mapper.ParkingSpaceMapper;
 import com.autonext.code.autonext_server.models.ParkingLevel;
 import com.autonext.code.autonext_server.models.ParkingSpace;
@@ -16,6 +19,8 @@ import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.ParkingLevelRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
 import com.autonext.code.autonext_server.specifications.ParkingSpaceSpecifications;
+import com.autonext.code.autonext_server.repositories.WorkCenterRepository;
+import com.autonext.code.autonext_server.models.WorkCenter;
 
 @Service
 public class ParkingService {
@@ -23,14 +28,17 @@ public class ParkingService {
   private final ParkingSpaceRepository parkingSpaceRepository;
   private final ParkingLevelRepository parkingLevelRepository;
 
+  private final WorkCenterRepository workCenterRepository;
+
   @Value("${app.image-base-url}")
   private String imageBaseUrl;
 
   public ParkingService(ParkingSpaceRepository parkingSpaceRepository,
       ParkingSpaceMapper parkingSpaceMapper,
-      ParkingLevelRepository parkingLevelRepository) {
+      ParkingLevelRepository parkingLevelRepository, WorkCenterRepository workCenterRepository) {
     this.parkingSpaceRepository = parkingSpaceRepository;
     this.parkingLevelRepository = parkingLevelRepository;
+    this.workCenterRepository = workCenterRepository;
   }
 
   public ParkingLevelMapDTO getFilteredLevelMap(int levelId,
@@ -60,4 +68,18 @@ public class ParkingService {
     return new ParkingLevelMapDTO(level, imageBaseUrl, spaceDTOs);
   }
 
+  public Map<Integer, String> getWorkCenters() {
+    try {
+      Iterable<WorkCenter> workCenters = workCenterRepository.findAll();
+      Map<Integer, String> workCentersMap = new HashMap<>();
+
+      for (WorkCenter workCenter : workCenters) {
+        workCentersMap.put(workCenter.getId(), workCenter.getName());
+      }
+
+      return workCentersMap;
+    } catch (Exception e) {
+      throw new ExecutionException("Surgio un error inesperado");
+    }
+  }
 }

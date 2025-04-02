@@ -4,12 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.dto.ParkingCenterDTO;
 import com.autonext.code.autonext_server.dto.ParkingLevelMapDTO;
-import com.autonext.code.autonext_server.dto.ParkingSpaceDTO;
-import com.autonext.code.autonext_server.mapper.BookingMapper;
-import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.CentersService;
 import com.autonext.code.autonext_server.services.ParkingService;
@@ -18,12 +14,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/parking")
@@ -83,4 +82,13 @@ public class ParkingController {
     return user;
   }
 
+  @GetMapping("/centers-names")
+  public ResponseEntity<Map<Integer, String>> getWorkCenters() {
+    try {
+      Map<Integer, String> workCenters = parkingService.getWorkCenters();
+      return ResponseEntity.ok(workCenters);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+  }
 }
