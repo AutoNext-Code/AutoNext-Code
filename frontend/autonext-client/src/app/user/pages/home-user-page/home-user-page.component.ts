@@ -14,12 +14,12 @@ import { LoaderComponent } from "@shared/loader/loader.component";
 })
 export class HomeUserPageComponent {
 
-  selectedMap: string = '';  // Para guardar el mapa seleccionado
+  selectedMap: number = 0;  // Para guardar el mapa seleccionado
   isMapLoaded = false;       // Para manejar la carga del mapa
 
-  updateSelectedMap(map: string) {
+  updateSelectedMap(idmap: number) {
     this.isMapLoaded = false; // Ocultamos el mapa antes de cambiarlo
-    this.selectedMap = map;
+    this.selectedMap = idmap;
   }
 
 }

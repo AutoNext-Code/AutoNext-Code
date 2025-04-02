@@ -20,16 +20,20 @@
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="delegationSelect">Delegación</label>
-      <select class="border p-2 rounded w-full" id="delegationSelect">
-        <option value="malaga">Málaga</option>
-        <option value="madrid">Madrid</option>
+      <select class="border p-2 rounded w-full" id="delegationSelect" formControlName="selectedCenter" (change)="updateMaps()">
+        @for(center of centers; track $index){
+          <option [value]="center" [text]="center" ></option>
+        }
+
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="levelSelect">Planta</label>
-      <select class="border p-2 rounded w-full" id="levelSelect">
-        <option value="0">0</option>
-        <option value="1">1</option>
+      <select class="border p-2 rounded w-full" id="levelSelect" formControlName="selectedMap">
+        @for (map of visibleMaps; track $index) {
+          <option [value]="map" [text]="map"></option>
+        }
+
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">

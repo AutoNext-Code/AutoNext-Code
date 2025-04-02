@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Slot } from '../types/slot.type';
-import { MapLoaderService } from '@maps/services/map-loader.service';
+import { MapLoaderService } from '@maps/services/map.service';
 import { Chart } from '@maps/interfaces/Chart.interface';
 import { Observable } from 'rxjs';
 import { Space } from '@maps/interfaces/Space.interface';
@@ -27,7 +27,7 @@ export class MapsComponent implements OnInit {
   spaces:Space[] = [];
 
 
-  @Input() mapSelected: string = '';
+  @Input() mapSelected: number = 0;
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
 
