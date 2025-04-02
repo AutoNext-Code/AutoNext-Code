@@ -12,9 +12,10 @@ public class BookingDTO {
     private String delegation;
     private String status;
     private String confirmationStatus;
+    private String carName;
 
     public BookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String nameSpace,
-            String delegation, String status, String confirmationStatus) {
+            String delegation, String status, String confirmationStatus, String carName) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -23,6 +24,7 @@ public class BookingDTO {
         this.delegation = delegation;
         this.status = status;
         this.confirmationStatus = confirmationStatus;
+        this.carName = carName;
     }
 
     public LocalDate getDate() {
@@ -87,5 +89,13 @@ public class BookingDTO {
 
     public void setConfirmationStatus(String confirmationStatus) {
         this.confirmationStatus = confirmationStatus;
+    }
+
+    public String getCarName() {
+        return carName;
+    }
+    
+    public void setCarName(String carName) {
+        this.carName = carName;
     }
 }

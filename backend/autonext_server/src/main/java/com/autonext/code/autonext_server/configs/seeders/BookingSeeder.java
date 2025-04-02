@@ -66,10 +66,8 @@ public class BookingSeeder implements CommandLineRunner {
                 LocalTime.of(9, 0),
                 LocalTime.of(11, 0),
                 LocalDate.now().plusDays(1),
-                BookingStatus.Pending,
                 admin,
-                adminCar,
-                ConfirmationStatus.Inactive
+                adminCar
             );
             booking1.setParkingSpace(space1);
             booking1.setWorkCenter(center1);
@@ -78,13 +76,13 @@ public class BookingSeeder implements CommandLineRunner {
                 LocalTime.of(12, 0),
                 LocalTime.of(14, 0),
                 LocalDate.now().minusDays(2),
-                BookingStatus.Completed,
                 user,
-                userCar,
-                ConfirmationStatus.Confirmed
+                userCar
             );
             booking2.setParkingSpace(space2);
             booking2.setWorkCenter(center2);
+            booking2.setStatus(BookingStatus.Completed);
+            booking2.setConfirmationStatus(ConfirmationStatus.Confirmed);
 
             bookingRepository.saveAll(List.of(booking1, booking2));
             System.out.println("Reservas creadas con éxito.");
