@@ -3,8 +3,6 @@ package com.autonext.code.autonext_server.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.autonext.code.autonext_server.models.WorkCenter;
-
 public class MapBookingDTO {
     
     private LocalDate date;
@@ -12,7 +10,6 @@ public class MapBookingDTO {
     private LocalTime endTime;
     private Integer carId; 
     private Integer parkingSpaceId ;
-    private Integer workCenterId;
 
 
     public MapBookingDTO() {}

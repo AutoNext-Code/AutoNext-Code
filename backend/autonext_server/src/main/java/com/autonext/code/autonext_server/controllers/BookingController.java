@@ -100,7 +100,7 @@ public class BookingController {
 
 		bookingService.createBooking(booking, userId);
 
-		return ResponseEntity.ok("Reserva registrad correctamente");
+		return ResponseEntity.ok("Reserva registrada correctamente");
 
     } catch (ParkingSpaceNotExistsException psne) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La plaza no existe");
@@ -116,11 +116,11 @@ public class BookingController {
   }
 
   @PutMapping("/{id}")
-  public BookingDTO updateBooking(@RequestParam int id, @RequestParam BookingStatus bookingStatus) throws Exception {
+  public ResponseEntity<String> updateBooking(@RequestParam int id, @RequestParam BookingStatus bookingStatus) throws Exception {
 	try {
 		int userId = getAuthenticatedUserId() ;
-		BookingDTO updatedBooking = bookingService.updateBookingState(id, userId, bookingStatus);
-		return updatedBooking;
+		bookingService.updateBookingState(id, userId, bookingStatus);
+		return ResponseEntity.ok("Reserva modificada correctamente");
 	} catch (BookingNotFoundException bnf) {
         throw new Exception("Reserva no encontrada");
 	} catch (UserNotFoundException bnf) {
