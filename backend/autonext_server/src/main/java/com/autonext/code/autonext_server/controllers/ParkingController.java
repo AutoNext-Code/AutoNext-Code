@@ -10,10 +10,14 @@ import com.autonext.code.autonext_server.services.CentersService;
 import com.autonext.code.autonext_server.services.ParkingService;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -65,5 +69,17 @@ public class ParkingController {
 
         
     }
+
+@GetMapping("/centers-names")
+public ResponseEntity<Map<Integer, String>> getWorkCenters() {
+    try {
+        Map<Integer, String> workCenters = parkingService.getWorkCenters();
+        return ResponseEntity.ok(workCenters);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+}
+
+    
     
 }
