@@ -4,5 +4,5 @@ public enum ParkingState {
     Available,
     Occupied,
     Blocked,
-    Unusable
+    Own_Reservation
 }
