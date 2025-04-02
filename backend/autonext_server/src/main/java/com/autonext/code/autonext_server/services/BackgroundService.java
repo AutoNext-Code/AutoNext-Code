@@ -42,6 +42,8 @@ public class BackgroundService {
 
         for (Booking booking : bookings) {
             sendReservationNotification(booking);
+            // booking.setStatus(BookingStatus.);
+
         }
 
         List<Booking> bookingsToEndSoon = bookingRepository.findReservationsToEndSoon(BookingStatus.Active, date,
@@ -56,7 +58,8 @@ public class BackgroundService {
         String subject = "Notificación de reserva";
         String body = "La reserva en el puesto de carga " + booking.getParkingSpace().getName()
                 + " está por iniciar a las "
-                + booking.getStartTime() + " del día " + booking.getDate();
+                + booking.getStartTime() + " del día " + booking.getDate() +
+                ", ya puedes confirmar.";
         emailService.sendEmail(booking.getUser().getEmail(), subject, body);
     }
 
