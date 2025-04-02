@@ -6,6 +6,7 @@ import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.WorkCenter;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
@@ -65,9 +66,10 @@ public class BookingSeeder implements CommandLineRunner {
                 LocalTime.of(9, 0),
                 LocalTime.of(11, 0),
                 LocalDate.now().plusDays(1),
-                BookingStatus.Active,
+                BookingStatus.Pending,
                 admin,
-                adminCar
+                adminCar,
+                ConfirmationStatus.Inactive
             );
             booking1.setParkingSpace(space1);
             booking1.setWorkCenter(center1);
@@ -75,10 +77,11 @@ public class BookingSeeder implements CommandLineRunner {
             Booking booking2 = new Booking(
                 LocalTime.of(12, 0),
                 LocalTime.of(14, 0),
-                LocalDate.now().plusDays(2),
-                BookingStatus.Pending,
+                LocalDate.now().minusDays(2),
+                BookingStatus.Completed,
                 user,
-                userCar
+                userCar,
+                ConfirmationStatus.Confirmed
             );
             booking2.setParkingSpace(space2);
             booking2.setWorkCenter(center2);
