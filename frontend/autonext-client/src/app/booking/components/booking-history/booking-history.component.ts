@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -14,6 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { BookingService } from '@booking/services/booking.service';
 import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
+import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'booking-history',
@@ -30,6 +30,7 @@ import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 })
 export class BookingHistoryComponent {
   private bookingService = inject(BookingService);
+  private authService = inject(AuthService);
 
   // Signals para paginación y filtros
   currentPage = signal(1);
@@ -39,6 +40,8 @@ export class BookingHistoryComponent {
   carPlate = signal<string | null>(null);
   date = signal<string | null>(null);
 
+  userName = this.authService.getName();
+
   bookings$ = this.bookingService.bookingList$;
   total$ = this.bookingService.total$;
 
@@ -46,9 +49,7 @@ export class BookingHistoryComponent {
   totalPages = computed(() => Math.ceil(this.total() / 6));
 
   constructor() {
-    effect(() => {
-      this.loadBookings();
-    });
+    this.loadBookings(); // se hace la carga inicial solo una vez
   }
 
   onSort(column: string) {
@@ -58,25 +59,30 @@ export class BookingHistoryComponent {
       this.sortColumn.set(column);
       this.sortDirection.set('asc');
     }
+    this.loadBookings();
   }
 
   onPageChange(page: number) {
     this.currentPage.set(page);
+    this.loadBookings();
   }
 
   onDelegationChange(value: string) {
     this.delegation.set(value || null);
     this.currentPage.set(1);
+    this.loadBookings();
   }
 
   onCarChange(value: string) {
     this.carPlate.set(value || null);
     this.currentPage.set(1);
+    this.loadBookings();
   }
 
   onDateChange(value: string) {
     this.date.set(value || null);
     this.currentPage.set(1);
+    this.loadBookings();
   }
 
   private loadBookings() {
@@ -87,7 +93,7 @@ export class BookingHistoryComponent {
       delegation: this.delegation() ?? undefined,
       carPlate: this.carPlate() ?? undefined,
       date: this.date() ?? undefined,
-    }).subscribe();;
+    }).subscribe();
   }
 
   getStatusLabel(status: string | null): string {
@@ -99,7 +105,7 @@ export class BookingHistoryComponent {
       case 'Cancelled':
         return 'Cancelada';
       case 'Strike':
-        return 'Strike'; 
+        return 'Strike';
       case 'Completed':
         return 'Finalizada';
       case 'Blocked':
