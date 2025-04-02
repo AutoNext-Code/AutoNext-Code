@@ -80,6 +80,8 @@ public class BookingController {
         .toList();
   }
 
+
+
   @PostMapping
   public BookingDTO createBooking(@RequestParam Booking booking) {
     Booking createdBooking = bookingService.createBooking(booking);
