@@ -28,7 +28,7 @@ export class ProfileService {
     
         return this.profileHttp.getDataProfile(headers).pipe(
           tap((data: UserDto) => {
-            console.log('Profile Data:', data); // Verifica si llega la respuesta
+            console.log('Profile Data:', data);
           }
         ));  
       }
