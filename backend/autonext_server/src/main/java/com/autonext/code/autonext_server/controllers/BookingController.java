@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -90,23 +89,7 @@ public class BookingController {
     return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
   }
 
-  @GetMapping("/booking-map")
-  @SecurityRequirement(name = "bearerAuth")
-  public List<BookingDTO> getBookingsForMap(
-      @RequestParam(required = false) LocalDate date,
-      @RequestParam(required = false, name = "delegation") String workCenter,
-      @RequestParam(required = false) String carPlate) {
 
-    int userId = getAuthenticatedUserId();
-
-    List<Booking> bookings = bookingService.getFilteredBookings(userId, date, workCenter, carPlate);
-
-    return bookings.stream()
-        .map(BookingMapper::toDTO)
-        .toList();
-  }
-
-  @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
   @PostMapping
   public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {
 	  
