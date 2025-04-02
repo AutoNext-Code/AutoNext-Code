@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
-public class CarPlateNotExistsException extends RuntimeException {
-    public CarPlateNotExistsException(String message) {
+public class CarNotExistsException extends RuntimeException {
+    public CarNotExistsException(String message) {
         super(message);
     }
 }

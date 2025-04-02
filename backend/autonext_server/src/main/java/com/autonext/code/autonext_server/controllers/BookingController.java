@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
-import com.autonext.code.autonext_server.exceptions.CarPlateNotExistsException;
+import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
@@ -29,6 +31,7 @@ import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.services.BookingService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -86,18 +89,22 @@ public class BookingController {
         .toList();
   }
 
+
+  @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
   @PostMapping
-  public ResponseEntity<String> createBooking(@RequestParam MapBookingDTO booking) {
+  public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {
 	  
 	try {
 
-		bookingService.createBooking(booking);
+		int userId = getAuthenticatedUserId() ;
 
-		return ResponseEntity.ok("Usuario registrado correctamente");
+		bookingService.createBooking(booking, userId);
+
+		return ResponseEntity.ok("Reserva registrad correctamente");
 
     } catch (ParkingSpaceNotExistsException psne) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La plaza no existe");
-    } catch (CarPlateNotExistsException cpne) {
+    } catch (CarNotExistsException cpne) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El coche no existe");
     } catch (UserNotFoundException unf) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");

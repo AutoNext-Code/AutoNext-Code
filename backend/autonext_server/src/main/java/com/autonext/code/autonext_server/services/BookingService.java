@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,26 +16,28 @@ import org.springframework.stereotype.Service;
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
-import com.autonext.code.autonext_server.exceptions.CarPlateNotExistsException;
+import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.Car;
-import com.autonext.code.autonext_server.models.ParkingLevel;
 import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.WorkCenter;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
-import com.autonext.code.autonext_server.repositories.ParkingLevelRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import com.autonext.code.autonext_server.specifications.BookingSpecifications;
 
 @Service
 public class BookingService {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
     @Autowired
     private CarRepository carRepository;
@@ -76,29 +81,33 @@ public class BookingService {
         return bookingRepository.findById(id).orElse(null);
     }
 
-    public void createBooking(MapBookingDTO mapBookingDTO) {
+public void createBooking(MapBookingDTO mapBookingDTO, int userId) {
+    try {
+        logger.info("Datos recibidos: Fecha: {}, Hora de inicio: {}, Hora de fin: {}, ID del coche: {}, ID de la plaza: {}, ID de usuario: {}", 
+            mapBookingDTO.getDate(), mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), 
+            mapBookingDTO.getCarId(), mapBookingDTO.getParkingSpaceId(), userId);
         
-        Optional<Car> optionalCar = carRepository.findByCarPlate(mapBookingDTO.getCarPlate()) ;
-        Optional<User> optionalUser = userRepository.findById(mapBookingDTO.getUserId()) ;
-        Optional<ParkingSpace> optionalSpace = parkingSpaceRepository.findById(mapBookingDTO.getParkingSpaceId()) ;
+        // Obtener las entidades correspondientes usando los IDs del DTO
+        Optional<Car> optionalCar = carRepository.findById(mapBookingDTO.getCarId());
+        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<ParkingSpace> optionalSpace = parkingSpaceRepository.findById(mapBookingDTO.getParkingSpaceId());
 
+        // Comprobación de existencia
         if (!optionalSpace.isPresent()) {
             throw new ParkingSpaceNotExistsException("La plaza no está registrada");
         }
-        if (!optionalCar.isPresent()) {
-            throw new CarPlateNotExistsException("La matrícula no está registrada");
-        }        
         if (!optionalUser.isPresent()) {
-            throw new UserNotFoundException("Usuario No Encontrado") ;
+            throw new UserNotFoundException("Usuario No Encontrado");
+        }
+        if (!optionalCar.isPresent()) {
+            throw new CarNotExistsException("La matrícula no está registrada");
         }
 
+        ParkingSpace parkingSpace = optionalSpace.get();
 
-        ParkingSpace parkingSpace = optionalSpace.get() ;
-
-        List<Booking> bookings = bookingRepository.findAllReservationsByDateAndSpace(mapBookingDTO.getDate(), parkingSpace) ;
-
+        // Verificar si la plaza está ocupada en el horario deseado
+        List<Booking> bookings = bookingRepository.findAllReservationsByDateAndSpace(mapBookingDTO.getDate(), parkingSpace);
         for (Booking booking : bookings) {
-
             boolean overlap = !(mapBookingDTO.getEndTime().isBefore(booking.getStartTime()) || 
                                 mapBookingDTO.getStartTime().isAfter(booking.getEndTime()));
 
@@ -107,14 +116,26 @@ public class BookingService {
             }
         }
 
-        Car car = optionalCar.get() ;
-        User user = optionalUser.get() ;
+        // Crear la reserva
+        Car car = optionalCar.get();
+        User user = optionalUser.get();
 
-        Booking booking = new Booking(mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), mapBookingDTO.getDate(), BookingStatus.Pending , user , car ) ;
+        // Aquí obtenemos el WorkCenter de la ParkingSpace, como lo habíamos discutido
+        WorkCenter workCenter = parkingSpace.getParkingLevel().getWorkCenter();
 
-        bookingRepository.save(booking) ;
+        // Creamos la entidad de Booking
+        Booking booking = new Booking(mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), mapBookingDTO.getDate(), 
+                                      BookingStatus.Pending, user, car);
+        booking.setParkingSpace(parkingSpace);
+        booking.setWorkCenter(workCenter);  // Asociamos el WorkCenter de la ParkingSpace a la reserva
 
+        // Guardamos la reserva en la base de datos
+        bookingRepository.save(booking);
+    } catch (Exception e) {
+        logger.error("Error al crear la reserva", e);
+        throw new RuntimeException("Error al procesar la reserva"); // Lanza una excepción adecuada para el controlador
     }
+}
 
     public BookingDTO updateBookingState(int id, int userId, BookingStatus bookingStatus) throws Exception {
         Booking booking = bookingRepository.getReferenceById(id) ;
