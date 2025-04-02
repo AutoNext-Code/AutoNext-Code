@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.autonext.code.autonext_server.models.enums.Direction;
@@ -43,7 +44,7 @@ public class ParkingSpace {
     public PlugType plugType ;
 
     @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "parking_level_id", nullable = false)
