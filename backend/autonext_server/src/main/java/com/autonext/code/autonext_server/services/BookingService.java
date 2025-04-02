@@ -13,14 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
-import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.ParkingSpace;
