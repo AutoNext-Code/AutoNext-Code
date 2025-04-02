@@ -60,7 +60,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(LocalTime startTime, LocalTime endTime, LocalDate date, BookingStatus status, User user, Car car, ConfirmationStatus confirmationStatus) {
+    public Booking(LocalTime startTime, LocalTime endTime, LocalDate date, User user, Car car) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;

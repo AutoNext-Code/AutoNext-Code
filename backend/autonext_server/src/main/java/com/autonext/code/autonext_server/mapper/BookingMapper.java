@@ -5,18 +5,23 @@ import com.autonext.code.autonext_server.models.Booking;
 
 public class BookingMapper {
 
-    public static BookingDTO toDTO(Booking booking) {
-        if (booking == null) return null;
+  public static BookingDTO toDTO(Booking booking) {
+    if (booking == null)
+      return null;
 
-        return new BookingDTO(
-            booking.getDate(),
-            booking.getStartTime(),
-            booking.getEndTime(),
-            booking.getUser().getName() + " " + booking.getUser().getSurname(),
-            booking.getParkingSpace().getName(),
-            booking.getWorkCenter().getName(),
-            booking.getStatus().name(),
-            booking.getConfirmationStatus().name()
-        );
-    }
+    String carName = booking.getCar().getName() != null && !booking.getCar().getName().isBlank()
+        ? booking.getCar().getName()
+        : booking.getCar().getCarPlate();
+
+    return new BookingDTO(
+        booking.getDate(),
+        booking.getStartTime(),
+        booking.getEndTime(),
+        booking.getUser().getName() + " " + booking.getUser().getSurname(),
+        booking.getParkingSpace().getName(),
+        booking.getWorkCenter().getName(),
+        booking.getStatus().name(),
+        booking.getConfirmationStatus().name(),
+        carName);
+  }
 }
