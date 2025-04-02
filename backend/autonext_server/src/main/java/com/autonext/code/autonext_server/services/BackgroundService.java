@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class BackgroundService {
     private BookingRepository bookingRepository;
 
     public void start() {
-        scheduler.scheduleAtFixedRate(this::checkReservations, 20, 20, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::checkReservations, 10, 10, TimeUnit.MINUTES);
     }
 
     private void checkReservations() {
@@ -36,23 +37,26 @@ public class BackgroundService {
         LocalDate date = now.toLocalDate();
         LocalTime startTime = now.toLocalTime();
         LocalTime endTime = now.toLocalTime().plusMinutes(10);
-
-        List<Booking> bookings = bookingRepository.findReservationsToStartSoon(BookingStatus.Pending, date, startTime,
-                endTime);
-
+    
+        List<Booking> bookings = bookingRepository.findReservationsToStartSoon(BookingStatus.Pending, date, startTime, endTime);
         for (Booking booking : bookings) {
             sendReservationNotification(booking);
-            // booking.setStatus(BookingStatus.);
-
+            booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
         }
-
-        List<Booking> bookingsToEndSoon = bookingRepository.findReservationsToEndSoon(BookingStatus.Active, date,
-                startTime, now.toLocalTime().minusMinutes(15));
-
+        bookingRepository.saveAll(bookings);
+    
+        List<Booking> bookingsToEndSoon = bookingRepository.findReservationsToEndSoon(BookingStatus.Active, date, startTime, now.toLocalTime().minusMinutes(15));
         for (Booking booking : bookingsToEndSoon) {
             sendReservationEndNotification(booking);
         }
+    
+        List<Booking> completedBookings = bookingRepository.findCompletedBookings(BookingStatus.Active, date, now.toLocalTime());
+        for (Booking booking : completedBookings) {
+            booking.setStatus(BookingStatus.Completed);
+        }
+        bookingRepository.saveAll(completedBookings);
     }
+    
 
     private void sendReservationNotification(Booking booking) {
         String subject = "Notificación de reserva";
