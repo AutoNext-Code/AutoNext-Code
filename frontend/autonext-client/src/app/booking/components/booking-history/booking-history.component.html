@@ -1,7 +1,9 @@
 <div class="p-6 space-y-7 max-w-6xl mx-auto">
   <!-- ENCABEZADO -->
   <div class="flex items-center justify-center">
-    <h1 class="text-3xl sm:text-5xl text-center font-title">Historial de reservas de John Doe</h1>
+    <h1 class="text-3xl sm:text-5xl text-center font-title">
+      Historial de reservas de {{ userName }}
+    </h1>
   </div>
 
   <!-- FILTROS -->
@@ -38,8 +40,8 @@
             sortable-th
             label="Fecha"
             column="date"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
 
@@ -47,81 +49,87 @@
             sortable-th
             label="Hora de Reserva"
             column="horaReserva"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
           <th
             sortable-th
             label="Delegación"
             column="workcenter"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
           <th
             sortable-th
             label="Nº Plaza"
             column="parkingSpace"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
           <th
             sortable-th
             label="Coche"
             column="car"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
           <th
             sortable-th
             label="Estado"
             column="status"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
           <th
             sortable-th
             label="Incidencias"
             column="issues"
-            [activeSortColumn]="sortColumn"
-            [sortDirection]="sortDirection"
+            [activeSortColumn]="sortColumn()"
+            [sortDirection]="sortDirection()"
             (sort)="onSort($event)"
           ></th>
           <th class="px-4 py-2 text-center">Confirmar Reserva</th>
         </tr>
       </thead>
       <tbody class="bgtable divide-y divide-gray-200">
-        <tr *ngFor="let booking of bookings" class="hover:bg-gray-100">
+        <tr *ngFor="let booking of bookings$ | async" class="hover:bg-gray-100">
           <td class="px-4 py-2 text-center">{{ booking.date }}</td>
-          <td class="px-4 py-2 text-center">{{ booking.reservationTime }}</td>
-          <td class="px-4 py-2 text-center">{{ booking.workcenter }}</td>
-          <td class="px-4 py-2 text-center">{{ booking.parkingSpace }}</td>
-          <td class="px-4 py-2 text-center">{{ booking.car }}</td>
+          <td class="px-4 py-2 text-center">
+            {{ booking.startTime }} a {{ booking.endTime }}
+          </td>
+          <td class="px-4 py-2 text-center">{{ booking.delegation }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.nameSpace }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.carName }}</td>
           <td
             class="px-4 py-2 font-semibold text-center"
             [ngClass]="{
-              'color-green': booking.status === 'Confirmada',
-              'color-red': booking.status === 'Strike',
-              'color-gray': booking.status === 'Cancelada',
-              'color-lightblue': booking.status === 'Reservada'
+              'color-green': booking.status === 'Active',
+              'color-lightblue': booking.status === 'Pending',
+              'color-red':
+                booking.status === 'Cancelled' || booking.status === 'Strike',
+              'color-gray': booking.status === 'Completed',
+              'color-black': booking.status === 'Blocked'
             }"
           >
-            {{ booking.status }}
+            {{ getStatusLabel(booking.status) }}
           </td>
-          <td class="px-4 py-2 text-center">{{ booking.issues }}</td>
+          <td class="px-4 py-2 text-center">
+            {{ booking.issues ? booking.issues : "----" }}
+          </td>
           <td class="px-4 py-2 space-x-2 text-center">
             <button
-              *ngIf="booking.canConfirm"
+              *ngIf="booking.confirmationStatus === 'PendingConfirmation'"
               class="text-green-600 text-lg cursor-pointer"
             >
               <i class="material-icons text-base ml-2">check</i>
             </button>
             <button
-              *ngIf="booking.canCancel"
+              *ngIf="booking.confirmationStatus === 'PendingConfirmation'"
               class="text-red-600 text-lg cursor-pointer"
             >
               <i class="material-icons text-base ml-2">close</i>
@@ -141,7 +149,7 @@
   <!-- CARDS -->
   <div class="block lg:hidden space-y-4">
     <div
-      *ngFor="let booking of bookings"
+      *ngFor="let booking of bookings$ | async"
       class="border-card rounded-lg shadow-sm p-4"
     >
       <card-booking [booking]="booking"></card-booking>
@@ -150,8 +158,8 @@
 
   <!-- PAGINACIÓN -->
   <pagination
-    [currentPage]="currentPage"
-    [totalPages]="totalPages"
+    [currentPage]="currentPage()"
+    [totalPages]="totalPages()"
     (pageChange)="onPageChange($event)"
   />
 </div>

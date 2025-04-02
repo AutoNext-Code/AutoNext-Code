@@ -6,6 +6,7 @@ import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.WorkCenter;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
@@ -49,10 +50,7 @@ public class BookingSeeder implements CommandLineRunner {
         if (bookingRepository.count() == 0) {
             System.out.println("Creando bookings...");
 
-            User admin = userRepository.findByEmail("admin@example.com").orElseThrow();
             User user = userRepository.findByEmail("user@example.com").orElseThrow();
-
-            Car adminCar = carRepository.findByUser(admin).get(0);
             Car userCar = carRepository.findByUser(user).get(0);
 
             ParkingSpace space1 = parkingSpaceRepository.findById(1).orElseThrow();
@@ -65,9 +63,8 @@ public class BookingSeeder implements CommandLineRunner {
                 LocalTime.of(9, 0),
                 LocalTime.of(11, 0),
                 LocalDate.now().plusDays(1),
-                BookingStatus.Active,
-                admin,
-                adminCar
+                user,
+                userCar
             );
             booking1.setParkingSpace(space1);
             booking1.setWorkCenter(center1);
@@ -75,13 +72,14 @@ public class BookingSeeder implements CommandLineRunner {
             Booking booking2 = new Booking(
                 LocalTime.of(12, 0),
                 LocalTime.of(14, 0),
-                LocalDate.now().plusDays(2),
-                BookingStatus.Pending,
+                LocalDate.now().minusDays(2),
                 user,
                 userCar
             );
             booking2.setParkingSpace(space2);
             booking2.setWorkCenter(center2);
+            booking2.setStatus(BookingStatus.Completed);
+            booking2.setConfirmationStatus(ConfirmationStatus.Confirmed);
 
             bookingRepository.saveAll(List.of(booking1, booking2));
             System.out.println("Reservas creadas con éxito.");
