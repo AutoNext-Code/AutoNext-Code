@@ -71,7 +71,7 @@ public class BookingController {
     return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
   }
 
-  @PostMapping
+  @PostMapping("")
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {
 

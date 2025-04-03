@@ -20,6 +20,8 @@ export class BookingService {
   private totalSubject = new BehaviorSubject<number>(0);
   public total$ = this.totalSubject.asObservable();
 
+  private bookingSub:  BehaviorSubject<string | null> = new BehaviorSubject<string | null>("");
+
   getBookingsByUser(params: BookingParams): Observable<{ content: BookingDTO[]; totalElements: number }> {
     return this.bookingHttp.getBookingsByUser(params).pipe(
       tap((res) => {
@@ -34,7 +36,19 @@ export class BookingService {
   }
 
   postBooking(params: SpaceData): void {
-    console.log(params) ;
+    this.bookingHttp.postBooking(params).subscribe({ 
+      next: (book: any) => {
+        console.log("Reserva creada con éxito:", book);
+      },
+      error: (err: any) => {
+        console.error("Error al reservar:", err);
+        alert("Error al reservar: " + err.message);
+      }
+    });
+  }
+
+  private setBooking(booking: string): void {
+    this.bookingSub.next(booking) ;
   }
 
 }
