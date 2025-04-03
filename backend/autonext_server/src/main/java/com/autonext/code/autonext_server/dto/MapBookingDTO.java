@@ -8,13 +8,15 @@ public class MapBookingDTO {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private Integer userId; 
     private Integer carId; 
     private Integer parkingSpaceId ;
+    
 
 
     public MapBookingDTO() {}
 
-    public MapBookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, int carId, int parkingSpaceId) {
+    public MapBookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, Integer carId, Integer parkingSpaceId, Integer userId) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -60,6 +62,14 @@ public class MapBookingDTO {
 
     public void setParkingSpaceId(Integer parkingSpaceId) {
         this.parkingSpaceId = parkingSpaceId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
 }

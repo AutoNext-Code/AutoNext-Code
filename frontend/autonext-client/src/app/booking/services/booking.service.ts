@@ -34,7 +34,15 @@ export class BookingService {
   }
 
   postBooking(params: SpaceData): void {
-    console.log(params) ;
+    this.bookingHttp.postBooking(params).subscribe({ 
+      next: (book: any) => {
+        console.log("Reserva creada con éxito:", book);
+      },
+      error: (err: any) => {
+        console.error("Error al reservar:", err);
+      }
+    });
   }
+
 
 }

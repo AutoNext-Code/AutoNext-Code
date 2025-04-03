@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { CarService } from '@user/services/car.service';
 import { CarDto } from '@user/interfaces/car.interface';
-import { PlugType } from '@maps/enums/PlugType.enum';
+import { PlugType } from '@maps/enums/plugType.enum';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 
 import { MapParams } from '@maps/interfaces/MapParams.interface';
