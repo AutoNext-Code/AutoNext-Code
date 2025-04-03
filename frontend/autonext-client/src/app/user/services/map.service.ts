@@ -3,6 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject, delay, map, Observable, of, timeout } from "rxjs";
 import { MapHttpService } from './map-http.service';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
+import { MapParams } from '@maps/interfaces/MapParams.interface';
 
 
 
@@ -35,14 +36,15 @@ export class MapService {
 
 
 
-  formMapLoad(mapId:number, date:string, plugType:number, startTime:string, endTime:string){
-
-    return this.maphttp.getFormMap(mapId, date, plugType, startTime, endTime)
+  formMapLoad(params:MapParams){
+ 
+    return this.maphttp.getFormMap(params)
     .pipe(
       map(response => response as Chart)
     );
-
+ 
   }
+ 
 
 
 

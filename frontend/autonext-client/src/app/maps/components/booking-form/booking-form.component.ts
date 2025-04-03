@@ -7,6 +7,7 @@ import { CarDto } from '@user/interfaces/car.interface';
 import { PlugType } from '@maps/enums/PlugType.enum';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 import { CenterLevel } from '@user/pages/interfaces/CenterLevel.interface';
+import { MapParams } from '@maps/interfaces/MapParams.interface';
 
 @Component({
   selector: 'user-booking-form',
@@ -32,6 +33,8 @@ export class BookingFormComponent implements OnInit, OnChanges {
 
   @Output() mapSelected: EventEmitter<number> = new EventEmitter<number>();
 
+  @Output() filterChanged: EventEmitter<MapParams> = new EventEmitter<any>();
+
   constructor() {
     this.myForm = new FormGroup({
       center: new FormControl(''),
@@ -45,16 +48,50 @@ export class BookingFormComponent implements OnInit, OnChanges {
 
     this.myForm.get('center')?.valueChanges.subscribe(value => {
       this.updateParkingLevels(value);
+      this.filterChanged.emit(this.getFilterValues());
     });
 
     this.myForm.get('level')?.valueChanges.subscribe(value => {
       this.mapSelected.emit(value);
+      this.filterChanged.emit(this.getFilterValues());
     });
+
+    this.myForm.get('selectedCar')?.valueChanges.subscribe(() => {
+      this.updatePlugTypes();
+      this.filterChanged.emit(this.getFilterValues());
+    });
+
+    this.myForm.get('selectedPlugType')?.valueChanges.subscribe(() => {
+      this.filterChanged.emit(this.getFilterValues());
+    });
+
+    this.myForm.get('date')?.valueChanges.subscribe(() => {
+      this.filterChanged.emit(this.getFilterValues());
+    });
+
+    this.myForm.get('startHour')?.valueChanges.subscribe(() => {
+      this.filterChanged.emit(this.getFilterValues());
+    });
+
+    this.myForm.get('endHour')?.valueChanges.subscribe(() => {
+      this.filterChanged.emit(this.getFilterValues());
+    });
+
     this.plugTypes = Object.values(PlugType)
       .filter(value => typeof value === 'string' && value !== 'NoType');
 
     this.selectedPlugType = "Undefined";
     
+  }
+
+  getFilterValues(): MapParams {
+    return {
+      mapId: this.myForm.get('level')?.value,
+      date: this.myForm.get('date')?.value,
+      plugtype: this.myForm.get('selectedPlugType')?.value,
+      startTime: this.myForm.get('startHour')?.value,
+      endTime: this.myForm.get('endHour')?.value
+    };
   }
 
   ngOnInit() {

@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { CENTERS_LEVELS, MAP_ENDPOINT } from "../../config";
 import { CentersMaps } from "@maps/interfaces/CentersMaps.interface";
 import { PlugType } from '../../maps/enums/PlugType.enum';
+import { MapParams } from "@maps/interfaces/MapParams.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -19,22 +20,22 @@ export class MapHttpService{
     return this.http.get<any>(`${MAP_ENDPOINT}/${mapId}`);
   }
 
-  getFormMap(mapId:number, date:string, plugType:number, startTime:string, endTime:string): Observable<Chart>{
+  getFormMap(mapParams: MapParams): Observable<Chart>{
     let params = new HttpParams();
 
-    if(date && plugType && mapId && startTime && endTime){
+    if(mapParams){
 
-      params = params.set('date', date);
+      params = params.set('date', mapParams.date);
 
-      if(plugType != 1){
-        params = params.set('plugType', plugType.toString());
+      if(mapParams.plugtype != 1){
+        params = params.set('plugType', mapParams.plugtype.toString());
       }
 
-      params = params.set('startTime', startTime);
-      params = params.set('endTime', endTime);
+      params = params.set('startTime', mapParams.startTime);
+      params = params.set('endTime', mapParams.endTime);
     }
 
-    return this.http.get<any>(`${MAP_ENDPOINT}/${mapId}`, {params});
+    return this.http.get<any>(`${MAP_ENDPOINT}/${mapParams.mapId}`, {params});
   }
 
   getCentersLevels(): Observable<CentersMaps[]>{
