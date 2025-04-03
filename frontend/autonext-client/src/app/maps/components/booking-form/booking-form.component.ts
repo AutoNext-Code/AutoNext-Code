@@ -32,13 +32,15 @@ export class BookingFormComponent implements OnInit, OnChanges {
 
   @Output() mapSelected: EventEmitter<number> = new EventEmitter<number>();
 
-
   constructor() {
     this.myForm = new FormGroup({
       center: new FormControl(''),
       level: new FormControl(''),
       selectedCar: new FormControl(null),
-      selectedPlugType: new FormControl(null)
+      selectedPlugType: new FormControl(null),
+      date: new FormControl(this.getDate()),
+      startHour: new FormControl('8:00'),
+      endHour: new FormControl('17:00'),
     });
 
     this.myForm.get('center')?.valueChanges.subscribe(value => {
@@ -53,6 +55,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
       .filter(value => typeof value === 'string' && value !== 'NoType');
 
     this.selectedPlugType = "Undefined";
+    
   }
 
   ngOnInit() {
@@ -122,4 +125,29 @@ export class BookingFormComponent implements OnInit, OnChanges {
   getSelectedPlugTypeValue(): void {
     this.selectedPlugTypeValue = PlugType[this.selectedPlugType as keyof typeof PlugType] ?? PlugType.Undefined;
   }
+
+  startHours: string[] = [
+    '8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30',
+    '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
+    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+  ];
+
+  endHours: string[] = [
+    '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00',
+    '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00',
+    '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'
+  ];
+
+getDate(days?: number): string {
+  const date = new Date();
+  if (days) {
+    date.setDate(date.getDate() + days);
+  }
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+
 }
