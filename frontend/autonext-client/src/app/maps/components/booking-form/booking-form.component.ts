@@ -48,7 +48,6 @@ export class BookingFormComponent implements OnInit, OnChanges {
     });
 
     this.myForm.get('level')?.valueChanges.subscribe(value => {
-      console.log(value);
       this.mapSelected.emit(value);
     });
     this.plugTypes = Object.values(PlugType)
@@ -65,7 +64,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
     this.loadCarsUser();
     this.getSelectedPlugTypeValue();
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['maps'] && this.maps.length > 0) {
       this.myForm.get('center')?.setValue(this.maps[0].centerName);
@@ -84,7 +83,6 @@ export class BookingFormComponent implements OnInit, OnChanges {
     const defaultParkingId = this.parkingLevels.length > 0 ? this.parkingLevels[0].id : 0;
     this.myForm.get('level')?.setValue(defaultParkingId);
 
-    console.log(defaultParkingId)
     this.mapSelected.emit(defaultParkingId);
   }
 
