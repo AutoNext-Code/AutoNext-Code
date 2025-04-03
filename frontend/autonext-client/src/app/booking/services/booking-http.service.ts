@@ -32,4 +32,9 @@ export class BookingHttpService {
 
     return httpParams;
   }
+
+  postBooking(params: BookingParams): void {
+    
+  }
+
 }

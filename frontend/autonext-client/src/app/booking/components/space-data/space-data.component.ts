@@ -1,6 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
-import { CustomButtonComponent } from "../../../shared/components/ui/custom-button/custom-button.component";
+import { BookingService } from '@booking/services/booking.service';
+
+import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 
 @Component({
   selector: 'space-data',
@@ -16,10 +19,14 @@ export class SpaceDataComponent {
   @Output()
   modalEmitter = new EventEmitter<void>() ;
 
+  public bookingService: BookingService = inject(BookingService) ;
   
   closeModal() {
     this.modalEmitter.emit();
   }
 
+  postBooking(params: SpaceData) {
+    this.bookingService.postBooking(params)
+  }
 
 }
