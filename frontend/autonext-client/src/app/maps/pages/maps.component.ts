@@ -90,5 +90,13 @@ export class MapsComponent implements OnInit {
     this.modal = true;
   }
 
+  stateColorMap: Record<string, string> = {
+    Available: 'var(--green)',
+    Occupied: 'var(--red)',
+    Blocked: 'var(--gray)',
+    Own_Reservation: 'var(--light-blue)',
+    Unusable: 'var(--light-gray)',
+  };
+
 
 }
