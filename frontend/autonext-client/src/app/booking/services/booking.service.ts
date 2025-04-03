@@ -1,10 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+
+import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 
 import { BookingHttpService } from './booking-http.service';
 import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -30,4 +32,9 @@ export class BookingService {
       })
     );
   }
+
+  postBooking(params: SpaceData): void {
+    console.log(params) ;
+  }
+
 }

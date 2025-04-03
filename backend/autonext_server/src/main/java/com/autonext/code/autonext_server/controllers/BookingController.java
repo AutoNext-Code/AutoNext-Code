@@ -101,7 +101,7 @@ public class BookingController {
 		return ResponseEntity.ok("Reserva modificada correctamente");
 	} catch (BookingNotFoundException bnf) {
         throw new Exception("Reserva no encontrada");
-	} catch (UserNotFoundException bnf) {
+	} catch (UserNotFoundException unf) {
         throw new Exception("Usuario no encontrado");
 	}
   }

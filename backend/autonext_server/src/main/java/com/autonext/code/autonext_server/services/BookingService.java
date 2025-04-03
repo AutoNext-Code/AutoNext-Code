@@ -100,17 +100,13 @@ public class BookingService {
 
   public void createBooking(MapBookingDTO mapBookingDTO, int userId) {
     try {
-      logger.info(
-          "Datos recibidos: Fecha: {}, Hora de inicio: {}, Hora de fin: {}, ID del coche: {}, ID de la plaza: {}, ID de usuario: {}",
-          mapBookingDTO.getDate(), mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(),
-          mapBookingDTO.getCarId(), mapBookingDTO.getParkingSpaceId(), userId);
 
-      // Obtener las entidades correspondientes usando los IDs del DTO
+      
       Optional<Car> optionalCar = carRepository.findById(mapBookingDTO.getCarId());
       Optional<User> optionalUser = userRepository.findById(userId);
       Optional<ParkingSpace> optionalSpace = parkingSpaceRepository.findById(mapBookingDTO.getParkingSpaceId());
 
-      // Comprobación de existencia
+      
       if (!optionalSpace.isPresent()) {
         throw new ParkingSpaceNotExistsException("La plaza no está registrada");
       }
@@ -123,7 +119,7 @@ public class BookingService {
 
       ParkingSpace parkingSpace = optionalSpace.get();
 
-      // Verificar si la plaza está ocupada en el horario deseado
+      
       List<Booking> bookings = bookingRepository.findAllReservationsByDateAndSpace(mapBookingDTO.getDate(),
           parkingSpace);
       for (Booking booking : bookings) {
@@ -134,24 +130,20 @@ public class BookingService {
           throw new ParkingSpaceOccupiedException("La plaza está ocupada en el horario seleccionado");
         }
       }
-
-      // Crear la reserva
+      
       Car car = optionalCar.get();
       User user = optionalUser.get();
 
-      // Aquí obtenemos el WorkCenter de la ParkingSpace, como lo habíamos discutido
       WorkCenter workCenter = parkingSpace.getParkingLevel().getWorkCenter();
-
-      // Creamos la entidad de Booking
+      
       Booking booking = new Booking(mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(), mapBookingDTO.getDate(), user, car);
       booking.setParkingSpace(parkingSpace);
-      booking.setWorkCenter(workCenter); // Asociamos el WorkCenter de la ParkingSpace a la reserva
+      booking.setWorkCenter(workCenter); 
 
-      // Guardamos la reserva en la base de datos
       bookingRepository.save(booking);
     } catch (Exception e) {
       logger.error("Error al crear la reserva", e);
-      throw new RuntimeException("Error al procesar la reserva"); // Lanza una excepción adecuada para el controlador
+      throw new RuntimeException("Error al procesar la reserva"); 
     }
   }
 
