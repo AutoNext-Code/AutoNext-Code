@@ -91,16 +91,4 @@ public class ParkingLevel {
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
-
-    public List<ParkingSpace> getActiveSpaces(){
-        ParkingState state = ParkingState.Unusable;
-
-        List<ParkingSpace> activeSpaces = parkingSpaces.stream()
-        .filter(s -> !s.getState().equals(state))
-        .collect(Collectors.toList());
-        
-        
-        return activeSpaces;
-    }
-
 }
