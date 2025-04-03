@@ -28,15 +28,17 @@ public class CarSeeder implements CommandLineRunner {
         if (carRepository.count() == 0) {
             User admin = userRepository.findByEmail("admin@example.com").orElseThrow();
             User user = userRepository.findByEmail("user@example.com").orElseThrow();
+            User prueba = userRepository.findByEmail("prueba@example.com").orElseThrow();
 
-            if (admin != null && user != null) {
+            if (admin != null && user != null && prueba != null) {
                 Car carAdmin = new Car("0000AAA", "Coche 1", PlugType.Undefined, admin);
                 Car carUser = new Car("0000BBB", "Coche 1", PlugType.Undefined, user);
+                Car carPrueba = new Car("0000CCC", "Coche 1", PlugType.Undefined, prueba);
 
-                carRepository.saveAll(List.of(carAdmin, carUser));
+                carRepository.saveAll(List.of(carAdmin, carUser, carPrueba));
                 System.out.println("Coches creados con éxito");
             } else {
-                System.out.println("No se encontraron usuarios para asignar coches");
+                System.out.println("No se encontraron todos los usuarios para asignar coches");
             }
         } else {
             System.out.println("La base de datos ya tiene coches. Seeding skipped.");

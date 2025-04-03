@@ -6,7 +6,7 @@ import { BookingFormComponent } from '@maps/components/booking-form/booking-form
 
 import { HeaderComponent } from '@shared/header/header.component';
 import { LoaderComponent } from "@shared/loader/loader.component";
-import { MapService } from '@maps/services/map.service';
+import { MapService } from '@user/services/map.service';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 import { CenterLevel } from '../interfaces/CenterLevel.interface';
 
@@ -24,6 +24,11 @@ export class HomeUserPageComponent implements OnInit{
   selectedMap!: number;
   chart:any;
   isMapLoaded = false;
+  date:string = "2025-04-04";
+  plugType:number = 1;
+  startTime:string = "09:00";
+  endTime:string = "11:00";
+
 
   updateSelectedMap(mapId: number) {
     this.isMapLoaded = false; // Ocultamos el mapa antes de cambiarlo
@@ -34,7 +39,7 @@ export class HomeUserPageComponent implements OnInit{
   chartLoad() {
 
     if(this.selectedMap){
-      this.mapService.mapLoad(this.selectedMap).subscribe((response) => {
+      this.mapService.formMapLoad(this.selectedMap, this.date, this.plugType, this.startTime, this.endTime).subscribe((response) => {
         this.chart = response;
       });
     }
