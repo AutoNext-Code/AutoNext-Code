@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { MapLoaderService } from '@maps/services/map-loader.service';
+
 import { Space } from '@maps/interfaces/Space.interface';
 import { Direction } from '@maps/enums/Direction.enum';
 import { State } from '@maps/enums/State.enum';
@@ -22,12 +22,12 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
   styleUrl: './maps.component.css',
 })
 export class MapsComponent implements OnInit {
-  private mapLoader: MapLoaderService = inject(MapLoaderService);
-  chart: any;
+
   imageUrl: String = '';
   spaces: Space[] = [];
 
-  @Input() mapSelected: string = '';
+  @Input() chart: any;
+  @Input() mapSelected: number = 1;
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
 
@@ -49,11 +49,12 @@ export class MapsComponent implements OnInit {
   }
 
   chartLoad() {
-    this.mapLoader.mapLoad(this.mapSelected).subscribe((response) => {
-      this.chart = response;
-      this.imageUrl = response.imageUrl;
 
-      this.spaces = response.spaces.map((space: any) => ({
+    if(this.chart){
+
+      this.imageUrl = this.chart.imageUrl;
+
+      this.spaces = this.chart.spaces.map((space: any) => ({
         ...space,
         direction:
           typeof space.direction === 'string'
@@ -66,7 +67,8 @@ export class MapsComponent implements OnInit {
       }));
 
       this.checkImageLoad();
-    });
+    }
+
   }
 
   checkImageLoad() {

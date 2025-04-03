@@ -150,4 +150,7 @@ public class Booking {
         this.confirmationStatus = confirmationStatus;
     }
 
+    public boolean isActive() {
+        return this.status == BookingStatus.Active;
+    }
 }
