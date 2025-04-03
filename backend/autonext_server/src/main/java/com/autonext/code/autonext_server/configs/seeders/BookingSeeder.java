@@ -52,7 +52,6 @@ public class BookingSeeder implements CommandLineRunner {
             User user = userRepository.findByEmail("user@example.com").orElseThrow();
             Car userCar = carRepository.findByUser(user).get(0);
 
-            // Por ejemplo, la plaza id=12, que es la MAD1-12 con PlugType.Schuko
             ParkingSpace space1 = parkingSpaceRepository.findById(12).orElseThrow();
             ParkingSpace space2 = parkingSpaceRepository.findById(2).orElseThrow();
 
