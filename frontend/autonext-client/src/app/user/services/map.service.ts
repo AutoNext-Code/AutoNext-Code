@@ -1,4 +1,4 @@
-import { Chart } from '../interfaces/Chart.interface';
+import { Chart } from '../../maps/interfaces/Chart.interface';
 import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject, delay, map, Observable, of, timeout } from "rxjs";
 import { MapHttpService } from './map-http.service';

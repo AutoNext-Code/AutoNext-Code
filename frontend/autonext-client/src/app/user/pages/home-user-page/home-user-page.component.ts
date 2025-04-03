@@ -6,7 +6,7 @@ import { BookingFormComponent } from '@maps/components/booking-form/booking-form
 
 import { HeaderComponent } from '@shared/header/header.component';
 import { LoaderComponent } from "@shared/loader/loader.component";
-import { MapService } from '@maps/services/map.service';
+import { MapService } from '@user/services/map.service';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 import { CenterLevel } from '../interfaces/CenterLevel.interface';
 
