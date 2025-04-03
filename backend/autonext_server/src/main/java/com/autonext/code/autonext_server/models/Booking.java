@@ -151,6 +151,8 @@ public class Booking {
     }
 
     public boolean isActive() {
-        return this.status == BookingStatus.Active;
+        return this.status == BookingStatus.Pending 
+            || this.status == BookingStatus.Active;
     }
+    
 }

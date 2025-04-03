@@ -1,6 +1,6 @@
-import { Direction } from "@maps/enums/Direction.enum";
-import { PlugType } from "@maps/enums/PlugType.enum";
-import { State } from "@maps/enums/State.enum";
+import { Direction } from "@maps/enums/direction.enum";
+import { PlugType } from "@maps/enums/plugType.enum";
+import { State } from "@maps/enums/state.enum";
 
 
 

@@ -1,4 +1,4 @@
-import { PlugType } from "@maps/enums/PlugType.enum";
+import { PlugType } from "@maps/enums/plugType.enum";
 
 export interface CarDto {
     id: number;

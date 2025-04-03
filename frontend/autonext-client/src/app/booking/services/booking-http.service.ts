@@ -2,9 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { BOOKINGS_LIST_ENDPOINT } from '../../config';
+import { BOOKINGS_ENDPOINT, BOOKINGS_LIST_ENDPOINT } from '../../config';
 import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 
 @Injectable({
@@ -33,8 +34,10 @@ export class BookingHttpService {
     return httpParams;
   }
 
-  postBooking(params: BookingParams): void {
-    
+  postBooking(params: SpaceData): Observable<string> {
+    console.log(params)
+    const body = { carId: params.carId, date: params.date, parkingSpaceId: params.parkingSpaceId, endTime: params.endTime, startTime: params.startTime }
+    return this.http.post(BOOKINGS_ENDPOINT, body , { responseType: 'text' }) ;
   }
 
 }

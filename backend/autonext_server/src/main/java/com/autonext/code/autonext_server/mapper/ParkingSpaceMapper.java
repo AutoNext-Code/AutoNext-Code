@@ -1,11 +1,10 @@
 package com.autonext.code.autonext_server.mapper;
 
 import com.autonext.code.autonext_server.dto.ParkingLevelMapDTO;
-import com.autonext.code.autonext_server.dto.ParkingSpaceDTO;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.User;
-import com.autonext.code.autonext_server.models.enums.BookingStatus;
+
 import com.autonext.code.autonext_server.models.enums.ParkingState;
 
 import java.time.LocalDate;
