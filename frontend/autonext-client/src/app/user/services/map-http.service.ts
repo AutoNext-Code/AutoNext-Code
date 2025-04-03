@@ -4,7 +4,6 @@ import { Chart } from "@maps/interfaces/Chart.interface";
 import { Observable } from "rxjs";
 import { CENTERS_LEVELS, MAP_ENDPOINT } from "../../config";
 import { CentersMaps } from "@maps/interfaces/CentersMaps.interface";
-import { PlugType } from '../../maps/enums/PlugType.enum';
 import { MapParams } from "@maps/interfaces/MapParams.interface";
 
 @Injectable({
