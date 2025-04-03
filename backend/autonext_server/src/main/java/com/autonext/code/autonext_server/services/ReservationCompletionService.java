@@ -18,32 +18,33 @@ import com.autonext.code.autonext_server.repositories.BookingRepository;
 
 @Service
 public class ReservationCompletionService implements CommandLineRunner {
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+  private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-    @Autowired
-    private BookingRepository bookingRepository;
+  @Autowired
+  private BookingRepository bookingRepository;
 
-    @Override
-    public void run(String... args) throws Exception {
-        start();
+  @Override
+  public void run(String... args) throws Exception {
+    start();
+  }
+
+  public void start() {
+    scheduler.scheduleAtFixedRate(this::completeExpiredReservations, 0, 5, TimeUnit.MINUTES);
+  }
+
+  private void completeExpiredReservations() {
+    LocalDateTime now = LocalDateTime.now();
+    LocalDate date = now.toLocalDate();
+    LocalTime currentTime = now.toLocalTime();
+
+    List<Booking> completedBookings = bookingRepository.findCompletedBookings(BookingStatus.Active, date, currentTime);
+
+    if (!completedBookings.isEmpty()) {
+      for (Booking booking : completedBookings) {
+        booking.setStatus(BookingStatus.Completed);
+      }
+      bookingRepository.saveAll(completedBookings);
     }
 
-    public void start() {
-        scheduler.scheduleAtFixedRate(this::completeExpiredReservations, 0, 5, TimeUnit.MINUTES);
-    }
-
-    private void completeExpiredReservations() {
-
-        System.out.println("\033[0;35mEntra en backgrundService ReservationCompletionService\033[0m");
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDate date = now.toLocalDate();
-        LocalTime currentTime = now.toLocalTime();
-
-        List<Booking> completedBookings = bookingRepository.findCompletedBookings(BookingStatus.Active, date, currentTime);
-        for (Booking booking : completedBookings) {
-            booking.setStatus(BookingStatus.Completed);
-        }
-        bookingRepository.saveAll(completedBookings);
-    }
+  }
 }
