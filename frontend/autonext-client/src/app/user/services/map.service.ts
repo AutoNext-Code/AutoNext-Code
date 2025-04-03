@@ -33,28 +33,40 @@ export class MapService {
     );
   }
 
-  centersLevelsLoad(){
-    setTimeout(() => {
-      const data: CentersMaps[] = [
-        {
-          centerName: "Madrid",
-          parkingLevels: [
-            { id: 1, name: "1" },
-            { id: 2, name: "2" },
-            { id: 3, name: "3" }
-          ]
-        },
-        {
-          centerName: "Málaga",
-          parkingLevels: [
-            { id: 4, name: "0" },
-            { id: 5, name: "1" }
-          ]
-        }
-      ];
-      this.centersMapsData.next(data);
-    }, 2000);
+
+
+  formMapLoad(mapId:number, date:string, plugType:number, startTime:string, endTime:string){
+
+    return this.maphttp.getFormMap(mapId, date, plugType, startTime, endTime)
+    .pipe(
+      map(response => response as Chart)
+    );
+
   }
+
+
+
+  centersLevelsLoad(){
+    this.maphttp.getCentersLevels()
+    .pipe(
+      map(response => response as CentersMaps[])
+    )
+    .subscribe({
+      next: (data) => {
+        this.centersMapsData.next(data);
+      },
+      error: (error) => {
+        console.error('Error al cargar los datos:', error);
+      },
+      complete: () => {
+        console.log('Carga de datos completada.');
+      }
+    });
+
+  }
+
+
+
 
 
 
