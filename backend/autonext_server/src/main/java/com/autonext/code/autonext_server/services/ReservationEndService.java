@@ -36,17 +36,21 @@ public class ReservationEndService implements CommandLineRunner  {
     }
 
     private void checkReservationsEndingSoon() {
-        System.out.println("\033[0;34mEntra en backgrundService ReservationEndService\033[0m");
+        System.out.println("\033[0;34mEntra en backgroundService ReservationEndService\033[0m");
+        
         LocalDateTime now = LocalDateTime.now();
         LocalDate date = now.toLocalDate();
-        LocalTime startTime = now.toLocalTime();
-        LocalTime endTime = startTime.minusMinutes(15);
-
-        List<Booking> bookings = bookingRepository.findReservationsToEndSoon(BookingStatus.Active, date, startTime, endTime);
+        
+        LocalTime lowerBound = now.toLocalTime().plusMinutes(5);
+        LocalTime endTime = now.toLocalTime().plusMinutes(15);
+    
+        List<Booking> bookings = bookingRepository.findReservationsToEndSoon(BookingStatus.Active, date, lowerBound, endTime);
+        
         for (Booking booking : bookings) {
             sendReservationEndNotification(booking);
         }
     }
+    
 
     private void sendReservationEndNotification(Booking booking) {
         String subject = "Tu reserva está por finalizar";

@@ -23,9 +23,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
         List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
                         @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
 
-        @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime BETWEEN :startTime AND :endTime")
+        @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime BETWEEN :lowerBound AND :endTime")
         List<Booking> findReservationsToEndSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
-                        @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+                        @Param("lowerBound") LocalTime lowerBound, @Param("endTime") LocalTime endTime);
 
         @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime <= :currentTime")
         List<Booking> findCompletedBookings(@Param("status") BookingStatus status, @Param("date") LocalDate date,
