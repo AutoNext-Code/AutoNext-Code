@@ -43,9 +43,6 @@ public class ParkingSpace {
     @Column(nullable = false)
     public PlugType plugType ;
 
-    @Column(nullable = false)
-    public ParkingState state ;
-
     @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
@@ -56,13 +53,12 @@ public class ParkingSpace {
     public ParkingSpace() {
     }
 
-    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingState state, ParkingLevel parkingLevel) {
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel) {
         this.name = name ;
         this.x = x ;
         this.y = y ;
         this.direction = direction ;
         this.plugType = plugType ;
-        this.state = state ;
         this.parkingLevel = parkingLevel;
     }
 
@@ -112,14 +108,6 @@ public class ParkingSpace {
 
     public void setPlugType(PlugType plugType) {
         this.plugType = plugType;
-    }
-
-    public ParkingState getState() {
-        return state;
-    }
-
-    public void setState(ParkingState state) {
-        this.state = state;
     }
 
     public List<Booking> getBookings() {
