@@ -44,7 +44,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
       selectedCar: new FormControl(null),
       selectedPlugType: new FormControl(null),
       date: new FormControl(this.getDate()),
-      startHour: new FormControl('8:00'),
+      startHour: new FormControl('08:00'),
       endHour: new FormControl('17:00'),
     });
 
@@ -67,7 +67,11 @@ export class BookingFormComponent implements OnInit, OnChanges {
       this.filterChanged.emit(this.getFilterValues());
     });
 
-    this.myForm.get('date')?.valueChanges.subscribe(() => {
+    this.myForm.get('date')?.valueChanges.subscribe(value => {
+      if (value) {
+        const formattedDate = new Date(value).toISOString().split('T')[0];
+        this.myForm.patchValue({ date: formattedDate }, { emitEvent: false });
+      }
       this.filterChanged.emit(this.getFilterValues());
     });
 
@@ -90,7 +94,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
     return {
       mapId: this.myForm.get('level')?.value,
       date: this.myForm.get('date')?.value,
-      plugtype: this.myForm.get('selectedPlugType')?.value,
+      plugtype: this.selectedPlugTypeValue!,
       startTime: this.myForm.get('startHour')?.value,
       endTime: this.myForm.get('endHour')?.value
     };
@@ -164,13 +168,13 @@ export class BookingFormComponent implements OnInit, OnChanges {
   }
 
   startHours: string[] = [
-    '8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30',
+    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
     '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
     '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
   ];
 
   endHours: string[] = [
-    '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00',
+    '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
     '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00',
     '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'
   ];
