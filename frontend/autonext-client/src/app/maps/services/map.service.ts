@@ -1,10 +1,8 @@
 import { Chart } from '../interfaces/Chart.interface';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { MAP_ENDPOINT } from "../../config";
-import { BehaviorSubject, map, Observable } from "rxjs";
-import { AuthService } from '@auth/services/auth.service';
+import { BehaviorSubject, delay, map, Observable, of, timeout } from "rxjs";
 import { MapHttpService } from './map-http.service';
+import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 
 
 
@@ -12,27 +10,53 @@ import { MapHttpService } from './map-http.service';
   providedIn: 'root'
 })
 
-export class MapLoaderService {
+export class MapService {
 
-  private http: HttpClient= inject(HttpClient);
-  private auth: AuthService= inject(AuthService);
   private maphttp: MapHttpService = inject (MapHttpService);
 
-  public map$: BehaviorSubject<Chart | null> = new BehaviorSubject<Chart | null>(null);;
+  public maps$: BehaviorSubject<Chart | null> = new BehaviorSubject<Chart | null>(null);
+
+  //CentersMaps
+  private centersMapsData = new BehaviorSubject<CentersMaps[]>([]);
+  centersMaps$ = this.centersMapsData.asObservable();
 
   constructor(){
+
   }
 
   mapLoad(mapId: number): Observable<Chart>{
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.auth.getToken()}`);
-    console.log(this.auth.getToken());
 
-    return this.maphttp.getMap(headers, mapId)
+    return this.maphttp.getMap(mapId)
     .pipe(
       map(response => response as Chart)
     );
   }
+
+  centersLevelsLoad(){
+    setTimeout(() => {
+      const data: CentersMaps[] = [
+        {
+          centerName: "Madrid",
+          parkingLevels: [
+            { id: 1, name: "1" },
+            { id: 2, name: "2" },
+            { id: 3, name: "3" }
+          ]
+        },
+        {
+          centerName: "Málaga",
+          parkingLevels: [
+            { id: 4, name: "0" },
+            { id: 5, name: "1" }
+          ]
+        }
+      ];
+      this.centersMapsData.next(data);
+    }, 2000);
+  }
+
+
 
 
 

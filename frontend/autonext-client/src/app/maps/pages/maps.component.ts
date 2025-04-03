@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Slot } from '../types/slot.type';
-import { MapLoaderService } from '@maps/services/map.service';
+import { MapService } from '@maps/services/map.service';
 import { Chart } from '@maps/interfaces/Chart.interface';
 import { Observable } from 'rxjs';
 import { Space } from '@maps/interfaces/Space.interface';
@@ -20,6 +20,7 @@ import { SpaceDataComponent } from '@booking/components/space-data/space-data.co
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 import { CustomButtonComponent } from '../../shared/components/ui/custom-button/custom-button.component';
+import { CenterLevel } from '@user/pages/interfaces/CenterLevel.interface';
 
 @Component({
   selector: 'app-maps',
@@ -28,12 +29,12 @@ import { CustomButtonComponent } from '../../shared/components/ui/custom-button/
   styleUrl: './maps.component.css',
 })
 export class MapsComponent implements OnInit {
-  private mapLoader: MapLoaderService = inject(MapLoaderService);
+  private mapService: MapService = inject(MapService);
   chart: any;
   imageUrl: String = '';
   spaces: Space[] = [];
 
-  @Input() mapSelected: number = 0;
+  @Input() mapSelected: number = 1;
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
 
@@ -55,24 +56,28 @@ export class MapsComponent implements OnInit {
   }
 
   chartLoad() {
-    this.mapLoader.mapLoad(this.mapSelected).subscribe((response) => {
-      this.chart = response;
-      this.imageUrl = response.imageUrl;
 
-      this.spaces = response.spaces.map((space: any) => ({
-        ...space,
-        direction:
-          typeof space.direction === 'string'
-            ? Direction[space.direction as keyof typeof Direction]
-            : space.direction,
-        state:
-          typeof space.state === 'string'
-            ? State[space.state as keyof typeof State]
-            : space.state,
-      }));
+    if(this.mapSelected){
+      this.mapService.mapLoad(this.mapSelected).subscribe((response) => {
+        this.chart = response;
+        this.imageUrl = response.imageUrl;
 
-      this.checkImageLoad();
-    });
+        this.spaces = response.spaces.map((space: any) => ({
+          ...space,
+          direction:
+            typeof space.direction === 'string'
+              ? Direction[space.direction as keyof typeof Direction]
+              : space.direction,
+          state:
+            typeof space.state === 'string'
+              ? State[space.state as keyof typeof State]
+              : space.state,
+        }));
+
+        this.checkImageLoad();
+      });
+    }
+
   }
 
   checkImageLoad() {

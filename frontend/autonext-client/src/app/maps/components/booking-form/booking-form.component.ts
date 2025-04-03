@@ -1,6 +1,8 @@
-import { Component, EventEmitter, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectPlugTypeComponent } from "../select-plug-type/select-plug-type.component";
+import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
+import { CenterLevel } from '@user/pages/interfaces/CenterLevel.interface';
 
 @Component({
   selector: 'user-booking-form',
@@ -8,52 +10,55 @@ import { SelectPlugTypeComponent } from "../select-plug-type/select-plug-type.co
   templateUrl: './booking-form.component.html',
   styleUrl: './booking-form.component.css'
 })
-export class BookingFormComponent implements OnChanges{
+export class BookingFormComponent implements  OnChanges{
 
 
-    centers = ["Madrid", "Málaga"];
-    maps = {
-      "Madrid": [1,2,3],
-      "Málaga": [0,1]
-    };
-    visibleMaps: number[] = this.maps["Madrid"];
-
-    @Output() mapSelected: EventEmitter<number> = new EventEmitter();
-
-
+    @Input() maps:CentersMaps[] = [];
+    selectedCenter!:string;
+    selectedLevel!:number;
+    parkingLevels: ParkingLevel[] = [];
+    CenterLevel?: CenterLevel;
     myForm!: FormGroup;
 
-    ngOnInit() {
+    @Output() mapSelected: EventEmitter<number> = new EventEmitter<number>();
+
+    constructor(){
+
       this.myForm = new FormGroup({
-        selectedMap: new FormControl(this.maps["Madrid"][0]),
-        selectedCenter: new FormControl("Madrid")
+        center: new FormControl(''),
+        level: new FormControl(''),
       });
-      this.mapSelected.emit(0);
-    }
 
+      this.myForm.get('center')?.valueChanges.subscribe(value => {
+        this.updateParkingLevels(value);
+      });
+
+      this.myForm.get('level')?.valueChanges.subscribe(value => {
+        console.log(value);
+        this.mapSelected.emit(value);
+      });
+
+    }
     ngOnChanges(changes: SimpleChanges): void {
-      if(changes['centers'] && this.centers.length > 0 && !this.myForm.get('center')?.value){
-        this.myForm.get('center')?.setValue(this.centers[0]);
-        this.updateMaps();
+      if (changes['maps'] && this.maps.length > 0) {
+        this.myForm.get('center')?.setValue(this.maps[0].centerName);
+        this.updateParkingLevels(this.maps[0].centerName);
       }
     }
 
-    updateMap(map: { catSelected: number, subCatSelected:number}) {
-      this.mapSelected.emit(map.subCatSelected);
+
+    updateParkingLevels(centerName: string) {
+      const center = this.maps.find(c => c.centerName === centerName);
+      this.parkingLevels = center ? center.parkingLevels : [];
+
+      const defaultParkingId = this.parkingLevels.length > 0 ? this.parkingLevels[0].id : 0;
+      this.myForm.get('level')?.setValue(defaultParkingId);
+
+      console.log(defaultParkingId)
+      this.mapSelected.emit(defaultParkingId);
     }
 
-    updateMaps(){
-
-      const actualCenter = this.myForm.get('selectedCenter')?.value as keyof typeof this.maps;
 
 
-      if(actualCenter in this.maps){
-        this.visibleMaps = this.maps[actualCenter];
-        this.myForm.get("selectedMap")?.setValue(this.visibleMaps[0]);
-      }else{
-        console.error(`"${actualCenter}" no es una clave válida para maps`);
-      }
-
-    }
 
 }
