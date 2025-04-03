@@ -125,7 +125,7 @@ public class BookingController {
     try {
       int userId = getAuthenticatedUserId();
       bookingService.cancelBooking(id, userId);
-      return ResponseEntity.ok("Reserva cancelada correctamente");
+      return ResponseEntity.noContent().build();
     } catch (BookingNotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reserva no encontrada");
     } catch (UserNotFoundException e) {
