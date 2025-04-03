@@ -34,20 +34,19 @@
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="carSelect">Coche Actual</label>
-      <select class="border p-2 rounded w-full" id="carSelect" formControlName="selectedCar" >
-        <option *ngFor="let car of cars" [value]="car">
+      <select class="border p-2 rounded w-full" id="carSelect" formControlName="selectedCar">
+        <option *ngFor="let car of cars" [ngValue]="car">
           {{ car.name || car.carPlate }}
         </option>
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="plugTypeSelect">Tipo de cargador:</label>
-      <select class="border p-2 rounded w-full" id="plugTypeSelect" formControlName="selectedPlugType" [(ngModel)]="selectedPlugType"
-      (ngModelChange)="getSelectedPlugTypeValue()">
+      <select class="border p-2 rounded w-full" id="plugTypeSelect" formControlName="selectedPlugType">
         <option *ngFor="let type of plugTypes" [ngValue]="type">
           {{ type === "Undefined" ? "Todos los cargadores" : type }}
         </option>
       </select>
-    </div> 
+    </div>
   </div>
 </form>

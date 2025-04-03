@@ -1,19 +1,18 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { CarService } from '@user/services/car.service';
 import { CarDto } from '@user/interfaces/car.interface';
 import { PlugType } from '@maps/enums/PlugType.enum';
-import { SelectPlugTypeComponent } from '../select-plug-type/select-plug-type.component';
 
 @Component({
   selector: 'user-booking-form',
-  imports: [ReactiveFormsModule, CommonModule, SelectPlugTypeComponent],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './booking-form.component.html',
-  styleUrl: './booking-form.component.css'
+  styleUrls: ['./booking-form.component.css']
 })
-export class BookingFormComponent {
+export class BookingFormComponent implements OnInit {
 
   private carService: CarService = inject(CarService);
 
@@ -39,6 +38,9 @@ export class BookingFormComponent {
       selectedCar: new FormControl(null),
       selectedPlugType: new FormControl(null)
     });
+    this.myForm.get('selectedCar')?.valueChanges.subscribe(() => {
+      this.updatePlugTypes();
+    });
     this.mapSelected.emit("1");
     this.loadCarsUser();
     this.getSelectedPlugTypeValue();
@@ -47,24 +49,10 @@ export class BookingFormComponent {
   get displaySelectedPlugType(): string {
     return this.selectedPlugType === "Undefined" ? "Todos los cargadores" : this.selectedPlugType;
   }
-  
+
   updateMap(map: { catSelected: string, subCatSelected: string }) {
     this.mapSelected.emit(`${map.subCatSelected}`);
   }
-
-/*   onCarChange() {
-    const selectedCar: CarDto | null = this.myForm.value.selectedCar;
-    if (selectedCar) {
-      if (selectedCar.plugType === PlugType.Undefined) {
-        this.availablePlugTypes = Object.values(PlugType).filter(value => typeof value === 'string' && value !== 'NoType') as PlugType[];
-      } else {
-        this.availablePlugTypes = [selectedCar.plugType];
-      }
-    } else {
-      this.availablePlugTypes = [];
-    }
-    this.myForm.get('selectedPlugType')?.setValue(null);
-  } */
 
   public loadCarsUser(): void {
     this.carService.getCarsByUser().subscribe({
@@ -74,6 +62,7 @@ export class BookingFormComponent {
         if (this.cars.length > 0) {
           this.myForm.get('selectedCar')?.setValue(this.cars[0]);
         }
+        this.updatePlugTypes();
       },
       error: (error) => {
         console.error('Error al obtener coches del usuario:', error);
@@ -82,6 +71,21 @@ export class BookingFormComponent {
         console.log('Carga de coches del usuario completa');
       }
     })
+  }
+
+  updatePlugTypes(): void {
+
+    const selectedCar = this.myForm.get('selectedCar')?.value;
+
+    if (PlugType[selectedCar.plugType as keyof typeof PlugType] == PlugType.Undefined && selectedCar) {
+      this.plugTypes = Object.values(PlugType)
+        .filter(value => typeof value === 'string' && value !== 'NoType');
+    } else {
+      this.plugTypes = [selectedCar.plugType];
+    }
+
+    this.myForm.get('selectedPlugType')?.setValue(this.plugTypes[0]);
+
   }
 
   getSelectedPlugTypeValue(): void {
