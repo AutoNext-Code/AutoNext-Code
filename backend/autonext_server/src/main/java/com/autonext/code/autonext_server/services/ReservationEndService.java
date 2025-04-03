@@ -36,7 +36,7 @@ public class ReservationEndService implements CommandLineRunner  {
     }
 
     private void checkReservationsEndingSoon() {
-        System.out.println("\033[0;34mEntra en backgrundService\033[0m");
+        System.out.println("\033[0;34mEntra en backgrundService ReservationEndService\033[0m");
         LocalDateTime now = LocalDateTime.now();
         LocalDate date = now.toLocalDate();
         LocalTime startTime = now.toLocalTime();

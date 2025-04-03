@@ -18,7 +18,7 @@ import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 
 @Service
-public class ReservationStartService implements CommandLineRunner  {
+public class ReservationStartService implements CommandLineRunner {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @Autowired
@@ -37,17 +37,22 @@ public class ReservationStartService implements CommandLineRunner  {
     }
 
     private void checkReservationsStartingSoon() {
-        System.out.println("\033[0;34mEntra en backgrundService\033[0m");
+        System.out.println("\033[0;33mEntra en backgrundService ReservationStartService\033[0m");
         LocalDateTime now = LocalDateTime.now();
         LocalDate date = now.toLocalDate();
         LocalTime startTime = now.toLocalTime();
         LocalTime endTime = startTime.plusMinutes(10);
 
-        List<Booking> bookings = bookingRepository.findReservationsToStartSoon(BookingStatus.Pending, date, startTime, endTime);
+        List<Booking> bookings = bookingRepository.findReservationsToStartSoon(BookingStatus.Pending, date, startTime,
+                endTime);
+
         for (Booking booking : bookings) {
-            sendReservationNotification(booking);
-            booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
+            if (booking.getConfirmationStatus() == ConfirmationStatus.Inactive) {
+                sendReservationNotification(booking);
+                booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
+            }
         }
+
         bookingRepository.saveAll(bookings);
     }
 
@@ -59,4 +64,3 @@ public class ReservationStartService implements CommandLineRunner  {
         emailService.sendEmail(booking.getUser().getEmail(), subject, body);
     }
 }
-

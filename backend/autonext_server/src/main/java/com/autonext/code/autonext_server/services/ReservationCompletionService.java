@@ -34,7 +34,7 @@ public class ReservationCompletionService implements CommandLineRunner {
 
     private void completeExpiredReservations() {
 
-        System.out.println("\033[0;34mEntra en backgrundService\033[0m");
+        System.out.println("\033[0;35mEntra en backgrundService ReservationCompletionService\033[0m");
 
         LocalDateTime now = LocalDateTime.now();
         LocalDate date = now.toLocalDate();
