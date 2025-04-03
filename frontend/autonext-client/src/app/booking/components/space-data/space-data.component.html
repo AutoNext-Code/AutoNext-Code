@@ -8,38 +8,45 @@
         <div class="bg-blue-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <h1 class="text-white text-center text-3xl">Reserva Vehículo | Puesto {{this.spaceData?.parkingSpaceId}}</h1>
         </div>
-        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-  
-            <div  class="grid grid-cols-2 text-[17px]">
-                <div>
-                    <p class="my-4">Departamento: {{this.spaceData?.workCenter}}</p>
-                    <p class="my-4">Día: {{this.spaceData?.date}}</p>
-                    <p class="my-4">Coche: {{this.spaceData?.car}}</p>
-                </div>
-                <div>
-                    <p class="my-4">Level: {{this.spaceData?.level}}</p>
-                    <p class="my-4">Horas: {{this.spaceData?.startTime}} - {{this.spaceData?.endTime}}</p>
-                    <p class="my-4">Cargador: {{this.spaceData?.plugType}}</p>
-                </div>
+
+            <div [hidden]="animation">
+                <confirmation-animation></confirmation-animation>
             </div>
 
-        </div>
-        <div class="bg-gray-200 px-4 py-3 flex">
-        <app-custom-button
-            (onClick)="closeModal()"
-            [color]="'gray'"
-            [icon]="'close'"
-            [label]="'Cerrar'"
-            class="flex-2 rounded"
-        ></app-custom-button>
-        <div class="flex-2"></div>
-        <app-custom-button
-            (onClick)="postBooking({date: this.spaceData.date ,startTime: this.spaceData.startTime, endTime: this.spaceData.endTime, carId: 1, parkingSpaceId: this.spaceData.parkingSpaceId, userId: this.spaceData.userId})"
-            [color]="'dark-blue'"
-            [icon]="'book'"
-            [label]="'Reservar'"
-            class="flex-2 rounded"
-        ></app-custom-button> 
-        </div>
+            <div [hidden]="!animation">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        
+                    <div  class="grid grid-cols-2 text-[17px]">
+                        <div>
+                            <p class="my-4">Departamento: {{this.spaceData?.workCenterId}}</p>
+                            <p class="my-4">Día: {{this.spaceData?.date}}</p>
+                            <p class="my-4">Coche: {{this.spaceData?.car}}</p>
+                        </div>
+                        <div>
+                            <p class="my-4">Level: {{this.spaceData?.level}}</p>
+                            <p class="my-4">Horas: {{this.spaceData?.startTime}} - {{this.spaceData?.endTime}}</p>
+                            <p class="my-4">Cargador: {{this.spaceData?.plugType}}</p>
+                        </div>
+                    </div>
+    
+                </div>
+                <div class="bg-gray-200 px-4 py-3 flex">
+                    <app-custom-button
+                        (onClick)="closeModal()"
+                        [color]="'gray'"
+                        [icon]="'close'"
+                        [label]="'Cerrar'"
+                        class="flex-2 rounded"
+                    ></app-custom-button>
+                    <div class="flex-2"></div>
+                    <app-custom-button
+                        (onClick)="postBooking({date: this.spaceData.date ,startTime: this.spaceData.startTime, endTime: this.spaceData.endTime, carId: 1, parkingSpaceId: this.spaceData.parkingSpaceId, userId: this.spaceData.userId})"
+                        [color]="'dark-blue'"
+                        [icon]="'book'"
+                        [label]="'Reservar'"
+                        class="flex-2 rounded"
+                    ></app-custom-button> 
+                </div>
+            </div>
         </div>
     </div>

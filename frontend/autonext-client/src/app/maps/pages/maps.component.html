@@ -3,36 +3,35 @@
   <div class="lg:flex lg:justify-center w-full overflow-x-auto">
     <svg #svgElement width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
       <image
-      [attr.href]="imageUrl"
-      width="800"
-      height="600"
+        [attr.href]="imageUrl"
+        width="800"
+        height="600"
       />
 
-    @for (space of spaces; track $index) {
-      <g
-      [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-      (click)="toggleModal({
-          workCenter: 'Malaga-101',
-          date: '2025-04-04',
-          level: 1,
-          carId: 2,
-          car: '1111 XXX',
-          startTime: '17:35:00',
-          endTime: '17:45:00',
-          plugType: 'CHAdeMO',
-          parkingSpaceId: 7,
-          }
-        )"
-      >
-      <use
-        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-        width="35" height="44"
-        [attr.filter]="space.state">
-      </use>
-    </g>
-  }
-  </svg>
-</div>
+      @for (space of spaces; track $index) {
+        <g
+          [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+          (click)="toggleModal({
+              workCenterId: 1,
+              date: '2025-04-04',
+              level: 1,
+              carId: 2,
+              startTime: '17:35:00',
+              endTime: '17:45:00',
+              plugType: 'CHAdeMO',
+              parkingSpaceId: 7,
+              }
+            )"
+        >
+          <use
+            xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+            width="35" height="44"
+            [attr.filter]="space.state">
+          </use>
+        </g>
+      }
+    </svg>
+  </div>
 
 }
 

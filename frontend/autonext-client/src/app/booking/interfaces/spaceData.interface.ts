@@ -7,7 +7,7 @@ export interface SpaceData {
     endTime: string,
     
     userId?: number
-    workCenter?: string ,
+    workCenterId?: number ,
     level? : number,
     car? : string,
     plugType? : string,
