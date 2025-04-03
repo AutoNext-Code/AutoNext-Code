@@ -19,17 +19,21 @@
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
-      <label class="block text-sm font-medium mb-1" for="delegationSelect">Delegación</label>
-      <select class="border p-2 rounded w-full" id="delegationSelect">
-        <option value="malaga">Málaga</option>
-        <option value="madrid">Madrid</option>
+      <label class="block text-sm font-medium mb-1" for="center">Delegación</label>
+      <select class="border p-2 rounded w-full" id="center" formControlName="center" >
+        @for(center of maps; track $index){
+          <option [value]="center.centerName" [text]="center.centerName" ></option>
+        }
+
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
-      <label class="block text-sm font-medium mb-1" for="levelSelect">Planta</label>
-      <select class="border p-2 rounded w-full" id="levelSelect">
-        <option value="0">0</option>
-        <option value="1">1</option>
+      <label class="block text-sm font-medium mb-1" for="level">Planta</label>
+      <select class="border p-2 rounded w-full" id="level" formControlName="level" >
+        @for (level of parkingLevels; track $index) {
+          <option [value]="level.id" [text]="level.name"></option>
+        }
+
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
