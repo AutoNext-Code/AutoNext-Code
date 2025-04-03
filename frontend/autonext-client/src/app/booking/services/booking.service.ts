@@ -35,17 +35,16 @@ export class BookingService {
     );
   }
 
-  postBooking(params: SpaceData): Observable<string> {
-    return this.bookingHttp.postBooking(params).pipe(
-      tap((book: string) => {
-        this.setBooking(book)
-        console.log(book)
-      }),
-      catchError((err: HttpErrorResponse) => {
-        console.log(err)
-        return throwError(() => new Error('Booking failed: ' + err.message));
-      })
-    );
+  postBooking(params: SpaceData): void {
+    this.bookingHttp.postBooking(params).subscribe({ 
+      next: (book: any) => {
+        console.log("Reserva creada con éxito:", book);
+      },
+      error: (err: any) => {
+        console.error("Error al reservar:", err);
+        alert("Error al reservar: " + err.message);
+      }
+    });
   }
 
   private setBooking(booking: string): void {

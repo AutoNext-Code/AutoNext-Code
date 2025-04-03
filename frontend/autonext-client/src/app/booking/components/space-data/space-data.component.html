@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     <p class="my-4">Level: {{this.spaceData?.level}}</p>
-                    <p class="my-4">Horas: {{this.spaceData?.timeStart}} - {{this.spaceData?.timeEnd}}</p>
+                    <p class="my-4">Horas: {{this.spaceData?.startTime}} - {{this.spaceData?.endTime}}</p>
                     <p class="my-4">Cargador: {{this.spaceData?.plugType}}</p>
                 </div>
             </div>
@@ -34,13 +34,12 @@
         ></app-custom-button>
         <div class="flex-2"></div>
         <app-custom-button
-            (onClick)="postBooking({date: 'date',timeStart: this.spaceData.timeStart, timeEnd: this.spaceData.timeEnd, carId: 1, parkingSpaceId: this.spaceData.parkingSpaceId, userId: this.spaceData.userId})"
+            (onClick)="postBooking({date: this.spaceData.date ,startTime: this.spaceData.startTime, endTime: this.spaceData.endTime, carId: 1, parkingSpaceId: this.spaceData.parkingSpaceId, userId: this.spaceData.userId})"
             [color]="'dark-blue'"
             [icon]="'book'"
             [label]="'Reservar'"
             class="flex-2 rounded"
         ></app-custom-button> 
-        <!-- LocalDate date, LocalTime startTime, LocalTime endTime, String userName, Integer carId, Integer parkingSpaceId, Integer userId -->
         </div>
         </div>
     </div>

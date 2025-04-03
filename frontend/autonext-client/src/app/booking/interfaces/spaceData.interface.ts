@@ -3,8 +3,8 @@ export interface SpaceData {
     date: string,
     parkingSpaceId: number,
     carId: number,
-    timeStart: string,
-    timeEnd: string,
+    startTime: string,
+    endTime: string,
     
     userId?: number
     workCenter?: string ,
@@ -13,4 +13,3 @@ export interface SpaceData {
     plugType? : string,
 
 }
-  

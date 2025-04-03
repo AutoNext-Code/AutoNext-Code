@@ -69,12 +69,26 @@ public class BookingController {
   }
 
 
-  @PostMapping
+  @PostMapping("")
   public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {
 	  
 	try {
 
 		int userId = getAuthenticatedUserId() ;
+    
+    System.out.println("");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("Aqui estamos");
+    System.out.println(booking.getCarId());
+    System.out.println(booking.getParkingSpaceId());
+    System.out.println(booking.getStartTime());
+    System.out.println(booking.getEndTime());
+    System.out.println("");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("");
 
 		bookingService.createBooking(booking, userId);
 
