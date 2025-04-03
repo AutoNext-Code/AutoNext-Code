@@ -1,0 +1,11 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'confirmation-animation',
+  imports: [],
+  templateUrl: './confirmation-animation.component.html',
+  styleUrl: './confirmation-animation.component.css'
+})
+export class ConfirmationAnimationComponent {
+
+}
