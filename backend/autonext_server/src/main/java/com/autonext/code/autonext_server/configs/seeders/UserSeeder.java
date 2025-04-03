@@ -38,7 +38,11 @@ public class UserSeeder implements CommandLineRunner {
             user.setJobPosition("Developer");
             user.setRole(Role.User);
 
-            userRepository.saveAll(List.of(admin, user));
+            User prueba = new User("prueba@example.com", "Prueba", "Prueba", passwordEncoder.encode("prueba123"), true);
+            prueba.setJobPosition("Developer");
+            prueba.setRole(Role.User);
+
+            userRepository.saveAll(List.of(admin, user, prueba));
             System.out.println("Usuarios creados con éxito");
         } else {
             System.out.println("La base de datos ya tiene usuarios. Seeding skipped.");
