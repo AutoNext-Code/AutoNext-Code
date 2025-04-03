@@ -5,6 +5,7 @@ import com.autonext.code.autonext_server.dto.ParkingSpaceDTO;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ParkingState;
 
 import java.time.LocalDate;
@@ -28,6 +29,7 @@ public class ParkingSpaceMapper {
       LocalTime endTime = LocalTime.parse(endTimeStr);
 
       List<Booking> overlappingBookings = space.getBookings().stream()
+          .filter(Booking::isActive)
           .filter(b -> b.getDate().equals(date) &&
               overlaps(b.getStartTime(), b.getEndTime(), startTime, endTime))
           .toList();
