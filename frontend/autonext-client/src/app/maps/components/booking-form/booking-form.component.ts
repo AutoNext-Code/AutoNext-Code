@@ -7,7 +7,7 @@ import { CarDto } from '@user/interfaces/car.interface';
 import { PlugType } from '@maps/enums/PlugType.enum';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
-import { MapParams } from '@user/interfaces/MapParams.interface';
+
 
 @Component({
   selector: 'user-booking-form',
@@ -34,7 +34,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
 
   @Output() mapSelected: EventEmitter<number> = new EventEmitter<number>();
 
-  @Output() mapParams: EventEmitter<MapParams> = new EventEmitter<MapParams>();
+
 
 
   constructor() {

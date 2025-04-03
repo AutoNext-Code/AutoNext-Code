@@ -9,7 +9,6 @@ import { LoaderComponent } from "@shared/loader/loader.component";
 import { MapService } from '@user/services/map.service';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 import { CenterLevel } from '../../interfaces/CenterLevel.interface';
-import { MapParams } from '@user/interfaces/MapParams.interface';
 
 @Component({
   imports: [HeaderComponent, MapsComponent, BookingFormComponent, LoaderComponent],
@@ -29,7 +28,6 @@ export class HomeUserPageComponent implements OnInit{
   plugType:number = 1;
   startTime:string = "09:00";
   endTime:string = "11:00";
-  mapParams!: MapParams;
 
 
   updateSelectedMap(mapId: number) {
@@ -40,8 +38,8 @@ export class HomeUserPageComponent implements OnInit{
 
   chartLoad() {
 
-    if(this.selectedMap && this.mapParams){
-      this.mapService.formMapLoad(this.mapParams).subscribe((response) => {
+    if(this.selectedMap){
+      this.mapService.formMapLoad(this.selectedMap, this.date, this.plugType, this.startTime, this.endTime).subscribe((response) => {
         this.chart = response;
       });
     }
