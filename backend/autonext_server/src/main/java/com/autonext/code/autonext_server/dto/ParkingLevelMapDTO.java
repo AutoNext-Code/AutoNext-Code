@@ -1,9 +1,7 @@
 package com.autonext.code.autonext_server.dto;
 
-import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.ParkingLevel;
 
-import java.util.stream.Collectors;
 import java.util.List;
 
 public class ParkingLevelMapDTO {
@@ -13,15 +11,12 @@ public class ParkingLevelMapDTO {
   private String workCenterName;
   private List<Space> spaces;
 
-  public ParkingLevelMapDTO(ParkingLevel level, String baseImageUrl) {
+  public ParkingLevelMapDTO(ParkingLevel level, String baseImageUrl, List<Space> spaces) {
     this.id = level.getId();
     this.name = level.getName();
     this.imageUrl = baseImageUrl + level.getImageName();
     this.workCenterName = level.getWorkCenter().getName();
-    this.spaces = level.getActiveSpaces().stream()
-        .map(Space::new)
-        .collect(Collectors.toList());
-
+    this.spaces = spaces;
   }
 
   public int getId() {
@@ -52,13 +47,13 @@ public class ParkingLevelMapDTO {
     private String plugType;
     private String state;
 
-    public Space(ParkingSpace space) {
-      this.id = space.getId();
-      this.x = space.getX();
-      this.y = space.getY();
-      this.direction = space.getDirection().name();
-      this.plugType = space.getPlugType().name();
-      this.state = space.getState().name();
+    public Space(int id, int x, int y, String direction, String plugType, String state) {
+      this.id = id;
+      this.x = x;
+      this.y = y;
+      this.direction = direction;
+      this.plugType = plugType;
+      this.state = state;
     }
 
     public int getId() {

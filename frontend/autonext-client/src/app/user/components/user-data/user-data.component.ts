@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from '../../../app.component';
 import { UserDto } from '@user/interfaces/user.interface';
 import { CommonModule } from '@angular/common';
-import { ProfileService } from './services/profile.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'profile-user-data',
