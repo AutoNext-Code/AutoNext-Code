@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { BOOKINGS_LIST_ENDPOINT } from '../../config';
+import { BOOKINGS_ENDPOINT, BOOKINGS_LIST_ENDPOINT } from '../../config';
 import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
 
@@ -33,8 +33,9 @@ export class BookingHttpService {
     return httpParams;
   }
 
-  postBooking(params: BookingParams): void {
-    
+  postBooking(params: BookingParams): Observable<string> {
+    console.log(params)
+    return this.http.post(BOOKINGS_ENDPOINT, {params}, { responseType: 'text' }) ;
   }
 
 }

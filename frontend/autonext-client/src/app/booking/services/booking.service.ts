@@ -20,6 +20,8 @@ export class BookingService {
   private totalSubject = new BehaviorSubject<number>(0);
   public total$ = this.totalSubject.asObservable();
 
+  private bookingSub:  BehaviorSubject<string | null> = new BehaviorSubject<string | null>("");
+
   getBookingsByUser(params: BookingParams): Observable<{ content: BookingDTO[]; totalElements: number }> {
     return this.bookingHttp.getBookingsByUser(params).pipe(
       tap((res) => {
@@ -33,8 +35,21 @@ export class BookingService {
     );
   }
 
-  postBooking(params: SpaceData): void {
-    console.log(params) ;
+  postBooking(params: SpaceData): Observable<string> {
+    return this.bookingHttp.postBooking(params).pipe(
+      tap((book: string) => {
+        this.setBooking(book)
+        console.log(book)
+      }),
+      catchError((err: HttpErrorResponse) => {
+        console.log(err)
+        return throwError(() => new Error('Booking failed: ' + err.message));
+      })
+    );
+  }
+
+  private setBooking(booking: string): void {
+    this.bookingSub.next(booking) ;
   }
 
 }

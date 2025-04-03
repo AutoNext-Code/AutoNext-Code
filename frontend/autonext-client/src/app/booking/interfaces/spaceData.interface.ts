@@ -1,15 +1,16 @@
 export interface SpaceData {
     
     date: string,
-    workCenter?: string ,
     parkingSpaceId: number,
-    level? : number,
     carId: number,
-    car? : string,
     timeStart: string,
     timeEnd: string,
+    
+    userId?: number
+    workCenter?: string ,
+    level? : number,
+    car? : string,
     plugType? : string,
-    userId: number
 
 }
   

@@ -34,12 +34,13 @@
         ></app-custom-button>
         <div class="flex-2"></div>
         <app-custom-button
-            (onClick)="postBooking({date: 'date', carId: 1, timeEnd: this.spaceData.timeEnd , parkingSpaceId: 1, timeStart: this.spaceData.timeStart, userId: this.spaceData.userId})"
+            (onClick)="postBooking({date: 'date',timeStart: this.spaceData.timeStart, timeEnd: this.spaceData.timeEnd, carId: 1, parkingSpaceId: this.spaceData.parkingSpaceId, userId: this.spaceData.userId})"
             [color]="'dark-blue'"
             [icon]="'book'"
             [label]="'Reservar'"
             class="flex-2 rounded"
-        ></app-custom-button>
+        ></app-custom-button> 
+        <!-- LocalDate date, LocalTime startTime, LocalTime endTime, String userName, Integer carId, Integer parkingSpaceId, Integer userId -->
         </div>
         </div>
     </div>
