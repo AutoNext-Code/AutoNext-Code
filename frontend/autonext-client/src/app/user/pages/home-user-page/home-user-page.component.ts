@@ -21,20 +21,26 @@ export class HomeUserPageComponent implements OnInit{
   private mapService: MapService = inject(MapService);
 
   maps:CentersMaps[] = [];
-
-
-  selectedMap!: number;  // Para guardar el mapa seleccionado
-  isMapLoaded = false;       // Para manejar la carga del mapa
+  selectedMap!: number;
+  chart:any;
+  isMapLoaded = false;
 
   updateSelectedMap(mapId: number) {
     this.isMapLoaded = false; // Ocultamos el mapa antes de cambiarlo
     this.selectedMap = mapId;
+    this.chartLoad();
   }
 
-  updateCenterLevels(){
+  chartLoad() {
 
-
+    if(this.selectedMap){
+      this.mapService.mapLoad(this.selectedMap).subscribe((response) => {
+        this.chart = response;
+      });
+    }
   }
+
+
 
   ngOnInit(): void {
     this.mapService.centersMaps$.subscribe(data =>{this.maps = data})
