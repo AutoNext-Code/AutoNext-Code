@@ -10,52 +10,58 @@
 
       @for (space of spaces; track $index) {
 
-        @if(statusSpace(space)){
+        @if(spaceNotTaken(space)){
 
-          @if(spaceNotTaken(space)){
+          <g
+            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+
+          >
+            <use
+              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+              width="35" height="44"
+              [attr.filter]="space.state">
+            </use>
+          </g>
+
+        }@else {
+
+          @if(statusSpace(space)){
 
             <g
-              [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+            (click)="toggleModal(space.id)"
 
-            >
-              <use
-                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-                width="35" height="44"
-                [attr.filter]="space.state">
-              </use>
-            </g>
+          >
+            <use
+              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+              width="35" height="44"
+              [attr.filter]="space.state">
+            </use>
+          </g>
+
+
 
           }@else {
-
             <g
-              [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-              (click)="toggleModal(space.id)"
+            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
 
-            >
-              <use
-                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-                width="35" height="44"
-                [attr.filter]="space.state">
-              </use>
-            </g>
 
+          >
+            <use
+              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+              width="35" height="44"
+              [attr.filter]="unusable">
+            </use>
+          </g>
           }
 
 
 
-        }@else {
-          <g
-          [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-
-
-        >
-          <use
-            xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-            width="35" height="44"
-            [attr.filter]="unusable">
-          </use>
-        </g>
         }
+
+
+
+
 
       }
     </svg>
