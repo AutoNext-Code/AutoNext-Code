@@ -4,11 +4,9 @@
   } @else if (isConfirmation) {
     <h1 class="text-[30px] font-bold" style="color: #0067B8;">EMAIL CONFIRMADO</h1>
     <h2 class="text-[20px] font-bold" style="color: #0067B8;">Inicie sesión</h2>
-    <confirmation-animation></confirmation-animation>
+    <shared-confirmation-animation />
   } @else {
     <h1 class="text-[30px] font-bold" style="color: #0067B8;">EMAIL NO CONFIRMADO</h1>
-    <span class="material-icons !text-[60px]" style="color: #E30000;">
-      close
-    </span>
+    <shared-error-animation />
   }
 </auth-card>

@@ -86,14 +86,15 @@ export class BookingService {
     this.getBookingsByUser(this.lastParams).subscribe();
   }
 
-  postBooking(params: SpaceData): void {
-    this.bookingHttp.postBooking(params).subscribe({
-      next: (book: any) => {
-        console.log('Reserva creada con éxito:', book);
-      },
-      error: (err: any) => {
-        console.error('Error al reservar:', err);
-      },
-    });
+  async postBooking(params: SpaceData): Promise<boolean> {
+    try {
+      const book = await this.bookingHttp.postBooking(params).toPromise();
+      console.log('Reserva creada con éxito:', book);
+      return true;
+    } catch (err) {
+      console.error('Error al reservar:', err);
+      return false;
+    }
   }
+  
 }

@@ -4,11 +4,12 @@ import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.
 import { AuthService } from '@auth/services/auth.service';
 import { LoaderComponent } from '@shared/loader/loader.component';
 import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
+import { ErrorAnimationComponent } from "../../../shared/error-animation/error-animation.component";
 
 @Component({
   selector: 'app-email-confirmation',
   standalone: true,
-  imports: [AuthCardComponent, LoaderComponent, ConfirmationAnimationComponent],
+  imports: [AuthCardComponent, LoaderComponent, ConfirmationAnimationComponent, ErrorAnimationComponent],
   templateUrl: './email-confirmation.component.html',
   styleUrls: ['./email-confirmation.component.css'],
 })

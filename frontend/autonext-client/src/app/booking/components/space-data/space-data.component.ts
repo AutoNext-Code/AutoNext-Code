@@ -6,10 +6,11 @@ import { BookingService } from '@booking/services/booking.service';
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
 import { ErrorAnimationComponent } from '@shared/error-animation/error-animation.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'space-data',
-  imports: [CustomButtonComponent, ConfirmationAnimationComponent, ErrorAnimationComponent],
+  imports: [CustomButtonComponent, ConfirmationAnimationComponent, ErrorAnimationComponent, DatePipe],
   templateUrl: './space-data.component.html',
   styleUrl: './space-data.component.css'
 })
@@ -21,7 +22,8 @@ export class SpaceDataComponent {
   @Output()
   modalEmitter = new EventEmitter<void>() ;
 
-  animation = true ;
+  confirmation = true ;
+  error = true ;
 
   public bookingService: BookingService = inject(BookingService) ;
   
@@ -29,15 +31,23 @@ export class SpaceDataComponent {
     this.modalEmitter.emit();
   }
 
-  postBooking(params: SpaceData) {
-    this.bookingService.postBooking(params)
-    this.checkAnimation() ;
+  async postBooking(params: SpaceData) {
+    let animation = await this.bookingService.postBooking(params)
+    this.tickAnimation(animation) ;
   }
   
-  checkAnimation() {
-    this.animation = false ;
+  tickAnimation(animation: boolean) {
+    if(animation){
+      this.confirmation = false ;
+    }else {
+      this.error = false ;
+    }
     setTimeout(() => {
-      this.animation = true ;
+      if(animation){
+        this.confirmation = true ;
+      }else {
+        this.error = true ;
+      }
       this.closeModal() ;
     }, 1500)
   }
