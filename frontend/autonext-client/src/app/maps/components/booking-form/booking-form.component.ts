@@ -66,10 +66,6 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       this.filterChanged.emit(this.getFilterValues());
     });
 
-    this.myForm.get('selectedPlugType')?.valueChanges.subscribe(() => {
-      this.filterChanged.emit(this.getFilterValues());
-    });
-
     this.myForm.get('date')?.valueChanges.subscribe(value => {
       if (value) {
         const formattedDate = new Date(value).toISOString().split('T')[0];
@@ -83,6 +79,12 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     });
 
     this.myForm.get('endHour')?.valueChanges.subscribe(() => {
+      this.filterChanged.emit(this.getFilterValues());
+    });
+
+    this.myForm.get('selectedPlugType')?.valueChanges.subscribe((value) => {
+      this.selectedPlugType = value;
+      this.getSelectedPlugTypeValue();
       this.filterChanged.emit(this.getFilterValues());
     });
 

@@ -37,6 +37,8 @@ export class MapService {
 
 
   formMapLoad(params:MapParams){
+
+    console.log("params", params);
  
     return this.maphttp.getFormMap(params)
     .pipe(

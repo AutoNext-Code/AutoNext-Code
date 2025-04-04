@@ -41,13 +41,12 @@ public class ParkingController {
   public ResponseEntity<?> getLevelWithAvailability(
       @PathVariable int id,
       @RequestParam(required = false) LocalDate date,
-      @RequestParam(required = false) Integer plugType,
       @RequestParam(required = false) String startTime,
       @RequestParam(required = false) String endTime) {
 
     try {
       User user = getAuthenticatedUser();
-      ParkingLevelMapDTO dto = parkingService.getFilteredLevelMap(id, date, plugType, startTime, endTime, user);
+      ParkingLevelMapDTO dto = parkingService.getFilteredLevelMap(id, date, startTime, endTime, user);
       return ResponseEntity.ok(dto);
     } catch (RuntimeException e) {
       return ResponseEntity.status(404).body("No se encontró el mapa con id " + id + ": " + e.getMessage());
