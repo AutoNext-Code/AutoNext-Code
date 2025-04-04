@@ -1,14 +1,16 @@
-import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { CarService } from '@user/services/car.service';
 import { CarDto } from '@user/interfaces/car.interface';
+import { CarService } from '@user/services/car.service';
+import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
+
 import { PlugType } from '@maps/enums/plugType.enum';
+import { MapParams } from '@maps/interfaces/MapParams.interface';
+import { DataRequestService } from '@maps/services/data-request.service';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 
-import { MapParams } from '@maps/interfaces/MapParams.interface';
-import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 @Component({
@@ -17,22 +19,22 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css']
 })
-export class BookingFormComponent implements OnInit, OnChanges {
+export class BookingFormComponent implements OnInit, OnChanges, AfterContentChecked {
 
   private carService: CarService = inject(CarService);
+  private dataRequestService: DataRequestService = inject(DataRequestService);
 
   public plugTypes: (string | PlugType)[];
   public selectedPlugType: string;
   public selectedPlugTypeValue: number | null = null;
   public cars: CarDto[] = [];
 
-
-  @Input() maps:CentersMaps[] = [];
-    selectedCenter!:string;
-    selectedLevel!:number;
-    parkingLevels: ParkingLevel[] = [];
-    CenterLevel?: CenterLevel;
-    myForm!: FormGroup;
+  @Input() maps: CentersMaps[] = [];
+  selectedCenter!: string;
+  selectedLevel!: number;
+  parkingLevels: ParkingLevel[] = [];
+  CenterLevel?: CenterLevel;
+  myForm!: FormGroup;
 
   @Output() mapSelected: EventEmitter<number> = new EventEmitter<number>();
 
@@ -116,6 +118,10 @@ export class BookingFormComponent implements OnInit, OnChanges {
     }
   }
 
+  ngAfterContentChecked() {
+    this.setData()  
+  }
+
   get displaySelectedPlugType(): string {
     return this.selectedPlugType === "Undefined" ? "Todos los cargadores" : this.selectedPlugType;
   }
@@ -180,67 +186,75 @@ export class BookingFormComponent implements OnInit, OnChanges {
     '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'
   ];
 
-getDate(days?: number): string {
-  const date = new Date();
-  if (days) {
-    date.setDate(date.getDate() + days);
+  getDate(days?: number): string {
+    const date = new Date();
+    if (days) {
+      date.setDate(date.getDate() + days);
+    }
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
-getCarId(): number {
+  getCarId(): number {
 
-  const id: number = this.myForm.value['selectedCar'].id ;
+    const id: number = this.myForm.value['selectedCar'].id;
 
-  return id ;
-} 
+    return id;
+  }
 
-getEndTime(): string {
+  getEndTime(): string {
 
-  const endTime: string = this.myForm.value['endHour'] ;
+    const endTime: string = this.myForm.value['endHour'];
 
-  return endTime ;
-} 
+    return endTime;
+  }
 
-getStartTime(): string {
+  getStartTime(): string {
 
-  const startTime: string = this.myForm.value['startHour'] ;
+    const startTime: string = this.myForm.value['startHour'];
 
-  return startTime ;
-} 
+    return startTime;
+  }
 
-getPlugType(): string {
+  getPlugType(): string {
 
-  const plugType: string = this.plugTypes[this.selectedPlugTypeValue!] as string ;
+    const plugType: string = this.plugTypes[this.selectedPlugTypeValue!] as string;
 
-  return plugType ;
-} 
+    return plugType;
+  }
 
-getCenter(): string {
+  getCenter(): string {
 
-  const center: string = this.myForm.value['center'] ;
+    const center: string = this.myForm.value['center'];
 
-  return center ;
-} 
+    return center;
+  }
 
-getData(): SpaceData{
+  getLevel(): number {
+
+    const level: number = this.myForm.value['level'];
+
+    return level;
+  }
+
+  setData(): void {
 
     const data: SpaceData = {
 
-      date: this.getDate() ,
+      workCenter: this.getCenter(),
+      date: this.getDate(),
+      level: this.getLevel(),
       carId: this.getCarId(),
-      endTime: this.getEndTime() , 
-      startTime: this.getStartTime() , 
+      startTime: this.getStartTime(),
+      endTime: this.getEndTime(),
       plugType: this.getPlugType(),
-
 
     }
 
-    return data ;
+    this.dataRequestService.setData(data) ;
 
-}
+  }
 
 }

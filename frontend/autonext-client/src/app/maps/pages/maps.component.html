@@ -11,17 +11,7 @@
       @for (space of spaces; track $index) {
         <g
           [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-          (click)="toggleModal({
-              workCenterId: 1,
-              date: '2025-04-04',
-              level: 1,
-              carId: 2,
-              startTime: '17:35:00',
-              endTime: '17:45:00',
-              plugType: 'CHAdeMO',
-              parkingSpaceId: space.id
-              }
-            )"
+          (click)="toggleModal(space.id)"
         >
           <use
             xlink:href="./assets/svg/CarIcon.svg#custom-marker"

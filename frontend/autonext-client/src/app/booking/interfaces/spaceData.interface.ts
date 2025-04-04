@@ -7,6 +7,7 @@ export interface SpaceData {
     
     parkingSpaceId?: number,
     userId?: number
+    workCenter?: string ,
     workCenterId?: number ,
     level? : number,
     car? : string,
