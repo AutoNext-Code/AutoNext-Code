@@ -201,9 +201,9 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
 
   getCarId(): number {
 
-    const id: number = this.myForm.value['selectedCar'].id;
+    const car = this.myForm.value['selectedCar'];
 
-    return id;
+    return car ? car.id : 0;;
   }
 
   getEndTime(): string {

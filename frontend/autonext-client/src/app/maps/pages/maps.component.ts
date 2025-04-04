@@ -89,7 +89,6 @@ export class MapsComponent implements OnInit {
 
   toggleModal(spaceId: number): void {
     this.carData = {...this.dataRequestService.getData(), parkingSpaceId: spaceId};
-    console.log(this.carData) ;
     this.modal = false;
   }
 

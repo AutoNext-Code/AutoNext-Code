@@ -9,14 +9,11 @@ export class DataRequestService {
   private data!: SpaceData;
 
   getData(): SpaceData {
-    console.log(this.data)
     return this.data ;
   }
   
   setData(data: SpaceData): void {
     this.data = data ;
   }
-
-
 
 }
