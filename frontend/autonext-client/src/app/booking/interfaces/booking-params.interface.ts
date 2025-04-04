@@ -3,10 +3,6 @@ export interface BookingParams {
   sortBy?: string;
   ascending?: boolean;
   date?: string;
-  delegation?: string;
-  carPlate?: string;
-  plugType?: string;
-  floor?: string;
-  startTime?: string;
-  endTime?: string;
+  workCenterId?: number;
+  carId?: number;
 }
