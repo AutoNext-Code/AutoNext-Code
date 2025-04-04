@@ -14,14 +14,6 @@ public class ParkingSpaceSpecifications {
     };
   }
 
-  public static Specification<ParkingSpace> hasPlugType(Integer plugTypeOrdinal) {
-    return (root, query, cb) -> {
-      if (plugTypeOrdinal == null)
-        return null;
-      return cb.equal(root.get("plugType"), PlugType.values()[plugTypeOrdinal]);
-    };
-  }
-
   public static Specification<ParkingSpace> isElectric() {
     return (root, query, cb) -> cb.notEqual(root.get("plugType"), PlugType.NoType);
   }
