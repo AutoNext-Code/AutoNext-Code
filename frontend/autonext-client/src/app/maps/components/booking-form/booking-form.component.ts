@@ -9,6 +9,7 @@ import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interfac
 
 import { MapParams } from '@maps/interfaces/MapParams.interface';
 import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 @Component({
   selector: 'user-booking-form',
@@ -190,5 +191,56 @@ getDate(days?: number): string {
   return `${year}-${month}-${day}`;
 }
 
+getCarId(): number {
+
+  const id: number = this.myForm.value['selectedCar'].id ;
+
+  return id ;
+} 
+
+getEndTime(): string {
+
+  const endTime: string = this.myForm.value['endHour'] ;
+
+  return endTime ;
+} 
+
+getStartTime(): string {
+
+  const startTime: string = this.myForm.value['startHour'] ;
+
+  return startTime ;
+} 
+
+getPlugType(): string {
+
+  const plugType: string = this.plugTypes[this.selectedPlugTypeValue!] as string ;
+
+  return plugType ;
+} 
+
+getCenter(): string {
+
+  const center: string = this.myForm.value['center'] ;
+
+  return center ;
+} 
+
+getData(): SpaceData{
+
+    const data: SpaceData = {
+
+      date: this.getDate() ,
+      carId: this.getCarId(),
+      endTime: this.getEndTime() , 
+      startTime: this.getStartTime() , 
+      plugType: this.getPlugType(),
+
+
+    }
+
+    return data ;
+
+}
 
 }
