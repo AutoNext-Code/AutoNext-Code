@@ -6,8 +6,8 @@
 
 .circle,
 .circle-border {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
 }
 
@@ -24,7 +24,7 @@
   position: absolute;
   transform: scale(1.1);
   animation: circle-anim 400ms ease;
-  background: #f86;
+  background: rgb(255, 36, 36);
 }
 
 @keyframes success-anim {
@@ -51,20 +51,20 @@
   content: "";
   display: block;
   height: 4px;
-  background: #f86;
+  background: rgb(255, 36, 36);
   position: absolute;
 }
 
 .error::before {
-  width: 40px;
+  width: 70px;
   top: 48%;
-  left: 16%;
+  left: 12%;
   transform: rotateZ(50deg);
 }
 
 .error::after {
-  width: 40px;
+  width: 70px;
   top: 48%;
-  left: 16%;
+  left: 12%;
   transform: rotateZ(-50deg);
 }

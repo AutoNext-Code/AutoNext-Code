@@ -21,7 +21,8 @@ export class SpaceDataComponent {
   @Output()
   modalEmitter = new EventEmitter<void>() ;
 
-  animation = true ;
+  confirmation = true ;
+  error = true ;
 
   public bookingService: BookingService = inject(BookingService) ;
   
@@ -29,15 +30,23 @@ export class SpaceDataComponent {
     this.modalEmitter.emit();
   }
 
-  postBooking(params: SpaceData) {
-    this.bookingService.postBooking(params)
-    this.checkAnimation() ;
+  async postBooking(params: SpaceData) {
+    let animation = await this.bookingService.postBooking(params)
+    this.tickAnimation(animation) ;
   }
   
-  checkAnimation() {
-    this.animation = false ;
+  tickAnimation(animation: boolean) {
+    if(animation){
+      this.confirmation = false ;
+    }else {
+      this.error = false ;
+    }
     setTimeout(() => {
-      this.animation = true ;
+      if(animation){
+        this.confirmation = true ;
+      }else {
+        this.error = true ;
+      }
       this.closeModal() ;
     }, 1500)
   }
