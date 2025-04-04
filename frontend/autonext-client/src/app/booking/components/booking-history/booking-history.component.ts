@@ -5,7 +5,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -20,7 +20,6 @@ import { AppComponent } from '../../../app.component';
     CommonModule,
     PaginationComponent,
   ],
-  providers: [DatePipe],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,8 +28,6 @@ export class BookingHistoryComponent {
   private bookingService = inject(BookingService);
   private authService = inject(AuthService);
   private appComponent: AppComponent = inject(AppComponent);
-  private datePipe: DatePipe = inject(DatePipe);
-
 
   currentPage = signal(1);
   sortDirection = signal<'asc' | 'desc'>('desc');
@@ -156,9 +153,4 @@ export class BookingHistoryComponent {
     });
   }
 
-
-  formatHour(hour: string): string | null {
-    const date = new Date('1970-01-01T' + hour + 'Z');
-    return this.datePipe.transform(date, 'HH:mm');
-  }
 }

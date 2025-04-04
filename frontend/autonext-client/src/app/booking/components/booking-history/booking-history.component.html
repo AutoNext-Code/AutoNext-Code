@@ -138,7 +138,8 @@
           <div>{{ booking.date }}</div>
         </div>
         <div>
-          <div>{{ booking.startTime ? formatHour(booking.startTime) : 'N/A' }} - {{ booking.endTime ? formatHour(booking.endTime) : 'N/A' }}</div>
+          <div>{{ booking.startTime | slice : 0 : -3 }} -
+            {{ booking.endTime | slice : 0 : -3 }}</div>
         </div>
       </div>
       <div class="flex justify-between items-center mt-3">
