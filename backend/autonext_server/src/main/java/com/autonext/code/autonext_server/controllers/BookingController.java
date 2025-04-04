@@ -55,14 +55,14 @@ public class BookingController {
       @RequestParam(defaultValue = "date") String sortBy,
       @RequestParam(defaultValue = "true") boolean ascending,
       @RequestParam(required = false) LocalDate date,
-      @RequestParam(required = false, name = "delegation") String workCenter,
-      @RequestParam(required = false) String carPlate) {
+      @RequestParam(required = false) Integer workCenterId,
+      @RequestParam(required = false) Integer carId) {
 
     int userId = getAuthenticatedUserId();
     PageRequest pageable = buildPageRequest(page, sortBy, ascending);
 
     Page<Booking> bookings = bookingService.getFilteredBookingsPaged(
-        userId, pageable, date, workCenter, carPlate);
+        userId, pageable, date, workCenterId, carId);
 
     List<BookingDTO> bookingDTOs = bookings.getContent().stream()
         .map(BookingMapper::toDTO)
@@ -125,7 +125,7 @@ public class BookingController {
     try {
       int userId = getAuthenticatedUserId();
       bookingService.cancelBooking(id, userId);
-      return ResponseEntity.ok("Reserva cancelada correctamente");
+      return ResponseEntity.noContent().build();
     } catch (BookingNotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reserva no encontrada");
     } catch (UserNotFoundException e) {
@@ -156,12 +156,16 @@ public class BookingController {
    * }
    */
 
-  private int getAuthenticatedUserId() {
-    UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
-        .getContext().getAuthentication();
-    User user = (User) authentication.getPrincipal();
-    return user.getId();
-  }
+   private int getAuthenticatedUserId() {
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+  
+    if (principal instanceof User user) {
+      return user.getId();
+    }
+  
+    throw new SecurityException("Usuario no autenticado correctamente");
+  }  
 
   private PageRequest buildPageRequest(int page, String sortBy, boolean ascending) {
     Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();

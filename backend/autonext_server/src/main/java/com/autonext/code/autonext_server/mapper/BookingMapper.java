@@ -14,6 +14,7 @@ public class BookingMapper {
         : booking.getCar().getCarPlate();
 
     return new BookingDTO(
+        booking.getId(),
         booking.getDate(),
         booking.getStartTime(),
         booking.getEndTime(),

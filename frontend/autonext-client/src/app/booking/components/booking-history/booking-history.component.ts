@@ -36,8 +36,8 @@ export class BookingHistoryComponent {
   currentPage = signal(1);
   sortColumn = signal<string>('date');
   sortDirection = signal<'asc' | 'desc'>('asc');
-  delegation = signal<string | null>(null);
-  carPlate = signal<string | null>(null);
+  workCenterId = signal<number | null>(null);
+  carId = signal<number | null>(null);
   date = signal<string | null>(null);
 
   userName = this.authService.getName();
@@ -45,11 +45,16 @@ export class BookingHistoryComponent {
   bookings$ = this.bookingService.bookingList$;
   total$ = this.bookingService.total$;
 
+  cars = signal<{ id: number; name: string }[]>([]);
+  workCenters = signal<{ id: number; name: string }[]>([]);
+
   total = toSignal(this.bookingService.total$, { initialValue: 0 });
   totalPages = computed(() => Math.ceil(this.total() / 6));
 
   constructor() {
-    this.loadBookings(); // se hace la carga inicial solo una vez
+    this.loadBookings();
+    this.loadUserCars();
+    this.loadWorkCenters();
   }
 
   onSort(column: string) {
@@ -68,13 +73,13 @@ export class BookingHistoryComponent {
   }
 
   onDelegationChange(value: string) {
-    this.delegation.set(value || null);
+    this.workCenterId.set(value ? +value : null);
     this.currentPage.set(1);
     this.loadBookings();
   }
 
   onCarChange(value: string) {
-    this.carPlate.set(value || null);
+    this.carId.set(value ? +value : null);
     this.currentPage.set(1);
     this.loadBookings();
   }
@@ -84,16 +89,52 @@ export class BookingHistoryComponent {
     this.currentPage.set(1);
     this.loadBookings();
   }
+  
 
   private loadBookings() {
-    this.bookingService.getBookingsByUser({
-      page: this.currentPage() - 1,
-      sortBy: this.sortColumn(),
-      ascending: this.sortDirection() === 'asc',
-      delegation: this.delegation() ?? undefined,
-      carPlate: this.carPlate() ?? undefined,
-      date: this.date() ?? undefined,
-    }).subscribe();
+    this.bookingService
+      .getBookingsByUser({
+        page: this.currentPage() - 1,
+        sortBy: this.sortColumn(),
+        ascending: this.sortDirection() === 'asc',
+        date: this.date() ?? undefined,
+        workCenterId: this.workCenterId() ?? undefined,
+        carId: this.carId() ?? undefined,
+      })
+      .subscribe();
+  }
+
+  private loadUserCars() {
+    this.bookingService.getUserCars().subscribe({
+      next: (cars) => this.cars.set(cars),
+      error: (err) => console.error('Error al cargar coches:', err),
+    });
+  }
+
+  private loadWorkCenters() {
+    this.bookingService.getWorkCenters().subscribe({
+      next: (centers) => this.workCenters.set(centers),
+      error: (err) => console.error('Error al cargar delegaciones:', err),
+    });
+  }
+
+  confirmBooking(id: number) {
+    this.bookingService.updateConfirmationStatus(id, 'Confirmed').subscribe({
+      next: () => this.loadBookings(),
+      error: (err) => console.error('Error al confirmar reserva:', err),
+    });
+  }
+
+  cancelBooking(id: number) {
+    console.log('[CANCEL ID]', id);
+    this.bookingService.cancelBooking(id).subscribe({
+      next: () => this.loadBookings(),
+      error: (err) => console.error('Error al cancelar reserva:', err),
+    });
+  }
+
+  getSelectValue(event: Event): string {
+    return (event.target as HTMLSelectElement).value;
   }
 
   getStatusLabel(status: string | null): string {
@@ -113,5 +154,13 @@ export class BookingHistoryComponent {
       default:
         return 'Desconocido';
     }
+  }
+
+  formatDateToISO(value: string): string | null {
+    if (!value) return null;
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return null;
+
+    return date.toISOString().split('T')[0];
   }
 }

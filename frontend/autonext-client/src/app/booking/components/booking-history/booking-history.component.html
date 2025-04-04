@@ -10,21 +10,41 @@
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
     <div>
       <label class="block text-sm font-medium" for="select1">Delegación</label>
-      <select class="w-full border p-2 rounded" id="select1">
-        <option value="malaga">Málaga</option>
-        <option value="madrid">Madrid</option>
+      <select
+        class="w-full border p-2 rounded"
+        (change)="onDelegationChange(getSelectValue($event))"
+      >
+        <option *ngIf="workCenters().length === 0" disabled selected>
+          Cargando delegaciones...
+        </option>
+        <option [value]="''" selected>Todos</option>
+        <option *ngFor="let center of workCenters()" [value]="center.id">
+          {{ center.name }}
+        </option>
       </select>
     </div>
     <div>
       <label class="block text-sm font-medium" for="select1">Coche</label>
-      <select class="w-full border p-2 rounded" id="select1">
-        <option value="coche1">1111AAA</option>
-        <option value="coche2">2222BBB</option>
+      <select
+        class="w-full border p-2 rounded"
+        (change)="onCarChange(getSelectValue($event))"
+      >
+        <option *ngIf="cars().length === 0" disabled selected>
+          Cargando coches...
+        </option>
+        <option [value]="''" selected>Todos</option>
+        <option *ngFor="let car of cars()" [value]="car.id">
+          {{ car.name }}
+        </option>
       </select>
     </div>
     <div>
       <label class="block text-sm font-medium" for="select1">Día</label>
-      <input type="date" class="w-full border p-2 rounded" />
+      <input
+        type="date"
+        class="w-full border p-2 rounded"
+        (change)="onDateChange(getSelectValue($event))"
+      />
     </div>
   </div>
 
@@ -125,17 +145,24 @@
             <button
               *ngIf="booking.confirmationStatus === 'PendingConfirmation'"
               class="text-green-600 text-lg cursor-pointer"
+              (click)="confirmBooking(booking.id)"
             >
               <i class="material-icons text-base ml-2">check</i>
             </button>
+
             <button
-              *ngIf="booking.confirmationStatus === 'PendingConfirmation'"
+              *ngIf="booking.confirmationStatus === 'Inactive'"
               class="text-red-600 text-lg cursor-pointer"
+              (click)="cancelBooking(booking.id)"
             >
               <i class="material-icons text-base ml-2">close</i>
             </button>
+
             <span
-              *ngIf="booking.status === 'Cancelada'"
+              *ngIf="
+                booking.confirmationStatus === 'Confirmed' ||
+                booking.confirmationStatus === 'Expired'
+              "
               class="text-gray-600 text-lg"
             >
               ----
