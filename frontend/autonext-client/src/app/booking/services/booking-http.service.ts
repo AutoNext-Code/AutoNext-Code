@@ -74,7 +74,6 @@ export class BookingHttpService {
   
   
   postBooking(params: SpaceData): Observable<string> {
-    console.log(params);
     const body = {
       carId: params.carId,
       date: params.date,

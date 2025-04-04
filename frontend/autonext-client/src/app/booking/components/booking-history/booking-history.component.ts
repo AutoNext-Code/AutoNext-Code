@@ -12,6 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { BookingService } from '@booking/services/booking.service';
 import { AuthService } from '@auth/services/auth.service';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'booking-history',
@@ -28,6 +29,7 @@ import { AuthService } from '@auth/services/auth.service';
 export class BookingHistoryComponent {
   private bookingService = inject(BookingService);
   private authService = inject(AuthService);
+  private appComponent: AppComponent = inject(AppComponent);
 
 
   currentPage = signal(1);
@@ -93,8 +95,14 @@ export class BookingHistoryComponent {
   cancelBooking(id: number) {
     console.log('[CANCEL ID]', id);
     this.bookingService.cancelBooking(id).subscribe({
-      next: () => this.loadBookings(),
-      error: (err) => console.error('Error al cancelar reserva:', err),
+      next: () => {
+        this.loadBookings();
+        this.appComponent.showToast('success', 'Reserva cancelada', '', 3000, 80);
+      }, 
+      error: (err) => {
+        console.error('Error al cancelar reserva:', err),
+        this.appComponent.showToast('error', 'Error al cancelar reserva', err.message, 3000, 80);
+      }
     });
   }
 
