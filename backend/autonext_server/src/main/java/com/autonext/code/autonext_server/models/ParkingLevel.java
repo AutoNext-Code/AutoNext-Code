@@ -5,9 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import com.autonext.code.autonext_server.models.enums.ParkingState;
 
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
