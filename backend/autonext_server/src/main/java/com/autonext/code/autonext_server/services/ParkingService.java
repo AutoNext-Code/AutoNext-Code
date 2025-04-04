@@ -43,7 +43,6 @@ public class ParkingService {
 
   public ParkingLevelMapDTO getFilteredLevelMap(int levelId,
       LocalDate date,
-      Integer plugType,
       String startTime,
       String endTime,
       User user) {
@@ -54,10 +53,6 @@ public class ParkingService {
     Specification<ParkingSpace> spec = Specification
         .where(ParkingSpaceSpecifications.isElectric())
         .and(ParkingSpaceSpecifications.hasLevel(levelId));
-
-    if (plugType != null) {
-      spec = spec.and(ParkingSpaceSpecifications.hasPlugType(plugType));
-    }
 
     List<ParkingSpace> spaces = parkingSpaceRepository.findAll(spec);
 
