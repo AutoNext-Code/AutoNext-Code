@@ -72,7 +72,7 @@ export class BookingService {
     );
   }
 
-  updateConfirmationStatus(id: number, status: string): Observable<void> {
+  updateConfirmationStatus(id: number, status: string): Observable<String> {
     return this.bookingHttp.updateConfirmationStatus(id, status).pipe(
       tap(() => this.refreshBookings()),
       catchError((err: HttpErrorResponse) => {

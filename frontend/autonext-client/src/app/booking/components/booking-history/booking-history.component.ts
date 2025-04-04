@@ -6,13 +6,11 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SortableThComponent } from '../sortable-th/sortable-th.component';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
 import { CardBookingComponent } from '../card-booking/card-booking.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { BookingService } from '@booking/services/booking.service';
-import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { AuthService } from '@auth/services/auth.service';
 import { AppComponent } from '../../../app.component';
 
@@ -21,7 +19,6 @@ import { AppComponent } from '../../../app.component';
   standalone: true,
   imports: [
     CommonModule,
-    SortableThComponent,
     PaginationComponent,
     CardBookingComponent,
   ],
@@ -34,10 +31,9 @@ export class BookingHistoryComponent {
   private authService = inject(AuthService);
   private appComponent: AppComponent = inject(AppComponent);
 
-  // Signals para paginación y filtros
+
   currentPage = signal(1);
-  sortColumn = signal<string>('date');
-  sortDirection = signal<'asc' | 'desc'>('asc');
+  sortDirection = signal<'asc' | 'desc'>('desc');
   workCenterId = signal<number | null>(null);
   carId = signal<number | null>(null);
   date = signal<string | null>(null);
@@ -59,15 +55,6 @@ export class BookingHistoryComponent {
     this.loadWorkCenters();
   }
 
-  onSort(column: string) {
-    if (this.sortColumn() === column) {
-      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
-    } else {
-      this.sortColumn.set(column);
-      this.sortDirection.set('asc');
-    }
-    this.loadBookings();
-  }
 
   onPageChange(page: number) {
     this.currentPage.set(page);
@@ -91,33 +78,11 @@ export class BookingHistoryComponent {
     this.currentPage.set(1);
     this.loadBookings();
   }
-  
 
-  private loadBookings() {
-    this.bookingService
-      .getBookingsByUser({
-        page: this.currentPage() - 1,
-        sortBy: this.sortColumn(),
-        ascending: this.sortDirection() === 'asc',
-        date: this.date() ?? undefined,
-        workCenterId: this.workCenterId() ?? undefined,
-        carId: this.carId() ?? undefined,
-      })
-      .subscribe();
-  }
-
-  private loadUserCars() {
-    this.bookingService.getUserCars().subscribe({
-      next: (cars) => this.cars.set(cars),
-      error: (err) => console.error('Error al cargar coches:', err),
-    });
-  }
-
-  private loadWorkCenters() {
-    this.bookingService.getWorkCenters().subscribe({
-      next: (centers) => this.workCenters.set(centers),
-      error: (err) => console.error('Error al cargar delegaciones:', err),
-    });
+  toggleSortDirection() {
+    this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+    this.currentPage.set(1);
+    this.loadBookings();
   }
 
   confirmBooking(id: number) {
@@ -140,6 +105,7 @@ export class BookingHistoryComponent {
       }
     });
   }
+
 
   getSelectValue(event: Event): string {
     return (event.target as HTMLSelectElement).value;
@@ -164,11 +130,29 @@ export class BookingHistoryComponent {
     }
   }
 
-  formatDateToISO(value: string): string | null {
-    if (!value) return null;
-    const date = new Date(value);
-    if (isNaN(date.getTime())) return null;
+  private loadBookings() {
+    this.bookingService
+      .getBookingsByUser({
+        page: this.currentPage() - 1,
+        ascending: this.sortDirection() === 'asc',
+        date: this.date() ?? undefined,
+        workCenterId: this.workCenterId() ?? undefined,
+        carId: this.carId() ?? undefined,
+      })
+      .subscribe();
+  }
 
-    return date.toISOString().split('T')[0];
+  private loadUserCars() {
+    this.bookingService.getUserCars().subscribe({
+      next: (cars) => this.cars.set(cars),
+      error: (err) => console.error('Error al cargar coches:', err),
+    });
+  }
+
+  private loadWorkCenters() {
+    this.bookingService.getWorkCenters().subscribe({
+      next: (centers) => this.workCenters.set(centers),
+      error: (err) => console.error('Error al cargar delegaciones:', err),
+    });
   }
 }
