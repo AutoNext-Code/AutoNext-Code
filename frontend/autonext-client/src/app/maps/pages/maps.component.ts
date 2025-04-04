@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 
 import { Space } from '@maps/interfaces/Space.interface';
-import { Direction } from '@maps/enums/Direction.enum';
-import { State } from '@maps/enums/State.enum';
+import { Direction } from '@maps/enums/direction.enum';
+import { State } from '@maps/enums/state.enum';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
@@ -89,6 +89,14 @@ export class MapsComponent implements OnInit {
   closeModal() {
     this.modal = true;
   }
+
+  stateColorMap: Record<string, string> = {
+    Available: 'var(--green)',
+    Occupied: 'var(--red)',
+    Blocked: 'var(--gray)',
+    Own_Reservation: 'var(--light-blue)',
+    Unusable: 'var(--light-gray)',
+  };
 
 
 }

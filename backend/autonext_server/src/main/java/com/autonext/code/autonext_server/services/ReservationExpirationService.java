@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 
 @Service
-public class ReservationCompletionService implements CommandLineRunner {
+public class ReservationExpirationService implements CommandLineRunner {
+
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
   @Autowired
@@ -29,21 +31,28 @@ public class ReservationCompletionService implements CommandLineRunner {
   }
 
   public void start() {
-    scheduler.scheduleAtFixedRate(this::completeExpiredReservations, 0, 5, TimeUnit.MINUTES);
+    scheduler.scheduleAtFixedRate(this::checkReservationsExpiredSoon, 0, 5, TimeUnit.MINUTES);
   }
 
-  private void completeExpiredReservations() {
+  private void checkReservationsExpiredSoon() {
     LocalDateTime now = LocalDateTime.now();
     LocalDate date = now.toLocalDate();
-    LocalTime currentTime = now.toLocalTime();
+    LocalTime expiredTime = now.toLocalTime().minusMinutes(15);
 
-    List<Booking> completedBookings = bookingRepository.findCompletedBookings(BookingStatus.Active, date, currentTime);
+    List<Booking> bookings = bookingRepository.findExpiredPendingConfirmations(
+        ConfirmationStatus.PendingConfirmation, date, expiredTime);
 
-    if (!completedBookings.isEmpty()) {
-      for (Booking booking : completedBookings) {
-        booking.setStatus(BookingStatus.Completed);
+    if (!bookings.isEmpty()) {
+      for (Booking booking : bookings) {
+        if (booking.getStatus() == BookingStatus.Pending) {
+          booking.setConfirmationStatus(ConfirmationStatus.Expired);
+          booking.setStatus(BookingStatus.Strike);
+          // TODO: Aqui es donde se penaliza al usuario cuando llegue la historia de usuario
+          // TODO: Aqui es donde se informara que recivio un strike
+        }
       }
-      bookingRepository.saveAll(completedBookings);
+
+      bookingRepository.saveAll(bookings);
     }
 
   }

@@ -4,34 +4,35 @@
   <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="dateSelect">Día</label>
-      <input type="date" class="border p-2 rounded w-full" id="dateSelect" />
+        <input type="date" class="border p-2 rounded w-full" id="dateSelect" formControlName="date" [min]="getDate()" [max]="getDate(7)" />
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="startHourSelect">Hora inicio</label>
-      <select class="border p-2 rounded w-full" id="startHourSelect">
-        <option value="0">00:00</option>
+      <select class="border p-2 rounded w-full" id="startHourSelect" formControlName="startHour">
+        <option *ngFor="let hour of startHours" [value]="hour">{{ hour }}</option>
       </select>
     </div>
+
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="endHourSelect">Hora fin</label>
-      <select class="border p-2 rounded w-full" id="endHourSelect">
-        <option value="0">00:00</option>
+      <select class="border p-2 rounded w-full" id="endHourSelect" formControlName="endHour">
+        <option *ngFor="let hour of endHours" [value]="hour">{{ hour }}</option>
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="center">Delegación</label>
-      <select class="border p-2 rounded w-full" id="center" formControlName="center" >
+      <select class="border p-2 rounded w-full" id="center" formControlName="center">
         @for(center of maps; track $index){
-          <option [value]="center.centerName" [text]="center.centerName" ></option>
+        <option [value]="center.centerName" [text]="center.centerName"></option>
         }
 
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="level">Planta</label>
-      <select class="border p-2 rounded w-full" id="level" formControlName="level" >
+      <select class="border p-2 rounded w-full" id="level" formControlName="level">
         @for (level of parkingLevels; track $index) {
-          <option [value]="level.id" [text]="level.name"></option>
+        <option [value]="level.id" [text]="level.name"></option>
         }
 
       </select>

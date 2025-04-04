@@ -6,7 +6,7 @@ import {
   catchError,
   map,
   tap,
-  throwError
+  throwError,
 } from 'rxjs';
 
 import { BookingHttpService } from './booking-http.service';
@@ -15,7 +15,7 @@ import { BookingParams } from '@booking/interfaces/booking-params.interface';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookingService {
   private bookingHttp = inject(BookingHttpService);
@@ -28,7 +28,9 @@ export class BookingService {
 
   private lastParams: BookingParams = {};
 
-  getBookingsByUser(params: BookingParams): Observable<{ content: BookingDTO[]; totalElements: number }> {
+  getBookingsByUser(
+    params: BookingParams
+  ): Observable<{ content: BookingDTO[]; totalElements: number }> {
     this.lastParams = params; // guardamos los últimos filtros para recargar
     return this.bookingHttp.getBookingsByUser(params).pipe(
       tap((res) => {
@@ -37,7 +39,9 @@ export class BookingService {
       }),
       catchError((err: HttpErrorResponse) => {
         console.error('Error al obtener reservas:', err);
-        return throwError(() => new Error('No se pudieron obtener las reservas'));
+        return throwError(
+          () => new Error('No se pudieron obtener las reservas')
+        );
       })
     );
   }
@@ -57,7 +61,6 @@ export class BookingService {
       )
     );
   }
-  
 
   cancelBooking(id: number): Observable<void> {
     return this.bookingHttp.cancelBooking(id).pipe(
@@ -84,7 +87,13 @@ export class BookingService {
   }
 
   postBooking(params: SpaceData): void {
-    console.log(params);
-    // pendiente de implementación
+    this.bookingHttp.postBooking(params).subscribe({
+      next: (book: any) => {
+        console.log('Reserva creada con éxito:', book);
+      },
+      error: (err: any) => {
+        console.error('Error al reservar:', err);
+      },
+    });
   }
 }

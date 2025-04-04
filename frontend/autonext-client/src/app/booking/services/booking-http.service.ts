@@ -3,14 +3,17 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import {
+  BOOKINGS_ENDPOINT,
   BOOKING_CANCEL_ENDPOINT,
   BOOKING_CONFIRMATION_ENDPOINT,
   BOOKINGS_LIST_ENDPOINT,
   CARS_USER_ENDPOINT,
   CENTER_NAME_ENDPOINT,
 } from '../../config';
+
 import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +52,7 @@ export class BookingHttpService {
 
   getWorkCenters(): Observable<Record<string, string>> {
     return this.http.get<Record<string, string>>(CENTER_NAME_ENDPOINT);
-  }  
+  }
 
   cancelBooking(id: number): Observable<void> {
     return this.http.put<void>(BOOKING_CANCEL_ENDPOINT(id), {});
@@ -64,5 +67,17 @@ export class BookingHttpService {
       {},
       { params: { confirmationStatus } }
     );
+  }
+  
+  postBooking(params: SpaceData): Observable<string> {
+    console.log(params);
+    const body = {
+      carId: params.carId,
+      date: params.date,
+      parkingSpaceId: params.parkingSpaceId,
+      endTime: params.endTime,
+      startTime: params.startTime,
+    };
+    return this.http.post(BOOKINGS_ENDPOINT, body, { responseType: 'text' });
   }
 }

@@ -4,10 +4,11 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { BookingService } from '@booking/services/booking.service';
 
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
+import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
 
 @Component({
   selector: 'space-data',
-  imports: [CustomButtonComponent],
+  imports: [CustomButtonComponent, ConfirmationAnimationComponent],
   templateUrl: './space-data.component.html',
   styleUrl: './space-data.component.css'
 })
@@ -19,6 +20,8 @@ export class SpaceDataComponent {
   @Output()
   modalEmitter = new EventEmitter<void>() ;
 
+  animation = true ;
+
   public bookingService: BookingService = inject(BookingService) ;
   
   closeModal() {
@@ -27,6 +30,15 @@ export class SpaceDataComponent {
 
   postBooking(params: SpaceData) {
     this.bookingService.postBooking(params)
+    this.checkAnimation() ;
+  }
+  
+  checkAnimation() {
+    this.animation = false ;
+    setTimeout(() => {
+      this.animation = true ;
+      this.closeModal() ;
+    }, 1500)
   }
 
 }
