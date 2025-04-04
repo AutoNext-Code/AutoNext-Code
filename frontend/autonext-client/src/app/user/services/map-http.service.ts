@@ -27,7 +27,8 @@ export class MapHttpService{
       params = params.set('date', mapParams.date);
 
       if(mapParams.plugtype != 1){
-        params = params.set('plugType', mapParams.plugtype.toString());
+        params = params.set('plugtype', mapParams.plugtype.toString());
+        console.log(mapParams.plugtype.toString());
       }
 
       params = params.set('startTime', mapParams.startTime);
