@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class BookingDTO {
+    private int id;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -14,8 +15,9 @@ public class BookingDTO {
     private String confirmationStatus;
     private String carName;
 
-    public BookingDTO(LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String nameSpace,
+    public BookingDTO(int id, LocalDate date, LocalTime startTime, LocalTime endTime, String userName, String nameSpace,
             String delegation, String status, String confirmationStatus, String carName) {
+        this.id = id;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -25,6 +27,14 @@ public class BookingDTO {
         this.status = status;
         this.confirmationStatus = confirmationStatus;
         this.carName = carName;
+    }
+
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {

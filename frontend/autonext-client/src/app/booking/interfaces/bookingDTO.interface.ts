@@ -1,4 +1,5 @@
 export interface BookingDTO {
+  id: number;
   date: Date | null;
   startTime: string | null;
   endTime: string | null;
@@ -10,4 +11,3 @@ export interface BookingDTO {
   confirmationStatus: string | null;
   carName: string | null;
 }
-

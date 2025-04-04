@@ -1,10 +1,10 @@
-import { enviromments } from "../environments/environments";
+import { enviromments } from '../environments/environments';
 
 export const BASE_URL = enviromments.baseUrl;
 
 export const API_BASE_URL = `${BASE_URL}api/`;
 
-export const SWAGGER = `${BASE_URL}swagger-ui/index.html`
+export const SWAGGER = `${BASE_URL}swagger-ui/index.html`;
 
 /* ENDPOINTS DE AUTH */
 
@@ -16,18 +16,25 @@ export const CONFIRM_EMAIL_ENDPOINT = `${API_BASE_URL}auth/email-confirmation`;
 
 /* ENDPOINTS DE MAP-Service  */
 
-export const MAP_ENDPOINT = `${API_BASE_URL}parking/level`
+export const MAP_ENDPOINT = `${API_BASE_URL}parking/level`;
 
 export const CENTERS_LEVELS = `${API_BASE_URL}parking/centers`
 
 /* ENDPOINTS DE BOOKINGS */
 
-export const BOOKINGS_ENDPOINT =  `${API_BASE_URL}bookings`
+export const BOOKINGS_ENDPOINT = `${API_BASE_URL}bookings`;
 
-export const BOOKINGS_LIST_ENDPOINT =  `${API_BASE_URL}bookings/booking-list`
+export const BOOKINGS_LIST_ENDPOINT = `${API_BASE_URL}bookings/booking-list`;
+
+export const BOOKING_CANCEL_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOINT}/${id}/cancel`;
+export const BOOKING_CONFIRMATION_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOINT}/${id}/confirmation`;
 
 /* ENDPOINTS DE USER */
 
-export const DATA_PROFILE_ENDPOINT = `${API_BASE_URL}user/profile`
+export const DATA_PROFILE_ENDPOINT = `${API_BASE_URL}user/profile`;
 
-export const CARS_USER_ENDPOINT = `${API_BASE_URL}cars`
+export const CARS_USER_ENDPOINT = `${API_BASE_URL}cars`;
+
+/* ENDPOINT PARA WORKCENTER */
+
+export const CENTER_NAME_ENDPOINT = `${API_BASE_URL}parking/centers-names`;

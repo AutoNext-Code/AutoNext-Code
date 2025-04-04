@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.autonext.code.autonext_server.models.enums.Direction;
-import com.autonext.code.autonext_server.models.enums.ParkingState;
 import com.autonext.code.autonext_server.models.enums.PlugType;
 
 import jakarta.persistence.Table;
