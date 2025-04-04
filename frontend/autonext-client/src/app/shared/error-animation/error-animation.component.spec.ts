@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SortableThComponent } from './sortable-th.component';
+import { ErrorAnimationComponent } from './error-animation.component';
 
-describe('SortableThComponent', () => {
-  let component: SortableThComponent;
-  let fixture: ComponentFixture<SortableThComponent>;
+describe('ErrorAnimationComponent', () => {
+  let component: ErrorAnimationComponent;
+  let fixture: ComponentFixture<ErrorAnimationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SortableThComponent]
+      imports: [ErrorAnimationComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SortableThComponent);
+    fixture = TestBed.createComponent(ErrorAnimationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

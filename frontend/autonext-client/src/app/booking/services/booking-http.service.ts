@@ -61,16 +61,19 @@ export class BookingHttpService {
   updateConfirmationStatus(
     id: number,
     confirmationStatus: string
-  ): Observable<void> {
-    return this.http.put<void>(
+  ): Observable<string> {
+    return this.http.put(
       BOOKING_CONFIRMATION_ENDPOINT(id),
       {},
-      { params: { confirmationStatus } }
+      {
+        params: { confirmationStatus },
+        responseType: 'text' as const
+      }
     );
   }
   
+  
   postBooking(params: SpaceData): Observable<string> {
-    console.log(params);
     const body = {
       carId: params.carId,
       date: params.date,

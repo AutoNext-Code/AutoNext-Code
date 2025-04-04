@@ -26,10 +26,7 @@ export class MapService {
   }
 
 
-
-
   formMapLoad(params:MapParams){
-
 
     return this.maphttp.getFormMap(params)
     .pipe(
@@ -37,9 +34,6 @@ export class MapService {
     );
 
   }
-
-
-
 
   centersLevelsLoad(){
     this.maphttp.getCentersLevels()
@@ -59,12 +53,5 @@ export class MapService {
     });
 
   }
-
-
-
-
-
-
-
 
 }

@@ -12,6 +12,7 @@ import {
 import { Space } from '@maps/interfaces/Space.interface';
 import { Direction } from '@maps/enums/direction.enum';
 import { State } from '@maps/enums/state.enum';
+import { DataRequestService } from '@maps/services/data-request.service';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
@@ -27,6 +28,8 @@ export class MapsComponent implements OnInit {
   imageUrl: String = '';
   spaces: Space[] = [];
 
+  formData!: SpaceData ;
+
   @Input() chart: any;
   @Input() plugType: PlugType = PlugType.Undefined;
   @Output() mapLoaded = new EventEmitter<boolean>();
@@ -35,6 +38,8 @@ export class MapsComponent implements OnInit {
   isLoaded: boolean = false;
   modal: boolean = true;
   carData!: SpaceData;
+
+  public dataRequestService = inject(DataRequestService) ;
 
   ngOnInit(): void {
     this.isLoaded = false;
@@ -101,9 +106,9 @@ export class MapsComponent implements OnInit {
     };
   }
 
-  toggleModal(carData: SpaceData) {
+  toggleModal(spaceId: number): void {
+    this.carData = {...this.dataRequestService.getData(), parkingSpaceId: spaceId};
     this.modal = false;
-    this.carData = carData;
   }
 
   closeModal() {

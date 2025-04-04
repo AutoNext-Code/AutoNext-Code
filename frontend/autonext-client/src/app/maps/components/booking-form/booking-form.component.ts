@@ -1,15 +1,19 @@
-import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { CarService } from '@user/services/car.service';
 import { CarDto } from '@user/interfaces/car.interface';
+import { CarService } from '@user/services/car.service';
+import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
+
 import { PlugType } from '@maps/enums/plugType.enum';
+import { MapParams } from '@maps/interfaces/MapParams.interface';
+import { DataRequestService } from '@maps/services/data-request.service';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 
 
-import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
 import { FormValues } from '@maps/interfaces/FormValues.interface';
+import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 @Component({
   selector: 'user-booking-form',
@@ -17,9 +21,10 @@ import { FormValues } from '@maps/interfaces/FormValues.interface';
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css']
 })
-export class BookingFormComponent implements OnInit, OnChanges {
+export class BookingFormComponent implements OnInit, OnChanges, AfterContentChecked {
 
   private carService: CarService = inject(CarService);
+  private dataRequestService: DataRequestService = inject(DataRequestService);
 
   public plugTypes: (string | PlugType)[];
   public selectedPlugType: string;
@@ -117,6 +122,10 @@ export class BookingFormComponent implements OnInit, OnChanges {
     }
   }
 
+  ngAfterContentChecked() {
+    this.setData()
+  }
+
   get displaySelectedPlugType(): string {
     return this.selectedPlugType === "Undefined" ? "Todos los cargadores" : this.selectedPlugType;
   }
@@ -181,16 +190,75 @@ export class BookingFormComponent implements OnInit, OnChanges {
     '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'
   ];
 
-getDate(days?: number): string {
-  const date = new Date();
-  if (days) {
-    date.setDate(date.getDate() + days);
+  getDate(days?: number): string {
+    const date = new Date();
+    if (days) {
+      date.setDate(date.getDate() + days);
+    }
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
+  getCarId(): number {
+
+    const car = this.myForm.value['selectedCar'];
+
+    return car ? car.id : 0;;
+  }
+
+  getEndTime(): string {
+
+    const endTime: string = this.myForm.value['endHour'];
+
+    return endTime;
+  }
+
+  getStartTime(): string {
+
+    const startTime: string = this.myForm.value['startHour'];
+
+    return startTime;
+  }
+
+  getPlugType(): string {
+
+    const plugType: string = this.plugTypes[this.selectedPlugTypeValue!] as string;
+
+    return plugType;
+  }
+
+  getCenter(): string {
+
+    const center: string = this.myForm.value['center'];
+
+    return center;
+  }
+
+  getLevel(): number {
+
+    const level: number = this.myForm.value['level'];
+
+    return level;
+  }
+
+  setData(): void {
+
+    const data: SpaceData = {
+
+      workCenter: this.getCenter(),
+      date: this.getDate(),
+      level: this.getLevel(),
+      carId: this.getCarId(),
+      startTime: this.getStartTime(),
+      endTime: this.getEndTime(),
+      plugType: this.getPlugType(),
+
+    }
+
+    this.dataRequestService.setData(data) ;
+
+  }
 
 }
