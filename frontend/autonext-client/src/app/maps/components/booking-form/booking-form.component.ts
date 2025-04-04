@@ -208,6 +208,13 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     return car ? car.id : 0;;
   }
 
+  getCarPlate(): string {
+
+    const car = this.myForm.value['selectedCar'];
+
+    return car ? car.carPlate : "";
+  }
+
   getEndTime(): string {
 
     const endTime: string = this.myForm.value['endHour'];
@@ -250,6 +257,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       workCenter: this.getCenter(),
       date: this.getDate(),
       level: this.getLevel(),
+      car: this.getCarPlate() ,
       carId: this.getCarId(),
       startTime: this.getStartTime(),
       endTime: this.getEndTime(),
