@@ -6,10 +6,11 @@ import { BookingService } from '@booking/services/booking.service';
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
 import { ErrorAnimationComponent } from '@shared/error-animation/error-animation.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'space-data',
-  imports: [CustomButtonComponent, ConfirmationAnimationComponent, ErrorAnimationComponent],
+  imports: [CustomButtonComponent, ConfirmationAnimationComponent, ErrorAnimationComponent, DatePipe],
   templateUrl: './space-data.component.html',
   styleUrl: './space-data.component.css'
 })
