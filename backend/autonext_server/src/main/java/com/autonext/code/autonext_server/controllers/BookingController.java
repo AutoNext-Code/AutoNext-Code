@@ -51,14 +51,13 @@ public class BookingController {
   @SecurityRequirement(name = "bearerAuth")
   public Page<BookingDTO> getBookingsByUser(
       @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "date") String sortBy,
       @RequestParam(defaultValue = "true") boolean ascending,
       @RequestParam(required = false) LocalDate date,
       @RequestParam(required = false) Integer workCenterId,
       @RequestParam(required = false) Integer carId) {
 
     int userId = getAuthenticatedUserId();
-    PageRequest pageable = buildPageRequest(page, sortBy, ascending);
+    PageRequest pageable = buildPageRequest(page, ascending);
 
     Page<Booking> bookings = bookingService.getFilteredBookingsPaged(
         userId, pageable, date, workCenterId, carId);
@@ -166,8 +165,8 @@ public class BookingController {
     throw new SecurityException("Usuario no autenticado correctamente");
   }  
 
-  private PageRequest buildPageRequest(int page, String sortBy, boolean ascending) {
-    Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+  private PageRequest buildPageRequest(int page, boolean ascending) {
+    Sort sort = ascending ? Sort.by("date").ascending() : Sort.by("date").descending();
     return PageRequest.of(page, 6, sort);
   }
 }
