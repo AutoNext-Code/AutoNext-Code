@@ -1,4 +1,4 @@
-import { Chart } from '../../maps/interfaces/Chart.interface';
+import { Chart } from '../interfaces/Chart.interface';
 import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject, delay, map, Observable, of, timeout } from "rxjs";
 import { MapHttpService } from './map-http.service';
@@ -25,28 +25,19 @@ export class MapService {
 
   }
 
-  mapLoad(mapId: number): Observable<Chart>{
-
-
-    return this.maphttp.getMap(mapId)
-    .pipe(
-      map(response => response as Chart)
-    );
-  }
 
 
 
   formMapLoad(params:MapParams){
 
-    console.log("params", params);
- 
+
     return this.maphttp.getFormMap(params)
     .pipe(
       map(response => response as Chart)
     );
- 
+
   }
- 
+
 
 
 

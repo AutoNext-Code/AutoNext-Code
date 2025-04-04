@@ -25,12 +25,6 @@ export class MapHttpService{
     if(mapParams){
 
       params = params.set('date', mapParams.date);
-
-      if(mapParams.plugtype != 1){
-        params = params.set('plugtype', mapParams.plugtype.toString());
-        console.log(mapParams.plugtype.toString());
-      }
-
       params = params.set('startTime', mapParams.startTime);
       params = params.set('endTime', mapParams.endTime);
     }

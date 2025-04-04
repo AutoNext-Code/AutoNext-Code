@@ -7,8 +7,9 @@ import { CarDto } from '@user/interfaces/car.interface';
 import { PlugType } from '@maps/enums/plugType.enum';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 
-import { MapParams } from '@maps/interfaces/MapParams.interface';
+
 import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
+import { FormValues } from '@maps/interfaces/FormValues.interface';
 
 @Component({
   selector: 'user-booking-form',
@@ -27,22 +28,22 @@ export class BookingFormComponent implements OnInit, OnChanges {
 
 
   @Input() maps:CentersMaps[] = [];
-    selectedCenter!:string;
-    selectedLevel!:number;
-    parkingLevels: ParkingLevel[] = [];
-    CenterLevel?: CenterLevel;
-    myForm!: FormGroup;
+  selectedCenter!:string;
+  selectedLevel!:number;
+  parkingLevels: ParkingLevel[] = [];
+  CenterLevel?: CenterLevel;
+  myForm!: FormGroup;
 
-  @Output() mapSelected: EventEmitter<number> = new EventEmitter<number>();
 
-  @Output() filterChanged: EventEmitter<MapParams> = new EventEmitter<any>();
+
+  @Output() filterChanged: EventEmitter<FormValues> = new EventEmitter<FormValues>();
 
   constructor() {
     this.myForm = new FormGroup({
       center: new FormControl(''),
       level: new FormControl(''),
       selectedCar: new FormControl(null),
-      selectedPlugType: new FormControl(null),
+      selectedPlugType: new FormControl(),
       date: new FormControl(this.getDate()),
       startHour: new FormControl('08:00'),
       endHour: new FormControl('17:00'),
@@ -54,7 +55,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
     });
 
     this.myForm.get('level')?.valueChanges.subscribe(value => {
-      this.mapSelected.emit(value);
+      this.filterChanged.emit(value);
       this.filterChanged.emit(this.getFilterValues());
     });
 
@@ -80,8 +81,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
     });
 
     this.myForm.get('selectedPlugType')?.valueChanges.subscribe((value) => {
-      this.selectedPlugType = value;
-      this.getSelectedPlugTypeValue();
+      this.filterChanged.emit(value);
       this.filterChanged.emit(this.getFilterValues());
     });
 
@@ -92,11 +92,11 @@ export class BookingFormComponent implements OnInit, OnChanges {
 
   }
 
-  getFilterValues(): MapParams {
+  getFilterValues(): FormValues {
     return {
       mapId: this.myForm.get('level')?.value,
       date: this.myForm.get('date')?.value,
-      plugtype: this.selectedPlugTypeValue!,
+      plugtype: this.myForm.get('selectedPlugType')?.value,
       startTime: this.myForm.get('startHour')?.value,
       endTime: this.myForm.get('endHour')?.value
     };
@@ -128,7 +128,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
     const defaultParkingId = this.parkingLevels.length > 0 ? this.parkingLevels[0].id : 0;
     this.myForm.get('level')?.setValue(defaultParkingId);
 
-    this.mapSelected.emit(defaultParkingId);
+
   }
 
   public loadCarsUser(): void {

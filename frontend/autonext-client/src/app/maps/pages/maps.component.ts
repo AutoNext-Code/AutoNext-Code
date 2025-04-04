@@ -15,6 +15,7 @@ import { State } from '@maps/enums/state.enum';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
+import { PlugType } from '@maps/enums/plugType.enum';
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent],
@@ -27,7 +28,7 @@ export class MapsComponent implements OnInit {
   spaces: Space[] = [];
 
   @Input() chart: any;
-  @Input() mapSelected: number = 1;
+  @Input() plugType: PlugType = PlugType.Undefined;
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
 
@@ -46,7 +47,25 @@ export class MapsComponent implements OnInit {
   ngOnChanges(): void {
     this.isLoaded = false;
     this.chartLoad();
+
+
   }
+
+  plugTypeFilter(space: Space) {
+
+    let number:number = 0;
+    if (typeof this.plugType === 'string') {
+      number = PlugType[this.plugType as keyof typeof PlugType];
+    }
+
+
+    return ((space.plugType === this.plugType) || (number==PlugType.Undefined)) ? space.state : State.Unusable;
+  }
+
+
+
+
+
 
   chartLoad() {
 
@@ -64,6 +83,7 @@ export class MapsComponent implements OnInit {
           typeof space.state === 'string'
             ? State[space.state as keyof typeof State]
             : space.state,
+
       }));
 
       this.checkImageLoad();
