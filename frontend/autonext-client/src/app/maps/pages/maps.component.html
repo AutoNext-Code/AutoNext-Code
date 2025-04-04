@@ -9,16 +9,54 @@
       />
 
       @for (space of spaces; track $index) {
-        <g
+
+        @if(statusSpace(space)){
+
+          @if(spaceNotTaken(space)){
+
+            <g
+              [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+
+            >
+              <use
+                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+                width="35" height="44"
+                [attr.filter]="space.state">
+              </use>
+            </g>
+
+          }@else {
+
+            <g
+              [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+              (click)="toggleModal(space.id)"
+
+            >
+              <use
+                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+                width="35" height="44"
+                [attr.filter]="space.state">
+              </use>
+            </g>
+
+          }
+
+
+
+        }@else {
+          <g
           [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-          (click)="toggleModal(space.id)"
+
+
         >
           <use
             xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
             width="35" height="44"
-            [attr.filter]="plugTypeFilter(space)">
+            [attr.filter]="unusable">
           </use>
         </g>
+        }
+
       }
     </svg>
   </div>

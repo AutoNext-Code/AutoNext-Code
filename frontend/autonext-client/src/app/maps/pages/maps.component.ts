@@ -17,6 +17,7 @@ import { DataRequestService } from '@maps/services/data-request.service';
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { PlugType } from '@maps/enums/plugType.enum';
+import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent],
@@ -27,6 +28,7 @@ export class MapsComponent implements OnInit {
 
   imageUrl: String = '';
   spaces: Space[] = [];
+  unusable = State.Unusable;
 
   formData!: SpaceData ;
 
@@ -34,6 +36,8 @@ export class MapsComponent implements OnInit {
   @Input() plugType: PlugType = PlugType.Undefined;
   @Output() mapLoaded = new EventEmitter<boolean>();
   @ViewChild('svgElement') svgElement!: ElementRef;
+
+  variable:boolean = true;
 
   isLoaded: boolean = false;
   modal: boolean = true;
@@ -65,6 +69,21 @@ export class MapsComponent implements OnInit {
 
 
     return ((space.plugType === this.plugType) || (number==PlugType.Undefined)) ? space.state : State.Unusable;
+  }
+
+  statusSpace(space: Space): boolean{
+    let number:number = 0;
+    if (typeof this.plugType === 'string') {
+      number = PlugType[this.plugType as keyof typeof PlugType];
+    }
+
+
+    return ((space.plugType === this.plugType) || (number==PlugType.Undefined));
+  }
+
+  spaceNotTaken(space:Space):boolean{
+
+    return ((space.state== State.Occupied)||(space.state==State.Own_Reservation));
   }
 
 
