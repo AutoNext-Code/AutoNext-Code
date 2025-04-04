@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
-import { CardBookingComponent } from '../card-booking/card-booking.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { BookingService } from '@booking/services/booking.service';
@@ -20,7 +19,6 @@ import { AppComponent } from '../../../app.component';
   imports: [
     CommonModule,
     PaginationComponent,
-    CardBookingComponent,
   ],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
@@ -30,7 +28,6 @@ export class BookingHistoryComponent {
   private bookingService = inject(BookingService);
   private authService = inject(AuthService);
   private appComponent: AppComponent = inject(AppComponent);
-
 
   currentPage = signal(1);
   sortDirection = signal<'asc' | 'desc'>('desc');
@@ -98,10 +95,10 @@ export class BookingHistoryComponent {
       next: () => {
         this.loadBookings();
         this.appComponent.showToast('success', 'Reserva cancelada', '', 3000, 80);
-      }, 
+      },
       error: (err) => {
         console.error('Error al cancelar reserva:', err),
-        this.appComponent.showToast('error', 'Error al cancelar reserva', err.message, 3000, 80);
+          this.appComponent.showToast('error', 'Error al cancelar reserva', err.message, 3000, 80);
       }
     });
   }
@@ -155,4 +152,5 @@ export class BookingHistoryComponent {
       error: (err) => console.error('Error al cargar delegaciones:', err),
     });
   }
+
 }
