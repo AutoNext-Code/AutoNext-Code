@@ -36,6 +36,9 @@ public class BookingService {
   private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
   @Autowired
+  private EmailTemplateService emailTemplateService;
+
+  @Autowired
   private BookingValidators bookingValidators;
 
   @Autowired
@@ -104,6 +107,7 @@ public class BookingService {
     booking.setWorkCenter(workCenter);
 
     bookingRepository.save(booking);
+    emailTemplateService.notifyUserOnBookingCreation(booking, mapBookingDTO);
   }
 
   public void updateConfirmationStatus(int id, int userId, ConfirmationStatus confirmationStatus) throws Exception {
@@ -160,6 +164,8 @@ public class BookingService {
     booking.setConfirmationStatus(ConfirmationStatus.Expired);
 
     bookingRepository.save(booking);
+
+    emailTemplateService.notifyUserOnBookingCancellation(booking);
   }
 
   /*
