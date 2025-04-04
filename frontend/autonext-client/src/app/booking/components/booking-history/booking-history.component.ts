@@ -5,14 +5,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { SortableThComponent } from '../sortable-th/sortable-th.component';
 import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
-import { CardBookingComponent } from '../card-booking/card-booking.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { BookingService } from '@booking/services/booking.service';
-import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { AuthService } from '@auth/services/auth.service';
 import { AppComponent } from '../../../app.component';
 
@@ -23,8 +21,8 @@ import { AppComponent } from '../../../app.component';
     CommonModule,
     SortableThComponent,
     PaginationComponent,
-    CardBookingComponent,
   ],
+  providers: [DatePipe],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +31,7 @@ export class BookingHistoryComponent {
   private bookingService = inject(BookingService);
   private authService = inject(AuthService);
   private appComponent: AppComponent = inject(AppComponent);
+  private datePipe: DatePipe = inject(DatePipe);
 
   // Signals para paginación y filtros
   currentPage = signal(1);
@@ -91,7 +90,7 @@ export class BookingHistoryComponent {
     this.currentPage.set(1);
     this.loadBookings();
   }
-  
+
 
   private loadBookings() {
     this.bookingService
@@ -133,10 +132,10 @@ export class BookingHistoryComponent {
       next: () => {
         this.loadBookings();
         this.appComponent.showToast('success', 'Reserva cancelada', '', 3000, 80);
-      }, 
+      },
       error: (err) => {
         console.error('Error al cancelar reserva:', err),
-        this.appComponent.showToast('error', 'Error al cancelar reserva', err.message, 3000, 80);
+          this.appComponent.showToast('error', 'Error al cancelar reserva', err.message, 3000, 80);
       }
     });
   }
@@ -170,5 +169,11 @@ export class BookingHistoryComponent {
     if (isNaN(date.getTime())) return null;
 
     return date.toISOString().split('T')[0];
+  }
+
+
+  formatHour(hour: string): string | null {
+    const date = new Date('1970-01-01T' + hour + 'Z');
+    return this.datePipe.transform(date, 'HH:mm');
   }
 }
