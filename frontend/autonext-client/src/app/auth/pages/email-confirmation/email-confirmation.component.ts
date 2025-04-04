@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
 import { AuthService } from '@auth/services/auth.service';
 import { LoaderComponent } from '@shared/loader/loader.component';
+import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
 
 @Component({
   selector: 'app-email-confirmation',
   standalone: true,
-  imports: [AuthCardComponent, LoaderComponent],
+  imports: [AuthCardComponent, LoaderComponent, ConfirmationAnimationComponent],
   templateUrl: './email-confirmation.component.html',
   styleUrls: ['./email-confirmation.component.css'],
 })
