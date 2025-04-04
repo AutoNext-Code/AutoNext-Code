@@ -6,12 +6,16 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaginationComponent } from '../../../shared/components/ui/pagination/pagination.component';
+
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { BookingService } from '@booking/services/booking.service';
-import { AuthService } from '@auth/services/auth.service';
 import { AppComponent } from '../../../app.component';
+import { PaginationComponent } from '@shared/components/ui/pagination/pagination.component';
+
+import { BookingService } from '@booking/services/booking.service';
+
+import { AuthService } from '@auth/services/auth.service';
+
 
 @Component({
   selector: 'booking-history',
