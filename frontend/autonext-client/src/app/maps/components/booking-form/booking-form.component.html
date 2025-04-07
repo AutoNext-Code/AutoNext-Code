@@ -23,16 +23,16 @@
       <label class="block text-sm font-medium mb-1" for="center">Delegación</label>
       <select class="border p-2 rounded w-full" id="center" formControlName="center">
         @for(center of maps; track $index){
-        <option [value]="center.centerName" [text]="center.centerName"></option>
+          <option [value]="center.centerName" [text]="center.centerName"></option>
         }
 
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="level">Planta</label>
-      <select class="border p-2 rounded w-full" id="level" formControlName="level">
+      <select class="border p-2 rounded w-full" id="level" formControlName="level" #levelSelect>
         @for (level of parkingLevels; track $index) {
-        <option [value]="level.id" [text]="level.name"></option>
+          <option [value]="level.id" [text]="level.name"></option>
         }
 
       </select>

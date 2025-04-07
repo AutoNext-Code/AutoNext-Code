@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -23,9 +23,13 @@ import { AppComponent } from '../../../app.component';
 })
 export class BookingFormComponent implements OnInit, OnChanges, AfterContentChecked {
 
+
   private carService: CarService = inject(CarService);
   private dataRequestService: DataRequestService = inject(DataRequestService);
   private appComponent: AppComponent = inject(AppComponent);
+
+
+  @ViewChild('levelSelect') level!: ElementRef<HTMLSelectElement>;
 
 
   public plugTypes: (string | PlugType)[];
@@ -33,9 +37,11 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
   public selectedPlugTypeValue: number | null = null;
   public cars: CarDto[] = [];
 
-  @Input() maps:CentersMaps[] = [];
-  selectedCenter!:string;
-  selectedLevel!:number;
+  public levelString: string = "1" ;
+
+  @Input() maps: CentersMaps[] = [];
+  selectedCenter!: string;
+  selectedLevel!: number;
   parkingLevels: ParkingLevel[] = [];
   CenterLevel?: CenterLevel;
 
@@ -79,6 +85,13 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     });
 
     this.myForm.get('level')?.valueChanges.subscribe(value => {
+
+      const nativeSelect = this.level.nativeElement;
+      const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
+      const levelRef: string = selectedOption ? selectedOption.text : '';
+
+      this.levelString = levelRef ;
+
       this.filterChanged.emit(value);
       this.filterChanged.emit(this.getFilterValues());
     });
@@ -258,6 +271,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   }
 
@@ -303,11 +317,17 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     return center;
   }
 
-  getLevel(): number {
+  getLevelId(): number {
 
-    const level: number = this.myForm.value['level'];
+    const levelId: number = this.myForm.value['level'];
 
-    return level;
+    return levelId;
+  }
+  getRealDate(): string {
+
+    const date: string = this.myForm.value['date'];
+    
+    return date;
   }
 
   setData(): void {
@@ -315,8 +335,9 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     const data: SpaceData = {
 
       workCenter: this.getCenter(),
-      date: this.getDate(),
-      level: this.getLevel(),
+      date: this.getRealDate(),
+      level: this.levelString,
+      levelId: this.getLevelId(),
       car: this.getCarPlate() ,
       carId: this.getCarId(),
       startTime: this.getStartTime(),
