@@ -7,13 +7,13 @@ import { CarService } from '@user/services/car.service';
 import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
 
 import { PlugType } from '@maps/enums/plugType.enum';
-import { MapParams } from '@maps/interfaces/MapParams.interface';
 import { DataRequestService } from '@maps/services/data-request.service';
 import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interface';
 
 
 import { FormValues } from '@maps/interfaces/FormValues.interface';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'user-booking-form',
@@ -26,6 +26,8 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
 
   private carService: CarService = inject(CarService);
   private dataRequestService: DataRequestService = inject(DataRequestService);
+  private appComponent: AppComponent = inject(AppComponent);
+
 
   @ViewChild('levelSelect') level!: ElementRef<HTMLSelectElement>;
 
@@ -42,21 +44,39 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
   selectedLevel!: number;
   parkingLevels: ParkingLevel[] = [];
   CenterLevel?: CenterLevel;
+
   myForm!: FormGroup;
 
+  public actualStartDate = new Date();
+  public actualEndHour = new Date(this.actualStartDate.getTime() + 30 * 60 * 1000);
 
+  startHours: string[] = [
+    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+    '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
+    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+  ];
+
+  endHours: string[] = [
+    '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
+    '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00',
+    '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'
+  ];
+
+  filteredStartHours: string[] = [];
+  filteredEndHours: string[] = [];
 
   @Output() filterChanged: EventEmitter<FormValues> = new EventEmitter<FormValues>();
 
   constructor() {
+
     this.myForm = new FormGroup({
       center: new FormControl(''),
       level: new FormControl(''),
       selectedCar: new FormControl(null),
       selectedPlugType: new FormControl(),
       date: new FormControl(this.getDate()),
-      startHour: new FormControl('08:00'),
-      endHour: new FormControl('17:00'),
+      startHour: new FormControl(this.roundToNearestHalfHour(this.actualStartDate)),
+      endHour: new FormControl(this.roundToNearestHalfHour(this.actualEndHour)),
     });
 
     this.myForm.get('center')?.valueChanges.subscribe(value => {
@@ -81,13 +101,35 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       this.filterChanged.emit(this.getFilterValues());
     });
 
-    this.myForm.get('date')?.valueChanges.subscribe(value => {
-      if (value) {
-        const formattedDate = new Date(value).toISOString().split('T')[0];
-        this.myForm.patchValue({ date: formattedDate }, { emitEvent: false });
+    this.myForm.get('date')?.valueChanges.subscribe((selectedDate: string) => {
+      if (!selectedDate) return;
+    
+      const today = this.getDate(0);
+      const selected = new Date(selectedDate).toISOString().split('T')[0];
+    
+      if (selected === today) {
+
+        const currentTime = this.roundToNearestHalfHour(new Date());
+        this.filteredStartHours = this.startHours.filter(hour => hour >= currentTime);
+        this.filteredEndHours = this.endHours.filter(hour => hour > currentTime);
+        this.myForm.get('startHour')?.setValue(this.filteredEndHours[0] || '');
+        this.myForm.get('endHour')?.setValue(this.filteredEndHours[0] || '');
+
+      } else {
+        this.filteredStartHours = [...this.startHours];
+        this.filteredEndHours = [...this.endHours];
+      
+        this.myForm.patchValue({
+          startHour: '08:00',
+          endHour: '17:00'
+        }, { emitEvent: false });
       }
+    
+
+    
       this.filterChanged.emit(this.getFilterValues());
     });
+    
 
     this.myForm.get('startHour')?.valueChanges.subscribe(() => {
       this.filterChanged.emit(this.getFilterValues());
@@ -125,6 +167,37 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     });
     this.loadCarsUser();
     this.getSelectedPlugTypeValue();
+
+    const currentTime = this.roundToNearestHalfHour(new Date(this.actualStartDate.getTime() - 30 * 60 * 1000));
+    
+    if (this.getDate() === this.getDate(0)) {
+      this.filteredStartHours = this.startHours.filter(hour => hour >= currentTime);
+      this.filteredEndHours = this.endHours.filter(hour => hour > currentTime);
+    } else {
+      this.filteredStartHours = this.startHours;
+      this.filteredEndHours = this.endHours;
+    }
+
+
+
+    this.myForm.get('startHour')?.valueChanges.subscribe((start: string) => {
+      if (start) {
+        
+        this.filteredEndHours = this.endHours.filter(end => end > start);
+    
+        const nextHour = this.filteredEndHours[0];
+        this.myForm.get('endHour')?.setValue(nextHour || '');
+
+        this.validateHourRange();
+      }
+    });
+
+    this.myForm.get('endHour')?.valueChanges.subscribe(() => {
+      this.validateHourRange();
+    });
+    
+    
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -189,18 +262,6 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
   getSelectedPlugTypeValue(): void {
     this.selectedPlugTypeValue = PlugType[this.selectedPlugType as keyof typeof PlugType] ?? PlugType.Undefined;
   }
-
-  startHours: string[] = [
-    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-    '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
-    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
-  ];
-
-  endHours: string[] = [
-    '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
-    '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00',
-    '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'
-  ];
 
   getDate(days?: number): string {
     const date = new Date();
@@ -288,4 +349,39 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     this.dataRequestService.setData(data) ;
 
   }
+
+  roundToNearestHalfHour(date: Date): string {
+    const minutes = date.getMinutes();
+    let hour = date.getHours();
+    let roundedMinutes;
+
+    if (minutes >= 30) {
+      hour += 1;
+      roundedMinutes = '00';
+    } else {
+      roundedMinutes = '30';
+    }
+
+    const h = hour < 10 ? '0' + hour : hour;
+    return `${h}:${roundedMinutes}`;
+  }
+
+  validateHourRange() {
+    const start = this.myForm.get('startHour')?.value;
+    const end = this.myForm.get('endHour')?.value;
+  
+    if (!start || !end) {
+      this.myForm.get('endHour')?.setErrors(null);
+      return;
+    }
+  
+    if (start >= end) {
+      this.myForm.get('endHour')?.setErrors({ invalidRange: true });
+      this.appComponent.showToast('error', 'Error', 'La hora de fin debe ser mayor que la hora de inicio', 3000, 100);
+    } else {
+      this.myForm.get('endHour')?.setErrors(null);
+    }
+  }
+  
+
 }
