@@ -76,7 +76,7 @@ export class RegisterComponent {
           this.appComponent.showToast(
             'success',
             'Registro exitoso',
-            'Te has registrado correctamente, verifica tu correo para confirmar tu cuenta.',
+            'Te has registrado correctamente, verifica tu correo para confirmar tu cuenta.'
           );
           this.router.navigate(['/auth/login']);
         },
@@ -93,28 +93,29 @@ export class RegisterComponent {
 
   forward() {
     if (this.password !== this.password2) {
-      this.appComponent.showToast('warn', 'Las contraseñas no coinciden', 'Por favor, verifica las contraseñas ingresadas.');
+      this.appComponent.showToast(
+        'warn',
+        'Las contraseñas no coinciden',
+        'Por favor, verifica las contraseñas ingresadas.'
+      );
       return;
     }
-  
-    const validationError = this.authValidation.validateSwitchFields(this.email, this.password);
+
+    const validationError = this.authValidation.validateSwitchFields(
+      this.email,
+      this.password
+    );
     if (validationError) {
       this.appComponent.showToast('warn', 'Campos inválidos', validationError);
       return;
     }
-  
+
     this.register2 = true;
     this.register1 = false;
   }
-  
 
   back() {
     this.register2 = false;
     this.register1 = true;
-  }
-
-  @HostListener('document:keydown.enter', ['$event'])
-  handleEnterKey(event: KeyboardEvent) {
-    this.register();
   }
 }
