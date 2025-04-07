@@ -54,12 +54,17 @@ public class ParkingSpaceMapper {
         space.getY(),
         space.getDirection().name(),
         space.getPlugType().name(),
-        status.name(),
+        (isTemporarilyBlocked(space.getName()) ? ParkingState.Blocked.name() : status.name()),
         bookingStartTime,
         bookingEndTime);
   }
 
   private static boolean overlaps(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
     return start1.isBefore(end2) && start2.isBefore(end1);
+  }
+
+  // BORRAR CUANDO SE PONGA ADMIN
+  private static boolean isTemporarilyBlocked(String name) {
+    return name.equals("MAD1-3") || name.equals("MAD2-5");
   }
 }

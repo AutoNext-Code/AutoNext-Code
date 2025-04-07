@@ -85,7 +85,7 @@ export class MapsComponent implements OnInit {
 
   spaceNotTaken(space: Space): boolean {
     return (
-      space.state == State.Occupied || space.state == State.Own_Reservation
+      space.state == State.Occupied || space.state == State.Own_Reservation || space.state == State.Blocked
     );
   }
 
