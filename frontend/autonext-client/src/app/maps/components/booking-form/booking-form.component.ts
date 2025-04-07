@@ -95,18 +95,24 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       const selected = new Date(selectedDate).toISOString().split('T')[0];
     
       if (selected === today) {
+
         const currentTime = this.roundToNearestHalfHour(new Date());
         this.filteredStartHours = this.startHours.filter(hour => hour >= currentTime);
         this.filteredEndHours = this.endHours.filter(hour => hour > currentTime);
+        this.myForm.get('startHour')?.setValue(this.filteredEndHours[0] || '');
+        this.myForm.get('endHour')?.setValue(this.filteredEndHours[0] || '');
+
       } else {
         this.filteredStartHours = [...this.startHours];
         this.filteredEndHours = [...this.endHours];
+      
+        this.myForm.patchValue({
+          startHour: '08:00',
+          endHour: '17:00'
+        }, { emitEvent: false });
       }
     
-      this.myForm.patchValue({
-        startHour: '08:00',
-        endHour: '17:00'
-      }, { emitEvent: false });
+
     
       this.filterChanged.emit(this.getFilterValues());
     });
