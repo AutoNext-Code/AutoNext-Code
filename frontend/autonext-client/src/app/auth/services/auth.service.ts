@@ -58,7 +58,6 @@ export class AuthService {
     return this.authHttp.register(email, name, surname,  password, carPlate).pipe(
       tap((register: string) => {
         this.setRegister(register)
-        console.log(register)
       }),
       catchError((err: HttpErrorResponse) => {
         console.log(err)
@@ -72,7 +71,6 @@ export class AuthService {
     return this.authHttp.confirmEmail(tokenEmail).pipe(
       tap((message: string) => {
         this.setconfirmEmail(message)
-        console.log(message)
       }),
       catchError((err: HttpErrorResponse) => {
         console.log(err)

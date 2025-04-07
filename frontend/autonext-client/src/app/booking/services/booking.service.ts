@@ -54,7 +54,6 @@ export class BookingService {
 
   getWorkCenters(): Observable<{ id: number; name: string }[]> {
     return this.bookingHttp.getWorkCenters().pipe(
-      tap((res) => console.log('[WorkCenters raw]', res)),
       map((response) =>
         Object.entries(response).map(([id, name]) => ({
           id: +id,
@@ -91,13 +90,11 @@ export class BookingService {
   async createBooking(params: SpaceData): Promise<{ success: boolean; errorMsg?: string }> {
     try {
       const book = await this.bookingHttp.postBooking(params).toPromise();
-      console.log('Reserva creada con éxito:', book);
   
       return { success: true };
     } catch (err: any) {
       
       console.error('Error al reservar:', err);
-      console.log('[BookingService] Error recibido del backend:', err.error);
   
       return {
         success: false,
