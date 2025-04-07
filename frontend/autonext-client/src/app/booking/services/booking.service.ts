@@ -88,15 +88,23 @@ export class BookingService {
     this.getBookingsByUser(this.lastParams).subscribe();
   }
 
-  async createBooking(params: SpaceData): Promise<boolean> {
+  async createBooking(params: SpaceData): Promise<{ success: boolean; errorMsg?: string }> {
     try {
       const book = await this.bookingHttp.postBooking(params).toPromise();
       console.log('Reserva creada con éxito:', book);
-      return true;
-    } catch (err) {
-      console.error('Error al reservar:', err);
-      return false;
-    }
-  }
   
+      return { success: true };
+    } catch (err: any) {
+      
+      console.error('Error al reservar:', err);
+      console.log('[BookingService] Error recibido del backend:', err.error);
+  
+      return {
+        success: false,
+        errorMsg: typeof err.error === 'string'
+      ? err.error
+      : err.error?.message || err.error?.error || 'No se pudo completar la reserva',
+      };
+    }
+  }  
 }
