@@ -13,12 +13,14 @@ import { BookingHttpService } from './booking-http.service';
 import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 import { BookingParams } from '@booking/interfaces/booking-params.interface';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
+import { MapService } from '@maps/services/map.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookingService {
   private bookingHttp = inject(BookingHttpService);
+  private mapService = inject(MapService);
 
   private bookingListSubject = new BehaviorSubject<BookingDTO[]>([]);
   public bookingList$ = this.bookingListSubject.asObservable();
@@ -31,7 +33,7 @@ export class BookingService {
   getBookingsByUser(
     params: BookingParams
   ): Observable<{ content: BookingDTO[]; totalElements: number }> {
-    this.lastParams = params; // guardamos los últimos filtros para recargar
+    this.lastParams = params;
     return this.bookingHttp.getBookingsByUser(params).pipe(
       tap((res) => {
         this.bookingListSubject.next(res.content);
@@ -86,7 +88,7 @@ export class BookingService {
     this.getBookingsByUser(this.lastParams).subscribe();
   }
 
-  async postBooking(params: SpaceData): Promise<boolean> {
+  async createBooking(params: SpaceData): Promise<boolean> {
     try {
       const book = await this.bookingHttp.postBooking(params).toPromise();
       console.log('Reserva creada con éxito:', book);

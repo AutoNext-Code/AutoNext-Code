@@ -1,74 +1,89 @@
 @if (isLoaded) {
 
-  <div class="lg:flex lg:justify-center w-full overflow-x-auto">
-    <svg #svgElement width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
-      <image
-        [attr.href]="imageUrl"
-        width="800"
-        height="600"
-      />
+<div class="lg:flex lg:justify-center w-full overflow-x-auto">
+  <svg
+    #svgElement
+    width="800"
+    height="600"
+    viewBox="0 0 800 600"
+    class="w-[800px] block"
+  >
+    <image [attr.href]="imageUrl" width="800" height="600" />
 
-      @for (space of spaces; track $index) {
+    @for (space of spaces; track $index) { @if(spaceNotTaken(space)){
 
-        @if(spaceNotTaken(space)){
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
 
-          <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+    }@else { @if(statusSpace(space)){
 
-          >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
-          </g>
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleModal(space.id)"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
 
-        }@else {
-
-          @if(statusSpace(space)){
-
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleModal(space.id)"
-
-          >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
-          </g>
-
-
-
-          }@else {
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-
-
-          >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="unusable">
-            </use>
-          </g>
-          }
-
-
-
-        }
-
-
-
-
-
-      }
-    </svg>
-  </div>
+    }@else {
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="unusable"
+      ></use>
+    </g>
+    } } }
+  </svg>
+</div>
 
 }
 
-<div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30" [hidden]="modal" id="modal">
-  <space-data (modalEmitter)="modal = !modal" [spaceData]="this.carData" />
-</div>
+<ng-container *ngIf="!modal && carData">
+  <div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30" id="modal">
+    <space-data
+      (modalEmitter)="closeModal()"
+      (reservationMade)="closeModal()"
+      [spaceData]="carData">
+    </space-data>
+  </div>
+</ng-container>
