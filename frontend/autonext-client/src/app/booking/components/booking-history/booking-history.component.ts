@@ -93,7 +93,6 @@ export class BookingHistoryComponent {
   }
 
   cancelBooking(id: number) {
-    console.log('[CANCEL ID]', id);
     this.bookingService.cancelBooking(id).subscribe({
       next: () => {
         this.loadBookings();
