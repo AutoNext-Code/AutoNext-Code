@@ -38,21 +38,23 @@ public class ReservationStartService implements CommandLineRunner {
 
   private void checkReservationsStartingSoon() {
     LocalDateTime now = LocalDateTime.now();
-    LocalDate date = now.toLocalDate();
-    LocalTime startTime = now.toLocalTime();
-    LocalTime endTime = startTime.plusMinutes(10);
+    LocalDateTime windowStart = now.minusMinutes(15);  
+    LocalDateTime windowEnd = now.plusMinutes(15); 
 
-    List<Booking> bookings = bookingRepository.findReservationsToStartSoon(BookingStatus.Pending, date, startTime,
-        endTime);
+    List<Booking> bookings = bookingRepository.findReservationsToStartSoon(
+        BookingStatus.Pending, windowStart, windowEnd);
 
     if (!bookings.isEmpty()) {
-      for (Booking booking : bookings) {
-        if (booking.getConfirmationStatus() == ConfirmationStatus.Inactive) {
-          this.emailTemplateService.notifyUserOnReservationStart(booking);
-          booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
+        for (Booking booking : bookings) {
+            if (booking.getConfirmationStatus() == ConfirmationStatus.Inactive) {
+                emailTemplateService.notifyUserOnReservationStart(booking);
+                booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
+            }
         }
-      }
-      bookingRepository.saveAll(bookings);
+        bookingRepository.saveAll(bookings);
     }
-  }
+}
+
+
+
 }
