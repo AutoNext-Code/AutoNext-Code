@@ -21,7 +21,7 @@ public class ReservationEndService implements CommandLineRunner {
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
   @Autowired
-  private EmailSenderService emailService;
+  private EmailTemplateService emailTemplateService;
 
   @Autowired
   private BookingRepository bookingRepository;
@@ -47,17 +47,9 @@ public class ReservationEndService implements CommandLineRunner {
 
     if (!bookings.isEmpty()) {
       for (Booking booking : bookings) {
-        sendReservationEndNotification(booking);
+        this.emailTemplateService.sendReservationEndNotification(booking);
       }
     }
 
-  }
-
-  private void sendReservationEndNotification(Booking booking) {
-    String subject = "Tu reserva está por finalizar";
-    String body = "La reserva en " + booking.getParkingSpace().getName() +
-        " termina a las " + booking.getEndTime() + " del " + booking.getDate() +
-        ". ¡Recuerda liberar el espacio!";
-    emailService.sendEmail(booking.getUser().getEmail(), subject, body);
   }
 }
