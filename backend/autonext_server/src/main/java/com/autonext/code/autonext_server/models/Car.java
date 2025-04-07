@@ -40,17 +40,14 @@ public class Car {
     private List<Booking> bookings;
 
     public Car() {
-        this.carPlate = "Undefined";
-        this.name = "Coche 1";
-        this.plugType = PlugType.Undefined;
-    }
+}
 
     public Car(String carPlate, User user) {
-        super();
         this.carPlate = carPlate;
-        this.user = user;
+        this.name = carPlate; 
         this.plugType = PlugType.Undefined;
-    }
+        this.user = user;
+}
 
     public Car(String carPlate, String name, PlugType plugType, User user) {
         this.carPlate = carPlate;
