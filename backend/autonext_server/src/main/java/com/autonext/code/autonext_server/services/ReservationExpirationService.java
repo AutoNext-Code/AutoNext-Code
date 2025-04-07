@@ -37,7 +37,7 @@ public class ReservationExpirationService implements CommandLineRunner {
   private void checkReservationsExpiredSoon() {
     LocalDateTime now = LocalDateTime.now();
     LocalDate date = now.toLocalDate();
-    LocalTime expiredTime = now.toLocalTime().minusMinutes(15);
+    LocalTime expiredTime = now.toLocalTime().minusMinutes(20);
 
     List<Booking> bookings = bookingRepository.findExpiredPendingConfirmations(
         ConfirmationStatus.PendingConfirmation, date, expiredTime);
