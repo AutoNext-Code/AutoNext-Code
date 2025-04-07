@@ -288,8 +288,4 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     this.dataRequestService.setData(data) ;
 
   }
-
-  show(){
-  }
-
 }
