@@ -103,7 +103,9 @@ public class EmailTemplateService {
   }
 
   public void notifyUserOnBookingCancellation(Booking booking) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
     String htmlContent = String.format(
         """
             <html>
@@ -144,7 +146,7 @@ public class EmailTemplateService {
                 <div class="container">
                     <h2>Reserva cancelada</h2>
                     <p>Hola <strong>%s</strong>,</p>
-                    <p>Te informamos que tu reserva para el día <strong>%s</strong> ha sido cancelada correctamente.</p>
+                    <p>Te informamos que tu reserva para el día <strong>%s</strong>, desde las <strong>%s</strong> hasta las <strong>%s</strong>, en el puesto <strong>%s</strong> ha sido cancelada correctamente.</p>
                     <p>Si esto fue un error o necesitas ayuda, no dudes en contactarnos.</p>
                     <div class="footer">
                         <p>AutoNext &copy; 2025</p>
@@ -154,17 +156,23 @@ public class EmailTemplateService {
             </html>
             """,
         booking.getUser().getName(),
-        booking.getDate().format(formatter));
+        booking.getDate().format(dateFormatter),
+        booking.getStartTime().format(timeFormatter),
+        booking.getEndTime().format(timeFormatter),
+        booking.getParkingSpace().getName()
+    );
 
     try {
-      this.emailSenderService.sendHtmlEmail(
-          booking.getUser().getEmail(),
-          "Tu reserva ha sido cancelada",
-          htmlContent);
+        this.emailSenderService.sendHtmlEmail(
+            booking.getUser().getEmail(),
+            "Tu reserva ha sido cancelada",
+            htmlContent
+        );
     } catch (MessagingException e) {
-      throw new EmailSendingException("Error al enviar el correo de cancelación", e);
+        throw new EmailSendingException("Error al enviar el correo de cancelación", e);
     }
-  }
+}
+
 
   public void sendReservationEndNotification(Booking booking) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
