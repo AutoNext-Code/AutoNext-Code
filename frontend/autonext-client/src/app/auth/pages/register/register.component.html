@@ -1,4 +1,4 @@
-<auth-card  tabindex="0" (keydown.enter)="register()" >
+<auth-card  tabindex="0" (keydown.enter)="register2 ? register() : forward()">
     <div class="flex flex-col space-y-6">
       <h1 class="text-2xl font-bold">Registro</h1>
   
@@ -6,12 +6,12 @@
         <div class="{{(register1)?'visible':'hidden'}}">
             <shared-input type="email" icon="mail" [(ngModel)]="email" placeholder="Correo electrónico"></shared-input>
             <shared-input type="password" icon="lock" [(ngModel)]="password"  placeholder="Contraseña"></shared-input>
-            <shared-input type="password" icon="lock" [(ngModel)]="password2"  placeholder="Confirmar Contraseña " (keydown.enter)="register()" ></shared-input>
+            <shared-input type="password" icon="lock" [(ngModel)]="password2"  placeholder="Confirmar Contraseña "></shared-input>
         </div>
         <div class="{{(register2)?'visible':'hidden'}}">
             <shared-input type="text" icon="edit" [(ngModel)]="name" placeholder="Nombre"></shared-input>
             <shared-input type="text" icon="edit" [(ngModel)]="surname"  placeholder="Apellidos"></shared-input>
-            <shared-input type="text" icon="directions_car_filled" [(ngModel)]="carPlate"  placeholder="Matrícula" (keydown.enter)="register()" ></shared-input>
+            <shared-input type="text" icon="directions_car_filled" [(ngModel)]="carPlate"  placeholder="Matrícula"></shared-input>
         </div>
   
         <div class="flex justify-between items-center">

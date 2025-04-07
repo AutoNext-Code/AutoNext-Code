@@ -15,15 +15,12 @@ import { PaginationComponent } from '@shared/components/ui/pagination/pagination
 import { BookingService } from '@booking/services/booking.service';
 
 import { AuthService } from '@auth/services/auth.service';
-
+import { CancelModalComponent } from '../cancel-modal/cancel-modal.component';
 
 @Component({
   selector: 'booking-history',
   standalone: true,
-  imports: [
-    CommonModule,
-    PaginationComponent,
-  ],
+  imports: [CommonModule, PaginationComponent, CancelModalComponent],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,12 +47,14 @@ export class BookingHistoryComponent {
   total = toSignal(this.bookingService.total$, { initialValue: 0 });
   totalPages = computed(() => Math.ceil(this.total() / 6));
 
+  modalVisible = false;
+  selectedBookingId: number | null = null;
+
   constructor() {
     this.loadBookings();
     this.loadUserCars();
     this.loadWorkCenters();
   }
-
 
   onPageChange(page: number) {
     this.currentPage.set(page);
@@ -94,19 +93,29 @@ export class BookingHistoryComponent {
   }
 
   cancelBooking(id: number) {
-    console.log('[CANCEL ID]', id);
     this.bookingService.cancelBooking(id).subscribe({
       next: () => {
         this.loadBookings();
-        this.appComponent.showToast('success', 'Reserva cancelada', '', 3000, 80);
+        this.appComponent.showToast(
+          'success',
+          'Reserva cancelada',
+          '',
+          3000,
+          80
+        );
       },
       error: (err) => {
         console.error('Error al cancelar reserva:', err),
-          this.appComponent.showToast('error', 'Error al cancelar reserva', err.message, 3000, 80);
-      }
+          this.appComponent.showToast(
+            'error',
+            'Error al cancelar reserva',
+            err.message,
+            3000,
+            80
+          );
+      },
     });
   }
-
 
   getSelectValue(event: Event): string {
     return (event.target as HTMLSelectElement).value;
@@ -157,4 +166,23 @@ export class BookingHistoryComponent {
     });
   }
 
+
+
+  openCancelModal(bookingId: number): void {
+    this.selectedBookingId = bookingId;
+    this.modalVisible = true;
+  }
+
+  handleModalCancel(): void {
+    this.modalVisible = false;
+    this.selectedBookingId = null;
+  }
+
+  handleModalConfirm(): void {
+    if (this.selectedBookingId !== null) {
+      this.cancelBooking(this.selectedBookingId);
+      this.modalVisible = false;
+      this.selectedBookingId = null;
+    }
+  }
 }

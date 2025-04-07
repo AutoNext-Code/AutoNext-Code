@@ -11,10 +11,9 @@ import { Subscription } from 'rxjs';
   selector: 'shared-header',
   imports: [CommonModule, CustomButtonComponent],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
 
@@ -47,12 +46,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public navigate(path: string): void {
-    console.log(path);
     this.router.navigate([path]);
   }
 
   public logout(): void {
-    console.log("Logout");
     this.authService.logout();
     this.navigate('/auth/login');
   }

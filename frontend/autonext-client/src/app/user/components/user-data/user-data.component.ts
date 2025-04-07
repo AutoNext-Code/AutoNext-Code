@@ -27,7 +27,6 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public navigate(path: string): void {
-    console.log(path);
     this.router.navigate([path]);
   }
 
@@ -38,15 +37,11 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   public loadUserProfile(): void {
     this.profileService.getDataProfile().subscribe({
       next: (data: UserDto) => {
-        console.log('Profile Data:', data);
         this.user = data;
       },
       error: (error) => {
         console.error('Error loading profile', error);
       },
-      complete: () => {
-        console.log('Profile data loading complete');
-      }
     });
   }
   

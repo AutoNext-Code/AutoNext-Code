@@ -7,12 +7,13 @@ import { CustomButtonComponent } from "@shared/components/ui/custom-button/custo
 import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
 import { ErrorAnimationComponent } from '@shared/error-animation/error-animation.component';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ToastComponent } from '@shared/toast/toast.component';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'space-data',
   imports: [CustomButtonComponent, ConfirmationAnimationComponent, ErrorAnimationComponent, DatePipe, CommonModule],
   templateUrl: './space-data.component.html',
-  styleUrl: './space-data.component.css'
 })
 export class SpaceDataComponent {
 
@@ -22,6 +23,8 @@ export class SpaceDataComponent {
   @Output() modalEmitter = new EventEmitter<void>() ;
   @Output() reservationMade = new EventEmitter<void>();
 
+  private appComponent: AppComponent = inject(AppComponent);
+  
 
   confirmation = true ;
   error = true ;
@@ -33,9 +36,23 @@ export class SpaceDataComponent {
   }
 
   async postBooking(params: SpaceData) {
-    const success = await this.bookingService.createBooking(params);
-    this.tickAnimation(success);
+    const result = await this.bookingService.createBooking(params);
+  
+    this.tickAnimation(result.success);
+  
+    if (!result.success) {
+      this.appComponent.showToast(
+        'error',
+        'Reserva fallida',
+        result.errorMsg ?? 'No se pudo completar la reserva',
+        3000,
+        75
+      );
+    }
+  
+    if (result.success) this.reservationMade.emit();
   }
+  
   
   tickAnimation(success: boolean) {
     if(success){

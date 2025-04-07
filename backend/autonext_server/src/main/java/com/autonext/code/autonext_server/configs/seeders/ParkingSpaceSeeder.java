@@ -40,9 +40,9 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 //Madrid-1
                 spaces.add(new ParkingSpace( "MAD1-1", 30, 140, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-2", 60, 140, Direction.Down, PlugType.NoType, madrid1));
-                spaces.add(new ParkingSpace( "MAD1-3", 90, 140, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-3", 90, 140, Direction.Down, PlugType.CHAdeMO, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-4", 125, 140, Direction.Down, PlugType.NoType, madrid1));
-                spaces.add(new ParkingSpace( "MAD1-5", 155, 140, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-5", 155, 140, Direction.Down, PlugType.CHAdeMO, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-6", 190, 140, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-7", 225, 140, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-8", 255, 140, Direction.Down, PlugType.NoType, madrid1));
