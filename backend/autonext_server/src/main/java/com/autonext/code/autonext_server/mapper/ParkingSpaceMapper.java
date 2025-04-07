@@ -21,7 +21,10 @@ public class ParkingSpaceMapper {
       String startTimeStr,
       String endTimeStr,
       User user) {
+
     ParkingState status = ParkingState.Available;
+    String bookingStartTime = null;
+    String bookingEndTime = null;
 
     if (date != null && startTimeStr != null && endTimeStr != null) {
       LocalTime startTime = LocalTime.parse(startTimeStr);
@@ -40,6 +43,8 @@ public class ParkingSpaceMapper {
         } else {
           status = ParkingState.Occupied;
         }
+        bookingStartTime = booking.getStartTime().toString();
+        bookingEndTime = booking.getEndTime().toString();
       }
     }
 
@@ -49,10 +54,12 @@ public class ParkingSpaceMapper {
         space.getY(),
         space.getDirection().name(),
         space.getPlugType().name(),
-        status.name());
+        status.name(),
+        bookingStartTime,
+        bookingEndTime);
   }
 
   private static boolean overlaps(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
-    return !start1.isAfter(end2) && !start2.isAfter(end1);
+    return start1.isBefore(end2) && start2.isBefore(end1);
   }
 }

@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +26,6 @@ import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedExceptio
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
-import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.services.BookingService;
 
@@ -56,11 +54,10 @@ public class BookingController {
       @RequestParam(required = false) Integer workCenterId,
       @RequestParam(required = false) Integer carId) {
 
-    int userId = getAuthenticatedUserId();
     PageRequest pageable = buildPageRequest(page, ascending);
 
     Page<Booking> bookings = bookingService.getFilteredBookingsPaged(
-        userId, pageable, date, workCenterId, carId);
+         pageable, date, workCenterId, carId);
 
     List<BookingDTO> bookingDTOs = bookings.getContent().stream()
         .map(BookingMapper::toDTO)
@@ -74,10 +71,7 @@ public class BookingController {
   public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {
 
     try {
-
-      int userId = getAuthenticatedUserId();
-
-      bookingService.createBooking(booking, userId);
+      bookingService.createBooking(booking );
 
       return ResponseEntity.ok("Reserva registrada correctamente");
 
@@ -103,8 +97,7 @@ public class BookingController {
       @RequestParam ConfirmationStatus confirmationStatus) {
 
     try {
-      int userId = getAuthenticatedUserId();
-      bookingService.updateConfirmationStatus(id, userId, confirmationStatus);
+      bookingService.updateConfirmationStatus(id, confirmationStatus);
       return ResponseEntity.ok("Estado de confirmación actualizado correctamente");
     } catch (BookingNotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reserva no encontrada");
@@ -121,8 +114,7 @@ public class BookingController {
   @SecurityRequirement(name = "bearerAuth")
   public ResponseEntity<String> cancelBooking(@PathVariable int id) {
     try {
-      int userId = getAuthenticatedUserId();
-      bookingService.cancelBooking(id, userId);
+      bookingService.cancelBooking(id);
       return ResponseEntity.noContent().build();
     } catch (BookingNotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reserva no encontrada");
@@ -154,16 +146,7 @@ public class BookingController {
    * }
    */
 
-   private int getAuthenticatedUserId() {
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
-    Object principal = authentication.getPrincipal();
-  
-    if (principal instanceof User user) {
-      return user.getId();
-    }
-  
-    throw new SecurityException("Usuario no autenticado correctamente");
-  }  
+ 
 
   private PageRequest buildPageRequest(int page, boolean ascending) {
     Sort sort = ascending ? Sort.by("date").ascending() : Sort.by("date").descending();
