@@ -9,14 +9,14 @@
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="startHourSelect">Hora inicio</label>
       <select class="border p-2 rounded w-full" id="startHourSelect" formControlName="startHour">
-        <option *ngFor="let hour of startHours" [value]="hour">{{ hour }}</option>
+        <option *ngFor="let hour of filteredStartHours" [value]="hour">{{ hour }}</option>
       </select>
     </div>
 
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="endHourSelect">Hora fin</label>
       <select class="border p-2 rounded w-full" id="endHourSelect" formControlName="endHour">
-        <option *ngFor="let hour of endHours" [value]="hour">{{ hour }}</option>
+        <option *ngFor="let hour of filteredEndHours" [value]="hour">{{ hour }}</option>
       </select>
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
