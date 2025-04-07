@@ -6,6 +6,7 @@ import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -19,9 +20,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
 
-        @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.startTime BETWEEN :startTime AND :endTime")
-        List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,
-                        @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+        @Query("SELECT b FROM Booking b " +
+                        "WHERE b.status = :status " +
+                        "AND FUNCTION('TIMESTAMP', b.date, b.startTime) BETWEEN :start AND :end")
+        List<Booking> findReservationsToStartSoon(@Param("status") BookingStatus status,
+                        @Param("start") LocalDateTime start,
+                        @Param("end") LocalDateTime end);
 
         @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.date = :date AND b.endTime BETWEEN :lowerBound AND :endTime")
         List<Booking> findReservationsToEndSoon(@Param("status") BookingStatus status, @Param("date") LocalDate date,

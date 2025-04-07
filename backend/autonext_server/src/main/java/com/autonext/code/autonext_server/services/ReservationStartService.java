@@ -22,7 +22,7 @@ public class ReservationStartService implements CommandLineRunner {
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
   @Autowired
-  private EmailSenderService emailService;
+  private EmailTemplateService emailTemplateService;
 
   @Autowired
   private BookingRepository bookingRepository;
@@ -38,29 +38,23 @@ public class ReservationStartService implements CommandLineRunner {
 
   private void checkReservationsStartingSoon() {
     LocalDateTime now = LocalDateTime.now();
-    LocalDate date = now.toLocalDate();
-    LocalTime startTime = now.toLocalTime();
-    LocalTime endTime = startTime.plusMinutes(10);
+    LocalDateTime windowStart = now.minusMinutes(15);  
+    LocalDateTime windowEnd = now.plusMinutes(15); 
 
-    List<Booking> bookings = bookingRepository.findReservationsToStartSoon(BookingStatus.Pending, date, startTime,
-        endTime);
+    List<Booking> bookings = bookingRepository.findReservationsToStartSoon(
+        BookingStatus.Pending, windowStart, windowEnd);
 
     if (!bookings.isEmpty()) {
-      for (Booking booking : bookings) {
-        if (booking.getConfirmationStatus() == ConfirmationStatus.Inactive) {
-          sendReservationNotification(booking);
-          booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
+        for (Booking booking : bookings) {
+            if (booking.getConfirmationStatus() == ConfirmationStatus.Inactive) {
+                emailTemplateService.notifyUserOnReservationStart(booking);
+                booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
+            }
         }
-      }
-      bookingRepository.saveAll(bookings);
+        bookingRepository.saveAll(bookings);
     }
-  }
+}
 
-  private void sendReservationNotification(Booking booking) {
-    String subject = "Notificación de reserva";
-    String body = "Tu reserva en " + booking.getParkingSpace().getName() +
-        " inicia a las " + booking.getStartTime() + " del " + booking.getDate() +
-        ". ¡Confirma tu llegada!";
-    emailService.sendEmail(booking.getUser().getEmail(), subject, body);
-  }
+
+
 }
