@@ -7,7 +7,7 @@ public class UserMapper {
     
     public static UserDto toUserDto(User user) {
         return new UserDto(
-            user.getName(),
+            user.getName() + " " + user.getSurname(),
             user.getEmail(),
             user.getJobPosition(),
             user.getWorkCenter() != null ? user.getWorkCenter().getName() : "---",
