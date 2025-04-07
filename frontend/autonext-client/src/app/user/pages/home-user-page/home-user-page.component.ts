@@ -1,3 +1,4 @@
+import { PlugType } from '@maps/enums/plugType.enum';
 import { Component, inject, OnInit } from '@angular/core';
 
 import { MapsComponent } from '@maps/pages/maps.component';
@@ -6,9 +7,11 @@ import { BookingFormComponent } from '@maps/components/booking-form/booking-form
 
 import { HeaderComponent } from '@shared/header/header.component';
 import { LoaderComponent } from "@shared/loader/loader.component";
-import { MapService } from '@user/services/map.service';
+import { MapService } from '@maps/services/map.service';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 import { MapParams } from '@maps/interfaces/MapParams.interface';
+import { FormValues } from '@maps/interfaces/FormValues.interface';
+
 
 @Component({
   imports: [HeaderComponent, MapsComponent, BookingFormComponent, LoaderComponent],
@@ -24,21 +27,24 @@ export class HomeUserPageComponent implements OnInit{
   selectedMap!: number;
   chart:any;
   isMapLoaded = false;
-  date:string = "2025-04-04";
-  plugType:number = 1;
-  startTime:string = "09:00";
-  endTime:string = "11:00";
+  formValues!: FormValues;
+  plugType: PlugType= 1;
 
 
-  updateSelectedMap(mapParams: MapParams) {
+  updateSelectedMap(formValues: FormValues) {
+    this.formValues = formValues;
+    this.plugType=formValues.plugtype;
     this.isMapLoaded = false; // Ocultamos el mapa antes de cambiarlo
-    this.selectedMap = mapParams.mapId;
-    this.chartLoad(mapParams);
+
+    this.chartLoad();
   }
 
-  chartLoad(mapParams: MapParams) {
+  chartLoad() {
 
-    if(this.selectedMap){
+    if(this.formValues.mapId){
+      const {mapId, date, startTime, endTime} = this.formValues
+      const mapParams:MapParams={mapId, date, startTime, endTime};
+
       this.mapService.formMapLoad(mapParams).subscribe((response) => {
         this.chart = response;
       });
@@ -49,6 +55,7 @@ export class HomeUserPageComponent implements OnInit{
 
   ngOnInit(): void {
     this.mapService.centersMaps$.subscribe(data =>{this.maps = data})
+
 
 
     this.mapService.centersLevelsLoad();
