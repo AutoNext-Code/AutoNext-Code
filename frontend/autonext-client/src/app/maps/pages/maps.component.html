@@ -10,18 +10,44 @@
 
       @for (space of spaces; track $index) {
 
-        @if(spaceNotTaken(space)){
+        @if(spaceTaken(space)){
+          <g class="tooltip-space" [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ')'">
 
-          <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+            <g
+              [attr.transform]="'rotate(' + space.direction + ', 17, 22)'"
 
-          >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
+            >
+              <use
+                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+                width="35" height="44"
+                [attr.filter]="space.state">
+              </use>
+
+
+            </g>
+
+
+            <g class="tooltip-group">
+              <rect
+                class="tooltip-bg"
+
+              ></rect>
+
+              <text
+                class="tooltip-text"
+                x="15"
+                y="-18"
+              >
+              {{getTooltipText(space)}}
+              </text>
+
+            </g>
+
+
           </g>
+
+
+
 
         }@else {
 

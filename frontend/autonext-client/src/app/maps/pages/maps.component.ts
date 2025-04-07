@@ -17,7 +17,6 @@ import { DataRequestService } from '@maps/services/data-request.service';
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { PlugType } from '@maps/enums/plugType.enum';
-import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent],
@@ -81,7 +80,7 @@ export class MapsComponent implements OnInit {
     return ((space.plugType === this.plugType) || (number==PlugType.Undefined));
   }
 
-  spaceNotTaken(space:Space):boolean{
+  spaceTaken(space:Space):boolean{
 
     return ((space.state== State.Occupied)||(space.state==State.Own_Reservation));
   }
@@ -141,6 +140,16 @@ export class MapsComponent implements OnInit {
     Own_Reservation: 'var(--light-blue)',
     Unusable: 'var(--light-gray)',
   };
+
+
+  getTooltipText(space: Space): string {
+    if (space.state === State.Own_Reservation) {
+      return 'Tu reserva dura hasta las ';
+    } else{
+      return 'Ocupado de ' + 'xx' +' a ' + 'yy';
+    }
+
+  }
 
 
 }
