@@ -27,7 +27,7 @@
                         <p class="my-4">Coche: {{this.spaceData?.car}}</p>
                     </div>
                     <div>
-                        <p class="my-4">Planta: {{this.spaceData?.level}}</p>
+                        <p class="my-4">Planta: {{this.spaceData?.levelId}}</p>
                         <p class="my-4">Horas: {{this.spaceData?.startTime}} - {{this.spaceData?.endTime}}</p>
                         <p class="my-4">Cargador: {{this.spaceData?.plugType}}</p>
                     </div>
@@ -36,12 +36,16 @@
             </div>
             <div class="bg-gray-200 px-4 py-3 flex">
                 <app-custom-button (onClick)="closeModal()" [color]="'gray'" [icon]="'close'" [label]="'Cerrar'"
-                    class="flex-2 rounded"></app-custom-button>
+                    class="flex-2 rounded">
+                </app-custom-button>
+
                 <div class="flex-2"></div>
+                
                 <app-custom-button
                     (onClick)="postBooking({date: this.spaceData.date ,startTime: this.spaceData.startTime, endTime: this.spaceData.endTime, carId: 1, parkingSpaceId: this.spaceData.parkingSpaceId, userId: this.spaceData.userId})"
                     [color]="'dark-blue'" [icon]="'book'" [label]="'Reservar'"
-                    class="flex-2 rounded"></app-custom-button>
+                    class="flex-2 rounded">
+                </app-custom-button>
             </div>
         </div>
     </div>

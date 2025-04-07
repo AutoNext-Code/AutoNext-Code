@@ -47,6 +47,7 @@ public class Car {
         this.name = carPlate; 
         this.plugType = PlugType.Undefined;
         this.user = user;
+        this.plugType = PlugType.Undefined;
     }
 
     public Car(String carPlate, String name, PlugType plugType, User user) {
