@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -21,13 +21,19 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
 })
 export class BookingFormComponent implements OnInit, OnChanges, AfterContentChecked {
 
+
   private carService: CarService = inject(CarService);
   private dataRequestService: DataRequestService = inject(DataRequestService);
+
+  @ViewChild('levelSelect') level!: ElementRef<HTMLSelectElement>;
+
 
   public plugTypes: (string | PlugType)[];
   public selectedPlugType: string;
   public selectedPlugTypeValue: number | null = null;
   public cars: CarDto[] = [];
+
+  public levelString: string = "1" ;
 
   @Input() maps: CentersMaps[] = [];
   selectedCenter!: string;
@@ -57,6 +63,13 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     });
 
     this.myForm.get('level')?.valueChanges.subscribe(value => {
+
+      const nativeSelect = this.level.nativeElement;
+      const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
+      const levelRef: string = selectedOption ? selectedOption.text : '';
+
+      this.levelString = levelRef ;
+
       this.mapSelected.emit(value);
       this.filterChanged.emit(this.getFilterValues());
     });
@@ -241,11 +254,11 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     return center;
   }
 
-  getLevel(): number {
+  getLevelId(): number {
 
-    const level: number = this.myForm.value['level'];
+    const levelId: number = this.myForm.value['level'];
 
-    return level;
+    return levelId;
   }
 
   setData(): void {
@@ -254,7 +267,8 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
 
       workCenter: this.getCenter(),
       date: this.getDate(),
-      level: this.getLevel(),
+      level: this.levelString,
+      levelId: this.getLevelId(),
       car: this.getCarPlate() ,
       carId: this.getCarId(),
       startTime: this.getStartTime(),
@@ -265,6 +279,9 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
 
     this.dataRequestService.setData(data) ;
 
+  }
+
+  show(){
   }
 
 }
