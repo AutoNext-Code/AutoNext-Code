@@ -46,14 +46,19 @@ public class ParkingLevelMapDTO {
     private String direction;
     private String plugType;
     private String state;
+    private String startTime;
+    private String endTime;
 
-    public Space(int id, int x, int y, String direction, String plugType, String state) {
+    public Space(int id, int x, int y, String direction, String plugType, String state, String startTime,
+        String endTime) {
       this.id = id;
       this.x = x;
       this.y = y;
       this.direction = direction;
       this.plugType = plugType;
       this.state = state;
+      this.startTime = startTime;
+      this.endTime = endTime;
     }
 
     public int getId() {
@@ -78,6 +83,14 @@ public class ParkingLevelMapDTO {
 
     public String getState() {
       return state;
+    }
+
+    public String getStartTime() {
+      return startTime;
+    }
+  
+    public String getEndTime() {
+      return endTime;
     }
   }
 }

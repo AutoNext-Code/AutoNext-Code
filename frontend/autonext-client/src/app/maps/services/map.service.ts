@@ -25,24 +25,16 @@ export class MapService {
 
   }
 
-  mapLoad(mapId: number): Observable<Chart>{
-
-
-    return this.maphttp.getMap(mapId)
-    .pipe(
-      map(response => response as Chart)
-    );
-  }
 
   formMapLoad(params:MapParams){
- 
+
     return this.maphttp.getFormMap(params)
     .pipe(
       map(response => response as Chart)
     );
- 
+
   }
- 
+
   centersLevelsLoad(){
     this.maphttp.getCentersLevels()
     .pipe(

@@ -43,8 +43,16 @@ public class BookingValidators {
       throw new IllegalArgumentException("La hora de inicio y fin no pueden ser iguales");
     }
 
-    if (dto.getDate().isEqual(today) && dto.getStartTime().isBefore(LocalTime.now())) {
-      throw new IllegalArgumentException("La hora de inicio no puede ser anterior a la actual");
+    if (dto.getDate().isEqual(today)) {
+      LocalTime now = LocalTime.now();
+
+      if (dto.getEndTime().isBefore(now)) {
+        throw new IllegalArgumentException("La franja seleccionada ya ha finalizado");
+      }
+
+      if (dto.getStartTime().plusMinutes(10).isBefore(now)) {
+        throw new IllegalArgumentException("No puedes reservar una franja ya empezada hace más de 10 minutos");
+      }
     }
   }
 
@@ -52,10 +60,13 @@ public class BookingValidators {
     List<Booking> bookings = bookingRepository.findAllReservationsByDateAndSpace(dto.getDate(), parkingSpace);
 
     for (Booking booking : bookings) {
-      boolean overlap = !(dto.getEndTime().isBefore(booking.getStartTime()) ||
-          dto.getStartTime().isAfter(booking.getEndTime()));
+      boolean isOverlapping = dto.getStartTime().isBefore(booking.getEndTime()) &&
+          dto.getEndTime().isAfter(booking.getStartTime());
 
-      if (overlap && (booking.getStatus() == BookingStatus.Active || booking.getStatus() == BookingStatus.Pending)) {
+      boolean isBookingActive = booking.getStatus() == BookingStatus.Active
+          || booking.getStatus() == BookingStatus.Pending;
+
+      if (isOverlapping && isBookingActive) {
         throw new ParkingSpaceOccupiedException("La plaza está ocupada en el horario seleccionado");
       }
     }

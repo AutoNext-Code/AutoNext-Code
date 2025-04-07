@@ -47,7 +47,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
 
     this.closeTimeout = setTimeout(() => {
       window.close();
-    }, 30000);
+    }, 15000);
   }
 
   ngOnDestroy(): void {
