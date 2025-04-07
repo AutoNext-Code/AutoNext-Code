@@ -33,9 +33,10 @@ public class CarSeeder implements CommandLineRunner {
             if (admin != null && user != null && prueba != null) {
                 Car carAdmin = new Car("0000AAA", "Coche 1", PlugType.Undefined, admin);
                 Car carUser = new Car("0000BBB", "Coche 1", PlugType.Undefined, user);
+                Car carUser2 = new Car("11111BB", "Coche 2", PlugType.Type1, user);
                 Car carPrueba = new Car("0000CCC", "Coche 1", PlugType.Undefined, prueba);
 
-                carRepository.saveAll(List.of(carAdmin, carUser, carPrueba));
+                carRepository.saveAll(List.of(carAdmin, carUser, carPrueba, carUser2));
                 System.out.println("Coches creados con éxito");
             } else {
                 System.out.println("No se encontraron todos los usuarios para asignar coches");
