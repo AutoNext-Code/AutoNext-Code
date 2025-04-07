@@ -144,9 +144,11 @@ export class MapsComponent implements OnInit {
 
   getTooltipText(space: Space): string {
     if (space.state === State.Own_Reservation) {
-      return 'Tu reserva dura hasta las ';
-    } else{
-      return 'Ocupado de ' + 'xx' +' a ' + 'yy';
+      return 'Tu reserva dura de '+ space.startTime + ' a</br>' + space.endTime;
+    } else if(space.state === State.Occupied){
+      return 'Ocupado de ' + space.startTime +' a ' + space.endTime;
+    }else{
+      return 'Plaza bloqueada por el sistema';
     }
 
   }
