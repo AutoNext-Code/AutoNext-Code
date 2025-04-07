@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
@@ -53,11 +55,8 @@ public class BookingService {
   @Autowired
   private ParkingSpaceRepository parkingSpaceRepository;
 
-  public Page<Booking> getFilteredBookingsPaged(int userId,
-      Pageable pageable,
-      LocalDate date,
-      Integer workCenterId,
-      Integer carId) {
+  public Page<Booking> getFilteredBookingsPaged(Pageable pageable, LocalDate date, Integer workCenterId, Integer carId) {
+    int userId = getAuthenticatedUserId();
     Specification<Booking> spec = buildBookingFilter(userId, date, workCenterId, carId);
     return bookingRepository.findAll(spec, pageable);
   }
@@ -77,11 +76,13 @@ public class BookingService {
     return bookingRepository.findById(id).orElse(null);
   }
 
-  public void createBooking(MapBookingDTO mapBookingDTO, int userId) {
+  public void createBooking(MapBookingDTO mapBookingDTO) {
     logger.info(
-        "Datos recibidos: Fecha: {}, Hora de inicio: {}, Hora de fin: {}, ID del coche: {}, ID de la plaza: {}, ID de usuario: {}",
+        "Datos recibidos: Fecha: {}, Hora de inicio: {}, Hora de fin: {}, ID del coche: {}, ID de la plaza: {}",
         mapBookingDTO.getDate(), mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(),
-        mapBookingDTO.getCarId(), mapBookingDTO.getParkingSpaceId(), userId);
+        mapBookingDTO.getCarId(), mapBookingDTO.getParkingSpaceId());
+
+    int userId = getAuthenticatedUserId();
 
     Car car = carRepository.findById(mapBookingDTO.getCarId())
         .orElseThrow(() -> new CarNotExistsException("La matrícula no está registrada"));
@@ -110,7 +111,9 @@ public class BookingService {
     emailTemplateService.notifyUserOnBookingCreation(booking, mapBookingDTO);
   }
 
-  public void updateConfirmationStatus(int id, int userId, ConfirmationStatus confirmationStatus) throws Exception {
+  public void updateConfirmationStatus(int id, ConfirmationStatus confirmationStatus) throws Exception {
+    int userId = getAuthenticatedUserId();
+
     Booking booking = bookingRepository.findById(id)
         .orElseThrow(() -> new BookingNotFoundException("Reserva no encontrada"));
 
@@ -148,7 +151,9 @@ public class BookingService {
     bookingRepository.save(booking);
   }
 
-  public void cancelBooking(int bookingId, int userId) {
+  public void cancelBooking(int bookingId) {
+    int userId = getAuthenticatedUserId();
+
     Booking booking = bookingRepository.findById(bookingId)
         .orElseThrow(() -> new BookingNotFoundException("Reserva no encontrada"));
 
@@ -164,10 +169,22 @@ public class BookingService {
     booking.setConfirmationStatus(ConfirmationStatus.Expired);
 
     bookingRepository.save(booking);
-
     emailTemplateService.notifyUserOnBookingCancellation(booking);
   }
 
+  private int getAuthenticatedUserId() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+
+    if (principal instanceof User user) {
+      return user.getId();
+    }
+
+    throw new SecurityException("Usuario no autenticado correctamente");
+  }
+}
+
+  
   /*
    * GUARDADO PARA EL ADMIN
    * public void updateBookingState(int id, int userId, BookingStatus
@@ -184,4 +201,4 @@ public class BookingService {
    * 
    * }
    */
-}
+
