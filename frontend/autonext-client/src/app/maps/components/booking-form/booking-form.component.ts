@@ -210,6 +210,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   }
 
@@ -261,13 +262,19 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
 
     return levelId;
   }
+  getRealDate(): string {
+
+    const date: string = this.myForm.value['date'];
+    
+    return date;
+  }
 
   setData(): void {
 
     const data: SpaceData = {
 
       workCenter: this.getCenter(),
-      date: this.getDate(),
+      date: this.getRealDate(),
       level: this.levelString,
       levelId: this.getLevelId(),
       car: this.getCarPlate() ,
