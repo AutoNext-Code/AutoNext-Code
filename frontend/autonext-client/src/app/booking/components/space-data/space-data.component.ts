@@ -14,7 +14,6 @@ import { AppComponent } from '../../../app.component';
   selector: 'space-data',
   imports: [CustomButtonComponent, ConfirmationAnimationComponent, ErrorAnimationComponent, DatePipe, CommonModule],
   templateUrl: './space-data.component.html',
-  styleUrl: './space-data.component.css'
 })
 export class SpaceDataComponent {
 
