@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { ToastComponent } from './shared/toast/toast.component';
+import { ToastComponent } from '@shared/toast/toast.component';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +9,11 @@ import { ToastComponent } from './shared/toast/toast.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'autonext-client';
-
+  
   @ViewChild(ToastComponent) toastComponent!: ToastComponent;
 
 
-  showToast(severity: 'success' | 'error' | 'warn' , summary: string, detail: string, life: number = 3000) {
-    this.toastComponent.showToast(severity, summary, detail, life);
+  showToast(severity: 'success' | 'error' | 'warn' , summary: string, detail: string, life: number = 3000, topOffset?: number) {
+    this.toastComponent.showToast(severity, summary, detail, life, topOffset);
   }
 }

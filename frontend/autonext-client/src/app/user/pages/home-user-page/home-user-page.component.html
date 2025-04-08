@@ -1,2 +1,15 @@
 <shared-header></shared-header>
-<app-maps></app-maps>
+<user-booking-form (filterChanged)="updateSelectedMap($event)"  [maps]="maps"></user-booking-form>
+<div>
+  <loader
+    [hidden]="isMapLoaded"
+    [isLoaded]="isMapLoaded"
+  ></loader>
+</div>
+<app-maps
+
+  [plugType]="plugType"
+  [hidden]="!isMapLoaded"
+  [chart]="chart"
+  (mapLoaded)="isMapLoaded = true"
+></app-maps>

@@ -1,47 +1,89 @@
-<div>
+@if (isLoaded) {
 
-  <div class="text-center">
+<div class="lg:flex lg:justify-center w-full overflow-x-auto">
+  <svg
+    #svgElement
+    width="800"
+    height="600"
+    viewBox="0 0 800 600"
+    class="w-[800px] block"
+  >
+    <image [attr.href]="imageUrl" width="800" height="600" />
 
-    <h1 class="mt-15 text-5xl">Reserva De Plazas</h1>
+    @for (space of spaces; track $index) { @if(spaceNotTaken(space)){
 
-    <form [formGroup]="myForm" class="mt-10 max-w-sm mx-auto flex justify-center">
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
 
-      <select-dep [cats]="ciudades" [subcats]="plantasCiudad" [catText]="'Sede'" [subCatText]="'Planta'" (catSubCatSelected)="updateMap($event)"></select-dep>
+    }@else { @if(statusSpace(space)){
 
-    </form>
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleModal(space.id)"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
 
-
-  </div>
-
-  <div  class="lg:flex lg:justify-center w-full overflow-x-auto">
-
-    <svg width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
-
-      <!-- Imagen de fondo -->
-
-      <image
-        [attr.href]="'./assets/img/mapas/' +  mapSelected + '.png'"
-        width="800"
-        height="600"
-      />
-
-
-      <!-- Usar ngFor para iterar sobre los puntos y agregar círculos con colores -->
-      @for (point of points[mapSelected]; track $index) {
-        <g
-          [attr.transform]="'translate(' + (point.x - 23) + ',' + (point.y-25) + ') rotate(' + point.direccion + ', 17, 22)'"
-        >
-
-          <!-- Aplicamos el color del filtro -->
-          <use
-            xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-            width="35" height="44"
-            [attr.filter]="point.color">
-          </use>
-
-        </g>
-      }
-    </svg>
-
-  </div>
+    }@else {
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="unusable"
+      ></use>
+    </g>
+    } } }
+  </svg>
 </div>
+
+}
+
+<ng-container *ngIf="!modal && carData">
+  <div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30" id="modal">
+    <space-data
+      (modalEmitter)="closeModal()"
+      (reservationMade)="closeModal()"
+      [spaceData]="carData">
+    </space-data>
+  </div>
+</ng-container>

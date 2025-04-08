@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
-import { AuthLayoutComponent } from './auth/layouts/auth-layout/auth-layout.component';
-import { LoginComponent } from './auth/pages/login/login.component';
-import { AuthGuard } from './guards/auth.guard';
-import { RoleGuard } from './guards/role.guard';
-import { RegisterComponent } from './auth/pages/register/register.component';
-import { EmailConfirmationComponent } from './auth/pages/email-confirmation/email-confirmation.component';
 
+import { LoginComponent } from '@auth/pages/login/login.component';
+import { RegisterComponent } from '@auth/pages/register/register.component';
+import { AuthLayoutComponent } from '@auth/layouts/auth-layout/auth-layout.component';
+import { EmailConfirmationComponent } from '@auth/pages/email-confirmation/email-confirmation.component';
+
+import { AuthGuard } from '@guards/auth.guard';
+import { RoleGuard } from '@guards/role.guard';
 
 
 export const routes: Routes = [
@@ -24,13 +25,28 @@ export const routes: Routes = [
         {
           path: 'email-confirmation/:token',
           component: EmailConfirmationComponent,
-        }
+        },
       ]
     },
     {
         path: 'home',
         loadComponent: () => import('./user/pages/home-user-page/home-user-page.component').then(m => m.HomeUserPageComponent),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+    },
+    {
+      path: 'booking',
+      loadComponent: () => import('./booking/pages/booking-page/booking-page.component').then(m => m.BookingPageComponent),
+      canActivate: [AuthGuard],
+    },
+    {
+      path: "profile",
+      loadComponent: () => import('./user/pages/profile/profile.component').then(m => m.ProfileComponent),
+      canActivate: [AuthGuard]
+    },
+    {
+      path: "vehicles",
+      loadComponent: () => import('./user/pages/vehicle-management/vehicle-management.component').then(m => m.VehicleManagementComponent),
+      canActivate: [AuthGuard]
     },
     {
         path: 'admin-home',

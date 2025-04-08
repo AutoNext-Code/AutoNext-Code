@@ -1,0 +1,84 @@
+<div
+  class="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+>
+  <div class="fixed inset-0 transition-opacity">
+    <div
+      class="absolute inset-0 bg-gray-900 opacity-75"
+      (click)="closeModal()"
+    ></div>
+  </div>
+  <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+    >&#8203;</span
+  >
+  <div
+    class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-headline"
+  >
+    <div class="bg-blue-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <h1 class="text-white text-center text-3xl">
+        Reserva Vehículo | Puesto {{ this.spaceData.parkingSpaceId }}
+      </h1>
+    </div>
+
+    <div [hidden]="confirmation">
+      <shared-confirmation-animation></shared-confirmation-animation>
+    </div>
+    <div [hidden]="error">
+      <shared-error-animation></shared-error-animation>
+    </div>
+
+    <div [hidden]="!(confirmation && error)">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="grid grid-cols-2 text-[17px]">
+          <div>
+            <p class="my-4">Departamento: {{ this.spaceData.workCenter }}</p>
+            <p class="my-4">
+              Día: {{ this.spaceData.date | date : "dd-MM-yyyy" }}
+            </p>
+            <p class="my-4">Coche: {{ this.spaceData.car }}</p>
+          </div>
+          <div>
+            <p class="my-4">Planta: {{ this.spaceData.levelId }}</p>
+            <p class="my-4">
+              Horas: {{ this.spaceData.startTime }} -
+              {{ this.spaceData.endTime }}
+            </p>
+            <p class="my-4">Cargador: {{ this.spaceData.plugType }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-200 px-4 py-3 flex">
+        <app-custom-button
+          (onClick)="closeModal()"
+          [color]="'gray'"
+          [icon]="'close'"
+          [label]="'Cerrar'"
+          class="flex-2 rounded"
+        >
+        </app-custom-button>
+
+        <div class="flex-2"></div>
+
+        <app-custom-button
+          (onClick)="
+            postBooking({
+              date: this.spaceData.date,
+              startTime: this.spaceData.startTime,
+              endTime: this.spaceData.endTime,
+              carId: this.spaceData.carId,
+              parkingSpaceId: this.spaceData.parkingSpaceId,
+              userId: this.spaceData.userId
+            })
+          "
+          [color]="'dark-blue'"
+          [icon]="'book'"
+          [label]="'Reservar'"
+          class="flex-2 rounded"
+        >
+        </app-custom-button>
+      </div>
+    </div>
+  </div>
+</div>

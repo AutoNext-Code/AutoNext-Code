@@ -23,19 +23,25 @@ public class SecurityConfig {
   }
 
   @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http,
+      JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .cors(cors -> cors.configure(http))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**").permitAll()
-            .anyRequest().permitAll()
-        )
+            .requestMatchers(
+                "/api/auth/**",
+                "/images/**",
+                "/v3/api-docs/**",
+                "/swagger-ui.html",
+                "/swagger-ui/**")
+            .permitAll()
+            .anyRequest().authenticated())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-}
+  }
 
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {

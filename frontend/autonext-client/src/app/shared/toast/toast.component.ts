@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 
 interface ToastMessage {
   severity: 'success' | 'warn' | 'error';
   summary: string;
   detail: string;
   life?: number;
+  topOffset?: number;
 }
 
 @Component({
@@ -15,13 +16,15 @@ interface ToastMessage {
   styleUrls: ['./toast.component.css'],
 })
 export class ToastComponent {
+
   messages: ToastMessage[] = [];
 
   showToast(
     severity: 'success' | 'warn' | 'error',
     summary: string,
     detail: string,
-    life: number = 3000
+    life: number = 3000,
+    topOffset?: number
   ) {
     const exists = this.messages.some(
       (msg) =>
@@ -31,7 +34,14 @@ export class ToastComponent {
     );
 
     if (!exists) {
-      const toast = { severity, summary, detail, life };
+      const toast: ToastMessage = { severity, summary, detail, life };
+
+      if (topOffset !== undefined) {
+
+        toast.topOffset = topOffset;
+
+      }
+
       this.messages.push(toast);
 
       setTimeout(() => {
@@ -43,13 +53,13 @@ export class ToastComponent {
   getIcon(severity: string): string {
     switch (severity) {
       case 'success':
-        return 'check_circle'; 
+        return 'check_circle';
       case 'error':
-        return 'error'; 
+        return 'error';
       case 'warn':
-        return 'warning'; 
+        return 'warning';
       default:
-        return 'notifications'; 
+        return 'notifications';
     }
   }
 }

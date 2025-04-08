@@ -1,0 +1,235 @@
+<div class="p-6 space-y-7 max-w-6xl mx-auto">
+  <!-- ENCABEZADO -->
+  <div class="flex items-center justify-center">
+    <h1 class="text-3xl sm:text-5xl text-center font-title">
+      Historial de reservas de {{ userName }}
+    </h1>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div>
+      <label class="block text-sm font-medium" for="select1">Delegación</label>
+      <select
+        class="w-full border p-2 rounded"
+        (change)="onDelegationChange(getSelectValue($event))"
+      >
+        <option *ngIf="workCenters().length === 0" disabled selected>
+          Cargando delegaciones...
+        </option>
+        <option [value]="''" selected>Todos</option>
+        <option *ngFor="let center of workCenters()" [value]="center.id">
+          {{ center.name }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium" for="select1">Coche</label>
+      <select
+        class="w-full border p-2 rounded"
+        (change)="onCarChange(getSelectValue($event))"
+      >
+        <option *ngIf="cars().length === 0" disabled selected>
+          Cargando coches...
+        </option>
+        <option [value]="''" selected>Todos</option>
+        <option *ngFor="let car of cars()" [value]="car.id">
+          {{ car.name }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium" for="select1">Día</label>
+      <input
+        type="date"
+        class="w-full border p-2 rounded"
+        (change)="onDateChange(getSelectValue($event))"
+      />
+    </div>
+  </div>
+
+  <!-- TABLA -->
+  <div class="overflow-auto hidden lg:block">
+    <table
+      class="divide-y divide-gray-200 border border-gray-300 rounded-lg shadow-sm mx-auto my-10"
+    >
+      <thead class="headertable">
+        <tr class="text-black uppercase text-sm tracking-wider">
+          <th
+            class="px-4 py-2 min-w-[150px] whitespace-nowrap text-center cursor-pointer select-none"
+            (click)="toggleSortDirection()"
+          >
+            Fecha
+            <span class="material-icons align-middle">
+              {{
+                sortDirection() === "asc" ? "arrow_upward" : "arrow_downward"
+              }}
+            </span>
+          </th>
+          <th class="px-4 py-2 text-center">Hora de Reserva</th>
+          <th class="px-4 py-2 text-center">Delegación</th>
+          <th class="px-4 py-2 text-center">Nº Plaza</th>
+          <th class="px-4 py-2 text-center">Coche</th>
+          <th class="px-4 py-2 text-center">Estado</th>
+          <th class="px-4 py-2 text-center">Incidencias</th>
+          <th class="px-4 py-2 text-center">Confirmar Reserva</th>
+        </tr>
+      </thead>
+
+      <tbody class="bgtable divide-y divide-gray-200">
+        <tr *ngIf="(bookings$ | async)?.length === 0">
+          <td colspan="8" class="text-center py-6">
+            No hay datos con estos filtros
+          </td>
+        </tr>
+
+        <tr *ngFor="let booking of bookings$ | async">
+          <td class="px-4 py-2 text-center">
+            {{ booking.date | date : "dd-MM-yyyy" }}
+          </td>
+          <td class="px-4 py-2 text-center">
+            {{ booking.startTime | slice : 0 : -3 }} a
+            {{ booking.endTime | slice : 0 : -3 }}
+          </td>
+          <td class="px-4 py-2 text-center">{{ booking.delegation }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.nameSpace }}</td>
+          <td class="px-4 py-2 text-center">{{ booking.carName }}</td>
+          <td
+            class="px-4 py-2 font-semibold text-center"
+            [ngClass]="{
+              'color-green': booking.status === 'Active',
+              'color-lightblue': booking.status === 'Pending',
+              'color-red':
+                booking.status === 'Cancelled' || booking.status === 'Strike',
+              'color-gray': booking.status === 'Completed',
+              'color-black': booking.status === 'Blocked'
+            }"
+          >
+            {{ getStatusLabel(booking.status) }}
+          </td>
+          <td class="px-4 py-2 text-center">
+            {{ booking.issues ? booking.issues : "----" }}
+          </td>
+          <td class="px-4 py-2 space-x-2 text-center">
+            <button
+              *ngIf="booking.confirmationStatus === 'PendingConfirmation'"
+              class="text-green-600 text-lg cursor-pointer"
+              (click)="confirmBooking(booking.id)"
+            >
+              <i class="material-icons text-base ml-2">check</i>
+            </button>
+
+            <button
+              *ngIf="booking.confirmationStatus === 'Inactive'"
+              class="text-red-600 text-lg cursor-pointer"
+              (click)="openCancelModal(booking.id)"
+            >
+              <i class="material-icons text-base ml-2">close</i>
+            </button>
+
+            <span
+              *ngIf="
+                booking.confirmationStatus === 'Confirmed' ||
+                booking.confirmationStatus === 'Expired'
+              "
+              class="text-gray-600 text-lg"
+            >
+              ----
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CARDS -->
+  <div class="block lg:hidden space-y-4">
+    <div
+      *ngFor="let booking of bookings$ | async"
+      class="border-card rounded-lg shadow-sm p-4"
+    >
+      <div
+        class="flex items-center justify-between text-xl border-b border-gray-700 pb-2 mb-2"
+      >
+        <h2 class="flex-grow text-center">Reserva - {{ booking.carName }}</h2>
+        <button class="material-icons text-gray-500 cursor-pointer">
+          sync_problem
+        </button>
+      </div>
+      <div class="flex justify-between mt-3">
+        <div>
+          <div>{{ booking.nameSpace }}</div>
+        </div>
+        <div>
+          <div>{{ booking.delegation }}</div>
+        </div>
+      </div>
+      <div class="flex justify-between mt-3">
+        <div>
+          <div>{{ booking.date }}</div>
+        </div>
+        <div>
+          <div>
+            {{ booking.startTime | slice : 0 : -3 }} -
+            {{ booking.endTime | slice : 0 : -3 }}
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between items-center mt-3">
+        <div
+          [ngClass]="{
+            'color-green': booking.status === 'Active',
+            'color-lightblue': booking.status === 'Pending',
+            'color-red':
+              booking.status === 'Cancelled' || booking.status === 'Strike',
+            'color-gray': booking.status === 'Completed',
+            'color-black': booking.status === 'Blocked'
+          }"
+        >
+          {{ getStatusLabel(booking.status) }}
+        </div>
+        <div class="flex space-x-2">
+          <button
+            *ngIf="booking.confirmationStatus === 'PendingConfirmation'"
+            class="text-green-600 text-lg cursor-pointer"
+            (click)="confirmBooking(booking.id)"
+          >
+            <i class="material-icons text-base ml-2">check</i>
+          </button>
+
+          <button
+            *ngIf="booking.confirmationStatus === 'Inactive'"
+            class="text-red-600 text-lg cursor-pointer"
+            (click)="cancelBooking(booking.id)"
+          >
+            <i class="material-icons text-base ml-2">close</i>
+          </button>
+
+          <span
+            *ngIf="
+              booking.confirmationStatus === 'Confirmed' ||
+              booking.confirmationStatus === 'Expired'
+            "
+            class="text-gray-600 text-lg"
+          >
+            ----
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGINACIÓN -->
+  <pagination
+    *ngIf="total() > 0"
+    [currentPage]="currentPage()"
+    [totalPages]="totalPages()"
+    (pageChange)="onPageChange($event)"
+  ></pagination>
+
+  <cancel-modal
+    [visible]="modalVisible"
+    (confirm)="handleModalConfirm()"
+    (cancel)="handleModalCancel()"
+  ></cancel-modal>
+</div>

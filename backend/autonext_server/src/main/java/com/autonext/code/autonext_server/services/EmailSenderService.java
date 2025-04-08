@@ -34,11 +34,17 @@ public class EmailSenderService {
             throw new IllegalArgumentException("Los parámetros del email no pueden ser nulos o vacíos");
         }
 
+        String footer = "<p style='margin-top: 20px; font-size: 12px; color: #666; text-align: center; padding: 10px; border-top: 1px solid #ccc;'>"
+        + "Este correo electrónico ha sido enviado desde <a href='https://autonextcode.duckdns.org' style='text-decoration: none; color: #337ab7;'>autonextcode.duckdns.org</a>.<br/>"
+        + "Si tienes alguna pregunta o inquietud, no dudes en hacérnoslo saber.<br>¡Gracias por confiar en nosotros!</p>" + "<h2 style='text-align: center;'><span style='color:#18B5D9;'>Auto</span><span style='color:#0067B8;'>Next</span></h2>";
+
+        String htmlContentWithFooter = htmlContent + footer;
+
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(htmlContent, true);
+        helper.setText(htmlContentWithFooter, true);
         
         javaMailSender.send(message);
         System.out.println("Correo HTML enviado con éxito a: " + to);

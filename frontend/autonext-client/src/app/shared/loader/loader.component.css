@@ -1,0 +1,23 @@
+#hourglass {
+    animation: spin, spinback;
+    animation-delay: 0.25s, 0.25s;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes spin {
+    100% {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+  @keyframes spinback {
+    0% {
+      -webkit-transform: rotate(181deg);
+      transform: rotate(181deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }

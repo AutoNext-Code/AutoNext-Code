@@ -10,10 +10,14 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.autonext.code.autonext_server.models.enums.Role;
+
 import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -40,10 +44,14 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Car> cars;
 
-  // private List<Booking> booking; TODO:
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Booking> bookings;
 
-  // private WorkCenter workCenter; TODO:
-
+  @ManyToOne
+  @JoinColumn(name = "work_center_id", nullable = true)
+  private WorkCenter workCenter;
+  
+  @Column(name = "job_position")
   private String jobPosition;
 
   @Column(nullable = false)
@@ -54,9 +62,12 @@ public class User implements UserDetails {
 
   @Column(nullable = false)
   private boolean emailConfirm;
-  
+
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
+
+  @Column()
+  private int strikes;
 
   public User() {
     this.role = Role.User;
@@ -64,6 +75,7 @@ public class User implements UserDetails {
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
+    this.strikes = 0;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
@@ -156,11 +168,19 @@ public class User implements UserDetails {
   }
 
   public void setCars(List<Car> cars) {
-      this.cars = cars;
+    this.cars = cars;
   }
 
   public List<Car> getCars() {
-      return cars;
+    return cars;
+  }
+
+  public List<Booking> getBookings() {
+    return bookings;
+  }
+
+  public void setBookings(List<Booking> bookings) {
+    this.bookings = bookings;
   }
 
   @Override
@@ -171,5 +191,21 @@ public class User implements UserDetails {
   @Override
   public String getUsername() {
     return email;
+  }
+
+  public WorkCenter getWorkCenter() {
+    return workCenter;
+  }
+
+  public void setWorkCenter(WorkCenter workCenter) {
+    this.workCenter = workCenter;
+  }
+
+  public int getStrikes() {
+    return strikes;
+  }
+
+  public void setStrikes(int strikes) {
+    this.strikes = strikes;
   }
 }

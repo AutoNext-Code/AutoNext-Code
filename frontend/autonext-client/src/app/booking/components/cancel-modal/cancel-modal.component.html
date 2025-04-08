@@ -1,0 +1,42 @@
+<div
+  *ngIf="visible"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+>
+
+  <!-- Contenedor del modal -->
+  <div
+    class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    role="dialog"
+    aria-modal="true"
+  >
+    <!-- Cabecera azul -->
+    <div class="bg-blue-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <h1 class="text-white text-center text-3xl">
+        Confirmar cancelación
+      </h1>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 text-[17px] text-center">
+      <p>¿Estás seguro de que deseas cancelar esta reserva?</p>
+      <p class="mt-2 text-sm text-gray-600">Esta acción no se puede deshacer.</p>
+    </div>
+
+    <!-- Botones -->
+    <div class="bg-gray-200 px-4 py-3 flex justify-center space-x-4">
+      <button
+        (click)="onCancel()"
+        class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+      >
+        Cerrar
+      </button>
+
+      <button
+        (click)="onConfirm()"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Cancelar reserva
+      </button>
+    </div>
+  </div>
+</div>

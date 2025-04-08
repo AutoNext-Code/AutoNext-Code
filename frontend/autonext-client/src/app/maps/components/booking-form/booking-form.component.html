@@ -1,0 +1,57 @@
+<h1 class="my-10 text-3xl text-center font-semibold">Reserva De Plazas</h1>
+
+<form [formGroup]="myForm" class="mx-20">
+  <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="dateSelect">Día</label>
+        <input type="date" class="border p-2 rounded w-full" id="dateSelect" formControlName="date" [min]="getDate()" [max]="getDate(7)" />
+    </div>
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="startHourSelect">Hora inicio</label>
+      <select class="border p-2 rounded w-full" id="startHourSelect" formControlName="startHour">
+        <option *ngFor="let hour of filteredStartHours" [value]="hour">{{ hour }}</option>
+      </select>
+    </div>
+
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="endHourSelect">Hora fin</label>
+      <select class="border p-2 rounded w-full" id="endHourSelect" formControlName="endHour">
+        <option *ngFor="let hour of filteredEndHours" [value]="hour">{{ hour }}</option>
+      </select>
+    </div>
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="center">Delegación</label>
+      <select class="border p-2 rounded w-full" id="center" formControlName="center">
+        @for(center of maps; track $index){
+          <option [value]="center.centerName" [text]="center.centerName"></option>
+        }
+
+      </select>
+    </div>
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="level">Planta</label>
+      <select class="border p-2 rounded w-full" id="level" formControlName="level" #levelSelect>
+        @for (level of parkingLevels; track $index) {
+          <option [value]="level.id" [text]="level.name"></option>
+        }
+
+      </select>
+    </div>
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="carSelect">Coche Actual</label>
+      <select class="border p-2 rounded w-full" id="carSelect" formControlName="selectedCar">
+        <option *ngFor="let car of cars" [ngValue]="car">
+          {{ car.name || car.carPlate }}
+        </option>
+      </select>
+    </div>
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="plugTypeSelect">Tipo de cargador:</label>
+      <select class="border p-2 rounded w-full" id="plugTypeSelect" formControlName="selectedPlugType">
+        <option *ngFor="let type of plugTypes" [ngValue]="type">
+          {{ type === "Undefined" ? "Todos los cargadores" : type }}
+        </option>
+      </select>
+    </div>
+  </div>
+</form>

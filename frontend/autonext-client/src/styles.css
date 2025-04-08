@@ -8,6 +8,9 @@
   --light-gray: #D3D3D3;
   --red: #E30000;
   --green: #00C21D;
+  
+  --table-header: #13B5E3;
+  --table-background: #F2F2F2;
 
   /* Font */
   --font-primary: 'IBM Plex Sans', sans-serif;
