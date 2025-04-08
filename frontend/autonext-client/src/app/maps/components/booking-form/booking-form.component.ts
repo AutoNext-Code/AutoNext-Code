@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit, OnChanges, Input, SimpleChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -14,6 +14,7 @@ import { CentersMaps, ParkingLevel } from '@maps/interfaces/CentersMaps.interfac
 import { FormValues } from '@maps/interfaces/FormValues.interface';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { AppComponent } from '../../../app.component';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'user-booking-form',
@@ -21,7 +22,7 @@ import { AppComponent } from '../../../app.component';
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css']
 })
-export class BookingFormComponent implements OnInit, OnChanges, AfterContentChecked {
+export class BookingFormComponent implements OnInit, OnChanges {
 
 
   private carService: CarService = inject(CarService);
@@ -37,7 +38,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
   public selectedPlugTypeValue: number | null = null;
   public cars: CarDto[] = [];
 
-  public levelString: string = "1" ;
+  public levelString!: string ;
 
   @Input() maps: CentersMaps[] = [];
   selectedCenter!: string;
@@ -79,21 +80,37 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       endHour: new FormControl(this.roundToNearestHalfHour(this.actualEndHour)),
     });
 
+    this.myForm.valueChanges
+      .pipe(debounceTime(0)) 
+      .subscribe(() => {
+        this.validateHourRange();
+        this.setData();
+    });
+
     this.myForm.get('center')?.valueChanges.subscribe(value => {
       this.updateParkingLevels(value);
       this.filterChanged.emit(this.getFilterValues());
+    
+      setTimeout(() => {
+        const nativeSelect = this.level.nativeElement;
+        const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
+        this.levelString = selectedOption ? selectedOption.text : '0';
+      }, 0);
     });
 
     this.myForm.get('level')?.valueChanges.subscribe(value => {
 
-      const nativeSelect = this.level.nativeElement;
-      const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
-      const levelRef: string = selectedOption ? selectedOption.text : '';
+      setTimeout(() => {
+        const nativeSelect = this.level.nativeElement;
+        const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
+        const levelRef: string = selectedOption ? selectedOption.text : '';
+    
+        this.levelString = levelRef;
+    
+        this.filterChanged.emit(value);
+        this.filterChanged.emit(this.getFilterValues());
+      }, 0);    
 
-      this.levelString = levelRef ;
-
-      this.filterChanged.emit(value);
-      this.filterChanged.emit(this.getFilterValues());
     });
 
     this.myForm.get('selectedCar')?.valueChanges.subscribe(() => {
@@ -125,9 +142,8 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
         }, { emitEvent: false });
       }
     
-
-    
       this.filterChanged.emit(this.getFilterValues());
+
     });
     
 
@@ -162,6 +178,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
   }
 
   ngOnInit() {
+
     this.myForm.get('selectedCar')?.valueChanges.subscribe(() => {
       this.updatePlugTypes();
     });
@@ -189,14 +206,13 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
         this.myForm.get('endHour')?.setValue(nextHour || '');
 
         this.validateHourRange();
+
       }
     });
 
     this.myForm.get('endHour')?.valueChanges.subscribe(() => {
       this.validateHourRange();
     });
-    
-    
 
   }
 
@@ -205,10 +221,6 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       this.myForm.get('center')?.setValue(this.maps[0].centerName);
       this.updateParkingLevels(this.maps[0].centerName);
     }
-  }
-
-  ngAfterContentChecked() {
-    this.setData()
   }
 
   get displaySelectedPlugType(): string {
@@ -336,7 +348,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
 
       workCenter: this.getCenter(),
       date: this.getRealDate(),
-      level: this.levelString,
+      level: this.levelString ? this.levelString : "1",
       levelId: this.getLevelId(),
       car: this.getCarPlate() ,
       carId: this.getCarId(),
@@ -345,6 +357,7 @@ export class BookingFormComponent implements OnInit, OnChanges, AfterContentChec
       plugType: this.getPlugType(),
 
     }
+    console.log(data)
 
     this.dataRequestService.setData(data) ;
 
