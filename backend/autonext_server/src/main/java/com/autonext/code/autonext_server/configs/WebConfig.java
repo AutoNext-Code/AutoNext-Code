@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     System.out.println("🔧 Sirviendo imágenes desde: " + absolutePath);
 
     registry.addResourceHandler("/images/**")
-            .addResourceLocations("file:uploads/")
+            .addResourceLocations("file:/Uploads/")
             .setCachePeriod(3600);
   }
 }
