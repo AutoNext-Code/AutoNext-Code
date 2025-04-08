@@ -67,7 +67,7 @@ public class User implements UserDetails {
   private String confirmationToken;
 
   @Column()
-  private int strikes;
+  private Integer strikes;
 
   public User() {
     this.role = Role.User;

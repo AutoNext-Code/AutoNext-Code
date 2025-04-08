@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hibernate.sql.exec.ExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -25,21 +26,20 @@ import com.autonext.code.autonext_server.models.WorkCenter;
 @Service
 public class ParkingService {
 
-  private final ParkingSpaceRepository parkingSpaceRepository;
-  private final ParkingLevelRepository parkingLevelRepository;
+  @Autowired
+  private ParkingSpaceRepository parkingSpaceRepository;
 
-  private final WorkCenterRepository workCenterRepository;
+  @Autowired
+  private ParkingLevelRepository parkingLevelRepository;
+
+  @Autowired
+  private WorkCenterRepository workCenterRepository;
+
+  // @Autowired
+  // private ParkingSpaceMapper parkingSpaceMapper;
 
   @Value("${app.image-base-url}")
   private String imageBaseUrl;
-
-  public ParkingService(ParkingSpaceRepository parkingSpaceRepository,
-      ParkingSpaceMapper parkingSpaceMapper,
-      ParkingLevelRepository parkingLevelRepository, WorkCenterRepository workCenterRepository) {
-    this.parkingSpaceRepository = parkingSpaceRepository;
-    this.parkingLevelRepository = parkingLevelRepository;
-    this.workCenterRepository = workCenterRepository;
-  }
 
   public ParkingLevelMapDTO getFilteredLevelMap(int levelId,
       LocalDate date,
