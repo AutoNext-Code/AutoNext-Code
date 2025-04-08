@@ -29,6 +29,7 @@ import { FormValues } from '@maps/interfaces/FormValues.interface';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { AppComponent } from '../../../app.component';
 import { debounceTime } from 'rxjs';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'user-booking-form',
@@ -202,6 +203,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
       }
 
       this.filterChanged.emit(this.getFilterValues());
+
     });
 
     this.myForm.get('startHour')?.valueChanges.subscribe(() => {
@@ -234,6 +236,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+
     this.myForm.get('selectedCar')?.valueChanges.subscribe(() => {
       this.updatePlugTypes();
     });
@@ -264,6 +267,7 @@ export class BookingFormComponent implements OnInit, OnChanges {
         this.myForm.get('endHour')?.setValue(nextHour || '');
 
         this.validateHourRange();
+
       }
     });
 
