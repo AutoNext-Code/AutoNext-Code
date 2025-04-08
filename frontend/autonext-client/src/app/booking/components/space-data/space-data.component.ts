@@ -25,6 +25,7 @@ export class SpaceDataComponent {
 
   private appComponent: AppComponent = inject(AppComponent);
   
+  clicked = false ;
 
   confirmation = true ;
   error = true ;
@@ -36,21 +37,26 @@ export class SpaceDataComponent {
   }
 
   async postBooking(params: SpaceData) {
-    const result = await this.bookingService.createBooking(params);
-  
-    this.tickAnimation(result.success);
-  
-    if (!result.success) {
-      this.appComponent.showToast(
-        'error',
-        'Reserva fallida',
-        result.errorMsg ?? 'No se pudo completar la reserva',
-        3000,
-        75
-      );
+    if(!this.clicked) {
+
+      this.clicked = true ;
+      const result = await this.bookingService.createBooking(params);
+      
+      this.tickAnimation(result.success);
+      
+      if (!result.success) {
+        this.appComponent.showToast(
+          'error',
+          'Reserva fallida',
+          result.errorMsg ?? 'No se pudo completar la reserva',
+          3000,
+          75
+        );
+      }
+      
+      if (result.success) this.reservationMade.emit();
+      
     }
-  
-    if (result.success) this.reservationMade.emit();
   }
   
   
@@ -68,6 +74,7 @@ export class SpaceDataComponent {
         this.error = true ;
       }
       this.closeModal() ;
+      this.clicked = true ;
     }, 1500)
   }
 

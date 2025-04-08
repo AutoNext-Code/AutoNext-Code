@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,13 +29,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/api/parking")
 public class ParkingController {
 
-  private final ParkingService parkingService;
-  private final CentersService centersService;
+  @Autowired
+  private ParkingService parkingService;
 
-  public ParkingController(ParkingService parkingService, CentersService centersService) {
-    this.parkingService = parkingService;
-    this.centersService = centersService;
-  }
+  @Autowired
+  private CentersService centersService;
 
   @GetMapping("/level/{id}")
   @SecurityRequirement(name = "bearerAuth")
