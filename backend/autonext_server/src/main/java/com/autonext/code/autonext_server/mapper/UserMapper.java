@@ -10,8 +10,8 @@ public class UserMapper {
             user.getName() + " " + user.getSurname(),
             user.getEmail(),
             user.getJobPosition(),
-            user.getWorkCenter() != null ? user.getWorkCenter().getName() : "---",
-            user.getStrikes()
+            user.getWorkCenter() != null ? user.getWorkCenter().getName() : "---"
+            // user.getStrikes()
         );
     }
 }

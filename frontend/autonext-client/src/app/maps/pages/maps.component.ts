@@ -85,7 +85,9 @@ export class MapsComponent implements OnInit {
 
   spaceNotTaken(space: Space): boolean {
     return (
-      space.state == State.Occupied || space.state == State.Own_Reservation || space.state == State.Blocked
+      space.state == State.Occupied ||
+      space.state == State.Own_Reservation ||
+      space.state == State.Blocked
     );
   }
 
@@ -119,7 +121,7 @@ export class MapsComponent implements OnInit {
     };
   }
 
-  toggleModal(spaceId: number): void {
+  toggleModal(spaceId: number, plugType: string): void {
     if (this.justClosed) {
       return;
     }
@@ -127,6 +129,7 @@ export class MapsComponent implements OnInit {
     this.carData = {
       ...this.dataRequestService.getData(),
       parkingSpaceId: spaceId,
+      plugType: plugType,
     };
 
     this.modal = false;
