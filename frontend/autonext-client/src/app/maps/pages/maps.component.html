@@ -55,7 +55,7 @@
 
             <g
             [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleModal(space.id)"
+            (click)="toggleModal(space.id, space.plugType.toString())"
 
           >
             <use
@@ -96,11 +96,15 @@
 }
 
 <ng-container *ngIf="!modal && carData">
-  <div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30" id="modal">
+  <div
+    class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
+    id="modal"
+  >
     <space-data
       (modalEmitter)="closeModal()"
       (reservationMade)="closeModal()"
-      [spaceData]="carData">
+      [spaceData]="carData"
+    >
     </space-data>
   </div>
 </ng-container>

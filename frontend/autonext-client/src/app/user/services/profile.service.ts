@@ -5,32 +5,26 @@ import { Observable, tap } from 'rxjs';
 import { UserDto } from '@user/interfaces/user.interface';
 import { AuthService } from '@auth/services/auth.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ProfileService {
+  private profileHttp: ProfileHttpService = inject(ProfileHttpService);
+  private authService: AuthService = inject(AuthService);
 
-    private profileHttp: ProfileHttpService = inject(ProfileHttpService);
-    private authService: AuthService = inject(AuthService);
-    
-    constructor() { }
+  constructor() {}
 
-    getDataProfile(): Observable<UserDto> {
-        const token = this.authService.getToken();
-    
-        if (!token) {
-          console.error('No hay token disponible');
-          throw new Error('No authentication token found');
-        }
-    
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        });
-    
-        return this.profileHttp.getDataProfile(headers).pipe(
-          tap((data: UserDto) => {
-            console.log('Profile Data:', data);
-          }
-        ));  
-      }
-    
+  getDataProfile(): Observable<UserDto> {
+    const token = this.authService.getToken();
+
+    if (!token) {
+      console.error('No hay token disponible');
+      throw new Error('No authentication token found');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.profileHttp.getDataProfile(headers).pipe();
+  }
 }

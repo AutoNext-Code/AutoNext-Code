@@ -7,15 +7,22 @@ public class UserDto {
     private String email;
     private String jobPosition;
     private String delegation;
-    private int strikes;
-    
-    public UserDto(String name, String email, String jobPosition, String delegation, int strikes) {
+    // private int strikes;
+
+    public UserDto(String name, String email, String jobPosition, String delegation) {
         this.name = name;
         this.email = email;
         this.jobPosition = jobPosition;
         this.delegation = delegation;
-        this.strikes = strikes;
     }
+    
+    // public UserDto(String name, String email, String jobPosition, String delegation, int strikes) {
+    //     this.name = name;
+    //     this.email = email;
+    //     this.jobPosition = jobPosition;
+    //     this.delegation = delegation;
+    //     this.strikes = strikes;
+    // }
 
     public String getName() {
         return name;
@@ -49,13 +56,13 @@ public class UserDto {
         this.delegation = delegation;
     }
 
-    public int getStrikes() {
-        return strikes;
-    }
+    // public int getStrikes() {
+    //     return strikes;
+    // }
 
-    public void setStrikes(int strikes) {
-        this.strikes = strikes;
-    }
+    // public void setStrikes(int strikes) {
+    //     this.strikes = strikes;
+    // }
 
     
 

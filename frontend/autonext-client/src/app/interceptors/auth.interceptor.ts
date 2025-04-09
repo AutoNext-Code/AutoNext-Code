@@ -15,13 +15,15 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
         req = req.clone({
           setHeaders: { Authorization: `Bearer ${token}` },
         });
-      } else {
-        console.log('🟡 [Interceptor] No hay token para la petición:', req.url);
       }
       return next(req).pipe(
         tap({
           error: (error) => {
-            console.error('🔴 [Interceptor] Error en petición:', req.url, error);
+            console.error(
+              '🔴 [Interceptor] Error en petición:',
+              req.url,
+              error
+            );
           },
         })
       );
