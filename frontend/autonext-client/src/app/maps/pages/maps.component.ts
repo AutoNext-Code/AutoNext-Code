@@ -176,7 +176,7 @@ export class MapsComponent implements OnInit {
 
   getTooltipText(space: Space): string {
     if (space.state === State.Own_Reservation) {
-      return 'Tu reserva dura de '+ space.startTime + ' a</br>' + space.endTime;
+      return 'Tu reserva es de '+ space.startTime + ' a ' + space.endTime;
     } else if(space.state === State.Occupied){
       return 'Ocupado de ' + space.startTime +' a ' + space.endTime;
     }else{
