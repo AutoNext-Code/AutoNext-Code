@@ -1,7 +1,7 @@
 package com.autonext.code.autonext_server.controllers;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
+
 import org.springframework.core.io.Resource;
 
 import org.springframework.core.io.UrlResource;
@@ -21,14 +21,17 @@ import java.nio.file.Paths;
 
 public class ImageController {
 
+
   @Value("${app.upload-dir}")
   private String uploadDir;
+
 
   @GetMapping("/{filename:.+}")
 
   public ResponseEntity<Resource> getImage(@PathVariable String filename) {
 
     try {
+
 
       Path file = Paths.get(uploadDir).resolve(filename);
 
