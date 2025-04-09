@@ -8,7 +8,6 @@ target/
 .env
 emailconfig.properties
 application-prod.properties
-application-dev.properties
 
 ### STS ###
 .apt_generated
