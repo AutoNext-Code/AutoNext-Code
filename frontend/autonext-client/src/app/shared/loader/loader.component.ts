@@ -1,7 +1,7 @@
-import { OnInit, Component, inject, OnChanges, Input } from '@angular/core';
+import { OnInit, Component, inject, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { AppComponent } from '../../app.component';
-
-
+ 
+ 
 @Component({
   selector: 'loader',
   imports: [],
@@ -9,26 +9,26 @@ import { AppComponent } from '../../app.component';
   styleUrl: './loader.component.css'
 })
 export class LoaderComponent implements OnChanges {
-
+ 
   private appComponent: AppComponent = inject(AppComponent);
-
+ 
   @Input({required: true})
   isLoaded: boolean = false ;
-  
-
-  ngOnChanges(): void {
-    this.changeMap()
+ 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isLoaded'] && !this.isLoaded) {
+      this.changeMap();
+    }
   }
-
+ 
   changeMap(): void {
     setTimeout(() => {
-      
-    }, 2000) ;
-    setTimeout(() => {
-      if(!this.isLoaded){
-        this.appComponent.showToast("error", "Timeout de Carga", "La carga tardó demasiado") ;
+      if (!this.isLoaded) {
+        this.appComponent.showToast("error", "Timeout de Carga", "La carga tardó demasiado");
       }
-    },8000)
+    }, 8000);
   }
-
+ 
+ 
 }
+ 
