@@ -10,7 +10,6 @@
       "@guards/*": ["./src/app/guards/*"],
       "@interceptors/*": ["./src/app/interceptors/*"],
       "@maps/*": ["./src/app/maps/*"],
-      "@profile/*": ["./src/app/profile/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@user/*": ["./src/app/user/*"],
     },
