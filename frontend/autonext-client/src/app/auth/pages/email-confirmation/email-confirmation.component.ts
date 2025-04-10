@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+import { AuthCardComponent } from '../../components/auth-card/auth-card.component';
 import { AuthService } from '@auth/services/auth.service';
 import { LoaderComponent } from '@shared/loader/loader.component';
 import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";

@@ -10,7 +10,7 @@ import { CustomButtonComponent } from '@shared/components/ui/custom-button/custo
 import { AuthService } from '../../services/auth.service';
 import { AuthValidationService } from '../../services/auth-validation.service';
 
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+import { AuthCardComponent } from '../../components/auth-card/auth-card.component';
 
 import { Observable } from 'rxjs';
 import { AppComponent } from '../../../app.component';

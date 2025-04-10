@@ -7,7 +7,7 @@ import { InputComponent } from '@shared/components/ui/input/input.component';
 import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
 
 import { AppComponent } from '../../../app.component';
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+import { AuthCardComponent } from '../../components/auth-card/auth-card.component';
 
 import { AuthService } from '../../services/auth.service';
 import { AuthValidationService } from '../../services/auth-validation.service';
