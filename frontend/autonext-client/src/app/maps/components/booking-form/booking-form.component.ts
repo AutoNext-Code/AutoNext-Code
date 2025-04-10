@@ -14,8 +14,8 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { CarDto } from '@user/interfaces/car.interface';
-import { CarService } from '@user/services/car.service';
+import { CarDto } from '../../../cars/interfaces/car.interface';
+import { CarService } from '../../../cars/services/car.service';
 import { CenterLevel } from '@user/interfaces/CenterLevel.interface';
 
 import { PlugType } from '@maps/enums/plugType.enum';
