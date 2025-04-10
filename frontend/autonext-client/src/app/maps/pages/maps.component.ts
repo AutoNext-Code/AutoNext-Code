@@ -83,7 +83,7 @@ export class MapsComponent implements OnInit {
     return space.plugType === this.plugType || number == PlugType.Undefined;
   }
 
-  spaceNotTaken(space: Space): boolean {
+  spaceTaken(space: Space): boolean {
     return (
       space.state == State.Occupied ||
       space.state == State.Own_Reservation ||
@@ -176,5 +176,16 @@ export class MapsComponent implements OnInit {
         console.error('[Map] Error while refreshing map:', err);
       },
     });
+  }
+
+  getTooltipText(space: Space): string {
+    if (space.state === State.Own_Reservation) {
+      return 'Reserva de '+ space.startTime + ' a ' + space.endTime;
+    } else if(space.state === State.Occupied){
+      return 'Ocupado de ' + space.startTime +' a ' + space.endTime;
+    }else{
+      return 'Bloqueado por el sistema';
+    }
+
   }
 }

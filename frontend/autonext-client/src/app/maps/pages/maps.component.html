@@ -1,81 +1,97 @@
 @if (isLoaded) {
 
-<div class="lg:flex lg:justify-center w-full overflow-x-auto">
-  <svg
-    #svgElement
-    width="800"
-    height="600"
-    viewBox="0 0 800 600"
-    class="w-[800px] block"
-  >
-    <image [attr.href]="imageUrl" width="800" height="600" />
+  <div class="lg:flex lg:justify-center w-full overflow-x-auto">
+    <svg #svgElement width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
+      <image
+        [attr.href]="imageUrl"
+        width="800"
+        height="600"
+      />
 
-    @for (space of spaces; track $index) { @if(spaceNotTaken(space)){
+      @for (space of spaces; track $index) {
 
-    <g
-      [attr.transform]="
-        'translate(' +
-        (space.x - 23) +
-        ',' +
-        (space.y - 25) +
-        ') rotate(' +
-        space.direction +
-        ', 17, 22)'
-      "
-    >
-      <use
-        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-        width="35"
-        height="44"
-        [attr.filter]="space.state"
-      ></use>
-    </g>
+        @if(spaceTaken(space)){
+          <g class="tooltip-space" [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ')'">
 
-    }@else { @if(statusSpace(space)){
+            <g
+              [attr.transform]="'rotate(' + space.direction + ', 17, 22)'"
 
-    <g
-      class="cursor-pointer"
-      [attr.transform]="
-        'translate(' +
-        (space.x - 23) +
-        ',' +
-        (space.y - 25) +
-        ') rotate(' +
-        space.direction +
-        ', 17, 22)'
-      "
-      (click)="toggleModal(space.id, space.plugType.toString())"
-    >
-      <use
-        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-        width="35"
-        height="44"
-        [attr.filter]="space.state"
-      ></use>
-    </g>
+            >
+              <use
+                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+                width="35" height="44"
+                [attr.filter]="space.state">
+              </use>
 
-    }@else {
-    <g
-      [attr.transform]="
-        'translate(' +
-        (space.x - 23) +
-        ',' +
-        (space.y - 25) +
-        ') rotate(' +
-        space.direction +
-        ', 17, 22)'
-      "
-    >
-      <use
-        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-        width="35"
-        height="44"
-        [attr.filter]="unusable"
-      ></use>
-    </g>
-    } } }
-  </svg>
-</div>
+
+            </g>
+
+
+            <g class="tooltip-group">
+              <rect
+                class="tooltip-bg"
+
+              ></rect>
+
+              <text
+                class="tooltip-text"
+                x="15"
+                y="-18"
+              >
+              {{getTooltipText(space)}}
+              </text>
+
+            </g>
+
+
+          </g>
+
+
+
+
+        }@else {
+
+          @if(statusSpace(space)){
+
+            <g
+            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+            (click)="toggleModal(space.id, space.plugType.toString())"
+
+          >
+            <use
+              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+              width="35" height="44"
+              [attr.filter]="space.state">
+            </use>
+          </g>
+
+
+
+          }@else {
+            <g
+            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+
+
+          >
+            <use
+              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+              width="35" height="44"
+              [attr.filter]="unusable">
+            </use>
+          </g>
+          }
+
+
+
+        }
+
+
+
+
+
+      }
+    </svg>
+  </div>
 
 }
 

@@ -9,3 +9,28 @@ h1 {
     align-items: center;
     height: 100px;
 }
+
+.tooltip-bg{
+  display: none;
+  background-color: black;
+  opacity: 0.8;
+  rx: 4;
+  ry: 4;
+  x:-60;
+  y:-35;
+  width:150px;
+  height:24px;
+}
+
+
+.tooltip-text{
+  display: none;
+  text-anchor:middle;
+  fill:white;
+  font-size:12px;
+}
+
+.tooltip-space:hover .tooltip-text,.tooltip-space:hover .tooltip-bg {
+  display: block;
+}
+
