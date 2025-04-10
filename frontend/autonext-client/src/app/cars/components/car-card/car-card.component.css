@@ -1,0 +1,15 @@
+.bg-mylightblue {
+    background-color: var(--light-blue);
+}
+
+.bg-mydarkblue {
+    background-color: var(--dark-blue);
+}
+
+.color-darkblue {
+    color: var(--dark-blue);
+}
+
+.border-card {
+    border: 1px solid var(--dark-blue);
+}
