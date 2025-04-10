@@ -180,11 +180,11 @@ export class MapsComponent implements OnInit {
 
   getTooltipText(space: Space): string {
     if (space.state === State.Own_Reservation) {
-      return 'Tu reserva es de '+ space.startTime + ' a ' + space.endTime;
+      return 'Reserva de '+ space.startTime + ' a ' + space.endTime;
     } else if(space.state === State.Occupied){
       return 'Ocupado de ' + space.startTime +' a ' + space.endTime;
     }else{
-      return 'Plaza bloqueada por el sistema';
+      return 'Bloqueado por el sistema';
     }
 
   }
