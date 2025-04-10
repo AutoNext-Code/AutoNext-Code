@@ -4,12 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.models.Booking;
@@ -18,22 +15,12 @@ import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 
 @Service
-public class ReservationExpirationService implements CommandLineRunner {
-
-  private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+public class ReservationExpirationService {
 
   @Autowired
   private BookingRepository bookingRepository;
 
-  @Override
-  public void run(String... args) throws Exception {
-    start();
-  }
-
-  public void start() {
-    scheduler.scheduleAtFixedRate(this::checkReservationsExpiredSoon, 0, 5, TimeUnit.MINUTES);
-  }
-
+  @Scheduled(fixedRate = 60 * 1000)
   private void checkReservationsExpiredSoon() {
     LocalDateTime now = LocalDateTime.now();
     LocalDate date = now.toLocalDate();
