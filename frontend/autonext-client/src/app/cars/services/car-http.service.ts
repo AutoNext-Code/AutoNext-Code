@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { CarDto } from '@user/interfaces/car.interface';
+import { CarDto } from '../interfaces/car.interface';
 import { Observable } from 'rxjs';
 import { CARS_USER_ENDPOINT } from '../../config';
 
@@ -11,8 +11,8 @@ export class CarHttpService {
 
   constructor() {}
 
-  getCarsByUser(headers: HttpHeaders): Observable<CarDto[]> {
-    return this.http.get<CarDto[]>(CARS_USER_ENDPOINT, { headers });
+  getCarsByUser(): Observable<CarDto[]> {
+    return this.http.get<CarDto[]>(CARS_USER_ENDPOINT);
   }
     
 }

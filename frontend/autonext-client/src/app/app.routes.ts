@@ -45,7 +45,7 @@ export const routes: Routes = [
     },
     {
       path: "vehicles",
-      loadComponent: () => import('./user/pages/vehicle-management/vehicle-management.component').then(m => m.VehicleManagementComponent),
+      loadComponent: () => import('./cars/pages/vehicle-management/vehicle-management.component').then(m => m.VehicleManagementComponent),
       canActivate: [AuthGuard]
     },
     {
