@@ -27,7 +27,7 @@
 
     <button
       class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
-      (click)="warning()"
+      (click)="passwordModal()"
     >
       <span>Contraseña</span>
       <i class="material-icons">lock_person</i>
@@ -49,4 +49,13 @@
       <i class="material-icons">calendar_month</i>
     </button>
   </div>
+</div>
+
+<div
+  class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
+>
+  <password-changer 
+    [hidden]="passwdModal" 
+    (modalEmitter)="cancelChanges()">
+  </password-changer>
 </div>
