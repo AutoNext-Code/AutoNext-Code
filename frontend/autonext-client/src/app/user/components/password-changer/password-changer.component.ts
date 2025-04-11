@@ -23,8 +23,15 @@ export class PasswordChangerComponent {
   passwordNew: string = '';
   passwordConfirm: string = '';
 
+  warningView = true ;  
+
   closeModal() {
     this.modalEmitter.emit();
+    this.warningView = true ;
+  }
+
+  acceptWarning() {
+    this.warningView = false
   }
 
 }
