@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { CarDto } from '../../interfaces/car.interface';
 import { CommonModule } from '@angular/common';
 import { ModalCarComponent } from "../../components/modal-car/modal-car.component";
+import { AppComponent } from '../../../app.component';
 
 @Component({
   imports: [HeaderComponent, CarCardComponent, CommonModule, ModalCarComponent],
@@ -16,6 +17,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
 
 
   private carService: CarService = inject(CarService);
+  private appComponent: AppComponent = inject(AppComponent);
 
   public cars: CarDto[];
   private subscription: Subscription;
@@ -35,10 +37,9 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
     this.subscription = this.carService.getCarsByUser().subscribe({
       next: (cars: CarDto[]) => {
         this.cars = cars;
-        console.log(this.cars);
       },
       error: (error) => {
-        console.error('Error al obtener coches del usuario:', error);
+        this.appComponent.showToast('error', '❌ Error al obtener coches del usuario. ',"", 3000);
       }
     });
   }
@@ -58,12 +59,12 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
   handleNewCar(newCar: CarDto) {
     this.carService.createCar(newCar).subscribe({
       next: (response: string) => {
-        console.log('🚗 Coche creado correctamente:', response);
         this.closeModal();
         this.loadCars();
+        this.appComponent.showToast('success', '', response, 3000);
       },
       error: (error) => {
-        console.error('❌ Error al añadir coche:', error.error || error.message);
+        this.appComponent.showToast('error', '❌ Error al añadir el coche.', "", 3000);
       }
     });
   }
