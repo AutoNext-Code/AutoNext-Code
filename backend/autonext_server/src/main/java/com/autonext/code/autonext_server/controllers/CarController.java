@@ -8,20 +8,27 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
+import com.autonext.code.autonext_server.exceptions.ActiveBookingsException;
 import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
+import com.autonext.code.autonext_server.exceptions.CarOwnerException;
+import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.CarService;
 
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @RestController
@@ -56,7 +63,7 @@ public class CarController {
         }
     }
 
-    @PutMapping("")
+    @PostMapping("")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<String> createCar(@Valid @RequestBody CarDTO carDTO) {
         //Optional id in CarDTO, if !=null inconsequential
@@ -75,6 +82,33 @@ public class CarController {
         }catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
         }
+        
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public ResponseEntity<String> deleteCar(@PathVariable int id){
+        try {
+
+            carService.deleteCar(id);
+            return ResponseEntity.ok("Vehículo eliminado correctamente");
+
+        }catch(UserNotFoundException unf){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+        }catch(CarNotExistsException cne){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El vehículo no existe");
+        }catch(CarsOwnedException cso){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Es el único vehículo registrado");
+        }catch(CarOwnerException coe){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El vehículo no le pertenece al usuario registrado");
+        }catch(ActiveBookingsException coe){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El vehículo tiene reservas pendientes");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+        }
+
         
     }
 }
