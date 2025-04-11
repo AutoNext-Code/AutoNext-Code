@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
-public class CarOwnerException extends RuntimeException{
+public class OwnerException extends RuntimeException{
 
-    public CarOwnerException(String message){
+    public OwnerException(String message){
         super(message);
     }
     
