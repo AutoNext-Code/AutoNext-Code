@@ -28,6 +28,10 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
   }
 
   ngOnInit(): void {
+    this.loadCars();
+  }
+
+  private loadCars(): void {
     this.subscription = this.carService.getCarsByUser().subscribe({
       next: (cars: CarDto[]) => {
         this.cars = cars;
@@ -52,20 +56,18 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
   }
 
   handleNewCar(newCar: CarDto) {
-    // this.carService.addCar(newCar).subscribe({
-    //   next: (car: CarDto) => {
-    //     this.cars.push(car); // O actualiza la lista si necesitas recargar
-    //     this.closeModal();
-    //   },
-    //   error: (error) => {
-    //     console.error('Error al añadir coche:', error);
-    //   }
-    // });
-
-    console.log(newCar);
-    this.closeModal();
-
+    this.carService.createCar(newCar).subscribe({
+      next: (response: string) => {
+        console.log('🚗 Coche creado correctamente:', response);
+        this.closeModal();
+        this.loadCars();
+      },
+      error: (error) => {
+        console.error('❌ Error al añadir coche:', error.error || error.message);
+      }
+    });
   }
+
 
 
 }
