@@ -57,8 +57,13 @@ public class UserService {
     int userId = getAuthenticatedUserId();
     
     try {
-      
-      userRepository.updatePassword(passwordEncoder.encode(password), userId) ;
+
+      User user = userRepository.findById(userId)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+      user.setPassword(passwordEncoder.encode(password));
+
+      userRepository.save(user) ;
       
     } catch(StaleStateException sse) {
       throw new StaleStateException("Usuario no encontrado.") ;
