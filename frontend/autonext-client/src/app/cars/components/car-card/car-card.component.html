@@ -9,14 +9,15 @@
         <p class="text-black">Enchufe: {{car?.plugType}}</p>
 
         <div class="flex justify-between pt-4">
-            <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md">
+            <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md" (click)="openModalEdit()">
                 <span class="material-icons">edit</span>
                 <span>Editar</span>
             </button>
-            <button class="flex items-center space-x-1 bg-myred text-white px-4 py-2 rounded-md">
+            <button class="flex items-center space-x-1 bg-myred text-white px-4 py-2 rounded-md" >
                 <span class="material-icons">delete</span>
                 <span>Eliminar</span>
             </button>
         </div>
     </div>
 </div>
+<cars-modal-car [visible]="showModalEdit" [carToEdit]="car!" [title]="'Edición de ' + car?.name" (confirm)="closeModalEdit()" (cancel)="closeModalEdit()">\</cars-modal-car>
