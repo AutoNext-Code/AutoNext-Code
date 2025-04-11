@@ -26,8 +26,9 @@ import com.autonext.code.autonext_server.services.CarService;
 
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @RestController
@@ -62,7 +63,7 @@ public class CarController {
         }
     }
 
-    @PutMapping("")
+    @PostMapping("")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<String> createCar(@Valid @RequestBody CarDTO carDTO) {
         //Optional id in CarDTO, if !=null inconsequential
