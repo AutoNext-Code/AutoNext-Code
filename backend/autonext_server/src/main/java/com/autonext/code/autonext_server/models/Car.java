@@ -51,7 +51,7 @@ public class Car {
 
     public Car(String carPlate, String name, PlugType plugType, User user) {
         this.carPlate = carPlate;
-        this.name = name;
+        this.name = (name.length()>0)?name:this.carPlate;
         this.plugType = plugType;
         this.user = user;
     }

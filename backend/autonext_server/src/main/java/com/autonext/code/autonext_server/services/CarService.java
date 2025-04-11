@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
+import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.CarMapper;
 import com.autonext.code.autonext_server.models.Car;
@@ -43,6 +46,41 @@ public class CarService {
             throw new RuntimeException("Error al obtener coches del usuario.", e);
         }
 
+    }
+
+    public void createCar(CarDTO carDTO){
+        int userId = getAuthenticatedUserId();
+
+        if (carRepository.findByCarPlate(carDTO.getCarPlate()).isPresent()){
+            throw new CarAlreadyExistsException("La matrícula ya está registrada en el sistema");
+        }
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+
+        Car car = new Car(
+            carDTO.getCarPlate(),
+            carDTO.getName(),
+            carDTO.getPlugType(),
+            user
+        );
+
+        carRepository.save(car);
+
+
+    }
+
+
+    private int getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof User user) {
+        return user.getId();
+        }
+
+        throw new SecurityException("Usuario no autenticado correctamente");
     }
 
 }
