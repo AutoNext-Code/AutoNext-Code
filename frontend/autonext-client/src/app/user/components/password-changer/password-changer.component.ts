@@ -8,6 +8,7 @@ import { CustomButtonComponent } from "@shared/components/ui/custom-button/custo
 import { AppComponent } from '../../../app.component';
 import { throwError } from 'rxjs';
 import { AuthValidationService } from '@auth/services/auth-validation.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'password-changer',
@@ -25,6 +26,7 @@ export class PasswordChangerComponent {
   private appComponent: AppComponent = inject(AppComponent);
   private authValidation: AuthValidationService = inject(AuthValidationService);
 
+  @Output() warningEmitter = new EventEmitter<void>() ;
   @Output() modalEmitter = new EventEmitter<void>() ;
 
   passwordOG: string = '';
@@ -32,6 +34,11 @@ export class PasswordChangerComponent {
   passwordConfirm: string = '';
 
   warningView = true ;  
+
+  warningClose() {
+    this.warningEmitter.emit();
+    this.warningView = true ;
+  }
 
   closeModal() {
     this.modalEmitter.emit();
@@ -66,10 +73,27 @@ export class PasswordChangerComponent {
 
     if (validacion !== null) {
       this.appComponent.showToast('error', 'Conflicto de seguridad', validacion);
+      return ;
     }
 
 
-    this.passwordService.validatePasswords(this.passwordOG, this.passwordNew);
+    this.passwordService.validatePasswords(this.passwordOG, this.passwordNew).subscribe({
+          next: () => {
+            this.appComponent.showToast(
+              'success',
+              'Contraseñas modificadas correctamente',
+              'Su contraseña a sido sustituida sin errores.'
+            );
+            this.closeModal()
+          },
+          error: (err: HttpErrorResponse) => {
+            this.appComponent.showToast(
+              'error',
+              'Error al cambiar la contraseña',
+              err.message
+            );
+          },
+        });
   }
 
 }

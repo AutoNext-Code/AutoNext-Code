@@ -64,6 +64,7 @@
 >
   <password-changer 
     [hidden]="passwdModal" 
-    (modalEmitter)="cancelChanges()">
+    (warningEmitter)="cancelChanges()"
+    (modalEmitter)="closeModal()">
   </password-changer>
 </div>
