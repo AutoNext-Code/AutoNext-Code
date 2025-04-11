@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.autonext.code.autonext_server.dto.UserDto;
+import com.autonext.code.autonext_server.dto.UserRequestDTO;
+import com.autonext.code.autonext_server.exceptions.NoChangesMadeException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.UserService;
@@ -33,26 +35,30 @@ public class UserController {
         User user = (User) authentication.getPrincipal();
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         int userId = user.getId();
 
         try {
             UserDto userDto = userService.getProfile(userId);
-            return ResponseEntity.ok(userDto); 
+            return ResponseEntity.ok(userDto);
         } catch (UserNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<UserDto> editProfile(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> editProfile(@RequestBody UserRequestDTO userRequestDto) {
         try {
-            UserDto updatedUser = userService.editProfile(userDto);
-            return ResponseEntity.ok(updatedUser);
+            userService.editProfile(userRequestDto);
+            return ResponseEntity.ok("Se han realiza los cambios correctamente");
         } catch (UserNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe");
+        } catch (NoChangesMadeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No hay cambio de datos en el perfil del usuario");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+          }
     }
 }
