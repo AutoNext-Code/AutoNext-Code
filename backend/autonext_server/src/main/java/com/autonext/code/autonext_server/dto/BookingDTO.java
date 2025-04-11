@@ -26,7 +26,7 @@ public class BookingDTO {
         this.delegation = delegation;
         this.status = status;
         this.confirmationStatus = confirmationStatus;
-        this.carName = (carName != null)?carName:"";
+        this.carName = carName;
     }
 
     public int getId() {

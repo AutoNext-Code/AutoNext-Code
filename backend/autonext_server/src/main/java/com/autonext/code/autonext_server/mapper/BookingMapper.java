@@ -9,9 +9,12 @@ public class BookingMapper {
     if (booking == null)
       return null;
 
-    String carName = booking.getCar().getName() != null && !booking.getCar().getName().isBlank()
-        ? booking.getCar().getName()
-        : booking.getCar().getCarPlate();
+      String carName = booking.getCar() != null
+      ? (booking.getCar().getName() != null && !booking.getCar().getName().isBlank()
+          ? booking.getCar().getName()
+          : booking.getCar().getCarPlate())
+      : "Nombre de coche no disponible";
+  
 
     return new BookingDTO(
         booking.getId(),
