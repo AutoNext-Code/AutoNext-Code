@@ -1,9 +1,11 @@
 package com.autonext.code.autonext_server.dto;
 
 import com.autonext.code.autonext_server.models.enums.PlugType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CarDTO {
 
+    @JsonProperty(required = false)
     private int id;
 
     private String carPlate;
