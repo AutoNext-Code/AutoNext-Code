@@ -5,21 +5,25 @@ import { CarService } from '../../services/car.service';
 import { Subscription } from 'rxjs';
 import { CarDto } from '../../interfaces/car.interface';
 import { CommonModule } from '@angular/common';
+import { ModalCarComponent } from "../../components/modal-car/modal-car.component";
 
 @Component({
-  imports: [HeaderComponent, CarCardComponent, CommonModule],
+  imports: [HeaderComponent, CarCardComponent, CommonModule, ModalCarComponent],
   templateUrl: './vehicle-management.component.html',
   styleUrl: './vehicle-management.component.css'
 })
 export class VehicleManagementComponent implements OnInit, OnDestroy  {
 
+
   private carService: CarService = inject(CarService);
 
   public cars: CarDto[];
   private subscription: Subscription;
+  public showModalEdit: boolean;
 
   constructor() {
     this.cars = [];
+    this.showModalEdit = false;
     this.subscription = new Subscription();
   }
 
@@ -38,5 +42,30 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+  openModal() {
+    this.showModalEdit = true;
+  }
+
+  closeModal() {
+    this.showModalEdit = false;
+  }
+
+  handleNewCar(newCar: CarDto) {
+    // this.carService.addCar(newCar).subscribe({
+    //   next: (car: CarDto) => {
+    //     this.cars.push(car); // O actualiza la lista si necesitas recargar
+    //     this.closeModal();
+    //   },
+    //   error: (error) => {
+    //     console.error('Error al añadir coche:', error);
+    //   }
+    // });
+
+    console.log(newCar);
+    this.closeModal();
+
+  }
+
 
 }

@@ -14,4 +14,20 @@
     </ng-container>
   </div>
 
+  <div class="fixed bottom-6 right-6 z-50">
+    <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md shadow-lg hover:bg-blue-900 transition" (click)="openModal()">
+      <span>Añadir</span>
+      <span class="material-icons">add</span>
+    </button>
+  </div>
+
+
 </div>
+
+<cars-modal-car
+  *ngIf="showModalEdit"
+  [visible]="showModalEdit"
+  [title]="'Añadir Coche'"
+  (confirm)="handleNewCar($event)"
+  (cancel)="closeModal()">
+</cars-modal-car>
