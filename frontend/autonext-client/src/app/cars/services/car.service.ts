@@ -7,7 +7,6 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CarService {
   private carHttp: CarHttpService = inject(CarHttpService);
-  private authService: AuthService = inject(AuthService);
 
   constructor() { }
 
