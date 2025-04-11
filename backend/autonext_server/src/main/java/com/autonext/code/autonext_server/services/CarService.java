@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
+import com.autonext.code.autonext_server.exceptions.ActiveBookingsException;
 import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.CarOwnerException;
@@ -17,6 +18,7 @@ import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.CarMapper;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
@@ -89,13 +91,27 @@ public class CarService {
 
 
         if(car.getUser()==user){
-            if(user.getCars().size()>1){
-                bookingRepository.carDeletionUnbound(car.getId());
 
-                carRepository.delByIdPer(car.getId());
+            boolean pendingBooking = car.getBookings().stream()
+                .anyMatch(booking -> 
+                    booking.getStatus().equals(BookingStatus.Active) || 
+                    booking.getStatus().equals(BookingStatus.Pending)
+                );
+            
+            if(!pendingBooking){
+
+                if(user.getCars().size()>1){
+                    bookingRepository.carDeletionUnbound(car.getId());
+    
+                    carRepository.delByIdPer(car.getId());
+                }else{
+                    throw new CarsOwnedException("Es el único vehículo registrado");
+                }
+
             }else{
-                throw new CarsOwnedException("Es el único vehículo registrado");
+                throw new ActiveBookingsException("El vehículo tiene reservas pendientes");
             }
+            
             
         }else{
             throw new CarOwnerException("El vehículo no le pertenece al usuario registrado");

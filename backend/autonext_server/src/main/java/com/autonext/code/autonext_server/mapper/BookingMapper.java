@@ -13,7 +13,7 @@ public class BookingMapper {
       ? (booking.getCar().getName() != null && !booking.getCar().getName().isBlank()
           ? booking.getCar().getName()
           : booking.getCar().getCarPlate())
-      : "Nombre de coche no disponible";
+      : "Vehículo eliminado";
   
 
     return new BookingDTO(

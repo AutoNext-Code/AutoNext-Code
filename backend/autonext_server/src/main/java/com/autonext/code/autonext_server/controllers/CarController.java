@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
+import com.autonext.code.autonext_server.exceptions.ActiveBookingsException;
 import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.CarOwnerException;
@@ -99,6 +100,8 @@ public class CarController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Es el único vehículo registrado");
         }catch(CarOwnerException coe){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El vehículo no le pertenece al usuario registrado");
+        }catch(ActiveBookingsException coe){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El vehículo tiene reservas pendientes");
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e) {
