@@ -91,10 +91,8 @@ public class CarService {
         if(car.getUser()==user){
             if(user.getCars().size()>1){
                 bookingRepository.carDeletionUnbound(car.getId());
-                
-                System.out.println(car);
-                carRepository.delete(car);
-                System.out.println(car);
+
+                carRepository.delByIdPer(car.getId());
             }else{
                 throw new CarsOwnedException("Es el único vehículo registrado");
             }

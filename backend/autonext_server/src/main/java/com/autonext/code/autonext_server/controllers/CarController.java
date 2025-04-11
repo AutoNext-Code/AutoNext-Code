@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
 import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
+import com.autonext.code.autonext_server.exceptions.CarOwnerException;
+import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.CarService;
@@ -90,6 +93,12 @@ public class CarController {
 
         }catch(UserNotFoundException unf){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+        }catch(CarNotExistsException cne){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El vehículo no existe");
+        }catch(CarsOwnedException cso){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Es el único vehículo registrado");
+        }catch(CarOwnerException coe){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El vehículo no le pertenece al usuario registrado");
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e) {
