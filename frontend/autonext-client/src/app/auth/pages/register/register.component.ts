@@ -2,18 +2,19 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, HostListener, inject, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { InputComponent } from '@shared/components/ui/input/input.component';
 import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
 
-import { AuthService } from '../../services/auth.service';
-import { AuthValidationService } from '../../services/auth-validation.service';
+import { AuthManager } from '@auth/services/authmanager.service';
+import { AuthValidationService } from '@auth/services/auth-validation.service';
 
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
+import { AuthCardComponent } from '@auth/components/auth-card/auth-card.component';
 
 import { Observable } from 'rxjs';
 import { AppComponent } from '../../../app.component';
+
 
 @Component({
   selector: 'auth-register',
@@ -29,8 +30,9 @@ import { AppComponent } from '../../../app.component';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-  private authService: AuthService = inject(AuthService);
+  private authManager = inject(AuthManager);
   private authValidation: AuthValidationService = inject(AuthValidationService);
+
   private appComponent: AppComponent = inject(AppComponent);
   private router: Router = inject(Router);
 
@@ -63,7 +65,7 @@ export class RegisterComponent {
     }
 
     if (validationError == null) {
-      this.registerResponse = this.authService.register(
+      this.registerResponse = this.authManager.register(
         this.name,
         this.surname,
         this.email,
