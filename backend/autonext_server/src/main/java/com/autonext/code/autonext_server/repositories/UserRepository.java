@@ -3,7 +3,6 @@ package com.autonext.code.autonext_server.repositories;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -25,9 +24,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
   @EntityGraph(attributePaths = "workCenter")
   @Query("SELECT u FROM User u WHERE u.id = :id")
   Optional<User> findByIdWithWorkCenter(@Param("id") int id);
-
-  @Modifying
-  @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
-  void updatePassword(@Param("password") String password, @Param("id") int id);
   
 }
