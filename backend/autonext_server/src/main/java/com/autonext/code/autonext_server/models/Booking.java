@@ -42,7 +42,7 @@ public class Booking {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "car_id", nullable = false)
+    @JoinColumn(name = "car_id", nullable = true)
     private Car car;
 
     @ManyToOne

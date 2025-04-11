@@ -8,7 +8,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,6 +77,25 @@ public class CarController {
         }catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
         }
+        
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public ResponseEntity<String> deleteCar(@PathVariable int id){
+        try {
+
+            carService.deleteCar(id);
+            return ResponseEntity.ok("Vehículo eliminado correctamente");
+
+        }catch(UserNotFoundException unf){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+        }
+
         
     }
 }
