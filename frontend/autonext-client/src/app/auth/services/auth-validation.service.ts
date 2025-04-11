@@ -1,64 +1,72 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthValidationService {
 
-  validateLoginFields(email: string, password: string): string | null {
-    if (!email.trim() || !password.trim()) {
-      return 'Por favor, ingrese su correo y contraseña.';
-    }
-
-    if (!this.isValidEmail(email)) {
-      return 'El formato de email es incorrecto.';
-    }
-
-    return null;
+  private validateRequiredFields(
+    fields: Record<string, string>
+  ): string | null {
+    const emptyField = Object.entries(fields).find(
+      ([_, value]) => !value.trim()
+    );
+    return emptyField ? 'Todos los campos son obligatorios.' : null;
   }
-
-  validateRegisterFields(name: string, surname: string, email: string, password: string, carPlate: string): string | null {
-    if (!name.trim() || !surname.trim() || !email.trim() || !password.trim() || !carPlate.trim()) {
-      return 'Todos los campos son obligatorios.';
-    }
-
-    if (!this.isValidEmail(email)) {
-      return 'El formato de email es incorrecto.';
-    }
-
-    if (!this.isValidPassword(password)) {
-      return 'La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una minúscula y un número.';
-    }
-
-    return null;
-  }
-
-  validateSwitchFields(email: string, password: string): string | null {
-    if (!this.isValidEmail(email)) {
-      return 'El correo electrónico no es válido.';
-    }
-    if (!this.isValidPassword(password)) {
-      return 'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números.';
-    }
-    return null; 
-  }
-  
-  validateNewPassword(password: string): string | null {
-    if (!this.isValidPassword(password)) {
-      return 'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números.';
-    }
-    return null; 
-  }
-  
 
   private isValidEmail(email: string): boolean {
-    const emailRegex = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
-
 
   private isValidPassword(password: string): boolean {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     return passwordRegex.test(password);
+  }
+
+  
+  validateEmail(email: string): string | null {
+    return this.isValidEmail(email)
+      ? null
+      : 'El formato del email no es válido.';
+  }
+
+  validatePassword(password: string): string | null {
+    return this.isValidPassword(password)
+      ? null
+      : 'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números.';
+  }
+
+  validateLoginFields(email: string, password: string): string | null {
+    return (
+      this.validateRequiredFields({ email, password }) ??
+      this.validateEmail(email) ??
+      null
+    );
+  }
+
+  validateRegisterFields(
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    carPlate: string
+  ): string | null {
+    return (
+      this.validateRequiredFields({
+        name,
+        surname,
+        email,
+        password,
+        carPlate,
+      }) ??
+      this.validateEmail(email) ??
+      this.validatePassword(password) ??
+      null
+    );
+  }
+
+  validateSwitchFields(email: string, password: string): string | null {
+    return this.validateEmail(email) ?? this.validatePassword(password) ?? null;
   }
 }

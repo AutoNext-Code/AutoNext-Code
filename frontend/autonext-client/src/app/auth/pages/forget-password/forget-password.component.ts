@@ -1,0 +1,68 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthCardComponent } from '@auth/components/auth-card/auth-card.component';
+import { AuthValidationService } from '@auth/services/auth-validation.service';
+import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
+import { InputComponent } from '@shared/components/ui/input/input.component';
+import { AppComponent } from '../../../app.component';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '@auth/services/auth.service';
+import { AuthManager } from '@auth/services/authmanager.service';
+
+@Component({
+  selector: 'app-forget-password',
+  imports: [
+    AuthCardComponent,
+    InputComponent,
+    CommonModule,
+    CustomButtonComponent,
+    FormsModule,
+  ],
+  templateUrl: './forget-password.component.html',
+  styleUrl: './forget-password.component.css',
+})
+export class ForgetPasswordComponent {
+  private authValidation = inject(AuthValidationService);
+  private authManager = inject(AuthManager);
+
+  private appComponent: AppComponent = inject(AppComponent);
+  private router: Router = inject(Router);
+
+  email: string = '';
+
+  sendResponse: Observable<string | null> | null = null;
+
+  sendEmail() {
+    const validateEmail = this.authValidation.validateEmail(this.email);
+
+    if (validateEmail) {
+      this.appComponent.showToast('warn', 'Error en el formato', validateEmail);
+      return;
+    }
+
+    if (validateEmail == null) {
+      this.sendResponse = this.authManager.requestPasswordReset(this.email,);
+    }
+
+    this.sendResponse?.subscribe({
+      next: () => {
+        this.appComponent.showToast(
+          'success',
+          'Compruebe su correo',
+          'Correo enviado. Revisa tu bandeja de entrada para reestablecer tu contraseña.'
+        );
+        this.router.navigate(['/auth/login']);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.appComponent.showToast(
+          'error',
+          'Error al enviar el correo',
+          err.message
+        );
+      },
+    });
+  }
+}

@@ -7,7 +7,7 @@
       <shared-input type="password" icon="lock" [(ngModel)]="password"  placeholder="Contraseña" (keydown.enter)="login()" ></shared-input>
 
       <div class="flex justify-between items-center">
-        <p class="text-sm sm:text-base">¿Has olvidado la contraseña?</p>
+        <a class="text-sm sm:text-base italic underline hover:text-blue-800" [routerLink]="['/auth/forget-password']">¿Has olvidado la contraseña?</a>
         <app-custom-button
           class="h-10 rounded-lg"
           label="Entrar"
