@@ -4,13 +4,15 @@ package com.autonext.code.autonext_server.dto;
 public class UserDto {
 
     private String name;
+    private String surname;
     private String email;
     private String jobPosition;
     private String delegation;
     // private int strikes;
 
-    public UserDto(String name, String email, String jobPosition, String delegation) {
+    public UserDto(String name, String surname, String email, String jobPosition, String delegation) {
         this.name = name;
+        this.surname = surname;
         this.email = email;
         this.jobPosition = jobPosition;
         this.delegation = delegation;
@@ -30,6 +32,14 @@ public class UserDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
