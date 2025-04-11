@@ -1,10 +1,10 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthCardComponent } from '../../components/auth-card/auth-card.component';
-import { AuthService } from '@auth/services/auth.service';
 import { LoaderComponent } from '@shared/loader/loader.component';
 import { ConfirmationAnimationComponent } from "../../../shared/confirmation-animation/confirmation-animation.component";
 import { ErrorAnimationComponent } from "../../../shared/error-animation/error-animation.component";
+import { AuthManager } from '@auth/services/authmanager.service';
 
 @Component({
   selector: 'app-email-confirmation',
@@ -20,7 +20,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private closeTimeout: any;
   private loadTimeout: any;
-  private authService = inject(AuthService);
+  private authManager = inject(AuthManager);
 
   constructor() {
     this.isConfirmation = false;
@@ -32,7 +32,7 @@ export class EmailConfirmationComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.loadTimeout = setTimeout(() => {
-      this.authService.confirmEmail(this.tokenEmail).subscribe({
+      this.authManager.confirmEmail(this.tokenEmail).subscribe({
         next: (message: string) => {
           this.isConfirmation = !!message;
           this.isLoading = false;

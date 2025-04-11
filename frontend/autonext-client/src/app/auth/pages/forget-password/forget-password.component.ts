@@ -9,6 +9,8 @@ import { InputComponent } from '@shared/components/ui/input/input.component';
 import { AppComponent } from '../../../app.component';
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '@auth/services/auth.service';
+import { AuthManager } from '@auth/services/authmanager.service';
 
 @Component({
   selector: 'app-forget-password',
@@ -18,13 +20,14 @@ import { HttpErrorResponse } from '@angular/common/http';
     CommonModule,
     CustomButtonComponent,
     FormsModule,
-    RouterLink,
   ],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })
 export class ForgetPasswordComponent {
   private authValidation = inject(AuthValidationService);
+  private authManager = inject(AuthManager);
+
   private appComponent: AppComponent = inject(AppComponent);
   private router: Router = inject(Router);
 
@@ -36,15 +39,15 @@ export class ForgetPasswordComponent {
     const validateEmail = this.authValidation.validateEmail(this.email);
 
     if (validateEmail) {
-      this.appComponent.showToast('warn', 'Email inválido', validateEmail);
+      this.appComponent.showToast('warn', 'Error en el formato', validateEmail);
       return;
     }
 
     if (validateEmail == null) {
-      this.sendResponse = this.authService.requestPasswordReset(this.email,);
+      this.sendResponse = this.authManager.requestPasswordReset(this.email,);
     }
 
-    this.sendResponse.subscribe({
+    this.sendResponse?.subscribe({
       next: () => {
         this.appComponent.showToast(
           'success',
