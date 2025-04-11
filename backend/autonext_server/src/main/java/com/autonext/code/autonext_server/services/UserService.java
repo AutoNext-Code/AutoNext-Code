@@ -1,5 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.UserDto;
@@ -30,5 +32,29 @@ public class UserService {
         .map(UserMapper::toUserDto)
         .orElseThrow(() -> new UserNotFoundException("Usuario no existente"));
   }
+
+  public UserDto editProfile(UserDto userDto) {
+    User user = userRepository.findById(getAuthenticatedUserId())
+        .orElseThrow(() -> new UserNotFoundException("Usuario no existente"));
+    
+    user.setName(userDto.getName());
+    user.setSurname(userDto.getSurname());
+    user.setEmail(userDto.getEmail());
+    
+    User updatedUser = userRepository.save(user);
+    
+    return UserMapper.toUserDto(updatedUser);
+  }
+
+  private int getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+ 
+        if (principal instanceof User user) {
+        return user.getId();
+        }
+ 
+        throw new SecurityException("Usuario no autenticado correctamente");
+    }
 
 }

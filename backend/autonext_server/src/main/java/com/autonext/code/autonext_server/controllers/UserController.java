@@ -3,6 +3,8 @@ package com.autonext.code.autonext_server.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +43,16 @@ public class UserController {
             return ResponseEntity.ok(userDto); 
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<UserDto> editProfile(@RequestBody UserDto userDto) {
+        try {
+            UserDto updatedUser = userService.editProfile(userDto);
+            return ResponseEntity.ok(updatedUser);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }
