@@ -43,6 +43,9 @@ export class PasswordChangerComponent {
   closeModal() {
     this.modalEmitter.emit();
     this.warningView = true ;
+    this.passwordOG = "" ;
+    this.passwordNew = "" ;
+    this.passwordConfirm = "" ;
   }
 
   acceptWarning() {
