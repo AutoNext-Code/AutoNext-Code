@@ -1,9 +1,10 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Component, EventEmitter, Output } from '@angular/core';
 
+import { UserDto } from '@user/interfaces/user.interface';
 
+import { InputComponent } from "@shared/components/ui/input/input.component";
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
-import { InputComponent } from "../../../shared/components/ui/input/input.component";
 
 @Component({
   selector: 'password-changer',
@@ -32,6 +33,10 @@ export class PasswordChangerComponent {
 
   acceptWarning() {
     this.warningView = false
+  }
+
+  saveNewPassword() {
+    
   }
 
 }
