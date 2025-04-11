@@ -8,6 +8,20 @@ import { switchMap, take, tap } from 'rxjs/operators';
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
+  const publicEndpoints = [
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/forget-password',
+    '/api/auth/request-password-reset',
+    '/api/auth/confirm-email'
+  ];
+
+  const isPublic = publicEndpoints.some(endpoint => req.url.includes(endpoint));
+
+  if (isPublic) {
+    return next(req); 
+  }
+
   return authService.token$.pipe(
     take(1),
     switchMap((token) => {
