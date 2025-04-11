@@ -41,7 +41,7 @@ public class PasswordResetService {
 
         String token = jwtService.generateTokenPassword(user);
 
-        String confirmationLink = clientUrl + "/auth/reset-passsword/" + token;
+        String confirmationLink = clientUrl + "/auth/reset-password/" + token;
         String htmlContent = "<html>"
                             + "<body>"
                             + "<h1>Restablecer tu contraseña</h1>"

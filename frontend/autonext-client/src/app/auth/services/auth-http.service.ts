@@ -42,10 +42,14 @@ export class AuthHttpService {
   }
 
   requestPasswordReset(email: string): Observable<string> {
-    return this.http.post(FORGET_PASSWORD, { email }, { responseType: 'text' });
+    console.log('por que entras aqui'); 
+    return this.http.post(FORGET_PASSWORD,  email, { responseType: 'text' });
   }
 
-  requestNewPassword(password: string): Observable<string> {
-    return this.http.post(RESET_PASSWORD, { password }, { responseType: 'text' });
+  requestNewPassword(token: string, password: string): Observable<string> {
+    console.log('🔵 URL usada en PUT:', RESET_PASSWORD(token)); 
+    return this.http.put(RESET_PASSWORD(token), password, {
+      responseType: 'text',
+    });
   }
 }
