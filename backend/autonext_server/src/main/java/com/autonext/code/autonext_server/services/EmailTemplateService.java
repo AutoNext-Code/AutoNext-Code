@@ -311,14 +311,47 @@ public class EmailTemplateService {
     }
 
     public void sendResetPasswordEmail(String email, String token) {
-        String confirmationLink = clientUrl + "/auth/reset-passsword/" + token;
-        String htmlContent = "<html>"
-                + "<body>"
-                + "<h1>Restablecer tu contraseña</h1>"
-                + "<p>Para restablecer tu contraseña, por favor, haz clic en el siguiente enlace:</p>"
-                + "<a href=\"" + confirmationLink + "\">Restablecer contraseña</a>"
-                + "</body>"
-                + "</html>";
+        String confirmationLink = clientUrl + "/auth/reset-password/" + token;
+        String htmlContent = String.format("""
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    background-color: #f9f9f9;
+                                    padding: 20px;
+                                }
+                                .container {
+                                    background-color: #ffffff;
+                                    border: 1px solid #e0e0e0;
+                                    border-radius: 10px;
+                                    padding: 20px;
+                                    max-width: 500px;
+                                    margin: auto;
+                                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                                }
+                                h1 {
+                                    color: #0067B8;
+                                }
+                                p {
+                                    color: #333;
+                                }
+                                a {
+                                    color: #0067B8;
+                                    text-decoration: none;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <h1>Restablecer tu contraseña</h1>
+                                <p>Para restablecer tu contraseña, por favor, haz clic en el siguiente enlace:</p>
+                                <a href="%s">Restablecer contraseña</a>
+                            </div>
+                        </body>
+                    </html>
+                """,
+                confirmationLink);
 
         try {
             this.emailSenderService.sendHtmlEmail(email, "Restablecimiento de contraseña", htmlContent);
