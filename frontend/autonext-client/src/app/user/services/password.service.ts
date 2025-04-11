@@ -44,13 +44,10 @@ export class PasswordService {
         error: (error) => {
           console.error('Error recibido en subscripción:', error);
         },
-        complete: () => {
-          console.log('Petición completada exitosamente');
-        }
       });
 
     } catch (error) {
-        
+      console.error(error) ;   
     }
 
   }

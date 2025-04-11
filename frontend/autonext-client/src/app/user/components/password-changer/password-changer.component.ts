@@ -42,7 +42,7 @@ export class PasswordChangerComponent {
     this.warningView = false
   }
 
-  saveNewPassword() {
+  saveNewPassword(): void {
 
     if (this.passwordOG === "" || this.passwordConfirm === "" || this.passwordNew === "") {
       this.appComponent.showToast('error', 'Problema en el formulario', "Los campos no deben estar vacíos.");
@@ -69,7 +69,7 @@ export class PasswordChangerComponent {
     }
 
 
-    this.passwordService.validatePasswords(this.passwordOG, this.passwordNew) ;
+    this.passwordService.validatePasswords(this.passwordOG, this.passwordNew);
   }
 
 }
