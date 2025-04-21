@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.autonext.code.autonext_server.models.Booking;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 
 public class BookingSpecifications {
 
@@ -29,6 +31,38 @@ public class BookingSpecifications {
       if (carId == null)
         return null;
       return cb.equal(root.get("car").get("id"), carId);
+    };
+  }
+
+  public static Specification<Booking> hasMonth(Integer month) {
+    return (root, query, cb) -> {
+      if (month == null)
+        return null;
+      return cb.equal(cb.function("month", Integer.class, root.get("date")), month);
+    };
+  }
+
+  public static Specification<Booking> hasYear(Integer year) {
+    return (root, query, cb) -> {
+      if (year == null)
+        return null;
+      return cb.equal(cb.function("year", Integer.class, root.get("date")), year);
+    };
+  }
+
+  public static Specification<Booking> hasConfirmationStatus(ConfirmationStatus status) {
+    return (root, query, cb) -> {
+      if (status == null)
+        return null;
+      return cb.equal(root.get("confirmationStatus"), status);
+    };
+  }
+
+  public static Specification<Booking> hasBookingStatus(BookingStatus status) {
+    return (root, query, cb) -> {
+      if (status == null)
+        return null;
+      return cb.equal(root.get("status"), status);
     };
   }
 }
