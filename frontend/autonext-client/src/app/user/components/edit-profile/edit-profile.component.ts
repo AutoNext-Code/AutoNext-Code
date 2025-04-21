@@ -14,13 +14,15 @@ import { EditProfileService } from '@user/services/edit-profile.service';
 import { AppComponent } from '../../../app.component';
 
 import { throwError } from 'rxjs';
+import { WarningMessageComponent } from "../../../shared/warning-message/warning-message.component";
 
 @Component({
   selector: 'edit-profile',
   imports: [
     InputComponent,
     FormsModule,
-    CustomButtonComponent
+    CustomButtonComponent,
+    WarningMessageComponent
 ],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'

@@ -1,22 +1,27 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { PasswordService } from '@user/services/password.service';
 
 import { InputComponent } from "@shared/components/ui/input/input.component";
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
-import { AppComponent } from '../../../app.component';
-import { throwError } from 'rxjs';
+import { WarningMessageComponent } from "@shared/warning-message/warning-message.component";
+
 import { AuthValidationService } from '@auth/services/auth-validation.service';
-import { HttpErrorResponse } from '@angular/common/http';
+
+import { AppComponent } from '../../../app.component';
+
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'password-changer',
   imports: [
-    CustomButtonComponent, 
+    CustomButtonComponent,
     InputComponent,
-    FormsModule
-  ],
+    FormsModule,
+    WarningMessageComponent
+],
   templateUrl: './password-changer.component.html',
   styleUrl: './password-changer.component.css'
 })
