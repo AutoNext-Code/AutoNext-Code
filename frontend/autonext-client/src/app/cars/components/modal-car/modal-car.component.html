@@ -1,1 +1,68 @@
-<p>modal-car works!</p>
+<ng-template #contentTemplate>
+  <div class="flex flex-col gap-2 max-w-[500px] items-center justify-center p-4">
+    <shared-input
+      #nameInput
+      [label]="'Nombre'"
+      [placeholder]="'Mi coche'"
+      [icon]="'draw'"
+      [(ngModel)]="carName"
+    ></shared-input>
+
+    <shared-input
+      #carPlateInput
+      [label]="'Matrícula'"
+      [placeholder]="'ABC123'"
+      [icon]="'directions_car'"
+      [(ngModel)]="carPlate"
+    ></shared-input>
+
+    <maps-select-plug-type
+      #plugSelect
+      [(ngModel)]="plugType"
+    ></maps-select-plug-type>
+  </div>
+</ng-template>
+
+
+<ng-template #buttonsTemplate>
+  <button
+    (click)="onCancel()"
+    class="bg-[#E30000] text-white px-4 py-2 rounded"
+    style="cursor: pointer;"
+  >
+    <span class="flex items-center gap-2">
+      Cancelar
+      <span
+      class="material-icons icon-small"
+      style="color: white; font-size: 24px"
+    >
+      close
+    </span>
+    </span>
+  </button>
+  <button
+    (click)="onConfirm()"
+    class="bg-[#0067B8] text-white px-4 py-2 rounded"
+    style="cursor: pointer;"
+  >
+    <span class="flex items-center  gap-2">
+      Confirmar
+      <span
+      class="material-icons icon-small"
+      style="color: white; font-size: 24px"
+    >
+      check
+    </span>
+    </span>
+  </button>
+</ng-template>
+
+<shared-custom-modal
+  [title]="title"
+  [visible]="visible"
+  [container]="contentTemplate"
+  [buttons]="buttonsTemplate"
+  (confirm)="onConfirm()"
+  (cancel)="onCancel()"
+>
+</shared-custom-modal>
