@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autonext.code.autonext_server.dto.CarDTO;
 import com.autonext.code.autonext_server.exceptions.ActiveBookingsException;
 import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.CarNameInUseException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
-import com.autonext.code.autonext_server.exceptions.CarOwnerException;
+import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.OwnerException;
 import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.User;
@@ -28,6 +30,8 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -66,7 +70,6 @@ public class CarController {
     @PostMapping("")
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<String> createCar(@Valid @RequestBody CarDTO carDTO) {
-        //Optional id in CarDTO, if !=null inconsequential
 
         try{
 
@@ -99,7 +102,7 @@ public class CarController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El vehículo no existe");
         }catch(CarsOwnedException cso){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Es el único vehículo registrado");
-        }catch(CarOwnerException coe){
+        }catch(OwnerException coe){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El vehículo no le pertenece al usuario registrado");
         }catch(ActiveBookingsException coe){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El vehículo tiene reservas pendientes");
@@ -110,5 +113,32 @@ public class CarController {
         }
 
         
+    }
+
+
+    @PutMapping("")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public ResponseEntity<String> updateCar(@Valid @RequestBody CarDTO carDTO) {
+        
+        try{
+
+            carService.updateCar(carDTO);
+            return ResponseEntity.ok("Vehículo actualizado correctamente");
+
+        }catch(UserNotFoundException unf){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+        }catch(CarNotExistsException cne){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El vehículo no existe");
+        }catch(OwnerException coe){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El vehículo no le pertenece al usuario registrado");
+        }catch(CarPlateAlreadyExistsException coe){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La matrícula ya está en uso");
+        }catch(CarNameInUseException coe){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El usuario ya tiene un coche con este nombre");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+        }
     }
 }
