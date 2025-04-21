@@ -10,7 +10,6 @@ import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import com.autonext.code.autonext_server.services.JwtService;
 
-
 @Service
 public class DashboardService {
 
@@ -29,6 +28,8 @@ public class DashboardService {
   @Autowired
   private DashboardMonthlyService dashboardMonthlyService;
 
+  @Autowired
+  private DashboardStatsService dashboardStatsService;
 
   public DashboardSummaryDto getDashboardForCurrentUser(int month, int year, String token) {
     int userId = jwtService.extractUserId(token);
@@ -48,6 +49,9 @@ public class DashboardService {
     dto.setMonthlyDaysReserved(dashboardMonthlyService.calculateMonthlyDaysReserved(user, year));
     dto.setMonthlyHoursReserved(dashboardMonthlyService.calculateMonthlyHoursReserved(user, year));
     dto.setMonthlyAvgDuration(dashboardMonthlyService.calculateMonthlyAvgDuration(user, year));
+
+    dto.setWeeklyHoursReserved(dashboardStatsService.calculateWeekdayHoursReserved(user, year));
+    dto.setMonthlyConfirmationStats(dashboardStatsService.calculateMonthlyConfirmations(user, year));
 
     // Strikes
     int activeStrikes = (int) user.getStrikes().stream()
