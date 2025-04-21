@@ -38,7 +38,7 @@ public class BookingSpecifications {
     return (root, query, cb) -> {
       if (month == null)
         return null;
-      return cb.equal(cb.function("month", Integer.class, root.get("date")), month);
+      return cb.equal(cb.function("MONTH", Integer.class, root.get("date")), month);
     };
   }
 
@@ -46,7 +46,7 @@ public class BookingSpecifications {
     return (root, query, cb) -> {
       if (year == null)
         return null;
-      return cb.equal(cb.function("year", Integer.class, root.get("date")), year);
+      return cb.equal(cb.function("YEAR", Integer.class, root.get("date")), year);
     };
   }
 
