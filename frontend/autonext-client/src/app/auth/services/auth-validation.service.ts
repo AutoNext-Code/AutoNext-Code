@@ -13,6 +13,14 @@ export class AuthValidationService {
     );
     return emptyField ? 'Todos los campos son obligatorios.' : null;
   }
+    
+  validateNewPassword(password: string): string | null {
+    if (!this.isValidPassword(password)) {
+      return 'La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números.';
+    }
+    return null; 
+  }
+  
 
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
