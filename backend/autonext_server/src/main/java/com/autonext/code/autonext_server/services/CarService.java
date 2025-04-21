@@ -70,18 +70,15 @@ public class CarService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
+    if ((carDTO.getCarPlate().isBlank()) || carDTO.getCarPlate().isEmpty()) {
+      throw new CarPlateNotValidException("La matrícula no es válida");
+    }
 
-        if((carDTO.getCarPlate().isBlank())||carDTO.getCarPlate().isEmpty()){
-            throw new CarPlateNotValidException("La matrícula no es válida");
-        }
-
-
-        Car car = new Car(
-            carDTO.getCarPlate(),
-            carDTO.getName(),
-            carDTO.getPlugType(),
-            user
-        );
+    Car car = new Car(
+        carDTO.getCarPlate(),
+        carDTO.getName(),
+        carDTO.getPlugType(),
+        user);
 
     carRepository.save(car);
 
