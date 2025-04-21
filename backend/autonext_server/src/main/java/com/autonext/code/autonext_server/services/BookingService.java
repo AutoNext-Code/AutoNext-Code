@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
+import com.autonext.code.autonext_server.exceptions.OverlappingBookingException;
+import com.autonext.code.autonext_server.exceptions.ParkingLimitOverpassException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.Booking;
@@ -34,8 +36,6 @@ import com.autonext.code.autonext_server.specifications.BookingSpecifications;
 
 @Service
 public class BookingService {
-
-  private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
 
   @Autowired
   private EmailTemplateService emailTemplateService;
@@ -76,39 +76,57 @@ public class BookingService {
     return bookingRepository.findById(id).orElse(null);
   }
 
-  public void createBooking(MapBookingDTO mapBookingDTO) {
-    logger.info(
-        "Datos recibidos: Fecha: {}, Hora de inicio: {}, Hora de fin: {}, ID del coche: {}, ID de la plaza: {}",
-        mapBookingDTO.getDate(), mapBookingDTO.getStartTime(), mapBookingDTO.getEndTime(),
-        mapBookingDTO.getCarId(), mapBookingDTO.getParkingSpaceId());
+
+  public void createBooking(MapBookingDTO dto) throws Exception {
 
     int userId = getAuthenticatedUserId();
-
-    Car car = carRepository.findById(mapBookingDTO.getCarId())
-        .orElseThrow(() -> new CarNotExistsException("La matrícula no está registrada"));
-
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-    ParkingSpace parkingSpace = parkingSpaceRepository.findById(mapBookingDTO.getParkingSpaceId())
+    int reservasHoy = bookingRepository.countByUserAndDate(user, dto.getDate());
+    
+    boolean solapa = bookingRepository.existsOverlappingBooking(
+      user,
+      dto.getDate(),
+      dto.getStartTime(),  
+      dto.getEndTime()   
+  );
+  
+
+    System.out.println("\u001B[31m"+solapa+"\u001B[0m");
+
+    if (solapa) {
+      throw new OverlappingBookingException(
+          "Ya existe una reserva que cruza con el horario solicitado: "
+          + dto.getStartTime() + " – " + dto.getEndTime()
+      );
+    }
+
+    final int LIMITE_DIARIO = 2;
+    if (reservasHoy >= LIMITE_DIARIO) {
+        throw new ParkingLimitOverpassException(
+            "Ha superado el límite de " + LIMITE_DIARIO + " reservas para el día " + dto.getDate()
+        );
+    }
+
+    Car car = carRepository.findById(dto.getCarId())
+        .orElseThrow(() -> new CarNotExistsException("La matrícula no está registrada"));
+    ParkingSpace space = parkingSpaceRepository.findById(dto.getParkingSpaceId())
         .orElseThrow(() -> new ParkingSpaceNotExistsException("La plaza no está registrada"));
-
-    bookingValidators.validate(mapBookingDTO, parkingSpace);
-
-    WorkCenter workCenter = parkingSpace.getParkingLevel().getWorkCenter();
+    bookingValidators.validate(dto, space);
+    WorkCenter wc = space.getParkingLevel().getWorkCenter();
 
     Booking booking = new Booking(
-        mapBookingDTO.getStartTime(),
-        mapBookingDTO.getEndTime(),
-        mapBookingDTO.getDate(),
+        dto.getStartTime(),
+        dto.getEndTime(),
+        dto.getDate(),
         user,
-        car);
-
-    booking.setParkingSpace(parkingSpace);
-    booking.setWorkCenter(workCenter);
-
+        car
+    );
+    booking.setParkingSpace(space);
+    booking.setWorkCenter(wc);
     bookingRepository.save(booking);
-    emailTemplateService.notifyUserOnBookingCreation(booking, mapBookingDTO);
+    emailTemplateService.notifyUserOnBookingCreation(booking, dto);
   }
 
   public void updateConfirmationStatus(int id, ConfirmationStatus confirmationStatus) throws Exception {
