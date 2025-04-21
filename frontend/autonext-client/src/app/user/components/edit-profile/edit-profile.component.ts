@@ -86,6 +86,10 @@ export class EditProfileComponent implements OnInit {
 
   saveData(): void {
 
+    this.name = this.name.trim() ;
+    this.surname = this.surname.trim() ;
+    this.email = this.email.trim() ;
+
     if (this.name === "" || this.surname === "" || this.email === "") {
       this.appComponent.showToast('error', 'Problema en el formulario', "Los campos no deben estar vacíos.");
       throwError("La nueva contraseña no puede ser igual a la anterior.") ;

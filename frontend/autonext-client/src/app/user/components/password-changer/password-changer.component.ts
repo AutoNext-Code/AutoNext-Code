@@ -61,6 +61,10 @@ export class PasswordChangerComponent {
 
   saveNewPassword(): void {
 
+    this.passwordOG = this.passwordOG.trim() ;
+    this.passwordNew = this.passwordNew.trim() ;
+    this.passwordConfirm = this.passwordConfirm.trim() ;
+
     if (this.passwordOG === "" || this.passwordConfirm === "" || this.passwordNew === "") {
       this.appComponent.showToast('error', 'Problema en el formulario', "Los campos no deben estar vacíos.");
       throwError("La nueva contraseña no puede ser igual a la anterior.") ;
