@@ -1,26 +1,20 @@
 package com.autonext.code.autonext_server.services.dashboard;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.dashboardDtos.DashboardSummaryDto;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.Strike;
-import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
-import com.autonext.code.autonext_server.services.JwtService;
 
 @Service
 public class DashboardService {
 
   @Autowired
-  private BookingRepository bookingRepository;
-
-  @Autowired
   private UserRepository userRepository;
-
-  @Autowired
-  private JwtService jwtService;
 
   @Autowired
   private DashboardKpiService dashboardKpiService;
@@ -32,7 +26,7 @@ public class DashboardService {
   private DashboardStatsService dashboardStatsService;
 
   public DashboardSummaryDto getDashboardForCurrentUser(int month, int year, String token) {
-    int userId = jwtService.extractUserId(token);
+    int userId = getAuthenticatedUserId();
 
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -61,5 +55,16 @@ public class DashboardService {
     dto.setBanned(user.isBanned());
 
     return dto;
+  }
+
+  private int getAuthenticatedUserId() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+
+    if (principal instanceof User user) {
+      return user.getId();
+    }
+
+    throw new SecurityException("Usuario no autenticado correctamente");
   }
 }
