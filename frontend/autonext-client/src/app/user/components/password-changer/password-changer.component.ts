@@ -5,8 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { PasswordService } from '@user/services/password.service';
 
 import { InputComponent } from "@shared/components/ui/input/input.component";
-import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 import { WarningMessageComponent } from "@shared/warning-message/warning-message.component";
+import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
+import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 
 import { AuthValidationService } from '@auth/services/auth-validation.service';
 
@@ -20,7 +21,8 @@ import { throwError } from 'rxjs';
     CustomButtonComponent,
     InputComponent,
     FormsModule,
-    WarningMessageComponent
+    WarningMessageComponent,
+    CustomModalComponent
 ],
   templateUrl: './password-changer.component.html',
   styleUrl: './password-changer.component.css'

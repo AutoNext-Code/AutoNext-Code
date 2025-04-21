@@ -3,18 +3,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { InputComponent } from "@shared/components/ui/input/input.component";
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
+import { WarningMessageComponent } from "@shared/warning-message/warning-message.component";
+import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
+import { InputComponent } from "@shared/components/ui/input/input.component";
 
-import { AuthValidationService } from '@auth/services/auth-validation.service';
 import { AuthService } from '@auth/services/auth.service';
+import { AuthValidationService } from '@auth/services/auth-validation.service';
 
 import { EditProfileService } from '@user/services/edit-profile.service';
 
 import { AppComponent } from '../../../app.component';
 
 import { throwError } from 'rxjs';
-import { WarningMessageComponent } from "../../../shared/warning-message/warning-message.component";
 
 @Component({
   selector: 'edit-profile',
@@ -22,7 +23,8 @@ import { WarningMessageComponent } from "../../../shared/warning-message/warning
     InputComponent,
     FormsModule,
     CustomButtonComponent,
-    WarningMessageComponent
+    WarningMessageComponent,
+    CustomModalComponent
 ],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
