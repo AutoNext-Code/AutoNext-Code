@@ -17,8 +17,7 @@ export class CarCardComponent {
   public showModalEdit: boolean = false;
 
   openModalEdit() {
-    // this.showModalEdit = true;
-    this.edit.emit(this.car!); // Emitimos el coche para edición
+    this.edit.emit(this.car!);
     console.log(this.car);
   }
 

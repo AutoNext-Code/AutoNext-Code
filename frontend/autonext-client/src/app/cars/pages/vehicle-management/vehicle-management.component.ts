@@ -41,7 +41,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
         this.cars = cars;
       },
       error: (error) => {
-        this.appComponent.showToast('error', '❌ Error al obtener coches del usuario. ',"", 3000);
+        this.appComponent.showToast('error', 'Error al obtener coches del usuario. ',"", 3000);
       }
     });
   }
@@ -52,7 +52,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
 
   openModal() {
     this.showModalEdit = true;
-    this.carToEdit = null; // Al abrir el modal para crear, no debería haber coche a editar.
+    this.carToEdit = null;
   }
 
   closeModal() {
@@ -61,7 +61,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
 
   openEditModal(car: CarDto) {
     this.showModalEdit = true;
-    this.carToEdit = car; // Se pasa el coche para edición
+    this.carToEdit = car;
   }
 
   handleNewCar(newCar: CarDto) {
@@ -72,7 +72,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
         this.appComponent.showToast('success', '', response, 3000);
       },
       error: () => {
-        this.appComponent.showToast('error', '❌ Error al añadir el coche.', "", 3000);
+        this.appComponent.showToast('error', 'Error al añadir el coche.', "", 3000);
       }
     });
   }
@@ -87,11 +87,11 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
           this.appComponent.showToast('success', 'Coche actualizado', '', 3000);
         },
         error: () => {
-          this.appComponent.showToast('error', '❌ Error al actualizar el coche.', "", 3000);
+          this.appComponent.showToast('error', 'Error al actualizar el coche.', "", 3000);
         }
       });
     } else {
-      this.appComponent.showToast('error', '❌ El coche no tiene ID para actualizar.', "", 3000);
+      this.appComponent.showToast('error', 'El coche no tiene ID para actualizar.', "", 3000);
     }
   }
 
@@ -109,7 +109,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
           this.resetDeleteState();
         },
         error: () => {
-          this.appComponent.showToast('error', '❌ Error al eliminar el coche.', '', 3000);
+          this.appComponent.showToast('error', 'Error al eliminar el coche.', '', 3000);
           this.resetDeleteState();
         }
       });
