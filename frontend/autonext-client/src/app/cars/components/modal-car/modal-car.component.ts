@@ -1,41 +1,72 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomModalComponent } from '@shared/components/custom-modal/custom-modal.component';
-import { InputComponent } from "../../../shared/components/ui/input/input.component";
-import { SelectPlugTypeComponent } from "../../../maps/components/select-plug-type/select-plug-type.component";
+import { InputComponent } from '../../../shared/components/ui/input/input.component';
+import { SelectPlugTypeComponent } from '../../../maps/components/select-plug-type/select-plug-type.component';
 import { CarDto } from '../../interfaces/car.interface';
-import { PlugType } from '@maps/enums/plugType.enum';
 import { FormsModule } from '@angular/forms';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'cars-modal-car',
   standalone: true,
-  imports: [CustomModalComponent, CommonModule, InputComponent, SelectPlugTypeComponent, FormsModule],
+  imports: [
+    CustomModalComponent,
+    CommonModule,
+    InputComponent,
+    SelectPlugTypeComponent,
+    FormsModule,
+  ],
   templateUrl: './modal-car.component.html',
 })
-export class ModalCarComponent implements OnChanges {
-
+export class ModalCarComponent {
   @Input() title: string = '';
   @Input() visible: boolean = false;
   @Input() carToEdit?: CarDto;
-  @Output() confirm = new EventEmitter<any>();
+  @Output() confirm = new EventEmitter<CarDto>();
   @Output() cancel = new EventEmitter<void>();
 
   @ViewChild('nameInput') nombreInput!: InputComponent;
   @ViewChild('carPlateInput') matriculaInput!: InputComponent;
   @ViewChild('plugSelect') plugSelect!: SelectPlugTypeComponent;
 
+  private appComponent = inject(AppComponent);
+
   public carName: string = '';
   public carPlate: string = '';
-  public plugType: PlugType = PlugType.Undefined;
+  public plugType: string = 'Undefined';
 
   onConfirm() {
-    this.carName = this.nombreInput.value;
-    this.carPlate = this.matriculaInput.value;
-    this.plugType = this.plugSelect.selectedPlugTypeValue ?? PlugType.Undefined;
+    this.carName = this.nombreInput.value.trim();
+    this.carPlate = this.matriculaInput.value.trim();
+
+    if (
+      !this.carName ||
+      !this.carPlate ||
+      /\s{2,}/.test(this.carName) ||
+      /\s{2,}/.test(this.carPlate)
+    ) {
+      this.appComponent.showToast(
+        'warn',
+        'Los campos no pueden estar vacíos ni contener espacios consecutivos.',
+        '',
+        3000
+      );
+      return;
+    }
+
+    this.plugType = this.plugSelect.selectedPlugType ?? 'Undefined';
 
     const newCar: CarDto = {
+      id: this.carToEdit?.id,
       name: this.carName,
       carPlate: this.carPlate,
       plugType: this.plugType,
@@ -57,7 +88,7 @@ export class ModalCarComponent implements OnChanges {
     } else {
       this.carName = '';
       this.carPlate = '';
-      this.plugType = PlugType.Undefined;
+      this.plugType = 'Undefined';
     }
   }
 }

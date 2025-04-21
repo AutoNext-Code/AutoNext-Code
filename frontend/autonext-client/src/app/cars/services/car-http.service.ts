@@ -21,4 +21,16 @@ export class CarHttpService {
     });
   }
 
+  updateCar(car: CarDto): Observable<string> {
+    return this.http.put<string>(CARS_USER_ENDPOINT, car, {
+      responseType: 'text' as 'json'
+    });
+  }
+
+  deleteCar(id: number): Observable<string> {
+    return this.http.delete<string>(`${CARS_USER_ENDPOINT}/${id}`, {
+      responseType: 'text' as 'json'
+    });
+  }
+
 }
