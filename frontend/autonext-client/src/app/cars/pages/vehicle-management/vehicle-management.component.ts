@@ -7,9 +7,10 @@ import { CarDto } from '../../interfaces/car.interface';
 import { CommonModule } from '@angular/common';
 import { ModalCarComponent } from "../../components/modal-car/modal-car.component";
 import { AppComponent } from '../../../app.component';
+import { CustomModalComponent } from "../../../shared/components/custom-modal/custom-modal.component";
 
 @Component({
-  imports: [HeaderComponent, CarCardComponent, CommonModule, ModalCarComponent],
+  imports: [HeaderComponent, CarCardComponent, CommonModule, ModalCarComponent, CustomModalComponent],
   templateUrl: './vehicle-management.component.html',
   styleUrl: './vehicle-management.component.css'
 })
@@ -22,6 +23,9 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
   public cars: CarDto[];
   private subscription: Subscription;
   public showModalEdit: boolean;
+  public showConfirmModal: boolean = false;
+  public carToDeleteId: number | null = null;
+
 
   constructor() {
     this.cars = [];
@@ -69,6 +73,35 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
     });
   }
 
+  openDeleteConfirmation(id: number) {
+    this.carToDeleteId = id;
+    this.showConfirmModal = true;
+    console.log("Abriendo modla aaaaaaaa")
+  }
 
+  confirmDelete() {
+    if (this.carToDeleteId !== null) {
+      this.carService.deleteCar(this.carToDeleteId).subscribe({
+        next: (response: string) => {
+          this.loadCars();
+          this.appComponent.showToast('success', '', response, 3000);
+          this.resetDeleteState();
+        },
+        error: () => {
+          this.appComponent.showToast('error', '❌ Error al eliminar el coche.', '', 3000);
+          this.resetDeleteState();
+        }
+      });
+    }
+  }
+
+  cancelDelete() {
+    this.resetDeleteState();
+  }
+
+  private resetDeleteState() {
+    this.showConfirmModal = false;
+    this.carToDeleteId = null;
+  }
 
 }
