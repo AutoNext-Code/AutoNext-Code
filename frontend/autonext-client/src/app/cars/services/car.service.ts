@@ -8,7 +8,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class CarService {
   private carHttp: CarHttpService = inject(CarHttpService);
 
-  constructor() { }
+  constructor() {}
 
   getCarsByUser(): Observable<CarDto[]> {
     return this.carHttp.getCarsByUser().pipe(
@@ -18,4 +18,14 @@ export class CarService {
       })
     );
   }
+
+  createCar(car: CarDto): Observable<string> {
+    return this.carHttp.createCar(car).pipe(
+      catchError((error) => {
+        console.error('Error al crear el coche:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
 }

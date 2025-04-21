@@ -1,0 +1,8 @@
+
+.bg-mydarkblue {
+  background-color: var(--dark-blue);
+}
+
+.button {
+  cursor: pointer;
+}
