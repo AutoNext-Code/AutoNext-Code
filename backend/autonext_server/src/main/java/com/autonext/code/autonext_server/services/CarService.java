@@ -14,6 +14,7 @@ import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.CarNameInUseException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.CarPlateNotValidException;
 import com.autonext.code.autonext_server.exceptions.OwnerException;
 import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
@@ -68,6 +69,10 @@ public class CarService {
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        if((carDTO.getCarPlate().isBlank())||carDTO.getCarPlate().isEmpty()){
+            throw new CarPlateNotValidException("La matrícula no es válida");
+        }
 
 
         Car car = new Car(
