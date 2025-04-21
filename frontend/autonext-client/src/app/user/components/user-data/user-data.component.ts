@@ -5,10 +5,11 @@ import { UserDto } from '@user/interfaces/user.interface';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../services/profile.service';
 import { PasswordChangerComponent } from "../password-changer/password-changer.component";
+import { EditProfileComponent } from "../edit-profile/edit-profile.component";
 
 @Component({
   selector: 'profile-user-data',
-  imports: [CommonModule, PasswordChangerComponent],
+  imports: [CommonModule, PasswordChangerComponent, EditProfileComponent],
   templateUrl: './user-data.component.html',
   styleUrls: ['./user-data.component.css']
 })
@@ -22,6 +23,7 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
   user: UserDto | null = null;
 
+  edModal:boolean = true ;
   passwdModal:boolean = true ;
   isMobile = false;
 
@@ -31,10 +33,6 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public navigate(path: string): void {
     this.router.navigate([path]);
-  }
-
-  public warning(): void {
-    this.appComponent.showToast('warn', 'No implementado', "", 3000, 80);
   }
 
   public loadUserProfile(): void {
@@ -53,6 +51,12 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
     this.passwdModal = false ;
 
   }
+  
+  public editModal(): void {
+
+    this.edModal = false ;
+
+  }
 
   cancelChanges() {
 
@@ -63,6 +67,7 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeModal() {
     this.passwdModal = true ;
+    this.edModal = true ;
   }
     
 
@@ -81,5 +86,4 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
     window.removeEventListener('resize', this.checkScreenSize);
   }
 
-  
 }

@@ -50,6 +50,9 @@ public class User implements UserDetails {
   @ManyToOne
   @JoinColumn(name = "work_center_id", nullable = true)
   private WorkCenter workCenter;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Strike> strikes;
   
   @Column(name = "job_position")
   private String jobPosition;
@@ -66,8 +69,9 @@ public class User implements UserDetails {
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
 
-  @Column()
-  private int strikes;
+  @Column
+  private boolean penalized;
+
 
   public User() {
     this.role = Role.User;
@@ -75,7 +79,7 @@ public class User implements UserDetails {
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
-    this.strikes = 0;
+    this.penalized=false;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
@@ -201,11 +205,26 @@ public class User implements UserDetails {
     this.workCenter = workCenter;
   }
 
-  public int getStrikes() {
+  public List<Strike> getStrikes() {
     return strikes;
   }
 
-  public void setStrikes(int strikes) {
+  public void setStrikes(List<Strike> strikes) {
     this.strikes = strikes;
   }
+
+  public void addStrike(Strike strike){
+    this.strikes.add(strike);
+  }
+
+
+  public boolean isPenalized() {
+    return penalized;
+  }
+
+  public void setPenalized(boolean penalized) {
+    this.penalized = penalized;
+  }
+
+  
 }

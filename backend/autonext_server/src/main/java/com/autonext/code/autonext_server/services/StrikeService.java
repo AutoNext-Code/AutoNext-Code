@@ -1,0 +1,39 @@
+package com.autonext.code.autonext_server.services;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.autonext.code.autonext_server.models.Booking;
+import com.autonext.code.autonext_server.models.Strike;
+import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.models.enums.StrikeReason;
+import com.autonext.code.autonext_server.repositories.StrikeRepository;
+
+@Service
+public class StrikeService {
+
+    @Autowired
+    private StrikeRepository strikeRepository;
+
+
+    public void setBookingStrike(Booking booking, LocalDate date, LocalTime time, StrikeReason reason ){
+
+
+        booking.setStatus(BookingStatus.Strike);
+        User user = booking.getUser();
+
+
+        Strike strike = new Strike(date, time, reason, booking.getUser());
+        strikeRepository.save(strike);
+
+        if(user.getStrikes().size()>2){
+            user.setPenalized(true);
+        }
+
+    }
+    
+}

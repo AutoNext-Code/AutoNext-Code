@@ -20,6 +20,7 @@ import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.CarNameInUseException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.CarPlateNotValidException;
 import com.autonext.code.autonext_server.exceptions.OwnerException;
 import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
@@ -80,6 +81,8 @@ public class CarController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La matrícula del coche ya está registrada");
         }catch(UserNotFoundException unf){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+        }catch(CarPlateNotValidException cpn){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cpn.getMessage());
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch(Exception e) {
