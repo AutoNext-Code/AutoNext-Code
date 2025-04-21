@@ -93,7 +93,7 @@ export class PasswordChangerComponent {
             this.appComponent.showToast(
               'error',
               'Error al cambiar la contraseña',
-              err.message
+              (!err.message.includes("Http failure response") ? err.message : "Existen problemas de conexion")
             );
           },
         });
