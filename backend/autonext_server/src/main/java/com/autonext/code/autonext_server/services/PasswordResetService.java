@@ -2,7 +2,6 @@ package com.autonext.code.autonext_server.services;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +13,16 @@ import com.autonext.code.autonext_server.repositories.UserRepository;
 @Service
 public class PasswordResetService {
 
-    @Value("${url.client}")
-    private String clientUrl;
-
     private final JwtService jwtService;
-    private final EmailSenderService emailSenderService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailTemplateService emailTemplateService;
 
-    public PasswordResetService(JwtService jwtService, EmailSenderService emailSenderService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public PasswordResetService(JwtService jwtService, EmailSenderService emailSenderService, UserRepository userRepository, PasswordEncoder passwordEncoder, EmailTemplateService emailTemplateService) {
+        this.emailTemplateService = emailTemplateService;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
-        this.emailSenderService = emailSenderService;
     }
 
     public String sendPasswordResetEmail(String email) {
@@ -51,7 +47,7 @@ public class PasswordResetService {
                             + "</html>";
 
         try {
-            emailSenderService.sendHtmlEmail(email, "Restablecimineto de contraseña", htmlContent);
+            emailTemplateService.sendResetPasswordEmail(email, token);
             return token;
         } catch (Exception e) {
             throw new ErrorSendEmailException("Error al enviar el email");

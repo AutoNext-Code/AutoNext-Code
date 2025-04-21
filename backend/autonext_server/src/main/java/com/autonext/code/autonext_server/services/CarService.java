@@ -9,11 +9,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
+import com.autonext.code.autonext_server.exceptions.ActiveBookingsException;
 import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.CarNameInUseException;
+import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
+import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
+import com.autonext.code.autonext_server.exceptions.OwnerException;
+import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.CarMapper;
 import com.autonext.code.autonext_server.models.Car;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
+import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 
@@ -22,6 +30,9 @@ public class CarService {
     
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -71,6 +82,90 @@ public class CarService {
 
     }
 
+    public void deleteCar(int id){
+        int userId = getAuthenticatedUserId();
+
+        Car car = carRepository.findById(id)
+            .orElseThrow(() -> new CarNotExistsException("Vehículo no encontrado"));
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("Usuario no encotrado"));
+
+
+        if(car.getUser()==user){
+
+            boolean pendingBooking = car.getBookings().stream()
+                .anyMatch(booking -> 
+                    booking.getStatus().equals(BookingStatus.Active) || 
+                    booking.getStatus().equals(BookingStatus.Pending)
+                );
+            
+            if(!pendingBooking){
+
+                if(user.getCars().size()>1){
+                    bookingRepository.carDeletionUnbound(car.getId());
+    
+                    carRepository.delByIdPer(car.getId());
+                }else{
+                    throw new CarsOwnedException("Es el único vehículo registrado");
+                }
+
+            }else{
+                throw new ActiveBookingsException("El vehículo tiene reservas pendientes");
+            }
+            
+            
+        }else{
+            throw new OwnerException("El vehículo no le pertenece al usuario registrado");
+        }
+
+    }
+
+
+
+    public void updateCar(CarDTO carDTO){
+
+        int userId = getAuthenticatedUserId();
+
+        Car car = carRepository.findById(carDTO.getId())
+            .orElseThrow(() -> new CarNotExistsException("Vehículo no encontrado"));
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("Usuario no encotrado"));
+
+
+        if(car.getUser()==user){
+
+            boolean plateInUse = carRepository.findAll().stream().anyMatch(c -> c.getCarPlate().equals(carDTO.getCarPlate()));
+            boolean nameInUse = carRepository.findByUser(user).stream().anyMatch(c -> c.getName().equals(carDTO.getName()));
+
+            if(!plateInUse){
+                car.setCarPlate(carDTO.getCarPlate());
+            }else{
+                throw new CarPlateAlreadyExistsException("La matrícula ya está en uso");
+            }
+
+            if(!nameInUse){
+                car.setName(carDTO.getName());
+            }else{
+                throw new CarNameInUseException("El usuario ya tiene un coche con este nombre");
+            }
+            
+           
+            car.setPlugType(carDTO.getPlugType());
+
+
+            
+            
+            
+        }else{
+            throw new OwnerException("El vehículo no le pertenece al usuario registrado");
+        }
+
+
+
+    }
+
 
     private int getAuthenticatedUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -82,5 +177,8 @@ public class CarService {
 
         throw new SecurityException("Usuario no autenticado correctamente");
     }
+
+
+    
 
 }
