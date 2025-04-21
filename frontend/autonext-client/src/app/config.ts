@@ -35,6 +35,8 @@ export const BOOKING_CONFIRMATION_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOIN
 
 export const DATA_PROFILE_ENDPOINT = `${API_BASE_URL}user/profile`;
 
+export const PASSWORD_CHANGE_ENDPOINT = `${API_BASE_URL}user/password-edit`;
+
 export const CARS_USER_ENDPOINT = `${API_BASE_URL}cars`;
 
 /* ENDPOINT PARA WORKCENTER */

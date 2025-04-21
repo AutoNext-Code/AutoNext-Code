@@ -1,5 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.hibernate.StaleStateException;
@@ -22,13 +24,15 @@ import jakarta.transaction.Transactional;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final ValidationsFunctions validationsFunctions;
   private final PasswordEncoder passwordEncoder;
+  private final AuthenticationManager authenticationManager;
+  private final ValidationsFunctions validationsFunctions;
 
-  public UserService(UserRepository userRepository, ValidationsFunctions validationsFunctions, PasswordEncoder passwordEncoder) {
+  public UserService(UserRepository userRepository, ValidationsFunctions validationsFunctions, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
     this.userRepository = userRepository;
     this.validationsFunctions = validationsFunctions;
     this.passwordEncoder = passwordEncoder;
+    this.authenticationManager = authenticationManager;
   }
 
   private int getAuthenticatedUserId() {
@@ -81,7 +85,7 @@ public class UserService {
   }
 
   @Transactional
-  public void updatePassword(String password) {
+  public void updatePassword(String newPassword, String oldPassword) {
     int userId = getAuthenticatedUserId();
     
     try {
@@ -89,7 +93,9 @@ public class UserService {
       User user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-      user.setPassword(passwordEncoder.encode(password));
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), oldPassword)) ;
+
+      user.setPassword(passwordEncoder.encode(newPassword));
 
       userRepository.save(user) ;
       
