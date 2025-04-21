@@ -1,0 +1,10 @@
+#icon {
+    font-size: 200px;
+}
+
+#modal {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+}
