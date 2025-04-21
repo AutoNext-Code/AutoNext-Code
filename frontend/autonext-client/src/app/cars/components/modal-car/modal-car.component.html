@@ -1,30 +1,36 @@
 <ng-template #contentTemplate>
   <div class="flex flex-col gap-2 max-w-[500px] items-center justify-center p-4">
+    <!-- Input de nombre -->
     <shared-input
       #nameInput
+      name="name"
       [label]="'Nombre'"
       [placeholder]="'Mi coche'"
       [icon]="'draw'"
       [(ngModel)]="carName"
     ></shared-input>
 
+    <!-- Input de matrícula -->
     <shared-input
       #carPlateInput
+      name="plate"
       [label]="'Matrícula'"
       [placeholder]="'ABC123'"
       [icon]="'directions_car'"
       [(ngModel)]="carPlate"
     ></shared-input>
 
+    <!-- Selector de tipo de enchufe -->
     <maps-select-plug-type
       #plugSelect
+      name="plugType"
       [(ngModel)]="plugType"
     ></maps-select-plug-type>
   </div>
 </ng-template>
 
-
 <ng-template #buttonsTemplate>
+  <!-- Botón Cancelar -->
   <button
     (click)="onCancel()"
     class="bg-[#E30000] text-white px-4 py-2 rounded"
@@ -33,26 +39,28 @@
     <span class="flex items-center gap-2">
       Cancelar
       <span
-      class="material-icons icon-small"
-      style="color: white; font-size: 24px"
-    >
-      close
-    </span>
+        class="material-icons icon-small"
+        style="color: white; font-size: 24px"
+      >
+        close
+      </span>
     </span>
   </button>
+
+  <!-- Botón Confirmar -->
   <button
     (click)="onConfirm()"
     class="bg-[#0067B8] text-white px-4 py-2 rounded"
     style="cursor: pointer;"
   >
-    <span class="flex items-center  gap-2">
+    <span class="flex items-center gap-2">
       Confirmar
       <span
-      class="material-icons icon-small"
-      style="color: white; font-size: 24px"
-    >
-      check
-    </span>
+        class="material-icons icon-small"
+        style="color: white; font-size: 24px"
+      >
+        check
+      </span>
     </span>
   </button>
 </ng-template>
@@ -64,5 +72,4 @@
   [buttons]="buttonsTemplate"
   (confirm)="onConfirm()"
   (cancel)="onCancel()"
->
-</shared-custom-modal>
+></shared-custom-modal>

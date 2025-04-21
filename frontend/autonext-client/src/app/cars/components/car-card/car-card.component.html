@@ -1,23 +1,24 @@
 <div class="md:w-[400px] w-[350px] rounded-lg shadow-md overflow-hidden border-card md:m-20">
+  <div class="bg-mylightblue p-3">
+    <h2 class="text-center text-black font-semibold text-lg">Nombre: {{car?.name}}</h2>
+  </div>
 
-    <div class="bg-mylightblue p-3">
-        <h2 class="text-center text-black font-semibold text-lg">Nombre: {{car?.name}}</h2>
+  <div class="p-4 space-y-2">
+    <p class="text-black">Matrícula: {{car?.carPlate}}</p>
+    <p class="text-black">Enchufe: {{car?.plugType}}</p>
+
+    <div class="flex justify-between pt-4">
+      <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md" (click)="openModalEdit()" style="cursor: pointer;">
+        <span class="material-icons">edit</span>
+        <span>Editar</span>
+      </button>
+      <button class="flex items-center space-x-1 bg-myred text-white px-4 py-2 rounded-md" style="cursor: pointer;" (click)="onDelete()">
+        <span class="material-icons">delete</span>
+        <span>Eliminar</span>
+      </button>
     </div>
-
-    <div class="p-4 space-y-2">
-        <p class="text-black">Matrícula: {{car?.carPlate}}</p>
-        <p class="text-black">Enchufe: {{car?.plugType}}</p>
-
-        <div class="flex justify-between pt-4">
-            <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md" (click)="openModalEdit()" style="cursor: pointer;">
-                <span class="material-icons">edit</span>
-                <span>Editar</span>
-            </button>
-            <button class="flex items-center space-x-1 bg-myred text-white px-4 py-2 rounded-md" style="cursor: pointer;" (click)="onDelete()">
-                <span class="material-icons">delete</span>
-                <span>Eliminar</span>
-            </button>
-        </div>
-    </div>
+  </div>
 </div>
-<cars-modal-car [visible]="showModalEdit" [carToEdit]="car!" [title]="'Edición de ' + car?.name" (confirm)="closeModalEdit()" (cancel)="closeModalEdit()">\</cars-modal-car>
+
+<!-- <cars-modal-car [visible]="showModalEdit" [carToEdit]="car!" [title]="'Edición de ' + car?.name" (confirm)="closeModalEdit()" (cancel)="closeModalEdit()">
+</cars-modal-car> -->

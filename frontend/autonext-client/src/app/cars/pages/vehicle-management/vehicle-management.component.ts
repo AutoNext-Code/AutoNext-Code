@@ -15,8 +15,6 @@ import { CustomModalComponent } from "../../../shared/components/custom-modal/cu
   styleUrl: './vehicle-management.component.css'
 })
 export class VehicleManagementComponent implements OnInit, OnDestroy  {
-
-
   private carService: CarService = inject(CarService);
   private appComponent: AppComponent = inject(AppComponent);
 
@@ -25,7 +23,7 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
   public showModalEdit: boolean;
   public showConfirmModal: boolean = false;
   public carToDeleteId: number | null = null;
-
+  public carToEdit: CarDto | null = null;
 
   constructor() {
     this.cars = [];
@@ -54,10 +52,16 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
 
   openModal() {
     this.showModalEdit = true;
+    this.carToEdit = null; // Al abrir el modal para crear, no debería haber coche a editar.
   }
 
   closeModal() {
     this.showModalEdit = false;
+  }
+
+  openEditModal(car: CarDto) {
+    this.showModalEdit = true;
+    this.carToEdit = car; // Se pasa el coche para edición
   }
 
   handleNewCar(newCar: CarDto) {
@@ -67,16 +71,33 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
         this.loadCars();
         this.appComponent.showToast('success', '', response, 3000);
       },
-      error: (error) => {
+      error: () => {
         this.appComponent.showToast('error', '❌ Error al añadir el coche.', "", 3000);
       }
     });
   }
 
+  handleEditCar(updatedCar: CarDto) {
+    console.log(updatedCar)
+    if (updatedCar.id) {
+      this.carService.updateCar(updatedCar).subscribe({
+        next: (response) => {
+          this.closeModal();
+          this.loadCars();
+          this.appComponent.showToast('success', 'Coche actualizado', '', 3000);
+        },
+        error: () => {
+          this.appComponent.showToast('error', '❌ Error al actualizar el coche.', "", 3000);
+        }
+      });
+    } else {
+      this.appComponent.showToast('error', '❌ El coche no tiene ID para actualizar.', "", 3000);
+    }
+  }
+
   openDeleteConfirmation(id: number) {
     this.carToDeleteId = id;
     this.showConfirmModal = true;
-    console.log("Abriendo modla aaaaaaaa")
   }
 
   confirmDelete() {
@@ -103,5 +124,4 @@ export class VehicleManagementComponent implements OnInit, OnDestroy  {
     this.showConfirmModal = false;
     this.carToDeleteId = null;
   }
-
 }

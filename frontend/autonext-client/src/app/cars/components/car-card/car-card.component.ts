@@ -12,11 +12,14 @@ import { ModalCarComponent } from "../modal-car/modal-car.component";
 export class CarCardComponent {
   @Input() car: CarDto | null = null;
   @Output() delete = new EventEmitter<number>();
+  @Output() edit = new EventEmitter<CarDto>();
 
   public showModalEdit: boolean = false;
 
   openModalEdit() {
-    this.showModalEdit = true;
+    // this.showModalEdit = true;
+    this.edit.emit(this.car!); // Emitimos el coche para edición
+    console.log(this.car);
   }
 
   closeModalEdit() {
