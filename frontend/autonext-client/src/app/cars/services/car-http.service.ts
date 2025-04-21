@@ -14,5 +14,11 @@ export class CarHttpService {
   getCarsByUser(): Observable<CarDto[]> {
     return this.http.get<CarDto[]>(CARS_USER_ENDPOINT);
   }
-    
+
+  createCar(car: CarDto): Observable<string> {
+    return this.http.post<string>(CARS_USER_ENDPOINT, car, {
+      responseType: 'text' as 'json'
+    });
+  }
+
 }
