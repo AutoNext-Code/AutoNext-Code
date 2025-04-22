@@ -196,9 +196,9 @@ public class BookingService {
     throw new SecurityException("Usuario no autenticado correctamente");
   }
 
-  public boolean checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
+  public String checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
 
-    return true ;
+    return "";
 
   }
 
