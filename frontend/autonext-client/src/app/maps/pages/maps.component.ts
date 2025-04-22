@@ -19,6 +19,8 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { PlugType } from '@maps/enums/plugType.enum';
 import { CommonModule } from '@angular/common';
 import { MapService } from '@maps/services/map.service';
+import { AuthService } from '@auth/services/auth.service';
+import { AppComponent } from '../../app.component';
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent, CommonModule],
@@ -48,8 +50,10 @@ export class MapsComponent implements OnInit {
   modal: boolean = true;
   carData!: SpaceData;
 
-  public dataRequestService: DataRequestService = inject(DataRequestService);
-  private mapService: MapService = inject(MapService);
+  public dataRequestService = inject(DataRequestService);
+  private mapService = inject(MapService);
+  private authService = inject(AuthService);
+  private appComponente = inject(AppComponent);
 
   ngOnInit(): void {
     this.isLoaded = false;
@@ -125,6 +129,12 @@ export class MapsComponent implements OnInit {
   toggleModal(spaceId: number, plugType: string): void {
     if (this.justClosed) {
       return;
+    }
+
+    if(this.authService.isUserPenalized()) {
+      this.appComponente.showToast("error",   "Acceso restringido",
+        "No puedes realizar reservas porque estás penalizado actualmente.", 1600);
+      return
     }
 
     this.carData = {

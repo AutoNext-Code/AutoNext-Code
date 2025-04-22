@@ -39,7 +39,7 @@ public class ReservationExpirationService {
         if (booking.getStatus() == BookingStatus.Pending) {
 
           booking.setConfirmationStatus(ConfirmationStatus.Expired);
-          strikeService.setBookingStrike(booking, date, expiredTime, StrikeReason.NOTCONFIRMED);
+          strikeService.setBookingStrike(booking, date, now.toLocalTime(), StrikeReason.NOTCONFIRMED);
           
 
           // TODO: Aqui es donde se informara que recivio un strike

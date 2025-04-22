@@ -51,6 +51,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
         @Query("UPDATE Booking b SET b.car = null WHERE b.car.id = :carId")
         void carDeletionUnbound(@Param("carId") int carId);
 
+        @Query("SELECT COUNT(b) FROM Booking b WHERE b.car.id = :carId AND (b.status = :statusA OR b.status = :statusB)")
+        long countPendingBookingsByCarId(@Param("carId") int carId, @Param("statusA") BookingStatus statusA, @Param("statusB") BookingStatus statusB);
+
         @Query("""
                 SELECT CASE WHEN COUNT(b) > 0 THEN TRUE ELSE FALSE END
                 FROM Booking b

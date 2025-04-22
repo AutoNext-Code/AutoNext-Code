@@ -25,7 +25,7 @@ export class AuthService {
     }
   }
 
-  
+
   // Token y sesión
   public setToken(token: string): void {
     this.tokenSubject.next(token);
@@ -62,7 +62,7 @@ export class AuthService {
     this.confirmEmailSubject.next(message);
   }
 
-  
+
   // Decodificación del token
   private decodeToken(): void {
     const token = this.tokenSubject.value;
@@ -82,5 +82,9 @@ export class AuthService {
       this.role = null;
       this.name = null;
     }
+  }
+
+  public isUserPenalized(): boolean {
+    return this.role == "Penalized";
   }
 }
