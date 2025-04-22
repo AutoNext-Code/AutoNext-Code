@@ -1,0 +1,26 @@
+<div class="p-6 space-y-7 max-w-6xl mx-auto">
+    <!-- ENCABEZADO -->
+    <div class="flex items-center justify-center">
+      <h1 class="text-3xl sm:text-5xl text-center font-title">
+        Dashboard de {{ userName }}
+      </h1>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div></div>
+        <div>
+          <label class="block text-sm font-medium" for="select1">Selecciona un mes</label>
+          <select
+            class="w-full border p-2 rounded"
+          >
+          @for (month of months; track $index) {
+            <option [value]="month.id">
+            {{ month.name }}
+            </option>
+          }
+          </select>
+        </div>
+        <div></div>
+      </div>
+    
+    
+</div>  

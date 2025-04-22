@@ -17,11 +17,19 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
   
   Optional<Car> findByCarPlate(String carPlate);
 
+  
+
   List<Car> findByUser(User user);
 
   @Modifying
   @Query("Delete from Car c where c.id=?1")
   int delByIdPer(int id);
+
+
+  Optional<Car> findByNameAndUser(String name, User user);
+
+
+  
 
 
 

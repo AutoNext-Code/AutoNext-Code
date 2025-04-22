@@ -1,11 +1,16 @@
-<label class="block text-sm font-medium mb-1 text-gray-500" for="plugTypeSelect">Tipo de cargador:</label>
+<label class="block text-sm font-medium mb-1 text-gray-500" for="plugTypeSelect">
+  Tipo de cargador:
+</label>
 <select
+  id="plugTypeSelect"
   [(ngModel)]="selectedPlugType"
   (ngModelChange)="getSelectedPlugTypeValue()"
+  (blur)="onBlur()"
+  [disabled]="isDisabled"
   class="w-[300px] h-11 border border-gray-400 text-gray-700 rounded px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-mydarkblue"
   style="cursor: pointer;"
 >
   <option *ngFor="let type of plugTypes" [ngValue]="type" style="cursor: pointer;">
-    {{ type === "Undefined" ? "Sin especificar" : type }}
+    {{ type === 'Undefined' ? 'Sin especificar' : type }}
   </option>
 </select>

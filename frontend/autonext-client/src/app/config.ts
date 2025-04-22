@@ -28,6 +28,8 @@ export const BOOKINGS_ENDPOINT = `${API_BASE_URL}bookings`;
 
 export const BOOKINGS_LIST_ENDPOINT = `${API_BASE_URL}bookings/booking-list`;
 
+export const BOOKINGS_USER_CHECK = `${API_BASE_URL}bookings/can-book`;
+
 export const BOOKING_CANCEL_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOINT}/${id}/cancel`;
 export const BOOKING_CONFIRMATION_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOINT}/${id}/confirmation`;
 

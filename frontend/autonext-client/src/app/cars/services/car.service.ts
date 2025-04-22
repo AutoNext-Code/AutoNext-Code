@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { CarHttpService } from './car-http.service';
-import { AuthService } from '@auth/services/auth.service';
 import { CarDto } from '../interfaces/car.interface';
 import { catchError, Observable, throwError } from 'rxjs';
 
@@ -28,4 +27,22 @@ export class CarService {
     );
   }
 
+
+  updateCar(car: CarDto): Observable<string> {
+    return this.carHttp.updateCar(car).pipe(
+      catchError((error) => {
+        console.error('Error al actualizar el coche:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  deleteCar(id: number): Observable<string> {
+    return this.carHttp.deleteCar(id).pipe(
+      catchError((error) => {
+        console.error('Error al eliminar el coche:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }

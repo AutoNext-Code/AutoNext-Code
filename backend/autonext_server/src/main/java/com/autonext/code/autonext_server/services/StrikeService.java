@@ -30,7 +30,7 @@ public class StrikeService {
         Strike strike = new Strike(date, time, reason, booking.getUser());
         strikeRepository.save(strike);
 
-        if(user.getStrikes().size()>2){
+        if(strikeRepository.findActiveStrikeByUser(user.getId()).size()>2){
             user.setPenalized(true);
         }
 
