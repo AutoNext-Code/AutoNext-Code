@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autonext.code.autonext_server.dto.BookCheckDTO;
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
@@ -35,6 +36,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -130,6 +133,20 @@ public class BookingController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
   }
+
+  @PostMapping("/can-book")
+  public boolean checkUserCanBook( @Valid @RequestBody(required = true) BookCheckDTO body) {
+
+      System.out.println("\u001B[31m"+body+"\u001B[0m");
+
+      DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+      LocalTime start = LocalTime.parse(body.getStartTime(), timeFormatter);
+      LocalTime end   = LocalTime.parse(body.getEndTime(),   timeFormatter);
+
+      return bookingService.checkIfUserCanBook(body.getDate(), start, end);
+  }
+
 
   /*
    * GUARDADO PARA EL ADMIN

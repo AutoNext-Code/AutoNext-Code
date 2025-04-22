@@ -1,9 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
 import java.time.LocalDate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -92,9 +90,6 @@ public class BookingService {
       dto.getEndTime()   
   );
   
-
-    System.out.println("\u001B[31m"+solapa+"\u001B[0m");
-
     if (solapa) {
       throw new OverlappingBookingException(
           "Ya existe una reserva que cruza con el horario solicitado: "
@@ -200,6 +195,13 @@ public class BookingService {
 
     throw new SecurityException("Usuario no autenticado correctamente");
   }
+
+  public boolean checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
+
+    return true ;
+
+  }
+
 }
 
   

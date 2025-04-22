@@ -43,12 +43,13 @@ export class MapsComponent implements OnInit {
 
   variable: boolean = true;
 
+  userCanBook: boolean = true;
   isLoaded: boolean = false;
   modal: boolean = true;
   carData!: SpaceData;
 
-  public dataRequestService = inject(DataRequestService);
-  private mapService = inject(MapService);
+  public dataRequestService: DataRequestService = inject(DataRequestService);
+  private mapService: MapService = inject(MapService);
 
   ngOnInit(): void {
     this.isLoaded = false;
@@ -131,6 +132,8 @@ export class MapsComponent implements OnInit {
       parkingSpaceId: spaceId,
       plugType: plugType,
     };
+    
+    this.userCanBook = this.mapService.checkUserCanBook(this.carData.date, this.carData.startTime, this.carData.endTime) ;
 
     this.modal = false;
   }

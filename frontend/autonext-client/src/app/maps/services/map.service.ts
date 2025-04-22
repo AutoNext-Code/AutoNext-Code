@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 
 import { Chart } from '@maps/interfaces/Chart.interface';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
@@ -16,7 +16,6 @@ export class MapService {
   public maps$: BehaviorSubject<Chart | null> =
     new BehaviorSubject<Chart | null>(null);
 
-  //CentersMaps
   private centersMapsData = new BehaviorSubject<CentersMaps[]>([]);
   centersMaps$ = this.centersMapsData.asObservable();
 
@@ -41,4 +40,22 @@ export class MapService {
         },
       });
   }
+
+  checkUserCanBook(date: string, startTime: string, endTime: string): boolean {
+
+    let canBook!: boolean ;
+
+    this.maphttp.getCanUserBook(date, startTime, endTime).subscribe({
+      next: (data) => {
+        canBook = data;
+      },
+      error: () => {
+        console.error('Error al cargar los datos');
+      },
+    });
+
+    return canBook ;
+
+  }
+
 }
