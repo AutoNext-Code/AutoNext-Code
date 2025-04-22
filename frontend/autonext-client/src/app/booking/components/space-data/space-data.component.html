@@ -50,18 +50,20 @@
         </div>
       </div>
       <div class="bg-gray-200 px-4 py-3 flex">
-        <app-custom-button
+        @if(canBook.message === "") {
+          
+          <app-custom-button
           (click)="closeModal()"
           [color]="'gray'"
           [icon]="'close'"
           [label]="'Cerrar'"
           class="flex-2 rounded"
           [disabled]="clicked"
-        >
+          >
         </app-custom-button>
-
+        
         <div class="flex-2"></div>
-
+        
         <app-custom-button
           (click)="
             postBooking({
@@ -72,14 +74,19 @@
               parkingSpaceId: this.spaceData.parkingSpaceId,
               userId: this.spaceData.userId
             })
-          "
+            "
           [color]="'dark-blue'"
           [icon]="'book'"
           [label]="'Reservar'"
           class="flex-2 rounded"
           [disabled]="clicked"
-        >
+          >
         </app-custom-button>
+       } @else {
+
+        <h1 class="text-red-500 text-2xl text-center">{{canBook.message}}</h1>
+
+       }
       </div>
     </div>
   </div>

@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 import { Chart } from '@maps/interfaces/Chart.interface';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 import { MapParams } from '@maps/interfaces/MapParams.interface';
 import { MapHttpService } from './map-http.service';
+import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -41,20 +42,9 @@ export class MapService {
       });
   }
 
-  checkUserCanBook(date: string, startTime: string, endTime: string): boolean {
+  checkUserCanBook(date: string, startTime: string, endTime: string): Observable<CanBookResponse> {
 
-    let canBook!: boolean ;
-
-    this.maphttp.getCanUserBook(date, startTime, endTime).subscribe({
-      next: (data) => {
-        canBook = data;
-      },
-      error: () => {
-        console.error('Error al cargar los datos');
-      },
-    });
-
-    return canBook ;
+    return this.maphttp.getCanUserBook(date, startTime, endTime) ;
 
   }
 
