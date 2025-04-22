@@ -25,10 +25,11 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
   @Query("Delete from Car c where c.id=?1")
   int delByIdPer(int id);
 
-  /* @Query("SELECT c FROM Car c WHERE c.user=:user AND c.carName=:carName")
-  Optional<Car> findCarNameByUser(@Param("name") String carName, @Param("user") User user); */
 
   Optional<Car> findByNameAndUser(String name, User user);
+
+
+  
 
 
 

@@ -98,12 +98,7 @@ public class CarService {
             throw new OwnerException("El vehículo no le pertenece al usuario registrado");
         }
 
-        //Reformular para que sea desde consulta mysql
-        boolean pendingBooking = car.getBookings().stream()
-            .anyMatch(booking -> booking.getStatus().equals(BookingStatus.Active) ||
-                booking.getStatus().equals(BookingStatus.Pending));
-
-        if (pendingBooking) {
+        if (bookingRepository.countPendingBookingsByCarId(car.getId(), BookingStatus.Active, BookingStatus.Pending) > 0) {
             throw new ActiveBookingsException("El vehículo tiene reservas pendientes");
         }
 
