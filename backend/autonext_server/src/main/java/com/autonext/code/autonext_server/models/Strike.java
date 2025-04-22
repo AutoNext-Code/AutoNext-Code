@@ -31,6 +31,9 @@ public class Strike {
     @Column(nullable = false)
     private StrikeReason reason;
 
+    @Column(nullable= false)
+    private boolean active;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -45,6 +48,7 @@ public class Strike {
         this.time=time;
         this.date=date;
         this.reason=reason;
+        this.active= true;
     }
 
     public int getId() {
@@ -67,6 +71,11 @@ public class Strike {
         return user;
     }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    
     
     
 }
