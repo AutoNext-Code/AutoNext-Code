@@ -44,3 +44,7 @@ export const CARS_USER_ENDPOINT = `${API_BASE_URL}cars`;
 /* ENDPOINT PARA WORKCENTER */
 
 export const CENTER_NAME_ENDPOINT = `${API_BASE_URL}parking/centers-names`;
+
+/* ENDPOINT PARA DASHBOARD */ 
+
+export const DASHBOARD = `${API_BASE_URL}dashboard`;
