@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { CarHttpService } from './car-http.service';
-import { AuthService } from '@auth/services/auth.service';
 import { CarDto } from '../interfaces/car.interface';
 import { catchError, Observable, throwError } from 'rxjs';
 
