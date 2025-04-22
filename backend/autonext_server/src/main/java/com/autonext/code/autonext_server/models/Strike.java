@@ -78,4 +78,7 @@ public class Strike {
     
     
     
+    public boolean isActive() {
+        return active;
+    }
 }

@@ -4,5 +4,5 @@ export interface CarDto {
     id?: number;
     carPlate: string;
     name: string;
-    plugType: PlugType;
+    plugType: string;
 }

@@ -28,162 +28,144 @@ import com.autonext.code.autonext_server.repositories.UserRepository;
 
 @Service
 public class CarService {
-    
-    @Autowired
-    private CarRepository carRepository;
 
-    @Autowired
-    private BookingRepository bookingRepository;
+  @Autowired
+  private CarRepository carRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private BookingRepository bookingRepository;
 
-    public List<CarDTO> GetCarsByUserId(int userId) {
-        
-        try {
-            Optional<User> user = userRepository.findById(userId);
+  @Autowired
+  private UserRepository userRepository;
 
-            if (user.isEmpty()) {
-                throw new UserNotFoundException("Usuario no existente.");
-            }
-    
-            List<Car> cars = carRepository.findByUser(user.get());
-            
-            List<CarDTO> carDTOs = CarMapper.toListCarDTO(cars);
-    
-            return carDTOs;
-        } catch (UserNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener coches del usuario.", e);
-        }
+  public List<CarDTO> GetCarsByUserId(int userId) {
 
+    try {
+      Optional<User> user = userRepository.findById(userId);
+
+      if (user.isEmpty()) {
+        throw new UserNotFoundException("Usuario no existente.");
+      }
+
+      List<Car> cars = carRepository.findByUser(user.get());
+
+      List<CarDTO> carDTOs = CarMapper.toListCarDTO(cars);
+
+      return carDTOs;
+    } catch (UserNotFoundException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new RuntimeException("Error al obtener coches del usuario.", e);
     }
 
-    public void createCar(CarDTO carDTO){
-        int userId = getAuthenticatedUserId();
+  }
 
-        if (carRepository.findByCarPlate(carDTO.getCarPlate()).isPresent()){
-            throw new CarAlreadyExistsException("La matrícula ya está registrada en el sistema");
-        }
+  public void createCar(CarDTO carDTO) {
+    int userId = getAuthenticatedUserId();
 
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
-
-        if((carDTO.getCarPlate().isBlank())||carDTO.getCarPlate().isEmpty()){
-            throw new CarPlateNotValidException("La matrícula no es válida");
-        }
-
-
-        Car car = new Car(
-            carDTO.getCarPlate(),
-            carDTO.getName(),
-            carDTO.getPlugType(),
-            user
-        );
-
-        carRepository.save(car);
-
-
+    if (carRepository.findByCarPlate(carDTO.getCarPlate()).isPresent()) {
+      throw new CarAlreadyExistsException("La matrícula ya está registrada en el sistema");
     }
 
-    public void deleteCar(int id){
-        int userId = getAuthenticatedUserId();
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-        Car car = carRepository.findById(id)
-            .orElseThrow(() -> new CarNotExistsException("Vehículo no encontrado"));
-
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("Usuario no encotrado"));
-
-
-        if(car.getUser()==user){
-
-            boolean pendingBooking = car.getBookings().stream()
-                .anyMatch(booking -> 
-                    booking.getStatus().equals(BookingStatus.Active) || 
-                    booking.getStatus().equals(BookingStatus.Pending)
-                );
-            
-            if(!pendingBooking){
-
-                if(user.getCars().size()>1){
-                    bookingRepository.carDeletionUnbound(car.getId());
-    
-                    carRepository.delByIdPer(car.getId());
-                }else{
-                    throw new CarsOwnedException("Es el único vehículo registrado");
-                }
-
-            }else{
-                throw new ActiveBookingsException("El vehículo tiene reservas pendientes");
-            }
-            
-            
-        }else{
-            throw new OwnerException("El vehículo no le pertenece al usuario registrado");
-        }
-
+    if ((carDTO.getCarPlate().isBlank()) || carDTO.getCarPlate().isEmpty()) {
+      throw new CarPlateNotValidException("La matrícula no es válida");
     }
 
+    Car car = new Car(
+        carDTO.getCarPlate(),
+        carDTO.getName(),
+        carDTO.getPlugType(),
+        user);
 
+    carRepository.save(car);
 
-    public void updateCar(CarDTO carDTO){
+  }
 
-        int userId = getAuthenticatedUserId();
+  public void deleteCar(int id) {
+    int userId = getAuthenticatedUserId();
 
-        Car car = carRepository.findById(carDTO.getId())
-            .orElseThrow(() -> new CarNotExistsException("Vehículo no encontrado"));
+    Car car = carRepository.findById(id)
+        .orElseThrow(() -> new CarNotExistsException("Vehículo no encontrado"));
 
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("Usuario no encotrado"));
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encotrado"));
 
+    if (car.getUser() == user) {
 
-        if(car.getUser()==user){
+      boolean pendingBooking = car.getBookings().stream()
+          .anyMatch(booking -> booking.getStatus().equals(BookingStatus.Active) ||
+              booking.getStatus().equals(BookingStatus.Pending));
 
-            boolean plateInUse = carRepository.findAll().stream().anyMatch(c -> c.getCarPlate().equals(carDTO.getCarPlate()));
-            boolean nameInUse = carRepository.findByUser(user).stream().anyMatch(c -> c.getName().equals(carDTO.getName()));
+      if (!pendingBooking) {
 
-            if(!plateInUse){
-                car.setCarPlate(carDTO.getCarPlate());
-            }else{
-                throw new CarPlateAlreadyExistsException("La matrícula ya está en uso");
-            }
+        if (user.getCars().size() > 1) {
+          bookingRepository.carDeletionUnbound(car.getId());
 
-            if(!nameInUse){
-                car.setName(carDTO.getName());
-            }else{
-                throw new CarNameInUseException("El usuario ya tiene un coche con este nombre");
-            }
-            
-           
-            car.setPlugType(carDTO.getPlugType());
-
-
-            
-            
-            
-        }else{
-            throw new OwnerException("El vehículo no le pertenece al usuario registrado");
+          carRepository.delByIdPer(car.getId());
+        } else {
+          throw new CarsOwnedException("Es el único vehículo registrado");
         }
 
+      } else {
+        throw new ActiveBookingsException("El vehículo tiene reservas pendientes");
+      }
 
-
+    } else {
+      throw new OwnerException("El vehículo no le pertenece al usuario registrado");
     }
 
+  }
 
-    private int getAuthenticatedUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
+  public void updateCar(CarDTO carDTO) {
 
-        if (principal instanceof User user) {
-        return user.getId();
-        }
+    int userId = getAuthenticatedUserId();
 
-        throw new SecurityException("Usuario no autenticado correctamente");
+    Car car = carRepository.findById(carDTO.getId())
+        .orElseThrow(() -> new CarNotExistsException("Vehículo no encontrado"));
+
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encotrado"));
+
+    if (!(car.getUser() == user)) {
+      throw new OwnerException("El vehículo no le pertenece al usuario registrado");
     }
 
+    if (!car.getCarPlate().equals(carDTO.getCarPlate())) {
+      boolean plateInUse = carRepository.findAll().stream().anyMatch(c -> c.getCarPlate().equals(carDTO.getCarPlate()));
 
-    
+      if (!plateInUse) {
+        car.setCarPlate(carDTO.getCarPlate());
+      } else {
+        throw new CarPlateAlreadyExistsException("La matrícula ya está en uso");
+      }
+    }
+
+    if (!car.getName().equals(carDTO.getName())) {
+      boolean nameInUse = carRepository.findByUser(user).stream().anyMatch(c -> c.getName().equals(carDTO.getName()));
+
+      if (!nameInUse) {
+        car.setName(carDTO.getName());
+      } else {
+        throw new CarNameInUseException("El usuario ya tiene un coche con este nombre");
+      }
+    }
+
+    car.setPlugType(carDTO.getPlugType());
+
+  }
+
+  private int getAuthenticatedUserId() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+
+    if (principal instanceof User user) {
+      return user.getId();
+    }
+
+    throw new SecurityException("Usuario no autenticado correctamente");
+  }
 
 }

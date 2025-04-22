@@ -14,7 +14,7 @@ export const REGISTER_ENDPOINT = `${API_BASE_URL}auth/register`;
 export const CONFIRM_EMAIL_ENDPOINT = `${API_BASE_URL}auth/email-confirmation`;
 
 export const FORGET_PASSWORD = `${API_BASE_URL}auth/forget-password`;
-export const RESET_PASSWORD = `${API_BASE_URL}auth/reset-password`;
+export const RESET_PASSWORD = (token: string) => `${API_BASE_URL}auth/reset-password/${token}`;
 
 /* ENDPOINTS DE MAP-Service  */
 
@@ -34,6 +34,8 @@ export const BOOKING_CONFIRMATION_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOIN
 /* ENDPOINTS DE USER */
 
 export const DATA_PROFILE_ENDPOINT = `${API_BASE_URL}user/profile`;
+
+export const PROFILE_EDIT_ENDPOINT = `${API_BASE_URL}user/edit`;
 
 export const PASSWORD_CHANGE_ENDPOINT = `${API_BASE_URL}user/password-edit`;
 
