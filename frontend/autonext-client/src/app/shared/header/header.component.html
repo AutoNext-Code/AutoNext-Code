@@ -1,7 +1,7 @@
 <header class="bg-mydark-blue text-white flex justify-between items-center px-6 py-3 shadow-md">
 
   <div class="flex items-center">
-      <img src="assets/logo.png" alt="Logo" class="h-10" (click)="navigate('/home')">
+      <img src="assets/logo.png" alt="Logo" class="cursor-pointer h-10" (click)="navigate('/home')">
   </div>
 
   <div class="hidden md:flex gap-4" *ngIf="token">
@@ -11,7 +11,7 @@
       </app-custom-button>
   </div>
 
-  <button class="md:hidden flex items-center" (click)="toggleMenu()"><span class="material-icons scale-120">menu</span></button>
+  <button class="md:hidden flex items-center cursor-pointer" (click)="toggleMenu()"><span class="material-icons scale-120">menu</span></button>
 
   <div *ngIf="menuOpen && token" class="absolute top-20 right-4 rounded-lg shadow-lg py-3 px-5 flex flex-col space-y-2 md:hidden">
       <app-custom-button label="Bienvenido, {{name}}" icon="person" class="rounded-lg" (onClick)="navigate('/profile')">
