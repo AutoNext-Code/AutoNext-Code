@@ -69,8 +69,6 @@ public class User implements UserDetails {
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
 
-  @Column
-  private boolean penalized;
 
 
   public User() {
@@ -79,7 +77,6 @@ public class User implements UserDetails {
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
-    this.penalized=false;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
@@ -218,13 +215,6 @@ public class User implements UserDetails {
   }
 
 
-  public boolean isPenalized() {
-    return penalized;
-  }
-
-  public void setPenalized(boolean penalized) {
-    this.penalized = penalized;
-  }
 
   
 }

@@ -42,7 +42,7 @@ public class ReservationExpirationService {
           strikeService.setBookingStrike(booking, date, now.toLocalTime(), StrikeReason.NOTCONFIRMED);
           
 
-          // TODO: Aqui es donde se informara que recivio un strike
+
         }
       }
 
