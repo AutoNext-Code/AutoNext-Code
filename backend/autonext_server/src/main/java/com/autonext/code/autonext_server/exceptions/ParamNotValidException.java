@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class CarPlateNotValidException  extends RuntimeException{
-    public CarPlateNotValidException(String message){
+public class ParamNotValidException  extends RuntimeException{
+    public ParamNotValidException(String message){
         super(message);
     }
     

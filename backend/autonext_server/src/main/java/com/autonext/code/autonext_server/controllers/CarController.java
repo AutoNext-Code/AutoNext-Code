@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.CarDTO;
 import com.autonext.code.autonext_server.exceptions.ActiveBookingsException;
-import com.autonext.code.autonext_server.exceptions.CarAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.CarNameInUseException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.CarPlateAlreadyExistsException;
-import com.autonext.code.autonext_server.exceptions.CarPlateNotValidException;
+import com.autonext.code.autonext_server.exceptions.ParamNotValidException;
 import com.autonext.code.autonext_server.exceptions.OwnerException;
 import com.autonext.code.autonext_server.exceptions.CarsOwnedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
@@ -77,12 +76,14 @@ public class CarController {
             carService.createCar(carDTO);
             return ResponseEntity.ok("Vehículo registrado correctamente");
 
-        }catch(CarAlreadyExistsException cae){
+        }catch(CarPlateAlreadyExistsException cae){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La matrícula del coche ya está registrada");
         }catch(UserNotFoundException unf){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
-        }catch(CarPlateNotValidException cpn){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cpn.getMessage());
+        }catch(ParamNotValidException pnv){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Los parámetros no son válidos");
+        }catch(CarNameInUseException cnu){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario ya tiene un coche con este nombre");
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch(Exception e) {
@@ -128,16 +129,18 @@ public class CarController {
             carService.updateCar(carDTO);
             return ResponseEntity.ok("Vehículo actualizado correctamente");
 
+        }catch(CarPlateAlreadyExistsException cae){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La matrícula del coche ya está registrada");
         }catch(UserNotFoundException unf){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
+        }catch(ParamNotValidException pnv){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Los parámetros no son válidos");
+        }catch(CarNameInUseException cnu){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario ya tiene un coche con este nombre");
         }catch(CarNotExistsException cne){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El vehículo no existe");
         }catch(OwnerException coe){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El vehículo no le pertenece al usuario registrado");
-        }catch(CarPlateAlreadyExistsException coe){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La matrícula ya está en uso");
-        }catch(CarNameInUseException coe){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El usuario ya tiene un coche con este nombre");
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e) {
