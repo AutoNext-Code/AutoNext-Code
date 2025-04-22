@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,6 +69,7 @@ public class BookingController {
     return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
   }
 
+  @PreAuthorize("!hasAuthority('Penalized')")
   @PostMapping("")
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {

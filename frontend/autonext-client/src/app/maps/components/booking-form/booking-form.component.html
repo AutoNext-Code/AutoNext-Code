@@ -4,7 +4,7 @@
   <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="dateSelect">Día</label>
-        <input type="date" class="border p-2 rounded w-full" id="dateSelect" formControlName="date" [min]="getDate()" [max]="getDate(7)" />
+        <input type="date" class="border p-2 rounded w-full" id="dateSelect" formControlName="date" [min]="this.dateUtilsService.getDate()" [max]="this.dateUtilsService.getDate(7)" />
     </div>
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="startHourSelect">Hora inicio</label>
@@ -40,7 +40,7 @@
     <div class="flex-1 min-w-[200px] max-w-[300px]">
       <label class="block text-sm font-medium mb-1" for="carSelect">Coche Actual</label>
       <select class="border p-2 rounded w-full" id="carSelect" formControlName="selectedCar">
-        <option *ngFor="let car of cars" [ngValue]="car">
+        <option *ngFor="let car of cars()" [ngValue]="car">
           {{ car.name || car.carPlate }}
         </option>
       </select>
