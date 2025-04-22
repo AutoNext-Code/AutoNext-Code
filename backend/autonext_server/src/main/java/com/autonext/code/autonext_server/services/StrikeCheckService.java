@@ -17,7 +17,7 @@ import com.autonext.code.autonext_server.models.Strike;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.repositories.StrikeRepository;
 
-import jakarta.transaction.Transactional;
+
 
 @Service
 public class StrikeCheckService {
@@ -26,13 +26,7 @@ public class StrikeCheckService {
     private StrikeRepository strikeRepository;
 
     @Scheduled(fixedRate = 86400 * 1000)
-    private void StrikesBGService(){
-
-        StrikeStatusCheck();       
-    }
-
-    @Transactional
-    public void StrikeStatusCheck(){
+    private void StrikesCheck(){
 
         LocalDate now = LocalDate.now();
 
@@ -60,8 +54,8 @@ public class StrikeCheckService {
 
 
 
-        strikeRepository.saveAll(strikesToUpdate);
-
+        strikeRepository.saveAll(strikesToUpdate);    
     }
+
 
 }
