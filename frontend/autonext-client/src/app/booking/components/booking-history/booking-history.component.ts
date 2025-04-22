@@ -15,12 +15,12 @@ import { PaginationComponent } from '@shared/components/ui/pagination/pagination
 import { BookingService } from '@booking/services/booking.service';
 
 import { AuthService } from '@auth/services/auth.service';
-import { CancelModalComponent } from '../cancel-modal/cancel-modal.component';
+import { CustomModalComponent } from '@shared/components/custom-modal/custom-modal.component';
 
 @Component({
   selector: 'booking-history',
   standalone: true,
-  imports: [CommonModule, PaginationComponent, CancelModalComponent],
+  imports: [CommonModule, PaginationComponent, CustomModalComponent],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

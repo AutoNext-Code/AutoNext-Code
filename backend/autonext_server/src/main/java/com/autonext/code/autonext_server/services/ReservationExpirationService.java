@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
+import com.autonext.code.autonext_server.models.enums.StrikeReason;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 
 @Service
@@ -19,6 +20,10 @@ public class ReservationExpirationService {
 
   @Autowired
   private BookingRepository bookingRepository;
+
+  @Autowired
+  private StrikeService strikeService;
+
 
   @Scheduled(fixedRate = 60 * 1000)
   private void checkReservationsExpiredSoon() {
@@ -32,9 +37,11 @@ public class ReservationExpirationService {
     if (!bookings.isEmpty()) {
       for (Booking booking : bookings) {
         if (booking.getStatus() == BookingStatus.Pending) {
+
           booking.setConfirmationStatus(ConfirmationStatus.Expired);
-          booking.setStatus(BookingStatus.Strike);
-          // TODO: Aqui es donde se penaliza al usuario cuando llegue la historia de usuario
+          strikeService.setBookingStrike(booking, date, expiredTime, StrikeReason.NOTCONFIRMED);
+          
+
           // TODO: Aqui es donde se informara que recivio un strike
         }
       }
