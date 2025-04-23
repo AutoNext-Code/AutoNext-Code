@@ -5,11 +5,6 @@ import com.autonext.code.autonext_server.dto.dashboardDtos.DashboardSummaryDto;
 import com.autonext.code.autonext_server.services.dashboard.DashboardPdfService;
 import com.autonext.code.autonext_server.services.dashboard.DashboardService;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,7 +23,7 @@ public class DashboardController {
 
     @GetMapping
     public DashboardSummaryDto getDashboard(
-            @RequestParam int month,
+            @RequestParam(required = false) Integer month,
             @RequestParam int year) {
         return dashboardService.getDashboardForCurrentUser(month, year);
     }
