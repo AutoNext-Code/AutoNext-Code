@@ -10,6 +10,7 @@ import { AuthService } from "@auth/services/auth.service";
 import { BOOKINGS_USER_CHECK, CENTERS_LEVELS, MAP_ENDPOINT } from "../../config";
 
 import { Observable } from "rxjs";
+import { CanBookResponse } from "@maps/interfaces/CanBookResponse";
 
 @Injectable({
   providedIn: 'root',
@@ -25,19 +26,14 @@ export class MapHttpService{
     return this.http.get<any>(`${MAP_ENDPOINT}/${mapId}`);
   }
 
-  getCanUserBook(date: string, startTime: string, endTime: string): Observable<boolean>{
-    let params = new HttpParams();
-
-
-    if(date && startTime && endTime){
-
-      params = params.set('date', date);
-      params = params.set('startHour', startTime+":00");
-      params = params.set('endHour', endTime+":00");
+  getCanUserBook(date: string, startTime: string, endTime: string): Observable<CanBookResponse>{
+    const body = {
+      date: date,
+      startTime: startTime+":00",
+      endTime: endTime+":00",
     }
-    console.log(params) ;
 
-    return this.http.post<boolean>(`${BOOKINGS_USER_CHECK}`, {params});
+    return this.http.post<CanBookResponse>(`${BOOKINGS_USER_CHECK}`, body);
   }
 
   getFormMap(mapParams: MapParams): Observable<Chart>{

@@ -2,6 +2,8 @@ package com.autonext.code.autonext_server.services;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -196,9 +198,40 @@ public class BookingService {
     throw new SecurityException("Usuario no autenticado correctamente");
   }
 
-  public boolean checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
+  public String checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
 
-    return true ;
+    final int LIMITE_DIARIO = 2;
+
+    int userId = getAuthenticatedUserId();
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+    int reservasHoy = bookingRepository.countByUserAndDate(user, date);
+    
+    boolean solapa = bookingRepository.existsOverlappingBooking(
+      user,
+      date,
+      startHour,
+      endHour
+    );
+  
+    if (solapa) {
+      return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour ;
+    }
+
+    if (reservasHoy >= LIMITE_DIARIO) {
+
+      Locale spanish = new Locale("es", "ES");
+
+      DateTimeFormatter fmt = DateTimeFormatter
+          .ofPattern("d 'de' MMMM 'de' uuuu", spanish);
+      String fechaFormateada = date.format(fmt);
+      
+        return "Ha superado el límite de " + LIMITE_DIARIO + " reservas para el día " + fechaFormateada ;
+        
+    }
+
+    return "";
 
   }
 

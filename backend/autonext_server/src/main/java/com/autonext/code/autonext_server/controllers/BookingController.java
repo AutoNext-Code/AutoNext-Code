@@ -39,7 +39,9 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -137,16 +139,16 @@ public class BookingController {
   }
 
   @PostMapping("/can-book")
-  public boolean checkUserCanBook( @Valid @RequestBody(required = true) BookCheckDTO body) {
+  public Map<String, String> checkUserCanBook(
+      @Valid @RequestBody BookCheckDTO body) {
 
-      System.out.println("\u001B[31m"+body+"\u001B[0m");
-
-      DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-      LocalTime start = LocalTime.parse(body.getStartTime(), timeFormatter);
-      LocalTime end   = LocalTime.parse(body.getEndTime(),   timeFormatter);
-
-      return bookingService.checkIfUserCanBook(body.getDate(), start, end);
+    String resultado = bookingService.checkIfUserCanBook(
+         body.getDate(),
+         LocalTime.parse(body.getStartTime(), DateTimeFormatter.ISO_TIME),
+         LocalTime.parse(body.getEndTime(),   DateTimeFormatter.ISO_TIME)
+    );
+    
+    return Collections.singletonMap("message", resultado);
   }
 
 
