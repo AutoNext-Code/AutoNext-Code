@@ -78,11 +78,13 @@ public class BookingSeeder implements CommandLineRunner {
                 booking.setWorkCenter(i % 2 == 0 ? center1 : center2); 
     
                 if (bookingDate.isBefore(LocalDate.now())) {
-                    booking.setStatus(BookingStatus.Completed);
-                    booking.setConfirmationStatus(ConfirmationStatus.Confirmed);
-                } else if (i % 3 == 0) {
-                    booking.setStatus(BookingStatus.Strike);
-                    booking.setConfirmationStatus(ConfirmationStatus.Expired);
+                    if (i % 3 == 0) {
+                        booking.setStatus(BookingStatus.Strike);
+                        booking.setConfirmationStatus(ConfirmationStatus.Expired);
+                    } else {
+                        booking.setStatus(BookingStatus.Completed);
+                        booking.setConfirmationStatus(ConfirmationStatus.Confirmed);
+                    }
                 } else {
                     booking.setStatus(BookingStatus.Pending);
                     booking.setConfirmationStatus(ConfirmationStatus.PendingConfirmation);
