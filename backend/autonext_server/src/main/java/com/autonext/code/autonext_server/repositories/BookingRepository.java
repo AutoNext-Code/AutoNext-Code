@@ -18,6 +18,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
@@ -54,9 +55,14 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
         @Query("SELECT COUNT(b) FROM Booking b WHERE b.car.id = :carId AND (b.status = :statusA OR b.status = :statusB)")
         long countPendingBookingsByCarId(@Param("carId") int carId, @Param("statusA") BookingStatus statusA, @Param("statusB") BookingStatus statusB);
 
+        @Transactional
+        @Modifying
         @Query("Update Booking b SET b.confirmationStatus=:newStatus WHERE b.user=:user AND b.confirmationStatus=:oldstatus")
-        List<Booking> UpdateStatusByUser(@Param("user") User user,@Param("newStatus") ConfirmationStatus newStatys,
+        void UpdateStatusByUser(@Param("user") User user,@Param("newStatus") ConfirmationStatus newStatys,
          @Param("oldstatus") ConfirmationStatus oldstatus);
+
+
+        List<Booking> findByUserAndConfirmationStatus(User user, ConfirmationStatus confirmationStatus);
 
         @Query("""
                 SELECT CASE WHEN COUNT(b) > 0 THEN TRUE ELSE FALSE END
