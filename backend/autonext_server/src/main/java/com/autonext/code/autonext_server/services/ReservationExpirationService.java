@@ -44,6 +44,7 @@ public class ReservationExpirationService {
           booking.setConfirmationStatus(ConfirmationStatus.Expired);
           //strikeService.setBookingStrike(booking, date, now.toLocalTime(), StrikeReason.NOTCONFIRMED);
           
+
           this.emailTemplateService.notifyUserStrikeForNoConfirmation(booking);
         }
       }
