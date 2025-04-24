@@ -56,8 +56,8 @@
             <g
             [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
             (click)="toggleModal(space.id, space.plugType.toString())"
-
-          >
+            class="cursor-pointer"
+            >
             <use
               xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
               width="35" height="44"
@@ -81,13 +81,7 @@
           </g>
           }
 
-
-
         }
-
-
-
-
 
       }
     </svg>
@@ -104,6 +98,7 @@
       (modalEmitter)="closeModal()"
       (reservationMade)="closeModal()"
       [spaceData]="carData"
+      [canBook]="canBook"
     >
     </space-data>
   </div>

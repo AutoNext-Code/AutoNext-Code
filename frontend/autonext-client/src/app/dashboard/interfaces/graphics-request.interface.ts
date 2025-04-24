@@ -1,0 +1,30 @@
+export interface GraphicsRequest {
+    strikes:                  number;
+    banned:                   boolean;
+    totalDaysReserved:        number;
+    totalHoursReserved:       number;
+    averageSessionDuration:   number;
+    confirmedReservations:    number;
+    unconfirmedReservations:  number;
+    monthlyDaysReserved:      Monthly[];
+    monthlyHoursReserved:     Monthly[];
+    monthlyAvgDuration:       Monthly[];
+    monthlyConfirmationStats: MonthlyConfirmationStat[];
+    weeklyHoursReserved:      WeeklyHoursReserved[];
+}
+
+export interface Monthly {
+    month: string;
+    value: number;
+}
+
+export interface MonthlyConfirmationStat {
+    month:       string;
+    confirmed:   number;
+    unconfirmed: number;
+}
+
+export interface WeeklyHoursReserved {
+    day:        string;
+    totalHours: number;
+}

@@ -9,18 +9,25 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { Space } from '@maps/interfaces/Space.interface';
-import { Direction } from '@maps/enums/direction.enum';
 import { State } from '@maps/enums/state.enum';
+import { PlugType } from '@maps/enums/plugType.enum';
+import { Direction } from '@maps/enums/direction.enum';
+import { MapService } from '@maps/services/map.service';
+import { Space } from '@maps/interfaces/Space.interface';
 import { DataRequestService } from '@maps/services/data-request.service';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
-import { PlugType } from '@maps/enums/plugType.enum';
+
 import { CommonModule } from '@angular/common';
-import { MapService } from '@maps/services/map.service';
+
 import { AuthService } from '@auth/services/auth.service';
+
 import { AppComponent } from '../../app.component';
+
+import { Observable } from 'rxjs';
+import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
+
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent, CommonModule],
@@ -45,7 +52,9 @@ export class MapsComponent implements OnInit {
 
   variable: boolean = true;
 
+  userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
+  canBook: CanBookResponse = {message: ""};
   modal: boolean = true;
   carData!: SpaceData;
 
@@ -141,7 +150,18 @@ export class MapsComponent implements OnInit {
       parkingSpaceId: spaceId,
       plugType: plugType,
     };
+    
+    this.userCanBook = this.mapService.checkUserCanBook(this.carData.date, this.carData.startTime, this.carData.endTime) ;
 
+    this.userCanBook.subscribe({
+      next: (data) => {
+        this.canBook = data ;
+      },
+      error: (error) => {
+        console.error('Error al verificar la disponibilidad:', error);
+      }
+    });
+        
     this.modal = false;
   }
 

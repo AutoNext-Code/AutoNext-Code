@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CarDto } from '../../interfaces/car.interface';
 import { CommonModule } from '@angular/common';
-import { ModalCarComponent } from "../modal-car/modal-car.component";
 
 @Component({
   selector: 'car-card',
-  imports: [CommonModule, ModalCarComponent],
+  imports: [CommonModule],
   templateUrl: './car-card.component.html',
   styleUrl: './car-card.component.css'
 })
