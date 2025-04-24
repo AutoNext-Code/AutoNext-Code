@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { DASHBOARD } from '../../config';
+import { DASHBOARD, DASHBOARD_PDF, DASHBOARD_YEARS } from '../../config';
 import { DashboardDTO } from '../models/dashboard.model';
 import { Observable } from 'rxjs';
+import { DashboardExportRequest } from '../interfaces/graphics-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +13,22 @@ export class DashboardHttpService {
 
   constructor() {}
 
-  getDashboard(month: number, year: number): Observable<DashboardDTO> {
-    return this.http.get<DashboardDTO>(
-      `${DASHBOARD}?month=${month}&year=${year}`
-    );
+  getDashboard(month: number | null, year: number): Observable<DashboardDTO> {
+    let params = new HttpParams().set('year', year.toString());
+
+    if (month !== null) {
+      params = params.set('month', month.toString());
+    }
+    return this.http.get<DashboardDTO>(DASHBOARD, { params });
+  }
+
+  exportDashboardPdf(payload: DashboardExportRequest): Observable<Blob> {
+    return this.http.post(DASHBOARD_PDF, payload, {
+      responseType: 'blob',
+    });
+  }
+
+  getAvailableYears(): Observable<number[]> {
+    return this.http.get<number[]>(DASHBOARD_YEARS);
   }
 }

@@ -2,6 +2,7 @@ package com.autonext.code.autonext_server.services.dashboard;
 
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.specifications.BookingSpecifications;
@@ -53,11 +54,14 @@ public class DashboardKpiService {
         return (int) bookingRepository.count(spec);
     }
 
-    public int calculateUnconfirmedReservations(User user, Integer month, int year) {
-        Specification<Booking> inactive = baseSpec(user, month, year, ConfirmationStatus.Inactive);
-        Specification<Booking> expired = baseSpec(user, month, year, ConfirmationStatus.Expired);
+    public int calculateCancelledReservations(User user, Integer month, int year) {
+        Specification<Booking> cancelledSpec = Specification
+                .where(BookingSpecifications.hasUserId(user.getId()))
+                .and(BookingSpecifications.hasYear(year))
+                .and(month != null ? BookingSpecifications.hasMonth(month) : null)
+                .and(BookingSpecifications.hasBookingStatus(BookingStatus.Cancelled));
 
-        return (int) (bookingRepository.count(inactive) + bookingRepository.count(expired));
+        return (int) bookingRepository.count(cancelledSpec);
     }
 
     private Specification<Booking> baseSpec(User user, Integer month, int year, ConfirmationStatus status) {
