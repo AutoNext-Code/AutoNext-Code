@@ -6,7 +6,7 @@
         {{ data?.totalDaysReserved ?? 0 }}
        </span>
     </div>
-    <app-chart [chartOptions]="daysReservedChartOptions"></app-chart>
+    <app-custom-chart [chartOptions]="daysReservedChartOptions"></app-custom-chart>
   </div>
   <div class="border-card rounded-lg py-2 px-4">
     <h2 class="text-center mt-2 text-2xl">Horas Reservadas</h2>
@@ -15,7 +15,7 @@
        {{ data?.totalHoursReserved ?? 0 }}
       </span>
    </div>
-    <app-chart [chartOptions]="hoursReservedChartOptions"></app-chart>
+    <app-custom-chart [chartOptions]="hoursReservedChartOptions"></app-custom-chart>
   </div>
   <div class="border-card rounded-lg py-2 px-4">
     <h2 class="text-center mt-2 text-2xl">Duración Promedia de Reserva</h2>
@@ -24,7 +24,7 @@
        {{ data?.averageSessionDuration ?? 0 }}
       </span>
    </div>
-    <app-chart [chartOptions]="avgDurationChartOptions"></app-chart>
+    <app-custom-chart [chartOptions]="avgDurationChartOptions"></app-custom-chart>
   </div>
   <div class="border-card rounded-lg py-2 px-4">
     <h2 class="text-center mt-2 text-2xl">Reservas Confirmadas</h2>
@@ -33,7 +33,7 @@
        {{ data?.confirmedReservations ?? 0 }}
       </span>
    </div>
-    <app-chart [chartOptions]="confirmedStatsChartOptions"></app-chart>
+    <app-custom-chart [chartOptions]="confirmedStatsChartOptions"></app-custom-chart>
   </div>
   <div class="border-card rounded-lg py-2 px-4">
     <h2 class="text-center mt-2 text-2xl">Reservas No Confirmadas</h2>
@@ -42,8 +42,6 @@
        {{ data?.unconfirmedReservations ?? 0 }}
       </span>
    </div>
-    <app-chart [chartOptions]="unconfirmedStatsChartOptions"></app-chart>
+    <app-custom-chart [chartOptions]="unconfirmedStatsChartOptions"></app-custom-chart>
   </div>
 </div>
-
-<app-chart></app-chart>

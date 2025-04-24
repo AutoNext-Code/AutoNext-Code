@@ -14,7 +14,7 @@ export interface GraphicsRequest {
 }
 
 export interface Monthly {
-    month: string;
+    month?: string;
     value: number;
 }
 
@@ -28,3 +28,14 @@ export interface WeeklyHoursReserved {
     day:        string;
     totalHours: number;
 }
+
+
+export interface DashboardExportRequest {
+    month: number | null;
+    year: number;
+    daysPerMonthChart: string;
+    hoursPerMonthChart: string;
+    avgDurationPerMonthChart: string;
+    hoursPerWeekdayChart: string;
+    confirmationsChart: string;
+  }

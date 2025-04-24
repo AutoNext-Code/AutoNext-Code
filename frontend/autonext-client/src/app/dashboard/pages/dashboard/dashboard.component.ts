@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@auth/services/auth.service';
 import { HeaderComponent } from '@shared/header/header.component';
-import { DashboardDTO } from '../../models/dashboard.model';
 import { DashboardService } from '../../services/dashboard.service';
 import { GraphicsComponent } from '../../components/graphics/graphics.component';
+import { DashboardExportRequest } from '../../interfaces/graphics-request.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,14 +18,16 @@ export class DashboardComponent {
   private authService = inject(AuthService);
   private dashboardService = inject(DashboardService);
 
+  @ViewChild(GraphicsComponent) graphicsComponent!: GraphicsComponent;
+
   data = {};
 
   userName = this.authService.getName();
 
 
   myForm = this.fb.group({
-    month: [0],
-    year: [0],
+    month: [null],
+    year: [new Date().getFullYear()],
   })
 
 
@@ -47,11 +49,29 @@ export class DashboardComponent {
   constructor() {
     this.myForm.valueChanges.subscribe(({ month, year }) => {
       console.log("Formulario cambió:", month, year);
-      // Aquí podrías hacer algo adicional si lo necesitas
     });
   }
   
-
-
-
+  
+  exportDashboardPdf(): void {
+    this.graphicsComponent.ensureChartsReady().then(() => {
+      this.graphicsComponent.exportChartsAsBase64().then((charts) => {
+        console.log("🔍 Charts capturados:", charts);
+    
+        const exportRequest: DashboardExportRequest = {
+          daysPerMonthChart: charts.daysPerMonthChart,
+          hoursPerMonthChart: charts.hoursPerMonthChart,
+          avgDurationPerMonthChart: charts.avgDurationPerMonthChart,
+          hoursPerWeekdayChart: charts.hoursPerWeekdayChart,
+          confirmationsChart: charts.confirmationsChart,
+          month: this.myForm.value.month ?? null,
+          year: this.myForm.value.year ?? new Date().getFullYear(),
+        };
+    
+        this.dashboardService.exportDashboardPdf(exportRequest);
+      });
+    });
+    
+  }
+  
 }
