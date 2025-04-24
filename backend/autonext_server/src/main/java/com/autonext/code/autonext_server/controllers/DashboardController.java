@@ -49,9 +49,8 @@ public class DashboardController {
 
     @GetMapping("/years")
     public List<Integer> getAvailableYears() {
-        // Ejemplo simple: del 2023 al año actual
         int currentYear = LocalDate.now().getYear();
-        return IntStream.rangeClosed(2023, currentYear)
+        return IntStream.rangeClosed(2024, currentYear)
                 .boxed()
                 .collect(Collectors.toList());
     }
