@@ -54,6 +54,10 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
         @Query("SELECT COUNT(b) FROM Booking b WHERE b.car.id = :carId AND (b.status = :statusA OR b.status = :statusB)")
         long countPendingBookingsByCarId(@Param("carId") int carId, @Param("statusA") BookingStatus statusA, @Param("statusB") BookingStatus statusB);
 
+        @Query("Update Booking b SET b.confirmationStatus=:newStatus WHERE b.user=:user AND b.confirmationStatus=:oldstatus")
+        List<Booking> UpdateStatusByUser(@Param("user") User user,@Param("newStatus") ConfirmationStatus newStatys,
+         @Param("oldstatus") ConfirmationStatus oldstatus);
+
         @Query("""
                 SELECT CASE WHEN COUNT(b) > 0 THEN TRUE ELSE FALSE END
                 FROM Booking b

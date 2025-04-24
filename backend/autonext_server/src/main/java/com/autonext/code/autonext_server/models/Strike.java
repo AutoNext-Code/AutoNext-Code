@@ -49,6 +49,7 @@ public class Strike {
         this.date=date;
         this.reason=reason;
         this.active= true;
+        this.user=user;
     }
 
     public int getId() {
