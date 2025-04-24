@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { DASHBOARD, DASHBOARD_PDF } from '../../config';
+import { DASHBOARD, DASHBOARD_PDF, DASHBOARD_YEARS } from '../../config';
 import { DashboardDTO } from '../models/dashboard.model';
 import { Observable } from 'rxjs';
 import { DashboardExportRequest } from '../interfaces/graphics-request.interface';
@@ -26,5 +26,9 @@ export class DashboardHttpService {
     return this.http.post(DASHBOARD_PDF, payload, {
       responseType: 'blob',
     });
+  }
+
+  getAvailableYears(): Observable<number[]> {
+    return this.http.get<number[]>(DASHBOARD_YEARS);
   }
 }

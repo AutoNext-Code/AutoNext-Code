@@ -36,11 +36,13 @@ export class DashboardService {
         })
       )
       .subscribe((blob: Blob) => {
-        const month = payload.month ? String(payload.month).padStart(2, '0') : null;
+        const month = payload.month
+          ? String(payload.month).padStart(2, '0')
+          : null;
         const filename = month
           ? `dashboard_${month}-${payload.year}.pdf`
           : `dashboard_${payload.year}.pdf`;
-  
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -50,5 +52,16 @@ export class DashboardService {
         a.remove();
         window.URL.revokeObjectURL(url);
       });
-  }  
+  }
+
+  getAvailableYears(): Observable<number[]> {
+    return this.dashboardHttp.getAvailableYears().pipe(
+      catchError((error) => {
+        console.error('Error al cargar los años disponibles:', error);
+        return throwError(
+          () => new Error('No se pudieron cargar los años disponibles.')
+        );
+      })
+    );
+  }
 }

@@ -51,3 +51,4 @@ export const CENTER_NAME_ENDPOINT = `${API_BASE_URL}parking/centers-names`;
 
 export const DASHBOARD = `${API_BASE_URL}dashboard`;
 export const DASHBOARD_PDF = `${API_BASE_URL}dashboard/export`;
+export const DASHBOARD_YEARS = `${API_BASE_URL}dashboard/years`;

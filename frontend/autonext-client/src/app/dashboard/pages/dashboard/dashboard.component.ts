@@ -33,6 +33,7 @@ export class DashboardComponent implements AfterViewInit {
   @ViewChild(GraphicsComponent) graphicsComponent!: GraphicsComponent;
 
   data = {};
+  years: number[] = [];
 
   userName = this.authService.getName();
 
@@ -59,6 +60,10 @@ export class DashboardComponent implements AfterViewInit {
   ];
 
   constructor(private cdr: ChangeDetectorRef) {
+    this.dashboardService.getAvailableYears().subscribe((res) => {
+      this.years = res;
+    });
+    
     this.myForm.valueChanges.subscribe(({ month, year }) => {
       console.log('Formulario cambió:', month, year);
     });
