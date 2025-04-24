@@ -116,8 +116,8 @@ public class DashboardPdfService {
 
       addChartRow(
           document,
-          request.getUnconfirmedChart(), "Reservas no confirmadas por mes", "Total",
-          String.valueOf(request.getUnconfirmedReservations()),
+          request.getCancelledChart(), "Reservas canceladas por mes", "Total",
+          String.valueOf(request.getCancelledReservations()),
           request.getConfirmationsChart(), "Reservas confirmadas por mes", "Total",
           String.valueOf(request.getConfirmedReservations()),
 
@@ -187,7 +187,7 @@ public class DashboardPdfService {
       String textoBase = title.toLowerCase();
       String pluralizado = totalValue.equals("1")
           ? textoBase.replace("reservadas", "reservada").replace("reservados", "reservado")
-              .replace("reservas", "reserva").replace("confirmadas", "confirmada")
+              .replace("reservas", "reserva").replace("canceladas", "cancelada").replace("confirmadas", "confirmada")
               .replace("no confirmadas", "no confirmada")
               .replace("días", "día").replace("horas", "hora")
           : textoBase;

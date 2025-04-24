@@ -11,7 +11,7 @@ public class DashboardExportRequest {
   private String avgDurationPerMonthChart;
   private String hoursPerWeekdayChart;
   private String confirmationsChart;
-  private String unconfirmedChart;
+  private String cancelledChart;
 
   private int strikes;
   private boolean banned;
@@ -21,7 +21,7 @@ public class DashboardExportRequest {
   private double averageSessionDuration;
   private int totalWeeklyHoursReserved;
   private int confirmedReservations;
-  private int unconfirmedReservations;
+  private int cancelledReservations;
 
   public DashboardExportRequest() {
   }
@@ -74,6 +74,14 @@ public class DashboardExportRequest {
     this.hoursPerWeekdayChart = hoursPerWeekdayChart;
   }
 
+  public String getCancelledChart() {
+    return cancelledChart;
+  }
+
+  public void setCancelledChart(String cancelledChart) {
+    this.cancelledChart = cancelledChart;
+  }
+
   public String getConfirmationsChart() {
     return confirmationsChart;
   }
@@ -114,20 +122,12 @@ public class DashboardExportRequest {
     this.confirmedReservations = confirmedReservations;
   }
 
-  public int getUnconfirmedReservations() {
-    return unconfirmedReservations;
+  public int getCancelledReservations() {
+    return cancelledReservations;
   }
 
-  public void setUnconfirmedReservations(int unconfirmedReservations) {
-    this.unconfirmedReservations = unconfirmedReservations;
-  }
-
-  public String getUnconfirmedChart() {
-    return unconfirmedChart;
-  }
-
-  public void setUnconfirmedChart(String unconfirmedChart) {
-    this.unconfirmedChart = unconfirmedChart;
+  public void setCancelledReservations(int cancelledReservations) {
+    this.cancelledReservations = cancelledReservations;
   }
 
   public int getTotalWeeklyHoursReserved() {
