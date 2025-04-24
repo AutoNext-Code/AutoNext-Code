@@ -208,17 +208,6 @@ public class BookingService {
 
     int reservasHoy = bookingRepository.countByUserAndDate(user, date);
     
-    boolean solapa = bookingRepository.existsOverlappingBooking(
-      user,
-      date,
-      startHour,
-      endHour
-    );
-  
-    if (solapa) {
-      return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour ;
-    }
-
     if (reservasHoy >= LIMITE_DIARIO) {
 
       Locale spanish = new Locale("es", "ES");
@@ -229,6 +218,17 @@ public class BookingService {
       
         return "Ha superado el límite de " + LIMITE_DIARIO + " reservas para el día " + fechaFormateada ;
         
+    }
+
+    boolean solapa = bookingRepository.existsOverlappingBooking(
+      user,
+      date,
+      startHour,
+      endHour
+    );
+  
+    if (solapa) {
+      return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour ;
     }
 
     return "";
