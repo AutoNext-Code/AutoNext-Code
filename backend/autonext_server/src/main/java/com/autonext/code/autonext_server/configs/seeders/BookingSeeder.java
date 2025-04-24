@@ -57,8 +57,16 @@ public class BookingSeeder implements CommandLineRunner {
             WorkCenter center1 = workCenterRepository.findById(1).orElseThrow(); 
             WorkCenter center2 = workCenterRepository.findById(2).orElseThrow(); 
     
-            for (int i = 0; i < 100; i++) {
-                LocalDate bookingDate = LocalDate.of(2024, 1, 1).plusDays(i * 7); 
+            for (int i = 0; i < 200; i++) {
+                LocalDate bookingDate = LocalDate.of(2024, 1, 1).plusDays(i * 4);
+
+                if (i % 2 == 0) {
+                    bookingDate = bookingDate.plusDays(1);
+                }
+
+                if (bookingDate.isAfter(LocalDate.now().plusWeeks(1))) {
+                    break;
+                }
 
                 Booking booking = new Booking(
                         LocalTime.of(9 + i % 5, 0), 
