@@ -26,7 +26,7 @@ public class UnpenaliceService {
     @Scheduled(fixedRate = 86400 * 1000)
     private void UnpenaliceCheck(){
 
-        List<Strike> strikes = strikeRepository.findLatestActiveStrikesOfPenalizedUsers();
+        List<Strike> strikes = strikeRepository.findLatestActiveStrikesOfPenalizedUsers(Role.Penalized);
         LocalDate today = LocalDate.now();
 
         for (Strike strike : strikes) {
