@@ -1,0 +1,7 @@
+.border-card {
+    border: 1px solid var(--dark-blue);
+}
+
+.bg-mydarkblue {
+    background-color: var(--dark-blue);
+}

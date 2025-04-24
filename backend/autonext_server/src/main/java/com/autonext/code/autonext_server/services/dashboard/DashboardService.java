@@ -25,7 +25,7 @@ public class DashboardService {
   @Autowired
   private DashboardStatsService dashboardStatsService;
 
-  public DashboardSummaryDto getDashboardForCurrentUser(int month, int year) {
+  public DashboardSummaryDto getDashboardForCurrentUser(Integer month, int year) {
     int userId = getAuthenticatedUserId();
 
     User user = userRepository.findById(userId)
