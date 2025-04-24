@@ -79,6 +79,9 @@ public class BookingSeeder implements CommandLineRunner {
     
                 if (bookingDate.isBefore(LocalDate.now())) {
                     if (i % 3 == 0) {
+                        booking.setStatus(BookingStatus.Cancelled);
+                        booking.setConfirmationStatus(ConfirmationStatus.Expired);
+                    } else if (i % 7 == 0) {
                         booking.setStatus(BookingStatus.Strike);
                         booking.setConfirmationStatus(ConfirmationStatus.Expired);
                     } else {
