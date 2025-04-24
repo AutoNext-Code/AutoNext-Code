@@ -6,6 +6,7 @@ import { Chart } from '@maps/interfaces/Chart.interface';
 import { CentersMaps } from '@maps/interfaces/CentersMaps.interface';
 import { MapParams } from '@maps/interfaces/MapParams.interface';
 import { MapHttpService } from './map-http.service';
+import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,6 @@ export class MapService {
   public maps$: BehaviorSubject<Chart | null> =
     new BehaviorSubject<Chart | null>(null);
 
-  //CentersMaps
   private centersMapsData = new BehaviorSubject<CentersMaps[]>([]);
   centersMaps$ = this.centersMapsData.asObservable();
 
@@ -41,4 +41,11 @@ export class MapService {
         },
       });
   }
+
+  checkUserCanBook(date: string, startTime: string, endTime: string): Observable<CanBookResponse> {
+
+    return this.maphttp.getCanUserBook(date, startTime, endTime) ;
+
+  }
+
 }

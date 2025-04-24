@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autonext.code.autonext_server.dto.BookCheckDTO;
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
@@ -36,7 +37,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -132,6 +137,20 @@ public class BookingController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
   }
+
+  @PostMapping("/can-book")
+  public Map<String, String> checkUserCanBook(
+      @Valid @RequestBody BookCheckDTO body) {
+
+    String resultado = bookingService.checkIfUserCanBook(
+         body.getDate(),
+         LocalTime.parse(body.getStartTime(), DateTimeFormatter.ISO_TIME),
+         LocalTime.parse(body.getEndTime(),   DateTimeFormatter.ISO_TIME)
+    );
+    
+    return Collections.singletonMap("message", resultado);
+  }
+
 
   /*
    * GUARDADO PARA EL ADMIN

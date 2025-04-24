@@ -21,8 +21,11 @@ public class ReservationExpirationService {
   @Autowired
   private BookingRepository bookingRepository;
 
+  // @Autowired
+  // private StrikeService strikeService;
+
   @Autowired
-  private StrikeService strikeService;
+  private EmailTemplateService emailTemplateService;
 
 
   @Scheduled(fixedRate = 60 * 1000)
@@ -39,7 +42,7 @@ public class ReservationExpirationService {
         if (booking.getStatus() == BookingStatus.Pending) {
 
           booking.setConfirmationStatus(ConfirmationStatus.Expired);
-          strikeService.setBookingStrike(booking, date, now.toLocalTime(), StrikeReason.NOTCONFIRMED);
+          //strikeService.setBookingStrike(booking, date, now.toLocalTime(), StrikeReason.NOTCONFIRMED);
           
 
 
