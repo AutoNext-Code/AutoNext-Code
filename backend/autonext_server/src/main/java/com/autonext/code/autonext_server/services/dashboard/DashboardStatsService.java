@@ -24,9 +24,10 @@ public class DashboardStatsService {
   @Autowired
   private BookingRepository bookingRepository;
 
-  public List<WeekdayMetricDto> calculateWeekdayHoursReserved(User user, int year) {
+  public List<WeekdayMetricDto> calculateWeekdayHoursReserved(User user, Integer month, int year) {
     Specification<Booking> spec = Specification
         .where(BookingSpecifications.hasUserId(user.getId()))
+        .and(BookingSpecifications.hasMonth(month))
         .and(BookingSpecifications.hasYear(year))
         .and(BookingSpecifications.hasConfirmationStatus(ConfirmationStatus.Confirmed));
 

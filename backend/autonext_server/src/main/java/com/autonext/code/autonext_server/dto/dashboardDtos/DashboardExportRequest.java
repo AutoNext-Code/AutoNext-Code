@@ -11,6 +11,17 @@ public class DashboardExportRequest {
   private String avgDurationPerMonthChart;
   private String hoursPerWeekdayChart;
   private String confirmationsChart;
+  private String unconfirmedChart;
+
+  private int strikes;
+  private boolean banned;
+
+  private int totalDaysReserved;
+  private int totalHoursReserved;
+  private double averageSessionDuration;
+  private int totalWeeklyHoursReserved;
+  private int confirmedReservations;
+  private int unconfirmedReservations;
 
   public DashboardExportRequest() {
   }
@@ -69,5 +80,77 @@ public class DashboardExportRequest {
 
   public void setConfirmationsChart(String confirmationsChart) {
     this.confirmationsChart = confirmationsChart;
+  }
+
+  public int getTotalDaysReserved() {
+    return totalDaysReserved;
+  }
+
+  public void setTotalDaysReserved(int totalDaysReserved) {
+    this.totalDaysReserved = totalDaysReserved;
+  }
+
+  public int getTotalHoursReserved() {
+    return totalHoursReserved;
+  }
+
+  public void setTotalHoursReserved(int totalHoursReserved) {
+    this.totalHoursReserved = totalHoursReserved;
+  }
+
+  public double getAverageSessionDuration() {
+    return averageSessionDuration;
+  }
+
+  public void setAverageSessionDuration(double averageSessionDuration) {
+    this.averageSessionDuration = averageSessionDuration;
+  }
+
+  public int getConfirmedReservations() {
+    return confirmedReservations;
+  }
+
+  public void setConfirmedReservations(int confirmedReservations) {
+    this.confirmedReservations = confirmedReservations;
+  }
+
+  public int getUnconfirmedReservations() {
+    return unconfirmedReservations;
+  }
+
+  public void setUnconfirmedReservations(int unconfirmedReservations) {
+    this.unconfirmedReservations = unconfirmedReservations;
+  }
+
+  public String getUnconfirmedChart() {
+    return unconfirmedChart;
+  }
+
+  public void setUnconfirmedChart(String unconfirmedChart) {
+    this.unconfirmedChart = unconfirmedChart;
+  }
+
+  public int getTotalWeeklyHoursReserved() {
+    return totalWeeklyHoursReserved;
+  }
+
+  public void setTotalWeeklyHoursReserved(int totalWeeklyHoursReserved) {
+    this.totalWeeklyHoursReserved = totalWeeklyHoursReserved;
+  }
+
+  public int getStrikes() {
+    return strikes;
+  }
+
+  public void setStrikes(int strikes) {
+    this.strikes = strikes;
+  }
+
+  public boolean isBanned() {
+    return banned;
+  }
+
+  public void setBanned(boolean banned) {
+    this.banned = banned;
   }
 }

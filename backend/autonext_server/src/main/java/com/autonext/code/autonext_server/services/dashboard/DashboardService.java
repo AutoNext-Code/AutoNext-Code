@@ -44,7 +44,7 @@ public class DashboardService {
     dto.setMonthlyHoursReserved(dashboardMonthlyService.calculateMonthlyHoursReserved(user, year));
     dto.setMonthlyAvgDuration(dashboardMonthlyService.calculateMonthlyAvgDuration(user, year));
 
-    dto.setWeeklyHoursReserved(dashboardStatsService.calculateWeekdayHoursReserved(user, year));
+    dto.setWeeklyHoursReserved(dashboardStatsService.calculateWeekdayHoursReserved(user, month, year));
     dto.setMonthlyConfirmationStats(dashboardStatsService.calculateMonthlyConfirmations(user, year));
 
     // Strikes

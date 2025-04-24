@@ -36,8 +36,19 @@ export class DashboardService {
         })
       )
       .subscribe((blob: Blob) => {
+        const month = payload.month ? String(payload.month).padStart(2, '0') : null;
+        const filename = month
+          ? `dashboard_${month}-${payload.year}.pdf`
+          : `dashboard_${payload.year}.pdf`;
+  
         const url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
       });
-  }
+  }  
 }

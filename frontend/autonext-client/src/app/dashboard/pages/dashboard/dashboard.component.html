@@ -3,6 +3,7 @@
   Dashboard de {{ userName }}
 </h1>
 
+
 <form [formGroup]="myForm" class="mx-20">
   <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
     <div class="flex-1 min-w-[200px] max-w-[300px]">
@@ -29,18 +30,24 @@
         <option value="2025">2025</option>
       </select>
     </div>
-    <div class="flex items-end pb-[2px]">
+    <div class="flex items-end pb-[2px]" *ngIf="graphicsReady && graphicsComponent.data && !graphicsComponent.hasNoData()">
       <button type="button" (click)="exportDashboardPdf()" class="text-xl">
-        <img
-          src="assets/svg/iconpdf.svg"
-          alt="Descargar PDF"
-          class="h-10 w-auto cursor-pointer"
-        />
+        <img src="assets/svg/iconpdf.svg" alt="Descargar PDF" class="h-10 w-auto cursor-pointer" />
       </button>
-    </div>
+    </div>    
   </div>
 </form>
-
+<div *ngIf="graphicsReady" class="text-center text-lg text-gray-700 my-4">
+  <p>
+    <strong>Strikes:</strong> {{ graphicsComponent.data.strikes }}
+  </p>
+  <p>
+    <strong>¿Usuario penalizado?:</strong>
+    <span [ngClass]="graphicsComponent.data.banned ? 'text-red-600 font-bold' : 'text-green-600'">
+      {{ graphicsComponent.data.banned ? 'Sí' : 'No' }}
+    </span>
+  </p>
+</div>
 <app-graphics
   [month]="myForm.value.month || null"
   [year]="myForm.value.year || 2025"

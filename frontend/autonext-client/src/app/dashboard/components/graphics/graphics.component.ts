@@ -9,14 +9,13 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
-import {
-  CustomChartComponent
-} from '../chart/custom-chart.component';
+import { CustomChartComponent } from '../chart/custom-chart.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-graphics',
   standalone: true,
-  imports: [CustomChartComponent],
+  imports: [CustomChartComponent, CommonModule],
   templateUrl: './graphics.component.html',
   styleUrls: ['./graphics.component.css'],
 })
@@ -89,7 +88,7 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
       .subscribe((dashboardData) => {
         this.updateChartData(dashboardData);
         this.data = dashboardData;
-  
+
         setTimeout(() => {
           this.chartComponents.forEach((chart) => {
             chart['renderChart']?.();
@@ -97,7 +96,6 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
         }, 100);
       });
   }
-  
 
   private updateChartData(dashboardData: any) {
     this.daysReservedChartOptions.series = [
@@ -134,7 +132,34 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
         ),
       },
     ];
+
+    this.weeklyHoursChartOptions.series = [
+      {
+        name: 'Horas por día',
+        data: dashboardData.weeklyHoursReserved.map(
+          (item: any) => item.totalHours
+        ),
+      },
+    ];
+
+    this.weeklyHoursChartOptions.xaxis = {
+      categories: dashboardData.weeklyHoursReserved.map(
+        (item: any) => item.day
+      ),
+    };
   }
+
+  public weeklyHoursChartOptions: Partial<ApexCharts.ApexOptions> = {
+    chart: { type: 'bar', height: 350 },
+    plotOptions: { bar: { horizontal: false, columnWidth: '55%' } },
+    dataLabels: { enabled: false },
+    stroke: { show: true, width: 2, colors: ['transparent'] },
+    xaxis: { categories: [] }, // lo rellenamos luego
+    yaxis: { title: { text: 'Horas' } },
+    fill: { opacity: 1 },
+    tooltip: { y: { formatter: (val: number) => `${val}` } },
+    series: [],
+  };
 
   getMonthName(monthId: number | null): string {
     const months = [
@@ -161,6 +186,7 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
     avgDurationPerMonthChart: string;
     hoursPerWeekdayChart: string;
     confirmationsChart: string;
+    unconfirmedChart: string;
   }> {
     const chartsArray = this.chartComponents?.toArray() ?? [];
 
@@ -174,8 +200,9 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
       daysPerMonthChart: await getBase64(chartsArray[0]),
       hoursPerMonthChart: await getBase64(chartsArray[1]),
       avgDurationPerMonthChart: await getBase64(chartsArray[2]),
-      confirmationsChart: await getBase64(chartsArray[3]),
-      hoursPerWeekdayChart: await getBase64(chartsArray[4]),
+      hoursPerWeekdayChart: await getBase64(chartsArray[3]),
+      confirmationsChart: await getBase64(chartsArray[4]),
+      unconfirmedChart: await getBase64(chartsArray[5]),
     };
   }
 
@@ -195,4 +222,37 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
       check();
     });
   }
+
+  getTotalWeeklyHours(): number {
+    return (
+      this.data?.weeklyHoursReserved?.reduce(
+        (acc: number, item: any) => acc + item.totalHours,
+        0
+      ) ?? 0
+    );
+  }
+
+  hasNoData(): boolean {
+    if (!this.data) return true;
+
+    const totals = [
+      this.data.totalDaysReserved,
+      this.data.totalHoursReserved,
+      this.data.averageSessionDuration,
+      this.data.confirmedReservations,
+      this.data.unconfirmedReservations,
+      this.getTotalWeeklyHours(),
+    ];
+
+    return totals.every(
+      (val) => val === 0 || val === null || val === undefined
+    );
+  }
+
+  getEmptyDataMessage(): string {
+    const monthName = this.getMonthName(this.month);
+    return this.month
+      ? `No hay datos disponibles para el mes de ${monthName.toLowerCase()} del año  ${this.year}.`
+      : 'Todavía no hay datos disponibles para mostrar.';
+  }  
 }
