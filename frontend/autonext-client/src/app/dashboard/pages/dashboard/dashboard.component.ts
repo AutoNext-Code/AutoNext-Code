@@ -73,10 +73,9 @@ export class DashboardComponent implements AfterViewInit {
         setTimeout(waitForData, 50);
       }
     };
-  
+
     waitForData();
   }
-  
 
   exportDashboardPdf(): void {
     this.graphicsComponent.ensureChartsReady().then(() => {
@@ -88,7 +87,7 @@ export class DashboardComponent implements AfterViewInit {
           hoursPerMonthChart: charts.hoursPerMonthChart,
           avgDurationPerMonthChart: charts.avgDurationPerMonthChart,
           confirmationsChart: charts.confirmationsChart,
-          unconfirmedChart: charts.unconfirmedChart,
+          cancelledChart: charts.cancelledChart,
           hoursPerWeekdayChart: charts.hoursPerWeekdayChart,
 
           month: this.myForm.value.month ?? null,
@@ -107,8 +106,8 @@ export class DashboardComponent implements AfterViewInit {
             ) ?? 0,
           confirmedReservations:
             this.graphicsComponent.data?.confirmedReservations ?? 0,
-          unconfirmedReservations:
-            this.graphicsComponent.data?.unconfirmedReservations ?? 0,
+          cancelledReservations:
+            this.graphicsComponent.data?.cancelledReservations ?? 0,
         };
 
         this.dashboardService.exportDashboardPdf(exportRequest);

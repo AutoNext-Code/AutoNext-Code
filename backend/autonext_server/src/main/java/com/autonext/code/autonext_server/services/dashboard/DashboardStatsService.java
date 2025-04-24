@@ -1,9 +1,11 @@
 package com.autonext.code.autonext_server.services.dashboard;
 
 import com.autonext.code.autonext_server.dto.dashboardDtos.MonthlyConfirmationDto;
+import com.autonext.code.autonext_server.dto.dashboardDtos.MonthlyMetricDto;
 import com.autonext.code.autonext_server.dto.dashboardDtos.WeekdayMetricDto;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.specifications.BookingSpecifications;
@@ -74,6 +76,24 @@ public class DashboardStatsService {
       int unconfirmed = (int) bookingRepository.count(unconfirmedSpec);
 
       list.add(new MonthlyConfirmationDto(getMonthName(month), confirmed, unconfirmed));
+    }
+
+    return list;
+  }
+
+  public List<MonthlyMetricDto> calculateMonthlyCancelledReservations(User user, int year) {
+    List<MonthlyMetricDto> list = new ArrayList<>();
+
+    for (int month = 1; month <= 12; month++) {
+      Specification<Booking> cancelledSpec = Specification
+          .where(BookingSpecifications.hasUserId(user.getId()))
+          .and(BookingSpecifications.hasMonth(month))
+          .and(BookingSpecifications.hasYear(year))
+          .and(BookingSpecifications.hasBookingStatus(BookingStatus.Cancelled));
+
+      int cancelledCount = (int) bookingRepository.count(cancelledSpec);
+
+      list.add(new MonthlyMetricDto(getMonthName(month), cancelledCount));
     }
 
     return list;

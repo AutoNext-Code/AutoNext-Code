@@ -32,7 +32,7 @@
     <div class="flex flex-col items-center">
       <span class="text-sm text-gray-600 mb-2">Promedio en {{ getMonthName(month) | lowercase }}</span>
       <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-        {{ data?.averageSessionDuration ?? 0 }}
+        {{ data?.averageSessionDuration ?? 0 | number:'1.2-2'}}
       </span>
     </div>
     <app-custom-chart [chartOptions]="avgDurationChartOptions"></app-custom-chart>
@@ -61,13 +61,13 @@
   </div>
 
   <div class="border-card rounded-lg py-2 px-4">
-    <h2 class="text-center mt-2 text-2xl">Reservas No Confirmadas</h2>
+    <h2 class="text-center mt-2 text-2xl">Reservas Canceladas</h2>
     <div class="flex flex-col items-center">
       <span class="text-sm text-gray-600 mb-2">Total en {{ getMonthName(month) | lowercase }}</span>
       <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-        {{ data?.unconfirmedReservations ?? 0 }}
+        {{ data?.cancelledReservations  ?? 0 }}
       </span>
     </div>
-    <app-custom-chart [chartOptions]="unconfirmedStatsChartOptions"></app-custom-chart>
+    <app-custom-chart [chartOptions]="cancelledStatsChartOptions"></app-custom-chart>
   </div>
 </div>

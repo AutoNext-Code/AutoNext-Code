@@ -37,12 +37,12 @@ export interface DashboardExportRequest {
   avgDurationPerMonthChart: string;
   hoursPerWeekdayChart: string;
   confirmationsChart: string;
-  unconfirmedChart: string;
-
+  cancelledChart: string;
+  
   totalDaysReserved: number;
   totalHoursReserved: number;
   averageSessionDuration: number;
   totalWeeklyHoursReserved: number;
   confirmedReservations: number;
-  unconfirmedReservations: number;
+  cancelledReservations: number;
 }

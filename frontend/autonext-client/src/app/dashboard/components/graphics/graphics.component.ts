@@ -34,7 +34,7 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
   public hoursReservedChartOptions: Partial<ApexCharts.ApexOptions>;
   public avgDurationChartOptions: Partial<ApexCharts.ApexOptions>;
   public confirmedStatsChartOptions: Partial<ApexCharts.ApexOptions>;
-  public unconfirmedStatsChartOptions: Partial<ApexCharts.ApexOptions>;
+  public cancelledStatsChartOptions: Partial<ApexCharts.ApexOptions>;
 
   constructor() {
     const defaultOptions: Partial<ApexCharts.ApexOptions> = {
@@ -67,7 +67,7 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
     this.hoursReservedChartOptions = { ...defaultOptions, series: [] };
     this.avgDurationChartOptions = { ...defaultOptions, series: [] };
     this.confirmedStatsChartOptions = { ...defaultOptions, series: [] };
-    this.unconfirmedStatsChartOptions = { ...defaultOptions, series: [] };
+    this.cancelledStatsChartOptions = { ...defaultOptions, series: [] };
 
     this.loadData();
   }
@@ -124,12 +124,10 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
         ),
       },
     ];
-    this.unconfirmedStatsChartOptions.series = [
+    this.cancelledStatsChartOptions.series = [
       {
-        name: 'No Confirmados',
-        data: dashboardData.monthlyConfirmationStats.map(
-          (item: any) => item.unconfirmed
-        ),
+        name: 'Reservas Canceladas',
+        data: dashboardData.monthlyCancelledReservations.map((item: any) => item.value),
       },
     ];
 
@@ -186,7 +184,7 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
     avgDurationPerMonthChart: string;
     hoursPerWeekdayChart: string;
     confirmationsChart: string;
-    unconfirmedChart: string;
+    cancelledChart: string;
   }> {
     const chartsArray = this.chartComponents?.toArray() ?? [];
 
@@ -202,7 +200,7 @@ export class GraphicsComponent implements OnChanges, AfterViewInit {
       avgDurationPerMonthChart: await getBase64(chartsArray[2]),
       hoursPerWeekdayChart: await getBase64(chartsArray[3]),
       confirmationsChart: await getBase64(chartsArray[4]),
-      unconfirmedChart: await getBase64(chartsArray[5]),
+      cancelledChart: await getBase64(chartsArray[5]),
     };
   }
 
