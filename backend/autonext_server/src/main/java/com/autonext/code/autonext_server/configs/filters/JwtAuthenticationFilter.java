@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
+import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.JwtService;
 
 @Component
@@ -35,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
+
     final String authHeader = request.getHeader("Authorization");
     final String token;
     final String username;
@@ -52,14 +54,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
       if (jwtService.validateToken(token, userDetails)) {
+
+        if (userDetails instanceof User appUser) {
+          String roleFromToken = jwtService.extractUserRole(token);
+          String currentRole = appUser.getRole().name();
+
+          if (!roleFromToken.equals(currentRole)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("TOKEN_OUTDATED");
+            return;
+          }
+        }
+
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
 
     filterChain.doFilter(request, response);
   }
+
 }

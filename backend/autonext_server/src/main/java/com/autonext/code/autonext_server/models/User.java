@@ -60,9 +60,6 @@ public class User implements UserDetails {
   private Role role;
 
   @Column(nullable = false)
-  private boolean isBanned;
-
-  @Column(nullable = false)
   private boolean emailConfirm;
 
   @Column(name = "confirmation_token", unique = true)
@@ -72,7 +69,6 @@ public class User implements UserDetails {
 
   public User() {
     this.role = Role.User;
-    this.isBanned = false;
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
@@ -141,14 +137,6 @@ public class User implements UserDetails {
 
   public void setRole(Role role) {
     this.role = role;
-  }
-
-  public boolean isBanned() {
-    return isBanned;
-  }
-
-  public void setBanned(boolean isBanned) {
-    this.isBanned = isBanned;
   }
 
   public boolean isEmailConfirm() {

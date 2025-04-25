@@ -34,7 +34,7 @@ public class DashboardPdfService {
 
       // Fuente personalizada
       BaseFont baseFont = BaseFont.createFont(
-          "src/main/resources/fonts/IBMPlexSerif-Regular.ttf",
+          "uploads/fonts/IBMPlexSerif-Regular.ttf",
           BaseFont.IDENTITY_H,
           BaseFont.EMBEDDED);
       Font normalFont = new Font(baseFont, 12, Font.NORMAL);
@@ -42,7 +42,7 @@ public class DashboardPdfService {
 
       // Logo
       Paragraph header = new Paragraph();
-      Image logo = Image.getInstance("src/main/resources/static/autonext-logo.png");
+      Image logo = Image.getInstance("uploads/static/autonext-logo.png");
       logo.scaleToFit(50, 30);
       logo.setAlignment(Element.ALIGN_CENTER);
 
@@ -89,7 +89,7 @@ public class DashboardPdfService {
 
       strikeResumen.add(new Phrase("• ¿Usuario baneado?: ", normalFont));
 
-      if (request.isBanned()) {
+      if (request.isPenalized()) {
         strikeResumen.add(new Phrase("Sí\n", redFont));
       } else {
         strikeResumen.add(new Phrase("No\n", greenFont));

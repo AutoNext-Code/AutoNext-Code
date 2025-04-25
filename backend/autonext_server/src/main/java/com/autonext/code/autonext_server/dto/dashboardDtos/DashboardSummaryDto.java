@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DashboardSummaryDto {
   private int strikes;
-  private boolean banned;
+  private boolean penalized;
   private int totalDaysReserved;
   private int totalHoursReserved;
   private double averageSessionDuration;
@@ -32,12 +32,12 @@ public class DashboardSummaryDto {
     this.strikes = strikes;
   }
 
-  public boolean isBanned() {
-    return banned;
+  public boolean isPenalized() {
+    return penalized;
   }
 
-  public void setBanned(boolean banned) {
-    this.banned = banned;
+  public void setPenalized(boolean penalized) {
+    this.penalized = penalized;
   }
 
   public int getTotalDaysReserved() {
