@@ -97,7 +97,7 @@ export class BookingFormUtils {
           roundedMinutes = 30;
         }
 
-        console.log('Rounded Hour:', hour, 'Rounded Minutes:', roundedMinutes);
+        // console.log('Rounded Hour:', hour, 'Rounded Minutes:', roundedMinutes);
     
         const h = hour < 10 ? '0' + hour : hour;
         const m = roundedMinutes == 0 ? '00' : '30';
