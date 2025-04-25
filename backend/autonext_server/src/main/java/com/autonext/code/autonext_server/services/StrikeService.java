@@ -25,6 +25,8 @@ public class StrikeService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private EmailTemplateService emailTemplateService;
 
     public void setBookingStrike(Booking booking, LocalDate date, LocalTime time, StrikeReason reason ){
 
@@ -43,6 +45,7 @@ public class StrikeService {
             user.setRole(Role.Penalized);
 
             bookingRepository.UpdateStatusByUser(user, ConfirmationStatus.Inactive, ConfirmationStatus.PendingConfirmation);
+            emailTemplateService.notifyUserPenaltyForAccumulatedStrikes(user);
         }
 
     }
