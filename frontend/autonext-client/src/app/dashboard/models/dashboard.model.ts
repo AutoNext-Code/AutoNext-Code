@@ -1,6 +1,6 @@
 export interface DashboardDTO {
   strikes: number;
-  banned: boolean;
+  penalized: boolean;
   totalDaysReserved: number;
   totalHoursReserved: number;
   averageSessionDuration: number;
