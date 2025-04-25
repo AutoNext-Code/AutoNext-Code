@@ -28,16 +28,24 @@ public class StrikeSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         Optional<User> pruebaOpt = userRepository.findByEmail("prueba@example.com");
+        Optional<User> penalizedOpt = userRepository.findByEmail("penalized@example.com");
 
-        if (pruebaOpt.isPresent()) {
+        if (pruebaOpt.isPresent() && penalizedOpt.isPresent()) {
             User prueba = pruebaOpt.get();
+            User penalized = penalizedOpt.get();
 
             Strike strike1 = new Strike(LocalDate.now(), LocalTime.now(), StrikeReason.NOTCONFIRMED, prueba);
             Strike strike2 = new Strike(LocalDate.now().minusDays(1), LocalTime.now(), StrikeReason.NOTCONFIRMED,
                     prueba);
 
+            Strike strike3 = new Strike(LocalDate.now(), LocalTime.now(), StrikeReason.NOTCONFIRMED, penalized);
+            Strike strike4 = new Strike(LocalDate.now().minusDays(1), LocalTime.now(), StrikeReason.NOTCONFIRMED,
+                    penalized);
+            Strike strike5 = new Strike(LocalDate.now().minusDays(2), LocalTime.now(), StrikeReason.NOTCONFIRMED, penalized);
+
             prueba.setStrikes(new ArrayList<>(List.of(strike1, strike2)));
-            strikeRepository.saveAll(List.of(strike1, strike2));
+            penalized.setStrikes(new ArrayList<>(List.of(strike3, strike4, strike5)));
+            strikeRepository.saveAll(List.of(strike1, strike2, strike3, strike4, strike5));
         }
     }
 }
