@@ -48,7 +48,6 @@ public class DashboardController {
         headers.setAccessControlExposeHeaders(List.of("Content-Disposition"));
 
         return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
-
     }
 
     @GetMapping("/years")
