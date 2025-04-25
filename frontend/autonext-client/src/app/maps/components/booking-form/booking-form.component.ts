@@ -153,6 +153,7 @@ export class BookingFormComponent implements OnInit {
         this.filteredEndHours = this.bookingFormUtils.endHours.filter(
           (end) => end > start
         );
+        console.log('Filtered End Hours:', this.filteredEndHours);
         this.myForm.get('endHour')?.setValue(this.filteredEndHours[0] || '');
       }
     });

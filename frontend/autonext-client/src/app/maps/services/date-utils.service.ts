@@ -16,6 +16,8 @@ export class DateUtilsService {
       (hour) => hour > currentTime
     );
 
+    console.log(currentTime, 'eres tu')
+
     myForm.patchValue(
       {
         startHour: filteredStartHours[0] || '',
