@@ -39,9 +39,13 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
             console.error('🔴 [Interceptor] Error en petición:', req.url, error);
 
             if (error.status === 401) {
-              authService.logout();
-              router.navigate(['/auth/login']);
+              const msg = typeof error.error === 'string' ? error.error : '';
+              if (msg === 'TOKEN_OUTDATED') {
+                authService.logout();
+                router.navigate(['/auth/login']);
+              }
             }
+
 
             return throwError(() => error);
           },

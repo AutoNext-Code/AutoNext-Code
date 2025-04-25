@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
           if (!roleFromToken.equals(currentRole)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token desactualizado. Inicia sesión nuevamente.");
+            response.getWriter().write("TOKEN_OUTDATED");
             return;
           }
         }
