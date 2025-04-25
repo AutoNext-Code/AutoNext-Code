@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
+
     final String authHeader = request.getHeader("Authorization");
     final String token;
     final String username;
@@ -52,6 +53,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
       if (jwtService.validateToken(token, userDetails)) {
+
+        if (userDetails instanceof com.autonext.code.autonext_server.models.User appUser) {
+          String roleName = appUser.getRole().name();
+          if (roleName.equals("Penalized") || roleName.equals("Banned")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Acceso denegado. El usuario está penalizado o baneado.");
+            return;
+          }
+        }
+
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -62,4 +73,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     filterChain.doFilter(request, response);
   }
+
 }
