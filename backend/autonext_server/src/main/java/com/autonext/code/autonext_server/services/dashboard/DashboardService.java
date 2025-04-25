@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.dashboardDtos.DashboardSummaryDto;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.Role;
 import com.autonext.code.autonext_server.models.Strike;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 
@@ -54,7 +55,7 @@ public class DashboardService {
         .filter(Strike::isActive)
         .count();
     dto.setStrikes(activeStrikes);
-    dto.setBanned(user.isBanned());
+    dto.setPenalized(user.getRole() == Role.Penalized);
 
     return dto;
   }
