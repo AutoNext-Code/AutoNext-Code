@@ -74,14 +74,14 @@ export class BookingFormComponent implements OnInit {
   }
 
   myForm: FormGroup = this.fb.group({
-      center: [''],
-      level: [''],
-      selectedCar: [null],
-      selectedPlugType: ['Undefined'],
-      date: [this.dateUtilsService.getDate()],
-      startHour: [this.bookingFormUtils.roundToNearestHalfHour(new Date())],
-      endHour: [this.bookingFormUtils.roundToNearestHalfHour(new Date(), 30 * 60 * 1000)]
-    }
+    center: [''],
+    level: [''],
+    selectedCar: [null],
+    selectedPlugType: ['Undefined'],
+    date: [this.dateUtilsService.getDate()],
+    startHour: [this.bookingFormUtils.roundToNearestHalfHour(new Date())],
+    endHour: [this.bookingFormUtils.roundToNearestHalfHour(new Date(), 30 * 60 * 1000)]
+  }
   );
 
   private getInitialPlugTypes(): (string | PlugType)[] {
@@ -114,7 +114,14 @@ export class BookingFormComponent implements OnInit {
   }
 
   private loadInitialData(): void {
-    const currentTime = this.bookingFormUtils.roundToNearestHalfHour(new Date(), -30 * 60 * 1000);
+    const now = new Date();
+    const minutes = now.getMinutes();
+    const shouldApplyOffset = (minutes >= 0 && minutes < 10 ) || (minutes >= 30 && minutes < 40);
+
+    const currentTime = shouldApplyOffset
+      ? this.bookingFormUtils.roundToNearestHalfHour(now, -30 * 60 * 1000)
+      : this.bookingFormUtils.roundToNearestHalfHour(now, 0);
+
     this.updateHoursForToday(currentTime);
     this.initializeDateValueChanges();
     this.initializeStartHourValueChanges();
@@ -139,7 +146,13 @@ export class BookingFormComponent implements OnInit {
 
       const isToday = this.dateUtilsService.isSelectedDateToday(selectedDate);
       if (isToday) {
-        const currentTime = this.bookingFormUtils.roundToNearestHalfHour(new Date(), -30 * 60 * 1000);
+        const now = new Date();
+        const minutes = now.getMinutes();
+        const shouldApplyOffset = (minutes >= 0 && minutes < 10 ) || (minutes >= 30 && minutes < 40);
+    
+        const currentTime = shouldApplyOffset
+          ? this.bookingFormUtils.roundToNearestHalfHour(now, -30 * 60 * 1000)
+          : this.bookingFormUtils.roundToNearestHalfHour(now, 0);
         this.updateHoursForToday(currentTime);
       } else {
         this.resetHoursForDefault();
@@ -153,6 +166,7 @@ export class BookingFormComponent implements OnInit {
         this.filteredEndHours = this.bookingFormUtils.endHours.filter(
           (end) => end > start
         );
+        console.log('Filtered End Hours:', this.filteredEndHours);
         this.myForm.get('endHour')?.setValue(this.filteredEndHours[0] || '');
       }
     });

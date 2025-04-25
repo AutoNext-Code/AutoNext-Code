@@ -22,8 +22,8 @@ package com.autonext.code.autonext_server.configs;
              .allowedOrigins(allowedOrigins.split(","))
              .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
              .allowedHeaders("*")
-             .allowCredentials(true)
-             .exposedHeaders("Content-Disposition");
+             .exposedHeaders("Content-Disposition")
+             .allowCredentials(true);
        }
      };
    }
