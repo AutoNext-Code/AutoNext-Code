@@ -39,12 +39,8 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
             console.error('🔴 [Interceptor] Error en petición:', req.url, error);
 
             if (error.status === 401) {
-              const msg = typeof error.error === 'string' ? error.error.toLowerCase() : '';
-
-              if (msg.includes('penalizado') || msg.includes('baneado')) {
-                authService.logout();
-                router.navigate(['/auth/login']);
-              }
+              authService.logout();
+              router.navigate(['/auth/login']);
             }
 
             return throwError(() => error);

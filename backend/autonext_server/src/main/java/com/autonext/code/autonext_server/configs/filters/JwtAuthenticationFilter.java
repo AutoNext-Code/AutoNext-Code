@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
+import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.JwtService;
 
 @Component
@@ -54,11 +55,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       if (jwtService.validateToken(token, userDetails)) {
 
-        if (userDetails instanceof com.autonext.code.autonext_server.models.User appUser) {
-          String roleName = appUser.getRole().name();
-          if (roleName.equals("Penalized") || roleName.equals("Banned")) {
+        if (userDetails instanceof User appUser) {
+          String roleFromToken = jwtService.extractUserRole(token);
+          String currentRole = appUser.getRole().name();
+
+          if (!roleFromToken.equals(currentRole)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Acceso denegado. El usuario está penalizado o baneado.");
+            response.getWriter().write("Token desactualizado. Inicia sesión nuevamente.");
             return;
           }
         }
@@ -66,7 +69,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
