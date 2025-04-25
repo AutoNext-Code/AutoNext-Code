@@ -30,6 +30,8 @@ public class StrikeService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private EmailTemplateService emailTemplateService;
 
     public void setBookingStrike(Booking booking, LocalDate date, LocalTime time, StrikeReason reason ){
 
@@ -52,6 +54,8 @@ public class StrikeService {
             List<Booking> bookings = bookingRepository.findByUserAndConfirmationStatus(user, ConfirmationStatus.Inactive);
             bookings.forEach(b -> {b.setConfirmationStatus(ConfirmationStatus.Expired);b.setStatus(BookingStatus.Blocked);});
             bookingRepository.saveAll(bookings);
+
+            emailTemplateService.notifyUserPenaltyForAccumulatedStrikes(user);
         }
 
     }
