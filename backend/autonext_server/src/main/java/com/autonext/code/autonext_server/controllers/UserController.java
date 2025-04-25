@@ -17,6 +17,7 @@ import com.autonext.code.autonext_server.dto.PasswordChangingDTO;
 import com.autonext.code.autonext_server.dto.UserDto;
 import com.autonext.code.autonext_server.dto.UserRequestDTO;
 import com.autonext.code.autonext_server.exceptions.NoChangesMadeException;
+import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.UserService;
@@ -60,13 +61,15 @@ public class UserController {
         try {
             userService.editProfile(userRequestDto);
             return ResponseEntity.ok("Se han realiza los cambios correctamente");
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya existe");
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe");
         } catch (NoChangesMadeException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("No hay cambio de datos en el perfil del usuario");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
-          }
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -74,11 +77,11 @@ public class UserController {
     public ResponseEntity<String> patchPassword(@Valid @RequestBody PasswordChangingDTO request) {
 
         try {
-            userService.updatePassword(request.getNewPassword(), request.getOldPassword()) ;
+            userService.updatePassword(request.getNewPassword(), request.getOldPassword());
             return ResponseEntity.ok("Contraseña actualizada correctamente");
         } catch (StaleStateException sse) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        } 
+        }
 
     }
 
