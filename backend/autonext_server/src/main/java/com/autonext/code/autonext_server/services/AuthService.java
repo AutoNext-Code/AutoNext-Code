@@ -77,7 +77,6 @@ public class AuthService {
         user.setSurname(surname);
         user.setPassword(passwordEncoder.encode(password)); 
         user.setRole(Role.User); 
-        user.setBanned(false);
         user.setEmailConfirm(false);
         user.setConfirmationToken(UUID.randomUUID().toString().replace("-", ""));
 

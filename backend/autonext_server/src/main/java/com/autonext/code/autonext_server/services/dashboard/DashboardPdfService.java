@@ -89,7 +89,7 @@ public class DashboardPdfService {
 
       strikeResumen.add(new Phrase("• ¿Usuario baneado?: ", normalFont));
 
-      if (request.isBanned()) {
+      if (request.isPenalized()) {
         strikeResumen.add(new Phrase("Sí\n", redFont));
       } else {
         strikeResumen.add(new Phrase("No\n", greenFont));
