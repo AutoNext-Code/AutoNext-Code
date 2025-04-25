@@ -38,13 +38,15 @@ public class DashboardService {
     dto.setTotalHoursReserved(dashboardKpiService.calculateTotalHoursReserved(user, month, year));
     dto.setAverageSessionDuration(dashboardKpiService.calculateAverageSessionDuration(user, month, year));
     dto.setConfirmedReservations(dashboardKpiService.calculateConfirmedReservations(user, month, year));
-    dto.setUnconfirmedReservations(dashboardKpiService.calculateUnconfirmedReservations(user, month, year));
+    dto.setCancelledReservations(dashboardKpiService.calculateCancelledReservations(user, month, year));
+
 
     dto.setMonthlyDaysReserved(dashboardMonthlyService.calculateMonthlyDaysReserved(user, year));
     dto.setMonthlyHoursReserved(dashboardMonthlyService.calculateMonthlyHoursReserved(user, year));
     dto.setMonthlyAvgDuration(dashboardMonthlyService.calculateMonthlyAvgDuration(user, year));
+    dto.setMonthlyCancelledReservations(dashboardStatsService.calculateMonthlyCancelledReservations(user, year));
 
-    dto.setWeeklyHoursReserved(dashboardStatsService.calculateWeekdayHoursReserved(user, year));
+    dto.setWeeklyHoursReserved(dashboardStatsService.calculateWeekdayHoursReserved(user, month, year));
     dto.setMonthlyConfirmationStats(dashboardStatsService.calculateMonthlyConfirmations(user, year));
 
     // Strikes

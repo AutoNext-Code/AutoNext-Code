@@ -5,6 +5,11 @@ import com.autonext.code.autonext_server.dto.dashboardDtos.DashboardSummaryDto;
 import com.autonext.code.autonext_server.services.dashboard.DashboardPdfService;
 import com.autonext.code.autonext_server.services.dashboard.DashboardService;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,7 +43,15 @@ public class DashboardController {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                 .body(pdf);
+    }
+
+    @GetMapping("/years")
+    public List<Integer> getAvailableYears() {
+        int currentYear = LocalDate.now().getYear();
+        return IntStream.rangeClosed(2024, currentYear)
+                .boxed()
+                .collect(Collectors.toList());
     }
 }
