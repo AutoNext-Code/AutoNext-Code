@@ -69,7 +69,6 @@ public class UserService {
     
     if (!user.getEmail().equals(userRequestDto.getEmail())) {
       if (userRepository.findByEmail(userRequestDto.getEmail()).isPresent()) {
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         throw new UserAlreadyExistsException("El usuario ya existe");
       }
     }

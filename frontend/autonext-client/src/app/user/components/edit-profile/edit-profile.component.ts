@@ -114,10 +114,11 @@ export class EditProfileComponent implements OnChanges {
           this.router.navigateByUrl('/auth/login');
         },
         error: (err: HttpErrorResponse) => {
+          console.log(err.error)
           this.appComponent.showToast(
             'error',
             'Error al cambiar el perfil',
-            err.error
+            err.error.message
           );
         }
       });

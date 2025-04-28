@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.hibernate.StaleStateException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.autonext.code.autonext_server.dto.EditDto;
 import com.autonext.code.autonext_server.dto.PasswordChangingDTO;
 import com.autonext.code.autonext_server.dto.UserDto;
 import com.autonext.code.autonext_server.dto.UserRequestDTO;
@@ -57,18 +59,35 @@ public class UserController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> editProfile(@RequestBody UserRequestDTO userRequestDto) {
+    public ResponseEntity<EditDto<Void>> editProfile(@RequestBody UserRequestDTO userRequestDto) {
         try {
             userService.editProfile(userRequestDto);
-            return ResponseEntity.ok("Se han realiza los cambios correctamente");
-        } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya existe");
+            EditDto<Void> ok = new EditDto<Void>();
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(ok);
+
+        } catch (UserAlreadyExistsException | NoChangesMadeException e) {
+            EditDto<Void> err = new EditDto<>(e.getMessage(), null);
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(err);
+
         } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe");
-        } catch (NoChangesMadeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No hay cambio de datos en el perfil del usuario");
+            EditDto<Void> err = new EditDto<>(e.getMessage(), null);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(err);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+            EditDto<Void> err = new EditDto<>("Error interno del servidor", null);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(err);
         }
     }
 
