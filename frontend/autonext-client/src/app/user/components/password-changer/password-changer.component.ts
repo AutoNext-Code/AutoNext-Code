@@ -65,21 +65,13 @@ export class PasswordChangerComponent {
     this.passwordNew = this.passwordNew.trim() ;
     this.passwordConfirm = this.passwordConfirm.trim() ;
 
-    if (this.passwordOG === "" || this.passwordConfirm === "" || this.passwordNew === "") {
-      this.appComponent.showToast('error', 'Problema en el formulario', "Los campos no deben estar vacíos.");
-      throwError("La nueva contraseña no puede ser igual a la anterior.") ;
-      return ;
-    }
-
     if (this.passwordOG === this.passwordNew) {
       this.appComponent.showToast('error', 'Conflicto de contraseñas', "La nueva contraseña no puede ser igual a la anterior.");
-      throwError("La nueva contraseña no puede ser igual a la anterior.") ;
       return ;
     }
 
     if (this.passwordNew !== this.passwordConfirm) {
       this.appComponent.showToast('error', 'Conflicto de contraseñas', "La contraseña nueva y su validación no coinciden.");
-      throwError("La contraseña nueva y su validación no coinciden.") ;
       return ;
     }
 
@@ -104,7 +96,7 @@ export class PasswordChangerComponent {
             this.appComponent.showToast(
               'error',
               'Error al cambiar la contraseña',
-              (!err.message.includes("Http failure response") ? err.message : "Existen problemas de conexion")
+              err.message
             );
           },
         });
