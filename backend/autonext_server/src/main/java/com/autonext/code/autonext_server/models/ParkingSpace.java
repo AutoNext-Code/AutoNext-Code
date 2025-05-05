@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.autonext.code.autonext_server.models.enums.Direction;
 import com.autonext.code.autonext_server.models.enums.PlugType;
 
@@ -42,6 +43,9 @@ public class ParkingSpace {
     @Column(nullable = false)
     public PlugType plugType ;
 
+    @Column(nullable = false)
+    public boolean blocked;
+
     @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
@@ -59,6 +63,18 @@ public class ParkingSpace {
         this.direction = direction ;
         this.plugType = plugType ;
         this.parkingLevel = parkingLevel;
+        this.blocked= false;
+    }
+
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel, boolean blocked) {
+        this.name = name ;
+        this.x = x ;
+        this.y = y ;
+        this.direction = direction ;
+        this.plugType = plugType ;
+        this.parkingLevel = parkingLevel;
+        this.blocked= false;
+        this.blocked = blocked;
     }
 
     public String getName() {
@@ -132,4 +148,13 @@ public class ParkingSpace {
         
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    
 }
