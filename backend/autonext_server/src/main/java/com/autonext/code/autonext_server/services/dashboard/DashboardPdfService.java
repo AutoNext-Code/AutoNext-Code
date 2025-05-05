@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 
 @Service
@@ -32,7 +34,7 @@ public class DashboardPdfService {
 
       // Fuente personalizada
       BaseFont baseFont = BaseFont.createFont(
-          "src/main/resources/fonts/IBMPlexSerif-Regular.ttf",
+          "uploads/fonts/IBMPlexSerif-Regular.ttf",
           BaseFont.IDENTITY_H,
           BaseFont.EMBEDDED);
       Font normalFont = new Font(baseFont, 12, Font.NORMAL);
@@ -40,7 +42,7 @@ public class DashboardPdfService {
 
       // Logo
       Paragraph header = new Paragraph();
-      Image logo = Image.getInstance("src/main/resources/static/autonext-logo.png");
+      Image logo = Image.getInstance("uploads/static/autonext-logo.png");
       logo.scaleToFit(50, 30);
       logo.setAlignment(Element.ALIGN_CENTER);
 
@@ -63,9 +65,9 @@ public class DashboardPdfService {
       // Título principal
       String periodo = (request.getMonth() != null)
           ? String.format("%02d/%d", request.getMonth(), request.getYear())
-          : String.format("todo el año %d", request.getYear());
+          : String.format("Año %d", request.getYear());
 
-      String titulo = String.format("Resumen de uso - %s para %s", periodo, fullName);
+      String titulo = String.format("Resumen de Uso - %s para %s", periodo, fullName);
 
       Paragraph title = new Paragraph(titulo, boldFont);
       title.setAlignment(Element.ALIGN_CENTER);
@@ -73,12 +75,66 @@ public class DashboardPdfService {
       title.setSpacingAfter(20);
       document.add(title);
 
+      Paragraph strikeResumen = new Paragraph();
+      strikeResumen.setSpacingBefore(10f);
+      strikeResumen.setSpacingAfter(10f);
+      strikeResumen.setAlignment(Element.ALIGN_LEFT);
+      strikeResumen.setIndentationLeft(50f);
+
+      strikeResumen.add(new Phrase("Estado del usuario:\n", new Font(baseFont, 14, Font.BOLD, BaseColor.DARK_GRAY)));
+      strikeResumen.add(new Phrase(String.format("• Strikes: %d\n", request.getStrikes()), normalFont));
+
+      Font greenFont = new Font(baseFont, 12, Font.BOLD, BaseColor.GREEN);
+      Font redFont = new Font(baseFont, 12, Font.BOLD, BaseColor.RED);
+
+      strikeResumen.add(new Phrase("• ¿Usuario baneado?: ", normalFont));
+
+      if (request.isPenalized()) {
+        strikeResumen.add(new Phrase("Sí\n", redFont));
+      } else {
+        strikeResumen.add(new Phrase("No\n", greenFont));
+      }
+
+      document.add(strikeResumen);
+
       // Gráficas
-      addImage(document, request.getDaysPerMonthChart(), "Días reservados por mes", normalFont);
-      addImage(document, request.getHoursPerMonthChart(), "Horas reservadas por mes", normalFont);
-      addImage(document, request.getAvgDurationPerMonthChart(), "Duración media por mes", normalFont);
-      addImage(document, request.getHoursPerWeekdayChart(), "Horas por día de la semana", normalFont);
-      addImage(document, request.getConfirmationsChart(), "Confirmaciones vs No confirmaciones", normalFont);
+      addChartRow(
+          document,
+          request.getDaysPerMonthChart(), "Días reservados por mes", "Total",
+          String.valueOf(request.getTotalDaysReserved()),
+          request.getHoursPerMonthChart(), "Horas reservadas por mes", "Total",
+          String.valueOf(request.getTotalHoursReserved()),
+          normalFont);
+
+      addChartRow(
+          document,
+          request.getAvgDurationPerMonthChart(), "Duración media de la reserva por mes", "Promedio",
+          String.format("%.2f horas", request.getAverageSessionDuration()),
+          request.getHoursPerWeekdayChart(), "Horas de media por día a la semana", "Total",
+          String.valueOf(request.getTotalWeeklyHoursReserved()),
+          normalFont);
+
+      addChartRow(
+          document,
+          request.getCancelledChart(), "Reservas canceladas por mes", "Total",
+          String.valueOf(request.getCancelledReservations()),
+          request.getConfirmationsChart(), "Reservas confirmadas por mes", "Total",
+          String.valueOf(request.getConfirmedReservations()),
+
+          normalFont);
+
+      // Pie de página
+      Paragraph spacer = new Paragraph();
+      spacer.setSpacingBefore(450f); 
+      document.add(spacer);
+
+      Paragraph footer = new Paragraph(
+          String.format("Exportado por %s el %s", fullName,
+              LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))),
+          new Font(baseFont, 10, Font.ITALIC, BaseColor.GRAY));
+      footer.setAlignment(Element.ALIGN_RIGHT);
+      footer.setSpacingBefore(30f);
+      document.add(footer);
 
       document.close();
       return out.toByteArray();
@@ -88,24 +144,62 @@ public class DashboardPdfService {
       e.printStackTrace();
       throw new RuntimeException("Error generating dashboard PDF", e);
     }
-
   }
 
-  private void addImage(Document document, String base64, String title, Font font) throws Exception {
-    if (base64 == null || base64.isEmpty())
-      return;
+  private void addChartRow(Document document, String base64Image1, String title1, String totalLabel1,
+      String totalValue1,
+      String base64Image2, String title2, String totalLabel2, String totalValue2,
+      Font font) throws Exception {
+    PdfPTable table = new PdfPTable(2);
+    table.setWidthPercentage(100);
+    table.setSpacingBefore(20f);
+    table.setSpacingAfter(20f);
+    table.setWidths(new float[] { 1, 1 });
 
-    Image image = Image.getInstance(Base64.getDecoder().decode(base64.split(",")[1]));
-    image.scaleToFit(500, 400);
-    image.setAlignment(Element.ALIGN_CENTER);
+    table.addCell(createChartCell(base64Image1, title1, totalLabel1, totalValue1, font));
+    table.addCell(createChartCell(base64Image2, title2, totalLabel2, totalValue2, font));
 
-    Paragraph label = new Paragraph(title, font);
-    label.setAlignment(Element.ALIGN_CENTER);
-    label.setSpacingBefore(10);
-    label.setSpacingAfter(5);
+    document.add(table);
+  }
 
-    document.add(label);
-    document.add(image);
+  private PdfPCell createChartCell(String base64, String title, String totalLabel, String totalValue, Font font)
+      throws Exception {
+    PdfPCell cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+
+    // Título en cursiva
+    Font italicFont = new Font(font.getBaseFont(), 12, Font.ITALIC, BaseColor.BLACK);
+    Paragraph titleP = new Paragraph(title, italicFont);
+    titleP.setAlignment(Element.ALIGN_CENTER);
+    titleP.setSpacingAfter(5f);
+    cell.addElement(titleP);
+
+    // Imagen
+    if (base64 != null && !base64.isEmpty()) {
+      Image img = Image.getInstance(Base64.getDecoder().decode(base64.split(",")[1]));
+      img.scaleToFit(240, 180);
+      img.setAlignment(Image.ALIGN_CENTER);
+      cell.addElement(img);
+    }
+
+    // Total personalizado
+    if (totalLabel != null && !totalLabel.isEmpty() && totalValue != null && !totalValue.isEmpty()) {
+      String textoBase = title.toLowerCase();
+      String pluralizado = totalValue.equals("1")
+          ? textoBase.replace("reservadas", "reservada").replace("reservados", "reservado")
+              .replace("reservas", "reserva").replace("canceladas", "cancelada").replace("confirmadas", "confirmada")
+              .replace("no confirmadas", "no confirmada")
+              .replace("días", "día").replace("horas", "hora")
+          : textoBase;
+      String totalTexto = String.format("Total: %s %s", totalValue, pluralizado);
+      Font smallFont = new Font(font.getBaseFont(), 10, Font.NORMAL, BaseColor.BLACK);
+      Paragraph totalP = new Paragraph(totalTexto, smallFont);
+      totalP.setAlignment(Element.ALIGN_CENTER);
+      totalP.setSpacingBefore(5f);
+      cell.addElement(totalP);
+    }
+
+    return cell;
   }
 
   private User getAuthenticatedUser() {

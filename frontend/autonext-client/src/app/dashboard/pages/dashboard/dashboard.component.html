@@ -1,29 +1,54 @@
 <shared-header></shared-header>
-<h1 class="my-10 text-3xl text-center font-semibold">Dashboard de {{userName}}</h1>
+<h1 class="my-10 text-3xl text-center font-semibold">
+  Dashboard de {{ userName }}
+</h1>
+
 
 <form [formGroup]="myForm" class="mx-20">
-    <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
-        <div class="flex-1 min-w-[200px] max-w-[300px]">
-            <label class="block text-sm font-medium mb-1" for="month">Mes</label>
-            <select class="border p-2 rounded w-full" id="month" formControlName="month">
-                
-                <option value="0">Todos los meses</option>
-                @for (month of months; track $index) {
+  <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="month">Mes</label>
+      <select
+        class="border p-2 rounded w-full"
+        id="month"
+        formControlName="month"
+      >
+        <option [ngValue]="null">Todos los meses</option>
+        @for (month of months; track $index) {
 
-                    <option [value]="month.id">{{month.name}}</option>
-                }
-
-            </select>
-        </div>
-        <div class="flex-1 min-w-[200px] max-w-[300px]">
-            <label class="block text-sm font-medium mb-1" for="year">Año</label>
-            <select class="border p-2 rounded w-full" id="year" formControlName="year">
-                <option value="0">2025</option>
-            </select>
-        </div>
-
+        <option [value]="month.id">{{ month.name }}</option>
+        }
+      </select>
     </div>
+    <div class="flex-1 min-w-[200px] max-w-[300px]">
+      <label class="block text-sm font-medium mb-1" for="year">Año</label>
+      <select
+        class="border p-2 rounded w-full"
+        id="year"
+        formControlName="year"
+      >
+      <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+      </select>
+    </div>
+    <div class="flex items-end pb-[2px]" *ngIf="graphicsReady && graphicsComponent.data && !graphicsComponent.hasNoData()">
+      <button type="button" (click)="exportDashboardPdf()" class="text-xl">
+        <img src="assets/svg/iconpdf.svg" alt="Descargar PDF" class="h-10 w-auto cursor-pointer" />
+      </button>
+    </div>    
+  </div>
 </form>
-
-<app-graphics [month]="myForm.value.month || 0" 
-[year]="myForm.value.year || 2025"></app-graphics>
+<div *ngIf="graphicsReady" class="text-center text-lg text-gray-700 my-4">
+  <p>
+    <strong>Strikes:</strong> {{ graphicsComponent.data.strikes }}
+  </p>
+  <p>
+    <strong>¿Usuario penalizado?:</strong>
+    <span [ngClass]="graphicsComponent.data.penalized ? 'text-red-600 font-bold' : 'text-green-600'">
+      {{ graphicsComponent.data.penalized ? 'Sí' : 'No' }}
+    </span>
+  </p>
+</div>
+<app-graphics
+  [month]="myForm.value.month || null"
+  [year]="myForm.value.year || 2025"
+></app-graphics>

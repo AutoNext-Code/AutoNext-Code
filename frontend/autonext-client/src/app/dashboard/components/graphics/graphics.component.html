@@ -1,49 +1,73 @@
-<div class="flex flex-wrap justify-center gap-15 m-10">
-  <div class="border-card rounded-lg py-2 px-4">
-    <h2 class="text-center mt-2 text-2xl">Días Reservados</h2>
-    <div class="flex flex-col items-center">Total en {{ getMonthName(month) }}:
-       <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-        {{ data?.totalDaysReserved ?? 0 }}
-       </span>
-    </div>
-    <app-chart [chartOptions]="daysReservedChartOptions"></app-chart>
-  </div>
-  <div class="border-card rounded-lg py-2 px-4">
-    <h2 class="text-center mt-2 text-2xl">Horas Reservadas</h2>
-    <div class="flex flex-col items-center">Total en {{ getMonthName(month) }}:
-      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-       {{ data?.totalHoursReserved ?? 0 }}
-      </span>
-   </div>
-    <app-chart [chartOptions]="hoursReservedChartOptions"></app-chart>
-  </div>
-  <div class="border-card rounded-lg py-2 px-4">
-    <h2 class="text-center mt-2 text-2xl">Duración Promedia de Reserva</h2>
-    <div class="flex flex-col items-center">Promedio en {{ getMonthName(month) }}:
-      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-       {{ data?.averageSessionDuration ?? 0 }}
-      </span>
-   </div>
-    <app-chart [chartOptions]="avgDurationChartOptions"></app-chart>
-  </div>
-  <div class="border-card rounded-lg py-2 px-4">
-    <h2 class="text-center mt-2 text-2xl">Reservas Confirmadas</h2>
-    <div class="flex flex-col items-center">Total en {{ getMonthName(month) }}:
-      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-       {{ data?.confirmedReservations ?? 0 }}
-      </span>
-   </div>
-    <app-chart [chartOptions]="confirmedStatsChartOptions"></app-chart>
-  </div>
-  <div class="border-card rounded-lg py-2 px-4">
-    <h2 class="text-center mt-2 text-2xl">Reservas No Confirmadas</h2>
-    <div class="flex flex-col items-center">Total en {{ getMonthName(month) }}:
-      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
-       {{ data?.unconfirmedReservations ?? 0 }}
-      </span>
-   </div>
-    <app-chart [chartOptions]="unconfirmedStatsChartOptions"></app-chart>
-  </div>
+<div *ngIf="hasNoData()" class="w-full text-center text-gray-500 text-lg mt-10">
+  {{ getEmptyDataMessage() }}
 </div>
 
-<app-chart></app-chart>
+
+<div *ngIf="!hasNoData()" class="flex flex-wrap justify-center gap-15 m-10">
+
+  <div class="border-card rounded-lg py-2 px-4">
+    <h2 class="text-center mt-2 text-2xl">Días Reservados</h2>
+    <div class="flex flex-col items-center">
+      <span class="text-sm text-gray-600 mb-2">Total en {{ getMonthName(month) | lowercase }}</span>
+      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
+        {{ data?.totalDaysReserved ?? 0 }}
+      </span>
+    </div>
+    <app-custom-chart [chartOptions]="daysReservedChartOptions"></app-custom-chart>
+  </div>
+
+  <div class="border-card rounded-lg py-2 px-4">
+    <h2 class="text-center mt-2 text-2xl">Horas Reservadas</h2>
+    <div class="flex flex-col items-center">
+      <span class="text-sm text-gray-600 mb-2">Total en {{ getMonthName(month) | lowercase }}</span>
+      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
+        {{ data?.totalHoursReserved ?? 0 }}
+      </span>
+    </div>
+    <app-custom-chart [chartOptions]="hoursReservedChartOptions"></app-custom-chart>
+  </div>
+
+  <div class="border-card rounded-lg py-2 px-4">
+    <h2 class="text-center mt-2 text-2xl">Duración Promedia de Reserva</h2>
+    <div class="flex flex-col items-center">
+      <span class="text-sm text-gray-600 mb-2">Promedio en {{ getMonthName(month) | lowercase }}</span>
+      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
+        {{ data?.averageSessionDuration ?? 0 | number:'1.2-2'}}
+      </span>
+    </div>
+    <app-custom-chart [chartOptions]="avgDurationChartOptions"></app-custom-chart>
+  </div>
+
+  <div class="border-card rounded-lg py-2 px-4">
+    <h2 class="text-center mt-2 text-2xl">Horas por Día de la Semana</h2>
+    <div class="flex flex-col items-center">
+      <span class="text-sm text-gray-600 mb-2">Referente a {{ getMonthName(month) | lowercase }}</span>
+      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
+        {{ getTotalWeeklyHours() }}
+      </span>
+    </div>
+    <app-custom-chart [chartOptions]="weeklyHoursChartOptions"></app-custom-chart>
+  </div>
+
+  <div class="border-card rounded-lg py-2 px-4">
+    <h2 class="text-center mt-2 text-2xl">Reservas Confirmadas</h2>
+    <div class="flex flex-col items-center">
+      <span class="text-sm text-gray-600 mb-2">Total en {{ getMonthName(month) | lowercase }}</span>
+      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
+        {{ data?.confirmedReservations ?? 0 }}
+      </span>
+    </div>
+    <app-custom-chart [chartOptions]="confirmedStatsChartOptions"></app-custom-chart>
+  </div>
+
+  <div class="border-card rounded-lg py-2 px-4">
+    <h2 class="text-center mt-2 text-2xl">Reservas Canceladas</h2>
+    <div class="flex flex-col items-center">
+      <span class="text-sm text-gray-600 mb-2">Total en {{ getMonthName(month) | lowercase }}</span>
+      <span class="flex justify-center items-center bg-mydarkblue h-15 w-15 rounded-full text-white">
+        {{ data?.cancelledReservations  ?? 0 }}
+      </span>
+    </div>
+    <app-custom-chart [chartOptions]="cancelledStatsChartOptions"></app-custom-chart>
+  </div>
+</div>

@@ -4,17 +4,19 @@ import java.util.List;
 
 public class DashboardSummaryDto {
   private int strikes;
-  private boolean banned;
+  private boolean penalized;
   private int totalDaysReserved;
   private int totalHoursReserved;
   private double averageSessionDuration;
   private int confirmedReservations;
-  private int unconfirmedReservations;
+  private int cancelledReservations;
+
 
   private List<MonthlyMetricDto> monthlyDaysReserved;
   private List<MonthlyMetricDto> monthlyHoursReserved;
   private List<MonthlyMetricDto> monthlyAvgDuration;
-
+  private List<MonthlyMetricDto> monthlyCancelledReservations;
+  
   private List<MonthlyConfirmationDto> monthlyConfirmationStats;
 
   private List<WeekdayMetricDto> weeklyHoursReserved;
@@ -30,12 +32,12 @@ public class DashboardSummaryDto {
     this.strikes = strikes;
   }
 
-  public boolean isBanned() {
-    return banned;
+  public boolean isPenalized() {
+    return penalized;
   }
 
-  public void setBanned(boolean banned) {
-    this.banned = banned;
+  public void setPenalized(boolean penalized) {
+    this.penalized = penalized;
   }
 
   public int getTotalDaysReserved() {
@@ -70,12 +72,12 @@ public class DashboardSummaryDto {
     this.confirmedReservations = confirmedReservations;
   }
 
-  public int getUnconfirmedReservations() {
-    return unconfirmedReservations;
+  public int getCancelledReservations() {
+    return cancelledReservations;
   }
-
-  public void setUnconfirmedReservations(int unconfirmedReservations) {
-    this.unconfirmedReservations = unconfirmedReservations;
+  
+  public void setCancelledReservations(int cancelledReservations) {
+    this.cancelledReservations = cancelledReservations;
   }
 
   public List<MonthlyMetricDto> getMonthlyDaysReserved() {
@@ -108,6 +110,14 @@ public class DashboardSummaryDto {
 
   public void setMonthlyConfirmationStats(List<MonthlyConfirmationDto> monthlyConfirmationStats) {
     this.monthlyConfirmationStats = monthlyConfirmationStats;
+  }
+
+  public List<MonthlyMetricDto> getMonthlyCancelledReservations() {
+    return monthlyCancelledReservations;
+  }
+  
+  public void setMonthlyCancelledReservations(List<MonthlyMetricDto> monthlyCancelledReservations) {
+    this.monthlyCancelledReservations = monthlyCancelledReservations;
   }
 
   public List<WeekdayMetricDto> getWeeklyHoursReserved() {

@@ -1,15 +1,21 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+
+import { AuthManager } from '@auth/services/authmanager.service';
 import { AuthCardComponent } from '@auth/components/auth-card/auth-card.component';
 import { AuthValidationService } from '@auth/services/auth-validation.service';
+
 import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
+
 import { InputComponent } from '@shared/components/ui/input/input.component';
+
 import { AppComponent } from '../../../app.component';
+
 import { Observable } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AuthManager } from '@auth/services/authmanager.service';
+
 
 @Component({
   selector: 'app-forget-password',
@@ -19,6 +25,7 @@ import { AuthManager } from '@auth/services/authmanager.service';
     CommonModule,
     CustomButtonComponent,
     FormsModule,
+    RouterLink
   ],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
@@ -60,17 +67,12 @@ export class ForgetPasswordComponent {
         this.router.navigate(['/auth/login']);
       },
       error: (err: HttpErrorResponse) => {
-        if (err.status === 404 || err.status === 401) {
-          this.appComponent.showToast(
-            'success',
-            'Compruebe su correo',
-            'Correo enviado. Revisa tu bandeja de entrada.'
-          );
-          this.router.navigate(['/auth/login']);
-          sub.unsubscribe();
-        } else {
-          this.appComponent.showToast('error', 'Error inesperado', err.message);
-        }
+        this.appComponent.showToast(
+          'success',
+          'Compruebe su correo',
+          'Correo enviado. Revisa tu bandeja de entrada para reestablecer tu contraseña.'
+        );
+        this.router.navigate(['/auth/login']);
       },
     });
   }

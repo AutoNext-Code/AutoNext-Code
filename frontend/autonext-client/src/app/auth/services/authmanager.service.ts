@@ -57,14 +57,20 @@ export class AuthManager {
 
   requestPasswordReset(email: string): Observable<string> {
     return this.authHttp.requestPasswordReset(email).pipe(
-      catchError((err) =>
-        this.handleError(
-          err,
-          'No se pudo enviar el correo de restablecimiento.'
-        )
-      )
+      catchError((err: HttpErrorResponse) => {
+        const isUnauthorized = err.status === 401;
+  
+        const fallbackMessage = 'No se pudo enviar el correo de restablecimiento.';
+  
+        if (isUnauthorized) {
+          return throwError(() => new Error(fallbackMessage));
+        }
+  
+        return this.handleError(err, fallbackMessage);
+      })
     );
   }
+  
 
   requestNewPassword(token: string, password: string): Observable<string> {
     console.log('🟢 Enviando requestNewPassword con token:', token);

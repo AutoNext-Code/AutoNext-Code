@@ -87,6 +87,8 @@ export class BookingFormUtils {
         const minutes = adjustedDate.getMinutes();
         let hour = adjustedDate.getHours();
         let roundedMinutes;
+
+        // console.log('Adjusted Date:', adjustedDate, 'Minutes:', minutes, 'Hour:', hour);
     
         if (minutes >= 30) {
           hour += 1;
@@ -94,9 +96,12 @@ export class BookingFormUtils {
         } else {
           roundedMinutes = 30;
         }
+
+        // console.log('Rounded Hour:', hour, 'Rounded Minutes:', roundedMinutes);
     
         const h = hour < 10 ? '0' + hour : hour;
-        return `${h}:${roundedMinutes}`;
+        const m = roundedMinutes == 0 ? '00' : '30';
+        return `${h}:${m}`;
       }
 
 }

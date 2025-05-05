@@ -17,7 +17,7 @@ export class EditProfileService {
   private authService: AuthService = inject(AuthService); 
   private editProfileHttpService: EditProfileHttpService = inject(EditProfileHttpService);  
 
-  editProfile(name: string, surname: string, email: string): Observable<string> {
+  editProfile(name: string, surname: string, email: string): Observable<Object> {
 
     const token = this.authService.getToken();
 
@@ -28,15 +28,7 @@ export class EditProfileService {
 
 
     return this.editProfileHttpService.editProfile(name, surname, email, headers)
-    .pipe(
-      tap((message: string) => {
-        console.log('Mensaje del servidor:', message);
-      }),
-      catchError((err: HttpErrorResponse) => {
-        console.error('Error en la petición:', err);
-        return throwError(() => new Error('Error al enviar la petición: ' + err.message));
-      })
-    ) ;
+    .pipe() ;
 
   }
 

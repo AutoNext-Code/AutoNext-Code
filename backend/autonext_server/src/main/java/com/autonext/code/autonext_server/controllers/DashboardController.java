@@ -5,8 +5,14 @@ import com.autonext.code.autonext_server.dto.dashboardDtos.DashboardSummaryDto;
 import com.autonext.code.autonext_server.services.dashboard.DashboardPdfService;
 import com.autonext.code.autonext_server.services.dashboard.DashboardService;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +42,19 @@ public class DashboardController {
                 ? String.format("dashboard_%02d-%d.pdf", request.getMonth(), request.getYear())
                 : String.format("dashboard_%d.pdf", request.getYear());
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-                .body(pdf);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", filename);
+        headers.setAccessControlExposeHeaders(List.of("Content-Disposition"));
+
+        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/years")
+    public List<Integer> getAvailableYears() {
+        int currentYear = LocalDate.now().getYear();
+        return IntStream.rangeClosed(2024, currentYear)
+                .boxed()
+                .collect(Collectors.toList());
     }
 }

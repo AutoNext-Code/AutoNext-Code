@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +13,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.List;
 
+import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.services.JwtService;
 
 @Component
@@ -35,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
+
     final String authHeader = request.getHeader("Authorization");
     final String token;
     final String username;
@@ -52,14 +56,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
       if (jwtService.validateToken(token, userDetails)) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.getAuthorities());
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
+        if (userDetails instanceof User appUser) {
+          String roleFromToken = jwtService.extractUserRole(token);
+          String currentRole = appUser.getRole().name();
+
+          if (!roleFromToken.equals(currentRole)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("TOKEN_OUTDATED");
+            return;
+          }
+        }
+
+        String role = jwtService.extractUserRole(token); // asegúrate de devolver "Admin"
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+            userDetails, null, authorities);
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
 
     filterChain.doFilter(request, response);
   }
+
 }
