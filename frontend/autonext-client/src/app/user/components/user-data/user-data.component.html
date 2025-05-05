@@ -73,7 +73,6 @@
     [originalName]="user?.name || ''"
     [originalSurname]="user?.surname || ''"
     [originalEmail]="user?.email || ''"
-    (warningEmitter)="cancelChanges()"
-    (modalEmitter)="closeModal()">
+    (warningEmitter)="cancelChanges()">
   </edit-profile>
 </div>

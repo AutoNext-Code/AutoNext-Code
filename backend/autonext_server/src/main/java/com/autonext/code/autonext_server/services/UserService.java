@@ -12,6 +12,7 @@ import com.autonext.code.autonext_server.dto.UserDto;
 import com.autonext.code.autonext_server.dto.UserRequestDTO;
 import com.autonext.code.autonext_server.exceptions.EmailNotConfirmedException;
 import com.autonext.code.autonext_server.exceptions.NoChangesMadeException;
+import com.autonext.code.autonext_server.exceptions.UserAlreadyExistsException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.UserMapper;
 import com.autonext.code.autonext_server.models.User;
@@ -28,7 +29,8 @@ public class UserService {
   private final AuthenticationManager authenticationManager;
   private final ValidationsFunctions validationsFunctions;
 
-  public UserService(UserRepository userRepository, ValidationsFunctions validationsFunctions, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+  public UserService(UserRepository userRepository, ValidationsFunctions validationsFunctions,
+      PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
     this.userRepository = userRepository;
     this.validationsFunctions = validationsFunctions;
     this.passwordEncoder = passwordEncoder;
@@ -64,6 +66,12 @@ public class UserService {
     if (!validationsFunctions.isValidEmail(userRequestDto.getEmail())) {
       throw new RuntimeException("El formato de email es incorrecto");
     }
+    
+    if (!user.getEmail().equals(userRequestDto.getEmail())) {
+      if (userRepository.findByEmail(userRequestDto.getEmail()).isPresent()) {
+        throw new UserAlreadyExistsException("El usuario ya existe");
+      }
+    }
 
     if (!hasChanges(user, userRequestDto)) {
       throw new NoChangesMadeException("No se han realizado cambios en los datos del usuario");
@@ -87,22 +95,21 @@ public class UserService {
   @Transactional
   public void updatePassword(String newPassword, String oldPassword) {
     int userId = getAuthenticatedUserId();
-    
+
     try {
 
       User user = userRepository.findById(userId)
-        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+          .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), oldPassword)) ;
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), oldPassword));
 
       user.setPassword(passwordEncoder.encode(newPassword));
 
-      userRepository.save(user) ;
-      
-    } catch(StaleStateException sse) {
-      throw new StaleStateException("Usuario no encontrado.") ;
+      userRepository.save(user);
+
+    } catch (StaleStateException sse) {
+      throw new StaleStateException("Usuario no encontrado.");
     }
   }
-  
 
 }

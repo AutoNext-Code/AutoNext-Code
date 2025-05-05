@@ -14,9 +14,9 @@ export class EditProfileHttpService {
 
   constructor() { }
 
-  editProfile(name: string, surname: string, email: string, headers: HttpHeaders): Observable<string> {
+  editProfile(name: string, surname: string, email: string, headers: HttpHeaders): Observable<Object> {
     const body = { name, surname, email } ;
   
-    return this.http.put(PROFILE_EDIT_ENDPOINT, body, { responseType: 'text', headers: headers }) ;
+    return this.http.put(PROFILE_EDIT_ENDPOINT, body, { responseType: 'json', headers: headers }) ;
   }
 }
