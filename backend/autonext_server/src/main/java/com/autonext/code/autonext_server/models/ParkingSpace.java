@@ -66,6 +66,17 @@ public class ParkingSpace {
         this.blocked= false;
     }
 
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel, boolean blocked) {
+        this.name = name ;
+        this.x = x ;
+        this.y = y ;
+        this.direction = direction ;
+        this.plugType = plugType ;
+        this.parkingLevel = parkingLevel;
+        this.blocked= false;
+        this.blocked = blocked;
+    }
+
     public String getName() {
         return name;
     }  
