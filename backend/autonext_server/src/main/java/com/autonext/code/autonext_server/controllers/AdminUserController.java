@@ -14,7 +14,7 @@ import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.services.UserManagementService;
 
 @RestController
-@RequestMapping("/api/admin-user")
+@RequestMapping("/api/admin/user")
 public class AdminUserController {
 
     private final UserManagementService userManagementService;
@@ -23,7 +23,7 @@ public class AdminUserController {
         this.userManagementService = userManagementService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/get-users")
     public ResponseEntity<?> getAllUsers(@RequestParam(required = false) String email) {
         if (email != null) {
             try {
