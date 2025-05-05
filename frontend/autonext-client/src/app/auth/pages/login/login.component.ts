@@ -1,18 +1,20 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Component, HostListener, inject, ViewChild } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 
 import { InputComponent } from '@shared/components/ui/input/input.component';
 import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
 
-import { AppComponent } from '../../../app.component';
-import { AuthCardComponent } from '../../components/layouts/auth-card/auth-card.component';
-
-import { AuthService } from '../../services/auth.service';
-import { AuthValidationService } from '../../services/auth-validation.service';
+import { AuthService } from '@auth/services/auth.service';
+import { AuthValidationService } from '@auth/services/auth-validation.service';
+import { AuthManager } from '@auth/services/authmanager.service';
 
 import { Observable } from 'rxjs';
+import { AuthCardComponent } from '@auth/components/auth-card/auth-card.component';
+
+import { AppComponent } from '../../../app.component';
+
 
 @Component({
   selector: 'auth-login',
@@ -29,6 +31,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginComponent {
   private authService: AuthService = inject(AuthService);
+  private authManager = inject(AuthManager);
   private router: Router = inject(Router);
   private authValidation = inject(AuthValidationService);
   private appComponent: AppComponent = inject(AppComponent);
@@ -47,7 +50,7 @@ export class LoginComponent {
       return;
     }
   
-    this.authService.login(this.email, this.password).subscribe({
+    this.authManager.login(this.email, this.password).subscribe({
       next: () => {
         const role = this.authService.getRole();
         const redirectUrl = role === 'Admin' ? '/admin-home' : '/home';

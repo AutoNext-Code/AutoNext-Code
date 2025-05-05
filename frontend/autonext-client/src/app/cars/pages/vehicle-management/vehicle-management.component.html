@@ -1,0 +1,61 @@
+<shared-header></shared-header>
+
+<div class="p-6 space-y-8 max-w-7xl mx-auto overflow-hidden">
+
+  <div class="flex items-center justify-center pt-4">
+    <h1 class="text-2xl sm:text-4xl text-center font-semibold text-gray-800">
+      Gestión de Vehículos
+    </h1>
+  </div>
+
+  <div class="flex flex-col md:flex-row md:flex-wrap justify-center gap-6 items-center">
+    <ng-container *ngFor="let car of cars; index as i">
+      <car-card (delete)="openDeleteConfirmation( $event )" (edit)="openEditModal($event)" [car]="car"></car-card>
+    </ng-container>
+  </div>
+
+  <div class="fixed bottom-6 right-6 z-50">
+    <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md shadow-lg hover:bg-blue-900 transition button" (click)="openModal()">
+      <span>Añadir</span>
+      <span class="material-icons">add</span>
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="showModalEdit && carToEdit">
+  <cars-modal-car
+    [visible]="true"
+    [title]="'Edición de ' + carToEdit.name"
+    [carToEdit]="carToEdit"
+    (confirm)="handleEditCar($event)"
+    (cancel)="closeModal()"
+  ></cars-modal-car>
+</ng-container>
+
+<ng-container *ngIf="showModalEdit && !carToEdit">
+  <cars-modal-car
+    [visible]="true"
+    [title]="'Añadir Coche'"
+    (confirm)="handleNewCar($event)"
+    (cancel)="closeModal()"
+  ></cars-modal-car>
+</ng-container>
+
+<!-- Modal -->
+<ng-template #deleteContent>
+  <p>¿Estás seguro de que deseas eliminar este vehículo?</p>
+</ng-template>
+
+<ng-template #deleteButtons>
+  <button class="bg-red-600 px-4 py-2 rounded text-white" (click)="confirmDelete()">Eliminar</button>
+  <button class="bg-gray-400 px-4 py-2 rounded text-black" (click)="cancelDelete()">Cancelar</button>
+</ng-template>
+
+<shared-custom-modal
+  [title]="'Eliminar vehículo'"
+  [visible]="showConfirmModal"
+  [container]="deleteContent"
+  [buttons]="deleteButtons"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+/>

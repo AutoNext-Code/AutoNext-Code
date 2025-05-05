@@ -7,6 +7,8 @@ import { EmailConfirmationComponent } from '@auth/pages/email-confirmation/email
 
 import { AuthGuard } from '@guards/auth.guard';
 import { RoleGuard } from '@guards/role.guard';
+import { ForgetPasswordComponent } from '@auth/pages/forget-password/forget-password.component';
+import { ResetPasswordComponent } from '@auth/pages/reset-password/reset-password.component';
 
 
 export const routes: Routes = [
@@ -25,6 +27,14 @@ export const routes: Routes = [
         {
           path: 'email-confirmation/:token',
           component: EmailConfirmationComponent,
+        },
+        {
+          path: 'forget-password',
+          component: ForgetPasswordComponent,
+        },
+        {
+          path: 'reset-password/:token',
+          component: ResetPasswordComponent,
         },
       ]
     },
@@ -45,7 +55,12 @@ export const routes: Routes = [
     },
     {
       path: "vehicles",
-      loadComponent: () => import('./user/pages/vehicle-management/vehicle-management.component').then(m => m.VehicleManagementComponent),
+      loadComponent: () => import('./cars/pages/vehicle-management/vehicle-management.component').then(m => m.VehicleManagementComponent),
+      canActivate: [AuthGuard]
+    },
+    {
+      path: "user-dashboard",
+      loadComponent: () => import('./dashboard/pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
       canActivate: [AuthGuard]
     },
     {

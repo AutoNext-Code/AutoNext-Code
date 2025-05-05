@@ -9,16 +9,25 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { Space } from '@maps/interfaces/Space.interface';
-import { Direction } from '@maps/enums/direction.enum';
 import { State } from '@maps/enums/state.enum';
+import { PlugType } from '@maps/enums/plugType.enum';
+import { Direction } from '@maps/enums/direction.enum';
+import { MapService } from '@maps/services/map.service';
+import { Space } from '@maps/interfaces/Space.interface';
 import { DataRequestService } from '@maps/services/data-request.service';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
-import { PlugType } from '@maps/enums/plugType.enum';
+
 import { CommonModule } from '@angular/common';
-import { MapService } from '@maps/services/map.service';
+
+import { AuthService } from '@auth/services/auth.service';
+
+import { AppComponent } from '../../app.component';
+
+import { Observable } from 'rxjs';
+import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
+
 @Component({
   selector: 'app-maps',
   imports: [SpaceDataComponent, CommonModule],
@@ -43,12 +52,16 @@ export class MapsComponent implements OnInit {
 
   variable: boolean = true;
 
+  userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
+  canBook: CanBookResponse = {message: ""};
   modal: boolean = true;
   carData!: SpaceData;
 
   public dataRequestService = inject(DataRequestService);
   private mapService = inject(MapService);
+  private authService = inject(AuthService);
+  private appComponente = inject(AppComponent);
 
   ngOnInit(): void {
     this.isLoaded = false;
@@ -83,7 +96,7 @@ export class MapsComponent implements OnInit {
     return space.plugType === this.plugType || number == PlugType.Undefined;
   }
 
-  spaceNotTaken(space: Space): boolean {
+  spaceTaken(space: Space): boolean {
     return (
       space.state == State.Occupied ||
       space.state == State.Own_Reservation ||
@@ -126,12 +139,29 @@ export class MapsComponent implements OnInit {
       return;
     }
 
+    if(this.authService.isUserPenalized()) {
+      this.appComponente.showToast("error",   "Acceso restringido",
+        "No puedes realizar reservas porque estás penalizado actualmente.", 1600);
+      return
+    }
+
     this.carData = {
       ...this.dataRequestService.getData(),
       parkingSpaceId: spaceId,
       plugType: plugType,
     };
+    
+    this.userCanBook = this.mapService.checkUserCanBook(this.carData.date, this.carData.startTime, this.carData.endTime) ;
 
+    this.userCanBook.subscribe({
+      next: (data) => {
+        this.canBook = data ;
+      },
+      error: (error) => {
+        console.error('Error al verificar la disponibilidad:', error);
+      }
+    });
+        
     this.modal = false;
   }
 
@@ -176,5 +206,16 @@ export class MapsComponent implements OnInit {
         console.error('[Map] Error while refreshing map:', err);
       },
     });
+  }
+
+  getTooltipText(space: Space): string {
+    if (space.state === State.Own_Reservation) {
+      return 'Reserva de '+ space.startTime + ' a ' + space.endTime;
+    } else if(space.state === State.Occupied){
+      return 'Ocupado de ' + space.startTime +' a ' + space.endTime;
+    }else{
+      return 'Bloqueado por el sistema';
+    }
+
   }
 }

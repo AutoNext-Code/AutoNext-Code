@@ -3,7 +3,6 @@ package com.autonext.code.autonext_server.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +22,7 @@ import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.enums.Role;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
+import com.autonext.code.autonext_server.validations.ValidationsFunctions;
 
 @Service
 public class AuthService {
@@ -32,6 +32,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final ValidationsFunctions validationsFunctions;
 
     @Autowired
     private EmailSenderService emailSenderService;
@@ -40,12 +41,13 @@ public class AuthService {
     private String clientUrl;
 
     public AuthService(UserRepository userRepository, CarRepository carRepository, PasswordEncoder passwordEncoder,
-                       AuthenticationManager authenticationManager, JwtService jwtService) {
+                       AuthenticationManager authenticationManager, JwtService jwtService, ValidationsFunctions validationsFunctions) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.carRepository = carRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.validationsFunctions = validationsFunctions;
     }
 
     public void register(String email, String name, String surname, String password, String carPlate) {
@@ -53,11 +55,11 @@ public class AuthService {
             throw new RuntimeException("Los campos no pueden estar vacíos");
         }
 
-        if (!isValidEmail(email)) {
+        if (!validationsFunctions.isValidEmail(email)) {
             throw new RuntimeException("El formato de email es incorrecto");
         }
 
-        if (!isValidPassword(password)) {
+        if (!validationsFunctions.isValidPassword(password)) {
             throw new RuntimeException("La contraseña no cumple con los requisitos de seguridad");
         }
 
@@ -75,7 +77,6 @@ public class AuthService {
         user.setSurname(surname);
         user.setPassword(passwordEncoder.encode(password)); 
         user.setRole(Role.User); 
-        user.setBanned(false);
         user.setEmailConfirm(false);
         user.setConfirmationToken(UUID.randomUUID().toString().replace("-", ""));
 
@@ -105,20 +106,6 @@ public class AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
     
         return jwtService.generateToken(user);
-    }
-    
-
-
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
-    }
-
-    private boolean isValidPassword(String password) {
-        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
-        Pattern pattern = Pattern.compile(passwordRegex);
-        return pattern.matcher(password).matches();
     }
 
      public void registerUser(String email, String token) {

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.autonext.code.autonext_server.models.enums.PlugType;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,7 +35,7 @@ public class Car {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "car")
     private List<Booking> bookings;
 
     public Car() {
@@ -51,7 +50,7 @@ public class Car {
 
     public Car(String carPlate, String name, PlugType plugType, User user) {
         this.carPlate = carPlate;
-        this.name = name;
+        this.name = (name.length()>0)?name:this.carPlate;
         this.plugType = plugType;
         this.user = user;
     }

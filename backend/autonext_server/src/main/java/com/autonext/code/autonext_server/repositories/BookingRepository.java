@@ -2,6 +2,7 @@ package com.autonext.code.autonext_server.repositories;
 
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.ParkingSpace;
+import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 
@@ -12,10 +13,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaSpecificationExecutor<Booking> {
@@ -44,5 +47,38 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
                         @Param("confirmationStatus") ConfirmationStatus confirmationStatus,
                         @Param("date") LocalDate date,
                         @Param("expiredTime") LocalTime expiredTime);
+
+        @Modifying
+        @Query("UPDATE Booking b SET b.car = null WHERE b.car.id = :carId")
+        void carDeletionUnbound(@Param("carId") int carId);
+
+        @Query("SELECT COUNT(b) FROM Booking b WHERE b.car.id = :carId AND (b.status = :statusA OR b.status = :statusB)")
+        long countPendingBookingsByCarId(@Param("carId") int carId, @Param("statusA") BookingStatus statusA, @Param("statusB") BookingStatus statusB);
+
+        @Transactional
+        @Modifying
+        @Query("Update Booking b SET b.confirmationStatus=:newStatus WHERE b.user=:user AND b.confirmationStatus=:oldstatus")
+        void UpdateStatusByUser(@Param("user") User user,@Param("newStatus") ConfirmationStatus newStatys,
+         @Param("oldstatus") ConfirmationStatus oldstatus);
+
+
+        List<Booking> findByUserAndConfirmationStatus(User user, ConfirmationStatus confirmationStatus);
+
+        @Query("""
+                SELECT CASE WHEN COUNT(b) > 0 THEN TRUE ELSE FALSE END
+                FROM Booking b
+                WHERE b.user = :user
+                  AND b.date = :date
+                  AND b.startTime < :endTime
+                  AND b.endTime > :startTime
+            """)
+            boolean existsOverlappingBooking(
+                @Param("user") User user,
+                @Param("date") LocalDate date,
+                @Param("startTime") LocalTime startTime,
+                @Param("endTime") LocalTime endTime
+            );
+
+        int countByUserAndDate(User user, LocalDate date);
 
 }

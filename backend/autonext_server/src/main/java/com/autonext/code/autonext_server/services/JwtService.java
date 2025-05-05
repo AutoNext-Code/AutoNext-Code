@@ -37,6 +37,17 @@ public class JwtService {
         .compact();
   }
 
+  public String generateTokenPassword(User user) {
+    return Jwts.builder()
+        .subject(user.getEmail())
+        .claim("id", user.getId())
+        .issuedAt(new Date())
+        .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+        // Firmado de la clave secreta
+        .signWith(getSigningKey())
+        .compact();
+  }
+
   private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
     try {
       final Claims claims = Jwts.parser()
@@ -71,8 +82,13 @@ public class JwtService {
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }
 
-  private boolean isTokenExpired(String token) {
+  public boolean isTokenExpired(String token) {
     Date expirationDate = extractClaim(token, Claims::getExpiration);
     return expirationDate.before(new Date());
   }
+
+  public String extractUserRole(String token) {
+    return extractClaim(token, claims -> claims.get("role", String.class));
+  }
+  
 }

@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.autonext.code.autonext_server.models.enums.Role;
 
-import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -50,6 +49,9 @@ public class User implements UserDetails {
   @ManyToOne
   @JoinColumn(name = "work_center_id", nullable = true)
   private WorkCenter workCenter;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Strike> strikes;
   
   @Column(name = "job_position")
   private String jobPosition;
@@ -58,24 +60,18 @@ public class User implements UserDetails {
   private Role role;
 
   @Column(nullable = false)
-  private boolean isBanned;
-
-  @Column(nullable = false)
   private boolean emailConfirm;
 
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
 
-  @Column()
-  private int strikes;
+
 
   public User() {
     this.role = Role.User;
-    this.isBanned = false;
     this.emailConfirm = false;
     this.jobPosition = "";
     this.confirmationToken = null;
-    this.strikes = 0;
   }
 
   public User(String email, String name, String surname, String password, boolean emailConfirm) {
@@ -143,14 +139,6 @@ public class User implements UserDetails {
     this.role = role;
   }
 
-  public boolean isBanned() {
-    return isBanned;
-  }
-
-  public void setBanned(boolean isBanned) {
-    this.isBanned = isBanned;
-  }
-
   public boolean isEmailConfirm() {
     return emailConfirm;
   }
@@ -185,7 +173,7 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.emptyList();
+    return List.of(() -> this.role.name());
   }
 
   @Override
@@ -201,11 +189,19 @@ public class User implements UserDetails {
     this.workCenter = workCenter;
   }
 
-  public int getStrikes() {
+  public List<Strike> getStrikes() {
     return strikes;
   }
 
-  public void setStrikes(int strikes) {
+  public void setStrikes(List<Strike> strikes) {
     this.strikes = strikes;
   }
+
+  public void addStrike(Strike strike){
+    this.strikes.add(strike);
+  }
+
+
+
+  
 }

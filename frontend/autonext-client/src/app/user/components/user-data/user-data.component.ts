@@ -4,10 +4,12 @@ import { AppComponent } from '../../../app.component';
 import { UserDto } from '@user/interfaces/user.interface';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../services/profile.service';
+import { PasswordChangerComponent } from "../password-changer/password-changer.component";
+import { EditProfileComponent } from "../edit-profile/edit-profile.component";
 
 @Component({
   selector: 'profile-user-data',
-  imports: [CommonModule],
+  imports: [CommonModule, PasswordChangerComponent, EditProfileComponent],
   templateUrl: './user-data.component.html',
   styleUrls: ['./user-data.component.css']
 })
@@ -17,9 +19,12 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   private ngZone: NgZone = inject(NgZone);
   private appComponent: AppComponent = inject(AppComponent);
   private profileService: ProfileService = inject(ProfileService);
+  
 
   user: UserDto | null = null;
 
+  edModal:boolean = true ;
+  passwdModal:boolean = true ;
   isMobile = false;
 
   ngOnInit(): void {
@@ -28,10 +33,6 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public navigate(path: string): void {
     this.router.navigate([path]);
-  }
-
-  public warning(): void {
-    this.appComponent.showToast('warn', 'No implementado', "", 3000, 80);
   }
 
   public loadUserProfile(): void {
@@ -45,6 +46,30 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   
+  public passwordModal(): void {
+
+    this.passwdModal = false ;
+
+  }
+  
+  public editModal(): void {
+
+    this.edModal = false ;
+
+  }
+
+  cancelChanges() {
+
+    this.appComponent.showToast('warn', 'Cambios Desechados', "No se guardaron los cambios realizados");
+    this.closeModal() ;
+
+  }
+
+  closeModal() {
+    this.passwdModal = true ;
+    this.edModal = true ;
+  }
+    
 
   ngAfterViewInit() {
     this.checkScreenSize();
@@ -60,4 +85,5 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     window.removeEventListener('resize', this.checkScreenSize);
   }
+
 }

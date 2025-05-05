@@ -6,7 +6,7 @@
     <div class="lg:w-1/2">
       <div class="flex flex-col gap-3 text-left md:text-left lg:text-[20px] md:text-[16px] max-sm:text-[25px]">
         <p class="text-4xl text-center md:text-left font-bold pb-1">
-          {{ user?.name }}
+          {{ user?.name }} {{ user?.surname }}
         </p>
         <p>Correo electrónico: {{ user?.email }}</p>
         <p>Puesto: {{ user?.jobPosition }}</p>
@@ -19,7 +19,7 @@
   <div class="flex flex-col md:flex-row text-center items-center gap-7 w-full">
     <button
       class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
-      (click)="warning()"
+      (click)="editModal()"
     >
       <span>Editar Perfil</span>
       <i class="material-icons">edit</i>
@@ -27,7 +27,7 @@
 
     <button
       class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
-      (click)="warning()"
+      (click)="passwordModal()"
     >
       <span>Contraseña</span>
       <i class="material-icons">lock_person</i>
@@ -48,5 +48,31 @@
       <span>Mis Reservas</span>
       <i class="material-icons">calendar_month</i>
     </button>
+
+    <button
+      class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
+      (click)="navigate('/user-dashboard')"
+    >
+      <span>Mi Dashboard</span>
+      <i class="material-icons">dashboard</i>
+    </button>
   </div>
+</div>
+
+<div
+  class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
+>
+  <password-changer 
+    [hidden]="passwdModal" 
+    (warningEmitter)="cancelChanges()"
+    (modalEmitter)="closeModal()">
+  </password-changer>
+
+  <edit-profile 
+    [hidden]="edModal"
+    [originalName]="user?.name || ''"
+    [originalSurname]="user?.surname || ''"
+    [originalEmail]="user?.email || ''"
+    (warningEmitter)="cancelChanges()">
+  </edit-profile>
 </div>

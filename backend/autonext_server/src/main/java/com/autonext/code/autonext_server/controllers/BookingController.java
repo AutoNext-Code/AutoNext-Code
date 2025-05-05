@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autonext.code.autonext_server.dto.BookCheckDTO;
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
+import com.autonext.code.autonext_server.exceptions.OverlappingBookingException;
+import com.autonext.code.autonext_server.exceptions.ParkingLimitOverpassException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceOccupiedException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
@@ -33,7 +37,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -66,6 +74,7 @@ public class BookingController {
     return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
   }
 
+  @PreAuthorize("!hasAuthority('Penalized')")
   @PostMapping("")
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public ResponseEntity<String> createBooking(@Valid @RequestBody MapBookingDTO booking) {
@@ -83,6 +92,10 @@ public class BookingController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
     } catch (ParkingSpaceOccupiedException pso) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("La plaza ya esta ocupada");
+    } catch (ParkingLimitOverpassException plo) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Ha superado el limite de reservas diarias");
+    } catch (OverlappingBookingException obe) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya has hecho una reserva en ese horario");
     } catch (IllegalArgumentException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     } catch (Exception e) {
@@ -124,6 +137,20 @@ public class BookingController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
   }
+
+  @PostMapping("/can-book")
+  public Map<String, String> checkUserCanBook(
+      @Valid @RequestBody BookCheckDTO body) {
+
+    String resultado = bookingService.checkIfUserCanBook(
+         body.getDate(),
+         LocalTime.parse(body.getStartTime(), DateTimeFormatter.ISO_TIME),
+         LocalTime.parse(body.getEndTime(),   DateTimeFormatter.ISO_TIME)
+    );
+    
+    return Collections.singletonMap("message", resultado);
+  }
+
 
   /*
    * GUARDADO PARA EL ADMIN

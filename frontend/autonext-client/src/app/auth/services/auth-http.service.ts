@@ -3,7 +3,13 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { CONFIRM_EMAIL_ENDPOINT, LOGIN_ENDPOINT, REGISTER_ENDPOINT } from '../../config';
+import {
+  CONFIRM_EMAIL_ENDPOINT,
+  FORGET_PASSWORD,
+  LOGIN_ENDPOINT,
+  REGISTER_ENDPOINT,
+  RESET_PASSWORD,
+} from '../../config';
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +24,32 @@ export class AuthHttpService {
     return this.http.post(LOGIN_ENDPOINT, body, { responseType: 'text' });
   }
 
-  register(email: string, name:string, surname:string, password:string, carPlate: string, ): Observable<string> {
-    const body = { email ,name, surname, password, carPlate };
+  register(
+    email: string,
+    name: string,
+    surname: string,
+    password: string,
+    carPlate: string
+  ): Observable<string> {
+    const body = { email, name, surname, password, carPlate };
     return this.http.post(REGISTER_ENDPOINT, body, { responseType: 'text' });
   }
 
   confirmEmail(token: string): Observable<string> {
-    return this.http.put(CONFIRM_EMAIL_ENDPOINT, token, { responseType: 'text'});
+    return this.http.put(CONFIRM_EMAIL_ENDPOINT, token, {
+      responseType: 'text',
+    });
   }
 
+  requestPasswordReset(email: string): Observable<string> {
+    console.log('por que entras aqui'); 
+    return this.http.post(FORGET_PASSWORD,  email, { responseType: 'text' });
+  }
+
+  requestNewPassword(token: string, password: string): Observable<string> {
+    console.log('🔵 URL usada en PUT:', RESET_PASSWORD(token)); 
+    return this.http.put(RESET_PASSWORD(token), password, {
+      responseType: 'text',
+    });
+  }
 }

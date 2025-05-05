@@ -1,0 +1,52 @@
+<ng-template #content>
+  <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4" >
+    <div [hidden]="!warningView" class="text-center">
+      <shared-warning-message
+        [title]="'¡Aviso!'"
+        [text]="'Al modificar su perfil, deberá volver a iniciar sesión para confirmar los cambios. ¿Está de acuerdo?'"
+      ></shared-warning-message>
+    </div>
+    <div [hidden]="warningView" class="grid grid-cols-1 text-[17px] mx-5 mt-5">
+      <shared-input type="text" icon="person"  [(ngModel)]="name"      placeholder="Nombre"></shared-input>
+      <shared-input type="text" icon="person" [(ngModel)]="surname"     placeholder="Apellidos"></shared-input>
+      <shared-input type="text" icon="email" [(ngModel)]="email" placeholder="Correo electrónico"></shared-input>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #buttons>
+  <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+    <app-custom-button
+      color="gray"
+      icon="close"
+      label="Cancelar"
+      class="rounded"
+      (onClick)="warningClose()">
+    </app-custom-button>
+    <div></div>
+    <app-custom-button
+      color="dark-blue"
+      icon="arrow_forward"
+      label="Continuar"
+      class="rounded"
+      (onClick)="acceptWarning()"
+      [hidden]="!warningView">
+    </app-custom-button>
+    <app-custom-button
+      color="dark-blue"
+      icon="book"
+      label="Guardar"
+      class="rounded"
+      [hidden]="warningView"
+      (onClick)="saveData()">
+    </app-custom-button>
+  </div>
+</ng-template>
+
+<shared-custom-modal
+  [title]="'Editar Perfil'"
+  [container]="content"
+  [buttons]="buttons"
+  [visible]="true"
+></shared-custom-modal>
