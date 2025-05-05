@@ -57,9 +57,24 @@ public class AdminUserController {
         return ResponseEntity.ok(userManagementService.getAllUsers());
     }
 
+    @PutMapping("/update-job-position/{userId}")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<String> updateJobPosition(@PathVariable int userId, @RequestParam String jobPosition) {
+        try {
+            userManagementService.setJobPosition(userId, jobPosition);
+            return ResponseEntity.ok("Puesto de trabajo actualizado correctamente");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+        }
+    }
+
     @PutMapping("/toggle-admin-role/{userId}")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> toggleAdminRole(@PathVariable int userId) {
+    public ResponseEntity<String> toggleAdminRole(@PathVariable int userId) {
         try {
 
             UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
@@ -77,6 +92,21 @@ public class AdminUserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+        }
+    }
+
+    @PutMapping("/update-work-center/{userId}")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<?> updateWorkCenter(@PathVariable int userId, @RequestParam int workCenterId) {
+        try {
+            userManagementService.setWorkCenter(userId, workCenterId);
+            return ResponseEntity.ok("Centro de trabajo actualizado correctamente");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Centro de trabajo no encontrado");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
         }
