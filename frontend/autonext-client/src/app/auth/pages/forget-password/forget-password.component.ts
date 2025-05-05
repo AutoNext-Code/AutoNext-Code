@@ -67,17 +67,12 @@ export class ForgetPasswordComponent {
         this.router.navigate(['/auth/login']);
       },
       error: (err: HttpErrorResponse) => {
-        if (err.status === 404 || err.status === 401) {
-          this.appComponent.showToast(
-            'success',
-            'Compruebe su correo',
-            'Correo enviado. Revisa tu bandeja de entrada.'
-          );
-          this.router.navigate(['/auth/login']);
-          sub.unsubscribe();
-        } else {
-          this.appComponent.showToast('error', 'Error inesperado', err.message);
-        }
+        this.appComponent.showToast(
+          'success',
+          'Compruebe su correo',
+          'Correo enviado. Revisa tu bandeja de entrada para reestablecer tu contraseña.'
+        );
+        this.router.navigate(['/auth/login']);
       },
     });
   }

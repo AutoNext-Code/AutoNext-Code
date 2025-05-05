@@ -52,7 +52,7 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Strike> strikes;
-  
+
   @Column(name = "job_position")
   private String jobPosition;
 
@@ -64,8 +64,6 @@ public class User implements UserDetails {
 
   @Column(name = "confirmation_token", unique = true)
   private String confirmationToken;
-
-
 
   public User() {
     this.role = Role.User;
@@ -171,16 +169,6 @@ public class User implements UserDetails {
     this.bookings = bookings;
   }
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(() -> this.role.name());
-  }
-
-  @Override
-  public String getUsername() {
-    return email;
-  }
-
   public WorkCenter getWorkCenter() {
     return workCenter;
   }
@@ -197,11 +185,17 @@ public class User implements UserDetails {
     this.strikes = strikes;
   }
 
-  public void addStrike(Strike strike){
+  public void addStrike(Strike strike) {
     this.strikes.add(strike);
   }
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(() -> this.role.name());
+  }
 
-
-  
+  @Override
+  public String getUsername() {
+    return email;
+  }
 }
