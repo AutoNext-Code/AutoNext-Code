@@ -25,9 +25,7 @@ export const CENTERS_LEVELS = `${API_BASE_URL}parking/centers`
 /* ENDPOINTS DE BOOKINGS */
 
 export const BOOKINGS_ENDPOINT = `${API_BASE_URL}bookings`;
-
 export const BOOKINGS_LIST_ENDPOINT = `${API_BASE_URL}bookings/booking-list`;
-
 export const BOOKINGS_USER_CHECK = `${API_BASE_URL}bookings/can-book`;
 
 export const BOOKING_CANCEL_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOINT}/${id}/cancel`;
@@ -36,11 +34,8 @@ export const BOOKING_CONFIRMATION_ENDPOINT = (id: number) => `${BOOKINGS_ENDPOIN
 /* ENDPOINTS DE USER */
 
 export const DATA_PROFILE_ENDPOINT = `${API_BASE_URL}user/profile`;
-
 export const PROFILE_EDIT_ENDPOINT = `${API_BASE_URL}user/edit`;
-
 export const PASSWORD_CHANGE_ENDPOINT = `${API_BASE_URL}user/password-edit`;
-
 export const CARS_USER_ENDPOINT = `${API_BASE_URL}cars`;
 
 /* ENDPOINT PARA WORKCENTER */
@@ -52,3 +47,8 @@ export const CENTER_NAME_ENDPOINT = `${API_BASE_URL}parking/centers-names`;
 export const DASHBOARD = `${API_BASE_URL}dashboard`;
 export const DASHBOARD_PDF = `${API_BASE_URL}dashboard/export`;
 export const DASHBOARD_YEARS = `${API_BASE_URL}dashboard/years`;
+
+/* ENDPOINTS PARA ADMINISTRADOR */
+
+export const GET_USERS = `${API_BASE_URL}admin/user/get-users`;
+export const TOGGLE_ROLE = (id: number) =>  `${API_BASE_URL}admin/user/toggle-admin-role/${id}`;
