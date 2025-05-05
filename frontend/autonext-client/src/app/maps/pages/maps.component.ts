@@ -44,6 +44,7 @@ export class MapsComponent implements OnInit {
   private justClosed = false;
 
   @Input() chart: any;
+  @Input({required: true}) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
 
   @Output() mapLoaded = new EventEmitter<boolean>();
