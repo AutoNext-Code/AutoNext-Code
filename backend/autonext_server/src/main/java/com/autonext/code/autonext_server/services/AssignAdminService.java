@@ -22,6 +22,10 @@ public class AssignAdminService {
             if (adminId != ADMIN_ID || !userRepository.existsById(adminId)) {
                 throw new AuthorizationException("No autorizado para realizar esta acción");
             }
+
+            if (adminId == userId) {
+                throw new AuthorizationException("No autorizado para realizar esta acción");
+            }
             
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
@@ -30,6 +34,8 @@ public class AssignAdminService {
                 user.setRole(Role.User);
             } else if(user.getRole() == Role.User) {
                 user.setRole(Role.Admin);
+            } else {
+                throw new AuthorizationException("No se puede hacer administrador a un usuario penalizado.");
             }
 
             userRepository.save(user);
