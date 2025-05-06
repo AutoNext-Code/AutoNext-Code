@@ -17,12 +17,7 @@ export class AdminService {
 
   toggleAdminRole(id: number): Observable<string> {
     return this.adminHttp.toggleAdminRole(id).pipe(
-      catchError((error) => {
-        console.error('Error al cambiar el rol del usuario:', error);
-        return throwError(
-          () => new Error('No se pudo actualizar el rol del usuario.')
-        );
-      })
+      catchError((error) => throwError(() => error))
     );
   }
 
