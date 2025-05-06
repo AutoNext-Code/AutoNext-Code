@@ -11,15 +11,7 @@ export class AdminService {
 
   getUsers(email?: string): Observable<UserForAdmin[]> {
     return this.adminHttp.getUsers(email).pipe(
-      catchError((error) => {
-        console.error('Error al cargar usuarios:', error);
-        return throwError(
-          () =>
-            new Error(
-              'No se pudo cargar la lista de usuarios. Intenta más tarde.'
-            )
-        );
-      })
+      catchError((error) => throwError(() => error))
     );
   }
 

@@ -7,4 +7,5 @@ export interface UserForAdmin {
   role: 'Admin' | 'User' | 'Penalized' | 'Banned';
   jobPosition: string;
   workCenter: string;
+  selectedJobPosition?: number;
 }

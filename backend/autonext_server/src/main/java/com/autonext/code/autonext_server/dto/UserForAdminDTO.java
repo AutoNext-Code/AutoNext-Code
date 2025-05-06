@@ -1,5 +1,6 @@
 package com.autonext.code.autonext_server.dto;
 
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.models.enums.Role;
 
 public class UserForAdminDTO {
@@ -8,7 +9,7 @@ public class UserForAdminDTO {
     private String email;
     private int strikes;
     private Role role;
-    private String jobPosition;
+    private JobPosition jobPosition;
     private String workCenter;
     private int id;
 
@@ -16,7 +17,7 @@ public class UserForAdminDTO {
     }
 
     public UserForAdminDTO(int id, String name, String surname, String email, int strikes, Role role,
-            String jobPosition,
+            JobPosition jobPosition,
             String workCenter) {
         this.id = id;
         this.name = name;
@@ -68,11 +69,11 @@ public class UserForAdminDTO {
         this.role = role;
     }
 
-    public String getJobPosition() {
+    public JobPosition getJobPosition() {
         return jobPosition;
     }
 
-    public void setJobPosition(String jobPosition) {
+    public void setJobPosition(JobPosition jobPosition) {
         this.jobPosition = jobPosition;
     }
 
