@@ -10,6 +10,7 @@ import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.mapper.UserMapper;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.WorkCenter;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import com.autonext.code.autonext_server.repositories.WorkCenterRepository;
 
@@ -37,7 +38,7 @@ public class UserManagementService {
                 .map(userMapper::convertToUserForAdminDTO);
     }
 
-    public void setJobPosition(int userId, String jobPosition) {
+    public void setJobPosition(int userId, JobPosition jobPosition) {
         if (jobPosition == null) {
             throw new IllegalArgumentException("El puesto de trabajo no puede ser null");
         }

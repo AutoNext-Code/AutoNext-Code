@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.models.enums.Role;
 
 import jakarta.persistence.CascadeType;
@@ -54,7 +55,7 @@ public class User implements UserDetails {
   private List<Strike> strikes;
 
   @Column(name = "job_position")
-  private String jobPosition;
+  private JobPosition jobPosition;
 
   @Column(nullable = false)
   private Role role;
@@ -68,7 +69,7 @@ public class User implements UserDetails {
   public User() {
     this.role = Role.User;
     this.emailConfirm = false;
-    this.jobPosition = "";
+    this.jobPosition = JobPosition.Undefined;
     this.confirmationToken = null;
   }
 
@@ -121,11 +122,11 @@ public class User implements UserDetails {
     this.password = password;
   }
 
-  public String getJobPosition() {
+  public JobPosition getJobPosition() {
     return jobPosition;
   }
 
-  public void setJobPosition(String jobPosition) {
+  public void setJobPosition(JobPosition jobPosition) {
     this.jobPosition = jobPosition;
   }
 
