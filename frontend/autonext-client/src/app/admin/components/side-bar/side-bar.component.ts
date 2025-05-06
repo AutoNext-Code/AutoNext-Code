@@ -24,7 +24,7 @@ export class SideBarComponent {
       { route: '/admin-home/dashboard', name: 'Dashboard', icon: this.sanitizeHtml(ICONS.dashboard) },
       { route: '/admin-home/incidents', name: 'Incidencias', icon: this.sanitizeHtml(ICONS.incidents) },
       { route: '/admin-home/place-management', name: 'Gestión de plazas', icon: this.sanitizeHtml(ICONS.stations) },
-      { route: '/admin-home/delegation-management', name: 'Gestión de delegaciones', icon: this.sanitizeHtml(ICONS.roofing) },
+      { route: '/admin-home/booking-management', name: 'Gestión de reservas', icon: this.sanitizeHtml(ICONS.roofing) },
       { route: '/admin-home/user-management', name: 'Gestión de usuarios', icon: this.sanitizeHtml(ICONS.supervisedUser) }
     ]
   }
