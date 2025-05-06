@@ -8,6 +8,6 @@
   <!-- Subcategoría -->
   <label class="block mt-4 font-semibold mb-1" [textContent]="subCatText"></label>
   <select formControlName="subcat" (change)="onSubcategoryChange()" class="border p-2 rounded w-full" >
-    <option *ngFor="let subcat of subCatOptions" [value]="subcat">{{ subcat }}</option>
+    <option *ngFor="let subcat of subCatOptions" [value]="subcat.id">{{ subcat.number }}</option>
   </select>
 </form>

@@ -28,6 +28,12 @@ export class MapService {
       .pipe(map((response) => response as Chart));
   }
 
+  formMapLoadById(id: number) {
+    return this.maphttp
+      .getFormMapById(id)
+      .pipe(map((response) => response as Chart));
+  }
+
   centersLevelsLoad() {
     this.maphttp
       .getCentersLevels()

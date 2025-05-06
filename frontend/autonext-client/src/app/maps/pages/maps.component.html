@@ -10,7 +10,7 @@
 
       @for (space of spaces; track $index) {
 
-        @if(spaceTaken(space)){
+        @if(spaceTaken(space) && !adminView){
           <g class="tooltip-space" [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ')'">
 
             <g
@@ -67,6 +67,22 @@
 
 
 
+          }@else if(adminView){
+
+            <g
+            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+            (click)="toggleData()"
+            class="cursor-pointer"
+            >
+            <use
+              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+              width="35" height="44"
+              [attr.filter]="space.state">
+            </use>
+          </g>
+
+
+
           }@else {
             <g
             [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
@@ -101,5 +117,55 @@
       [canBook]="canBook"
     >
     </space-data>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="adminModal">
+  <div
+    class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
+    id="modal"
+  >
+
+  <ng-template #content>
+    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4" >
+
+      <h1>Reservas</h1>
+
+    </div>
+  
+  </ng-template>
+  
+  
+  <ng-template #buttons>
+    <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+      <app-custom-button
+        color="gray"
+        icon="close"
+        label="Cancelar"
+        class="m-4 rounded"
+        (onClick)="closeAdmin()">
+      </app-custom-button>
+      <app-custom-button
+        color="red"
+        icon="book"
+        label="Guardar"
+        class="m-4 rounded">
+      </app-custom-button>
+      <app-custom-button
+        color="green"
+        icon="book"
+        label="Editar"
+        class="m-4 rounded">
+      </app-custom-button>
+    </div>
+  </ng-template>
+  
+  <shared-custom-modal
+    [title]="'Edicion De Plaza'"
+    [container]="content"
+    [buttons]="buttons"
+    [visible]="true"
+  ></shared-custom-modal>
+
   </div>
 </ng-container>
