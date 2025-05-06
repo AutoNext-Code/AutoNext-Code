@@ -17,6 +17,7 @@ import com.autonext.code.autonext_server.dto.UserForAdminDTO;
 import com.autonext.code.autonext_server.exceptions.AuthorizationException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.services.AssignAdminService;
 import com.autonext.code.autonext_server.services.UserManagementService;
 
@@ -59,7 +60,7 @@ public class AdminUserController {
 
     @PutMapping("/update-job-position/{userId}")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<String> updateJobPosition(@PathVariable int userId, @RequestParam String jobPosition) {
+    public ResponseEntity<String> updateJobPosition(@PathVariable int userId, @RequestParam JobPosition jobPosition) {
         try {
             userManagementService.setJobPosition(userId, jobPosition);
             return ResponseEntity.ok("Puesto de trabajo actualizado correctamente");
