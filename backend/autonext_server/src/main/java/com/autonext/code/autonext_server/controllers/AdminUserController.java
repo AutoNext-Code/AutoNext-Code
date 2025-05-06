@@ -1,5 +1,12 @@
 package com.autonext.code.autonext_server.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,11 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autonext.code.autonext_server.dto.BookingDTO;
 import com.autonext.code.autonext_server.dto.UserForAdminDTO;
 import com.autonext.code.autonext_server.exceptions.AuthorizationException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
+import com.autonext.code.autonext_server.mapper.BookingMapper;
+import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.User;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.services.AssignAdminService;
+import com.autonext.code.autonext_server.services.BookingService;
 import com.autonext.code.autonext_server.services.UserManagementService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,6 +41,9 @@ public class AdminUserController {
     private final UserManagementService userManagementService;
 
     private final AssignAdminService assignAdminService;
+
+    @Autowired
+    private BookingService bookingService;
 
     public AdminUserController(UserManagementService userManagementService, AssignAdminService assignAdminService) {
         this.userManagementService = userManagementService;
@@ -59,7 +74,7 @@ public class AdminUserController {
 
     @PutMapping("/update-job-position/{userId}")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<String> updateJobPosition(@PathVariable int userId, @RequestParam String jobPosition) {
+    public ResponseEntity<String> updateJobPosition(@PathVariable int userId, @RequestParam JobPosition jobPosition) {
         try {
             userManagementService.setJobPosition(userId, jobPosition);
             return ResponseEntity.ok("Puesto de trabajo actualizado correctamente");
@@ -111,5 +126,29 @@ public class AdminUserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
         }
     }
+
+
+    @GetMapping("/bookings-user")
+    public Page<BookingDTO>  getBookingsByUser(@RequestParam int userid, 
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "true") boolean ascending) {
+
+        PageRequest pageable = buildPageRequest(page, ascending);
+
+        Page<Booking> bookings = bookingService.getBookingPageUser(pageable, userid);
+
+        List<BookingDTO> bookingDTOs = bookings.getContent().stream()
+        .map(BookingMapper::toDTO)
+        .toList();
+        return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
+
+
+    }
+    
+
+    private PageRequest buildPageRequest(int page, boolean ascending) {
+    Sort sort = ascending ? Sort.by("date").ascending() : Sort.by("date").descending();
+    return PageRequest.of(page, 6, sort);
+  }
 
 }

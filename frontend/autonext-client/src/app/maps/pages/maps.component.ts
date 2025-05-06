@@ -8,31 +8,44 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { State } from '@maps/enums/state.enum';
 import { PlugType } from '@maps/enums/plugType.enum';
 import { Direction } from '@maps/enums/direction.enum';
 import { MapService } from '@maps/services/map.service';
 import { Space } from '@maps/interfaces/Space.interface';
+import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
 import { DataRequestService } from '@maps/services/data-request.service';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
-import { CommonModule } from '@angular/common';
-
 import { AuthService } from '@auth/services/auth.service';
+import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
+import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 
 import { AppComponent } from '../../app.component';
 
+import { SelectPlugTypeComponent } from "../components/select-plug-type/select-plug-type.component";
+
 import { Observable } from 'rxjs';
-import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
-import { CustomModalComponent } from "../../shared/components/custom-modal/custom-modal.component";
-import { CustomButtonComponent } from "../../shared/components/ui/custom-button/custom-button.component";
+import { BookingListService } from '@maps/services/booking-list.service';
+import { BookingList } from '@maps/interfaces/bookingList.interface';
+import { BookingListComponent } from "../components/booking-list/booking-list.component";
 
 @Component({
   selector: 'app-maps',
-  imports: [SpaceDataComponent, CommonModule, CustomModalComponent, CustomButtonComponent],
+  imports: [
+    SpaceDataComponent,
+    CommonModule,
+    CustomModalComponent,
+    CustomButtonComponent,
+    SelectPlugTypeComponent,
+    FormsModule,
+    BookingListComponent
+],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
 })
@@ -44,24 +57,28 @@ export class MapsComponent implements OnInit {
   formData!: SpaceData;
 
   private justClosed = false;
-
+  
   @Input() chart: any;
   @Input({required: true}) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
-
+  
   @Output() mapLoaded = new EventEmitter<boolean>();
-
+  
   @ViewChild('svgElement') svgElement!: ElementRef;
-
-  variable: boolean = true;
-
+  
   userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
   canBook: CanBookResponse = {message: ""};
   modal: boolean = true;
+  edit: boolean = false;
   adminModal: boolean = false;
+  bookingList!: BookingList ;
+  spaceEditedId!: number ;
   carData!: SpaceData;
+  
+  editPlugType!: PlugType ; 
 
+  private bookingListService: BookingListService = inject(BookingListService) ;
   public dataRequestService = inject(DataRequestService);
   private mapService = inject(MapService);
   private authService = inject(AuthService);
@@ -169,10 +186,6 @@ export class MapsComponent implements OnInit {
     this.modal = false;
   }
 
-  toggleData(): void {
-    this.adminModal = true ;
-  }
-
   closeModal(): void {
     this.modal = true;
     this.carData = null!;
@@ -185,7 +198,18 @@ export class MapsComponent implements OnInit {
   }
 
   closeAdmin(): void {
+    this.edit = false ;
     this.adminModal = false ;
+  }
+
+  toggleAdmin(id: number): void {
+    this.spaceEditedId = id ;
+    this.adminModal = true ;
+    this.loadPastBookings(1) ;
+  }
+
+  toggleEdit(): void {
+    this.edit = true ;
   }
 
   stateColorMap: Record<string, string> = {
@@ -199,6 +223,10 @@ export class MapsComponent implements OnInit {
   refreshMap() {
     if (!this.chart) {
       return;
+    }
+
+    if(this.adminView) {
+      return ;
     }
 
     const mapParams = {
@@ -216,6 +244,18 @@ export class MapsComponent implements OnInit {
       },
       error: (err) => {
         console.error('[Map] Error while refreshing map:', err);
+      },
+    });
+  }
+
+  loadPastBookings(page: number) {
+
+    this.bookingListService.getAllBookingBySpace(this.spaceEditedId, page).subscribe({
+      next: (listData) => {
+        this.bookingList = listData ;
+      },
+      error: (err) => {
+        console.error('Error while loading map:', err);
       },
     });
   }

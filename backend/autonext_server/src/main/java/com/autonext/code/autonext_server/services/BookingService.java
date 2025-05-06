@@ -3,10 +3,12 @@ package com.autonext.code.autonext_server.services;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
+import com.autonext.code.autonext_server.exceptions.AuthorizationException;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.OverlappingBookingException;
@@ -28,6 +31,7 @@ import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.WorkCenter;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.ConfigRepository;
@@ -65,6 +69,8 @@ public class BookingService {
     Specification<Booking> spec = buildBookingFilter(userId, date, workCenterId, carId);
     return bookingRepository.findAll(spec, pageable);
   }
+
+
 
   private Specification<Booking> buildBookingFilter(
       int userId,
@@ -117,6 +123,10 @@ public class BookingService {
         .orElseThrow(() -> new ParkingSpaceNotExistsException("La plaza no está registrada"));
     bookingValidators.validate(dto, space);
     WorkCenter wc = space.getParkingLevel().getWorkCenter();
+
+    if((!space.getJobPosition().equals(JobPosition.Undefined))&&(!space.getJobPosition().equals(user.getJobPosition()))){
+      throw new AuthorizationException("El ususuario no tiene permiso a reservar esta plaza");
+    }
 
     Booking booking = new Booking(
         dto.getStartTime(),
@@ -243,6 +253,26 @@ public class BookingService {
     return "";
 }
 
+
+  public Page<Booking> listToPage(List<Booking> list, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+        List<Booking> sublist = list.subList(start, end);
+
+        return new PageImpl<>(sublist, pageable, list.size());
+  
+  }
+
+  public Page<Booking> getBookingPageUser(Pageable pageable, int userId) {
+
+    User user = userRepository.findById(userId)
+    .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        
+    List<Booking> list= bookingRepository.findByUser(user);
+
+    return listToPage(list, pageable);
+}
 
 }
 

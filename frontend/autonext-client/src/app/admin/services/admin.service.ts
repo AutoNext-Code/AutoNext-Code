@@ -11,26 +11,13 @@ export class AdminService {
 
   getUsers(email?: string): Observable<UserForAdmin[]> {
     return this.adminHttp.getUsers(email).pipe(
-      catchError((error) => {
-        console.error('Error al cargar usuarios:', error);
-        return throwError(
-          () =>
-            new Error(
-              'No se pudo cargar la lista de usuarios. Intenta más tarde.'
-            )
-        );
-      })
+      catchError((error) => throwError(() => error))
     );
   }
 
   toggleAdminRole(id: number): Observable<string> {
     return this.adminHttp.toggleAdminRole(id).pipe(
-      catchError((error) => {
-        console.error('Error al cambiar el rol del usuario:', error);
-        return throwError(
-          () => new Error('No se pudo actualizar el rol del usuario.')
-        );
-      })
+      catchError((error) => throwError(() => error))
     );
   }
 
