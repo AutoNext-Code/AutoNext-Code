@@ -205,7 +205,7 @@ export class MapsComponent implements OnInit {
   toggleAdmin(id: number): void {
     this.spaceEditedId = id ;
     this.adminModal = true ;
-    this.loadPastBookings() ;
+    this.loadPastBookings(1) ;
   }
 
   toggleEdit(): void {
@@ -248,9 +248,9 @@ export class MapsComponent implements OnInit {
     });
   }
 
-  loadPastBookings() {
+  loadPastBookings(page: number) {
 
-    this.bookingListService.getAllBookingBySpace(this.spaceEditedId).subscribe({
+    this.bookingListService.getAllBookingBySpace(this.spaceEditedId, page).subscribe({
       next: (listData) => {
         this.bookingList = listData ;
       },

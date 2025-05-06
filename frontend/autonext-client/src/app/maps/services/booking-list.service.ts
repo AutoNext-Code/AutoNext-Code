@@ -11,7 +11,7 @@ export class BookingListService {
     private bookingListHttpService: BookingListHttpService = inject(BookingListHttpService) ;
     private authService: AuthService = inject(AuthService) ;
 
-    getAllBookingBySpace(id: number): Observable<BookingList> {
+    getAllBookingBySpace(id: number, page: number): Observable<BookingList> {
 
         const token = this.authService.getToken();
 
@@ -20,7 +20,7 @@ export class BookingListService {
             'Content-Type': 'application/json',
         });
 
-        return this.bookingListHttpService.getAllBookingBySpace(id, headers) ;
+        return this.bookingListHttpService.getAllBookingBySpace(id, page - 1, headers) ;
     }
     
 }

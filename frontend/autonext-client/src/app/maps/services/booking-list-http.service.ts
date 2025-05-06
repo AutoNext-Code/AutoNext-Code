@@ -10,8 +10,8 @@ export class BookingListHttpService {
 
     private http: HttpClient = inject(HttpClient);
 
-    getAllBookingBySpace(id: number, headers: HttpHeaders): Observable<BookingList> {
-        return this.http.get<BookingList>(SPACE_BOOKINGS(id), {headers} )
+    getAllBookingBySpace(id: number,page: number, headers: HttpHeaders): Observable<BookingList> {
+        return this.http.get<BookingList>((SPACE_BOOKINGS(id)+"?page="+page), {headers} )
     }
     
 }

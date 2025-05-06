@@ -131,6 +131,7 @@
 
       <booking-list 
         [bookingList]="bookingList"
+        (pageChanger)="loadPastBookings($event)"
       />
 
     </div>

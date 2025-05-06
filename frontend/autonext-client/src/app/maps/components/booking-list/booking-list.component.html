@@ -1,5 +1,5 @@
-@if (bookingList.content.length > 0 ) {
-    <table class="table-fixed border-collapse ">
+@if (bookingList && bookingList.content.length > 0 ) {
+    <table class="table-fixed border-collapse mb-5">
 
         <tr>
             <th class="border border-gray-400 bg-blue-200">Date</th>
@@ -22,6 +22,13 @@
             
         } 
     </table>
+
+    <pagination 
+        [currentPage]="currentPage"
+        [totalPages]="bookingList.totalPages"
+        (pageChange)="pageChange($event)"
+    />
+
 } @else {
     <p>No hay reservas</p>
 }
