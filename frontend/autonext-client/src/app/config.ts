@@ -58,5 +58,4 @@ export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/update-w
 
 /* SPACES */
 export const UPDATE_SPACE_STATE = `${API_BASE_URL}admin/space/state`;
-export const ADMIN_BOOKING = (id: number) =>`${API_BASE_URL}admin/space/bookings/${id}`;
-export const SPACE_BOOKINGS = (id: number) =>  `${API_BASE_URL}admin/space/bookings${id}`;
+export const SPACE_BOOKINGS = (id: number) =>`${API_BASE_URL}admin/space/bookings/${id}`;

@@ -3,14 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { UserForAdmin } from '@admin/interfaces/user-for-admin.interface';
 import {
-  ADMIN_BOOKING,
   GET_USERS,
   TOGGLE_ROLE,
   UPDATE_JOB_POSITION,
   UPDATE_SPACE_STATE,
   UPDATE_WORK_CENTER,
 } from '../../config';
-import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -50,21 +48,6 @@ export class AdminHttpService {
       UPDATE_SPACE_STATE,
       {},
       { params, responseType: 'text' }
-    );
-  }
-
-  getAdminBooking(params: {
-    id: number;
-    page?: number;
-  }): Observable<{ content: BookingDTO[]; totalElements: number }> {
-    const httpParams = new HttpParams().set(
-      'page',
-      (params.page ?? 0).toString()
-    );
-
-    return this.http.get<{ content: BookingDTO[]; totalElements: number }>(
-      ADMIN_BOOKING(params.id),
-      { params: httpParams }
     );
   }
 }

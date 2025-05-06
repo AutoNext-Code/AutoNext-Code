@@ -30,14 +30,4 @@ export class AdminService {
       })
     );
   }
-  
-/* TODO Mirar si funciona, si no cambiarlo */
-  getAdminBooking(params: { id: number; page?: number }): Observable<{ content: BookingDTO[]; totalElements: number }> {
-    return this.adminHttp.getAdminBooking(params).pipe(
-      catchError((error) => {
-        console.error('Error al obtener reservas por espacio:', error);
-        return throwError(() => new Error('No se pudieron obtener las reservas por espacio'));
-      })
-    );
-  }
 }
