@@ -1,0 +1,34 @@
+@if (bookingList && bookingList.content.length > 0 ) {
+    <table class="table-fixed border-collapse mb-5">
+
+        <tr>
+            <th class="border border-gray-400 bg-blue-200">Date</th>
+            <th class="border border-gray-400 bg-blue-200">User</th>
+            <th class="border border-gray-400 bg-blue-200">Start Time</th>
+            <th class="border border-gray-400 bg-blue-200">End Time</th>
+            <th class="border border-gray-400 bg-blue-200">Status</th>
+        </tr>
+
+        @for ( booking of bookingList.content; track $index) {
+            <tr>
+
+                    <td class="border border-gray-300 p-0.5">{{booking.date  | date : "dd/MM/yyyy" }}</td>
+                    <td class="border border-gray-300 p-0.5">{{booking.userName}}</td>
+                    <td class="border border-gray-300 p-0.5">{{booking.startTime.split(':').slice(0, 2).join(':')}}</td>
+                    <td class="border border-gray-300 p-0.5">{{booking.endTime.split(':').slice(0, 2).join(':')}}</td>
+                    <td class="border border-gray-300 p-0.5">{{booking.status}}</td>
+
+            </tr>
+            
+        } 
+    </table>
+
+    <pagination 
+        [currentPage]="currentPage"
+        [totalPages]="bookingList.totalPages"
+        (pageChange)="pageChange($event)"
+    />
+
+} @else {
+    <p>No hay reservas</p>
+}
