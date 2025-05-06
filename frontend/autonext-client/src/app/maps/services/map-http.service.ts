@@ -17,7 +17,6 @@ import { CanBookResponse } from "@maps/interfaces/CanBookResponse";
 })
 export class MapHttpService{
   private http: HttpClient = inject(HttpClient);
-  private authService: AuthService = inject(AuthService);
 
   constructor() {}
 
