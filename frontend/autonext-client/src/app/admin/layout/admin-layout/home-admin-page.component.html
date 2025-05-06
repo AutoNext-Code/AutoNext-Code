@@ -1,5 +1,5 @@
 <shared-header></shared-header>
-<div class="flex">
+<div class="flex overflow-x-hidden">
     <admin-sidebar (sidebarToggled)="isSidebarOpen = $event"></admin-sidebar>
     <div [ngClass]="{'max-sm:ml-0 ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen}" class="w-full p-6 transition-all duration-300">
         <router-outlet></router-outlet>

@@ -1,0 +1,10 @@
+<div class="flex justify-center">
+    <label for=""></label>
+    <select-dep 
+        [cats]="ciudades" 
+        [subcats]="plantasCiudad" 
+        [catText]="'Sede'" 
+        [subCatText]="'Planta'" 
+        (catSubCatSelected)="updateMap($event)"
+    />
+</div>

@@ -1,1 +1,8 @@
-<p>place-management-page works!</p>
+<admin-map-form
+    (mapEmitter)="changeMap($event)"
+/>
+
+<app-maps
+    [chart]="chart"
+    [adminView]="true"
+/>
