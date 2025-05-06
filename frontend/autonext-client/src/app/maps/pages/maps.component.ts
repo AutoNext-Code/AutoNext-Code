@@ -31,17 +31,21 @@ import { AppComponent } from '../../app.component';
 import { SelectPlugTypeComponent } from "../components/select-plug-type/select-plug-type.component";
 
 import { Observable } from 'rxjs';
+import { BookingListService } from '@maps/services/booking-list.service';
+import { BookingList } from '@maps/interfaces/bookingList.interface';
+import { BookingListComponent } from "../components/booking-list/booking-list.component";
 
 @Component({
   selector: 'app-maps',
   imports: [
-    SpaceDataComponent, 
-    CommonModule, 
-    CustomModalComponent, 
-    CustomButtonComponent, 
+    SpaceDataComponent,
+    CommonModule,
+    CustomModalComponent,
+    CustomButtonComponent,
     SelectPlugTypeComponent,
-    FormsModule
-  ],
+    FormsModule,
+    BookingListComponent
+],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
 })
@@ -68,11 +72,13 @@ export class MapsComponent implements OnInit {
   modal: boolean = true;
   edit: boolean = false;
   adminModal: boolean = false;
+  bookingList!: BookingList ;
   spaceEditedId!: number ;
   carData!: SpaceData;
   
   editPlugType!: PlugType ; 
 
+  private bookingListService: BookingListService = inject(BookingListService) ;
   public dataRequestService = inject(DataRequestService);
   private mapService = inject(MapService);
   private authService = inject(AuthService);
@@ -199,6 +205,7 @@ export class MapsComponent implements OnInit {
   toggleAdmin(id: number): void {
     this.spaceEditedId = id ;
     this.adminModal = true ;
+    this.loadPastBookings() ;
   }
 
   toggleEdit(): void {
@@ -237,6 +244,18 @@ export class MapsComponent implements OnInit {
       },
       error: (err) => {
         console.error('[Map] Error while refreshing map:', err);
+      },
+    });
+  }
+
+  loadPastBookings() {
+
+    this.bookingListService.getAllBookingBySpace(this.spaceEditedId).subscribe({
+      next: (listData) => {
+        this.bookingList = listData ;
+      },
+      error: (err) => {
+        console.error('Error while loading map:', err);
       },
     });
   }
