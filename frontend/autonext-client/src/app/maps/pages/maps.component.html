@@ -71,7 +71,7 @@
 
             <g
             [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleAdmin()"
+            (click)="toggleAdmin(space.id)"
             class="cursor-pointer"
             >
             <use
@@ -162,7 +162,7 @@
   </ng-template>
   
   <shared-custom-modal
-    [title]="'Configuración De Plaza'"
+    [title]="'Configuración De Plaza - '+ spaceEditedId"
     [container]="content"
     [buttons]="buttons"
     [visible]="true"
@@ -180,7 +180,9 @@
 
   <ng-template #content>
     <div class="flex flex-col space-y-6 p-5">
-      <maps-select-plug-type />
+      <maps-select-plug-type 
+        [(ngModel)]="editPlugType"
+      />
     </div>
   
   </ng-template>
@@ -206,7 +208,7 @@
   </ng-template>
   
   <shared-custom-modal
-    [title]="'Editar Plaza'"
+    [title]="'Editar Plaza - '+ spaceEditedId"
     [container]="content"
     [buttons]="buttons"
     [visible]="true"

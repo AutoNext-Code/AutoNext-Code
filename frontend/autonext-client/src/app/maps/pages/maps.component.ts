@@ -9,6 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { State } from '@maps/enums/state.enum';
 import { PlugType } from '@maps/enums/plugType.enum';
@@ -38,7 +39,8 @@ import { Observable } from 'rxjs';
     CommonModule, 
     CustomModalComponent, 
     CustomButtonComponent, 
-    SelectPlugTypeComponent
+    SelectPlugTypeComponent,
+    FormsModule
   ],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
@@ -51,22 +53,25 @@ export class MapsComponent implements OnInit {
   formData!: SpaceData;
 
   private justClosed = false;
-
+  
   @Input() chart: any;
   @Input({required: true}) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
-
+  
   @Output() mapLoaded = new EventEmitter<boolean>();
-
+  
   @ViewChild('svgElement') svgElement!: ElementRef;
-
+  
   userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
   canBook: CanBookResponse = {message: ""};
   modal: boolean = true;
   edit: boolean = false;
   adminModal: boolean = false;
+  spaceEditedId!: number ;
   carData!: SpaceData;
+  
+  editPlugType!: PlugType ; 
 
   public dataRequestService = inject(DataRequestService);
   private mapService = inject(MapService);
@@ -191,7 +196,8 @@ export class MapsComponent implements OnInit {
     this.adminModal = false ;
   }
 
-  toggleAdmin(): void {
+  toggleAdmin(id: number): void {
+    this.spaceEditedId = id ;
     this.adminModal = true ;
   }
 
