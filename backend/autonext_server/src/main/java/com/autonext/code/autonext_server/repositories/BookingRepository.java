@@ -48,6 +48,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
                         @Param("date") LocalDate date,
                         @Param("expiredTime") LocalTime expiredTime);
 
+
+        List<Booking> findByParkingSpaceAndConfirmationStatus(ParkingSpace parkingSpace, ConfirmationStatus confirmationStatus);
+
         @Modifying
         @Query("UPDATE Booking b SET b.car = null WHERE b.car.id = :carId")
         void carDeletionUnbound(@Param("carId") int carId);
