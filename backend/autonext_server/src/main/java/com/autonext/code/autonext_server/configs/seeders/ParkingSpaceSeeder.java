@@ -48,7 +48,7 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 spaces.add(new ParkingSpace( "MAD1-8", 255, 140, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-9", 290, 140, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-10", 325, 140, Direction.Down, PlugType.NoType, madrid1));
-                spaces.add(new ParkingSpace( "MAD1-11", 355, 140, Direction.Down, PlugType.Schuko, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-11", 355, 140, Direction.Down, PlugType.Schuko, madrid1, true));
                 spaces.add(new ParkingSpace( "MAD1-12", 390, 140, Direction.Down, PlugType.Schuko, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-13", 425, 140, Direction.Down, PlugType.Schuko, madrid1));
                 spaces.add(new ParkingSpace( "MAD1-14", 455, 140, Direction.Down, PlugType.NoType, madrid1));
@@ -110,7 +110,7 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 spaces.add(new ParkingSpace("MAD2-8", 405, 160, Direction.Down, PlugType.Schuko, madrid2));
                 spaces.add(new ParkingSpace("MAD2-9", 445, 160, Direction.Down, PlugType.CCS, madrid2));
                 spaces.add(new ParkingSpace("MAD2-10", 475, 160, Direction.Down, PlugType.CCS, madrid2));
-                spaces.add(new ParkingSpace("MAD2-11", 510, 160, Direction.Down, PlugType.CHAdeMO, madrid2));
+                spaces.add(new ParkingSpace("MAD2-11", 510, 160, Direction.Down, PlugType.CHAdeMO, madrid2, true));
                 spaces.add(new ParkingSpace("MAD2-12", 540, 160, Direction.Down, PlugType.CHAdeMO, madrid2));
                 spaces.add(new ParkingSpace("MAD2-13", 575, 160, Direction.Down, PlugType.Type1, madrid2));
                 spaces.add(new ParkingSpace("MAD2-14", 605, 160, Direction.Down, PlugType.Type1, madrid2));
@@ -166,7 +166,7 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 spaces.add(new ParkingSpace("MAD3-10", 170, 275, Direction.Up, PlugType.NoType, madrid3));
                 spaces.add(new ParkingSpace("MAD3-11", 215, 275, Direction.Up, PlugType.CCS, madrid3));
                 spaces.add(new ParkingSpace("MAD3-12", 250, 275, Direction.Up, PlugType.CCS, madrid3));
-                spaces.add(new ParkingSpace("MAD3-13", 315, 275, Direction.Up, PlugType.CHAdeMO, madrid3));
+                spaces.add(new ParkingSpace("MAD3-13", 315, 275, Direction.Up, PlugType.CHAdeMO, madrid3, true));
                 spaces.add(new ParkingSpace("MAD3-14", 345, 275, Direction.Up, PlugType.Type1, madrid3));
                 spaces.add(new ParkingSpace("MAD3-15", 385, 275, Direction.Up, PlugType.Type2, madrid3));
                 spaces.add(new ParkingSpace("MAD3-16", 420, 275, Direction.Up, PlugType.NoType, madrid3));
@@ -222,7 +222,7 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 /* Abajo */
 
                 spaces.add(new ParkingSpace("MAL0-12", 160, 370, Direction.Up, PlugType.NoType, malaga0));
-                spaces.add(new ParkingSpace("MAL0-13", 201, 370, Direction.Up, PlugType.CHAdeMO, malaga0));
+                spaces.add(new ParkingSpace("MAL0-13", 201, 370, Direction.Up, PlugType.CHAdeMO, malaga0, true));
                 spaces.add(new ParkingSpace("MAL0-14", 239, 370, Direction.Up, PlugType.CHAdeMO, malaga0));
                 spaces.add(new ParkingSpace("MAL0-15", 277, 370, Direction.Up, PlugType.CHAdeMO, malaga0));
                 spaces.add(new ParkingSpace("MAL0-16", 315, 370, Direction.Up, PlugType.NoType, malaga0));
@@ -260,7 +260,7 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 spaces.add(new ParkingSpace("MAL1-12", 474, 140, Direction.Down, PlugType.Type2, malaga1));
                 spaces.add(new ParkingSpace("MAL1-13", 510, 140, Direction.Down, PlugType.CCS, malaga1));
                 spaces.add(new ParkingSpace("MAL1-14", 545, 140, Direction.Down, PlugType.CCS, malaga1));
-                spaces.add(new ParkingSpace("MAL1-15", 583, 140, Direction.Down, PlugType.CHAdeMO, malaga1));
+                spaces.add(new ParkingSpace("MAL1-15", 583, 140, Direction.Down, PlugType.CHAdeMO, malaga1, true));
                 spaces.add(new ParkingSpace("MAL1-16", 617, 140, Direction.Down, PlugType.CHAdeMO, malaga1));
                 spaces.add(new ParkingSpace("MAL1-17", 655, 140, Direction.Down, PlugType.NoType, malaga1));
 

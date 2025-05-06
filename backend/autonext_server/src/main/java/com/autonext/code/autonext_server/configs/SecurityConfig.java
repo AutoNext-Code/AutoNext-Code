@@ -15,7 +15,7 @@ import com.autonext.code.autonext_server.configs.entrypoint.JwtAuthenticationEnt
 import com.autonext.code.autonext_server.configs.filters.JwtAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity 
+@EnableMethodSecurity
 public class SecurityConfig {
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -31,8 +31,10 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .cors(cors -> cors.configure(http))
         .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/admin/**").hasRole("Admin")
             .requestMatchers(
                 "/api/auth/**",
+                "/api/auth/forget-password",
                 "/images/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html",

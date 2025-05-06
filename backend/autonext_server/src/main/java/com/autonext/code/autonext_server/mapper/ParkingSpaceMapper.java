@@ -54,7 +54,7 @@ public class ParkingSpaceMapper {
         space.getY(),
         space.getDirection().name(),
         space.getPlugType().name(),
-        (isTemporarilyBlocked(space.getName()) ? ParkingState.Blocked.name() : status.name()),
+        (space.isBlocked() ? ParkingState.Blocked.name() : status.name()),
         bookingStartTime,
         bookingEndTime);
   }
@@ -63,8 +63,4 @@ public class ParkingSpaceMapper {
     return start1.isBefore(end2) && start2.isBefore(end1);
   }
 
-  // BORRAR CUANDO SE PONGA ADMIN
-  private static boolean isTemporarilyBlocked(String name) {
-    return name.equals("MAD1-3") || name.equals("MAD2-5");
-  }
 }
