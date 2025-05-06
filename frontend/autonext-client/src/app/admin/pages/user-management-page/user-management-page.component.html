@@ -3,15 +3,16 @@
 </h1>
 
 
-<form autocomplete="off" [formGroup]="myForm">
+<form autocomplete="off" [formGroup]="myForm" (ngSubmit)="onSubmit()">
     <div class="flex flex-col sm:flex-row justify-center flex-wrap gap-4">
         <div class="flex-1 min-w-[300px] max-w-[500px] relative">
             <input type="email" id="email" name="email" class="w-full border p-2 rounded" formControlName="email"
                 placeholder="Búsqueda por email">
-            <span
-                class="material-icons absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500">search</span>
+            <button type="submit"
+                class="material-icons absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500">search</button>
+
         </div>
     </div>
 </form>
 
-<admin-users-data></admin-users-data>
+<admin-users-data [emailSignal]="emailSignal"></admin-users-data>

@@ -17,7 +17,7 @@
                 </label>
                 <label class="block">
                     <span class="font-semibold">Delegación:</span>
-                    <select class="mx-2 p-1 max-w-[120px]" [(ngModel)]="user.workCenter">
+                    <select class="mx-2 p-1 max-w-[120px]" [value]="getWorkCenterValue(user.workCenter)">
                         <option value="0">Sin delegación</option>
                         <option value="1">Madrid</option>
                         <option value="2">Málaga</option>
