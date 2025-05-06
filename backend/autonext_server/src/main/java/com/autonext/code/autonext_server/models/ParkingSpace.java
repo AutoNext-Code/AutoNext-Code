@@ -9,6 +9,7 @@ import java.util.List;
 
 
 import com.autonext.code.autonext_server.models.enums.Direction;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.models.enums.PlugType;
 
 import jakarta.persistence.Table;
@@ -46,6 +47,9 @@ public class ParkingSpace {
     @Column(nullable = false)
     public boolean blocked;
 
+    @Column(nullable = false)
+    public JobPosition jobPosition;
+
     @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
@@ -64,6 +68,8 @@ public class ParkingSpace {
         this.plugType = plugType ;
         this.parkingLevel = parkingLevel;
         this.blocked= false;
+        this.jobPosition= JobPosition.Undefined;
+        
     }
 
     public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel, boolean blocked) {
@@ -75,6 +81,31 @@ public class ParkingSpace {
         this.parkingLevel = parkingLevel;
         this.blocked= false;
         this.blocked = blocked;
+        this.jobPosition= JobPosition.Undefined;
+    }
+
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel, JobPosition jobPosition) {
+        this.name = name ;
+        this.x = x ;
+        this.y = y ;
+        this.direction = direction ;
+        this.plugType = plugType ;
+        this.parkingLevel = parkingLevel;
+        this.blocked= false;
+        this.jobPosition= jobPosition;
+        
+    }
+
+    public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel, JobPosition jobPosition, boolean blocked) {
+        this.name = name ;
+        this.x = x ;
+        this.y = y ;
+        this.direction = direction ;
+        this.plugType = plugType ;
+        this.parkingLevel = parkingLevel;
+        this.blocked= blocked;
+        this.jobPosition= jobPosition;
+        
     }
 
     public String getName() {
@@ -156,5 +187,14 @@ public class ParkingSpace {
         this.blocked = blocked;
     }
 
+    public JobPosition getJobPosition() {
+        return jobPosition;
+    }
+
+    public void setJobPosition(JobPosition jobPosition) {
+        this.jobPosition = jobPosition;
+    }
+
+    
     
 }

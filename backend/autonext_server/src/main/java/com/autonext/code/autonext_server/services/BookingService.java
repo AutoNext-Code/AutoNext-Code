@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
+import com.autonext.code.autonext_server.exceptions.AuthorizationException;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.OverlappingBookingException;
@@ -27,6 +28,7 @@ import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.WorkCenter;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
@@ -112,6 +114,10 @@ public class BookingService {
         .orElseThrow(() -> new ParkingSpaceNotExistsException("La plaza no está registrada"));
     bookingValidators.validate(dto, space);
     WorkCenter wc = space.getParkingLevel().getWorkCenter();
+
+    if((!space.getJobPosition().equals(JobPosition.Undefined))&&(!space.getJobPosition().equals(user.getJobPosition()))){
+      throw new AuthorizationException("El ususuario no tiene permiso a reservar esta plaza");
+    }
 
     Booking booking = new Booking(
         dto.getStartTime(),
