@@ -1,0 +1,53 @@
+<div class="flex flex-wrap justify-center my-5">
+
+    <div *ngFor="let user of users">
+        <div class="flex justify-between gap-10 shadow-md rounded-2xl p-6 border-card m-5">
+
+            <form class="space-y-4 text-sm text-gray-800">
+                <p><span class="font-semibold">Email:</span> {{user.email}}</p>
+                <p><span class="font-semibold">Nombre:</span> {{user.name}}</p>
+                <p><span class="font-semibold">Apellidos:</span> {{user.surname}}</p>
+                <div class="flex flex-wrap gap-4 text-sm">
+                    <p><span class="font-semibold">Strike:</span> {{user.strikes}}</p>
+                    <p><span class="font-semibold">Rol:</span> {{user.role}}</p>
+                </div>
+                <label class="block">
+                    <span class="font-semibold">Puesto:</span>
+                    <input type="text" class="mx-2 p-1 max-w-[150px]" value="{{user.jobPosition}}">
+                </label>
+                <label class="block">
+                    <span class="font-semibold">Delegación:</span>
+                    <select class="mx-2 p-1 max-w-[120px]" [(ngModel)]="user.workCenter">
+                        <option value="0">Sin delegación</option>
+                        <option value="1">Madrid</option>
+                        <option value="2">Málaga</option>
+                    </select>
+                </label>
+            </form>
+
+            <div class="flex flex-col justify-between gap-2">
+                <button class="bg-mydarkblue text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
+                    Reservas
+                    <span class="material-icons">calendar_month</span>
+                </button>
+                <button class="bg-mydarkblue text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
+                    Editar
+                    <span class="material-icons">edit</span>
+                </button>
+                <button class="bg-green-600 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
+                    Guardar
+                    <span class="material-icons">save</span>
+                </button>
+                <button class="bg-red-500 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
+                    Banear
+                    <span class="material-icons">block</span>
+                </button>
+                <button class="bg-gray-700 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
+                    {{ user.role != 'Admin' ? 'Admin' : 'User' }}
+                    <span class="material-icons">
+                        {{ user.role != 'Admin' ? 'manage_accounts' : 'person' }}
+                    </span>
+                </button>
+            </div>
+        </div>
+</div>

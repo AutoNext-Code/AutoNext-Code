@@ -1,8 +1,9 @@
+import { UsersDataComponent } from '@admin/components/users-data/users-data.component';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, UsersDataComponent],
   templateUrl: './user-management-page.component.html',
   styleUrl: './user-management-page.component.css'
 })
