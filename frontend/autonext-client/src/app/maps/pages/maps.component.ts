@@ -8,6 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { State } from '@maps/enums/state.enum';
 import { PlugType } from '@maps/enums/plugType.enum';
@@ -20,19 +21,25 @@ import { DataRequestService } from '@maps/services/data-request.service';
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
-import { CommonModule } from '@angular/common';
-
 import { AuthService } from '@auth/services/auth.service';
 import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 
 import { AppComponent } from '../../app.component';
 
+import { SelectPlugTypeComponent } from "../components/select-plug-type/select-plug-type.component";
+
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-maps',
-  imports: [SpaceDataComponent, CommonModule, CustomModalComponent, CustomButtonComponent],
+  imports: [
+    SpaceDataComponent, 
+    CommonModule, 
+    CustomModalComponent, 
+    CustomButtonComponent, 
+    SelectPlugTypeComponent
+  ],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
 })
@@ -52,8 +59,6 @@ export class MapsComponent implements OnInit {
   @Output() mapLoaded = new EventEmitter<boolean>();
 
   @ViewChild('svgElement') svgElement!: ElementRef;
-
-  variable: boolean = true;
 
   userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
@@ -182,6 +187,7 @@ export class MapsComponent implements OnInit {
   }
 
   closeAdmin(): void {
+    this.edit = false ;
     this.adminModal = false ;
   }
 
@@ -189,12 +195,7 @@ export class MapsComponent implements OnInit {
     this.adminModal = true ;
   }
 
-  closeEdit(): void {
-    this.edit = false ;
-  }
-
   toggleEdit(): void {
-    console.log("edit")
     this.edit = true ;
   }
 
@@ -209,6 +210,10 @@ export class MapsComponent implements OnInit {
   refreshMap() {
     if (!this.chart) {
       return;
+    }
+
+    if(this.adminView) {
+      return ;
     }
 
     const mapParams = {
