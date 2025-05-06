@@ -24,18 +24,14 @@ public class WorkCenter {
     @Column(unique = true, nullable = false)
     public String name ;
 
-    @Column(nullable = false)
-    public int parkingLimit ;
-
     @OneToMany(mappedBy = "workCenter", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<ParkingLevel> parkingLevels;
 
-    public WorkCenter(){
-        this.parkingLimit = 2 ;
+    public WorkCenter() {
+        
     }
 
     public WorkCenter(String name) {
-        super();
         this.name = name ;
     }
 
@@ -53,14 +49,6 @@ public class WorkCenter {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getParkingLimit() {
-        return parkingLimit;
-    }
-
-    public void setParkingLimit(int parkingLimit) {
-        this.parkingLimit = parkingLimit;
     }
 
     public List<ParkingLevel> getParkingLevels() {
