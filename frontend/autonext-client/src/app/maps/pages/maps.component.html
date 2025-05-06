@@ -71,7 +71,7 @@
 
             <g
             [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleData()"
+            (click)="toggleAdmin()"
             class="cursor-pointer"
             >
             <use
@@ -155,16 +155,64 @@
         color="green"
         icon="book"
         label="Editar"
+        class="m-4 rounded"
+        (onClick)="toggleEdit()">
+      </app-custom-button>
+    </div>
+  </ng-template>
+  
+  <shared-custom-modal
+    [title]="'Configuración De Plaza'"
+    [container]="content"
+    [buttons]="buttons"
+    [visible]="true"
+    class="z-0"
+  ></shared-custom-modal>
+
+  </div>
+</ng-container>
+
+<ng-container *ngIf="adminModal && edit">
+  <div
+    class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
+    id="modal"
+  >
+
+  <ng-template #content>
+    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4" >
+
+      <h1>Editar Plaza</h1>
+
+    </div>
+  
+  </ng-template>
+  
+  
+  <ng-template #buttons>
+    <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+      <app-custom-button
+        color="gray"
+        icon="close"
+        label="Cancelar"
+        class="m-4 rounded"
+        (onClick)="closeEdit()">
+      </app-custom-button>
+      <div></div>
+      <app-custom-button
+        color="green"
+        icon="book"
+        label="Editar"
         class="m-4 rounded">
       </app-custom-button>
     </div>
   </ng-template>
   
   <shared-custom-modal
-    [title]="'Edicion De Plaza'"
+    [title]="'Editar Plaza'"
     [container]="content"
     [buttons]="buttons"
     [visible]="true"
+    class="z-99"
   ></shared-custom-modal>
 
   </div>

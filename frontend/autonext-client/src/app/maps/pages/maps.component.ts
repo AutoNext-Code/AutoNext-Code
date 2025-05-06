@@ -14,6 +14,7 @@ import { PlugType } from '@maps/enums/plugType.enum';
 import { Direction } from '@maps/enums/direction.enum';
 import { MapService } from '@maps/services/map.service';
 import { Space } from '@maps/interfaces/Space.interface';
+import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
 import { DataRequestService } from '@maps/services/data-request.service';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
@@ -22,13 +23,12 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '@auth/services/auth.service';
+import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
+import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 
 import { AppComponent } from '../../app.component';
 
 import { Observable } from 'rxjs';
-import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
-import { CustomModalComponent } from "../../shared/components/custom-modal/custom-modal.component";
-import { CustomButtonComponent } from "../../shared/components/ui/custom-button/custom-button.component";
 
 @Component({
   selector: 'app-maps',
@@ -59,6 +59,7 @@ export class MapsComponent implements OnInit {
   isLoaded: boolean = false;
   canBook: CanBookResponse = {message: ""};
   modal: boolean = true;
+  edit: boolean = false;
   adminModal: boolean = false;
   carData!: SpaceData;
 
@@ -169,10 +170,6 @@ export class MapsComponent implements OnInit {
     this.modal = false;
   }
 
-  toggleData(): void {
-    this.adminModal = true ;
-  }
-
   closeModal(): void {
     this.modal = true;
     this.carData = null!;
@@ -186,6 +183,19 @@ export class MapsComponent implements OnInit {
 
   closeAdmin(): void {
     this.adminModal = false ;
+  }
+
+  toggleAdmin(): void {
+    this.adminModal = true ;
+  }
+
+  closeEdit(): void {
+    this.edit = false ;
+  }
+
+  toggleEdit(): void {
+    console.log("edit")
+    this.edit = true ;
   }
 
   stateColorMap: Record<string, string> = {
