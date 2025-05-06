@@ -1,16 +1,18 @@
 
 package com.autonext.code.autonext_server.dto;
 
+import com.autonext.code.autonext_server.models.enums.JobPosition;
+
 public class UserDto {
 
     private String name;
     private String surname;
     private String email;
-    private String jobPosition;
+    private JobPosition jobPosition;
     private String delegation;
     // private int strikes;
 
-    public UserDto(String name, String surname, String email, String jobPosition, String delegation) {
+    public UserDto(String name, String surname, String email, JobPosition jobPosition, String delegation) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -50,11 +52,11 @@ public class UserDto {
         this.email = email;
     }
 
-    public String getJobPosition() {
+    public JobPosition getJobPosition() {
         return jobPosition;
     }
 
-    public void setJobPosition(String jobPosition) {
+    public void setJobPosition(JobPosition jobPosition) {
         this.jobPosition = jobPosition;
     }
 
