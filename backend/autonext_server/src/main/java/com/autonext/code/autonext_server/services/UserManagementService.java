@@ -60,9 +60,13 @@ public class UserManagementService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-            WorkCenter workCenter = workCenterRepository.findById(workCenterId).orElseThrow(() -> new NullPointerException("WorkCenter no encontrado"));
+            if (workCenterId != 0) {
+                WorkCenter workCenter = workCenterRepository.findById(workCenterId).orElseThrow(() -> new NullPointerException("WorkCenter no encontrado"));
 
-            user.setWorkCenter(workCenter);
+                user.setWorkCenter(workCenter);
+            } else {
+                user.setWorkCenter(null);
+            }
     
             userRepository.save(user);
         } catch (Exception e) {
