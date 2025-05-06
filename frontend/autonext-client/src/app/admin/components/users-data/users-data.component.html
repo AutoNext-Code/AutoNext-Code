@@ -51,12 +51,14 @@
                     Banear
                     <span class="material-icons">block</span>
                 </button>
-                <button class="bg-gray-700 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
-                    {{ user.role != 'Admin' ? 'Admin' : 'User' }}
-                    <span class="material-icons">
-                        {{ user.role != 'Admin' ? 'manage_accounts' : 'person' }}
-                    </span>
-                </button>
+                @if (idUser == 1) {
+                    <button (click)="toggleRole(user)" class="bg-gray-700 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
+                        {{ user.role != 'Admin' ? 'Admin' : 'User' }}
+                        <span class="material-icons">
+                            {{ user.role != 'Admin' ? 'manage_accounts' : 'person' }}
+                        </span>
+                    </button>
+                }
             </div>
         </div>
 </div>
