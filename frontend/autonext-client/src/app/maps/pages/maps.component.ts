@@ -27,10 +27,12 @@ import { AppComponent } from '../../app.component';
 
 import { Observable } from 'rxjs';
 import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
+import { CustomModalComponent } from "../../shared/components/custom-modal/custom-modal.component";
+import { CustomButtonComponent } from "../../shared/components/ui/custom-button/custom-button.component";
 
 @Component({
   selector: 'app-maps',
-  imports: [SpaceDataComponent, CommonModule],
+  imports: [SpaceDataComponent, CommonModule, CustomModalComponent, CustomButtonComponent],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
 })
@@ -44,6 +46,7 @@ export class MapsComponent implements OnInit {
   private justClosed = false;
 
   @Input() chart: any;
+  @Input({required: true}) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
 
   @Output() mapLoaded = new EventEmitter<boolean>();
@@ -56,6 +59,7 @@ export class MapsComponent implements OnInit {
   isLoaded: boolean = false;
   canBook: CanBookResponse = {message: ""};
   modal: boolean = true;
+  adminModal: boolean = false;
   carData!: SpaceData;
 
   public dataRequestService = inject(DataRequestService);
@@ -165,6 +169,10 @@ export class MapsComponent implements OnInit {
     this.modal = false;
   }
 
+  toggleData(): void {
+    this.adminModal = true ;
+  }
+
   closeModal(): void {
     this.modal = true;
     this.carData = null!;
@@ -174,6 +182,10 @@ export class MapsComponent implements OnInit {
     }, 300);
 
     this.refreshMap();
+  }
+
+  closeAdmin(): void {
+    this.adminModal = false ;
   }
 
   stateColorMap: Record<string, string> = {

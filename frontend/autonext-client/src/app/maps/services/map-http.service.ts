@@ -49,6 +49,10 @@ export class MapHttpService{
     return this.http.get<any>(`${MAP_ENDPOINT}/${mapParams.mapId}`, {params});
   }
 
+  getFormMapById(id: number): Observable<Chart>{
+    return this.http.get<any>(`${MAP_ENDPOINT}/${id}`);
+  }
+
   getCentersLevels(): Observable<CentersMaps[]>{
     return this.http.get<any>(`${CENTERS_LEVELS}`);
   }
