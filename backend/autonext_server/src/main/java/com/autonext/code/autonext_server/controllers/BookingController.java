@@ -21,6 +21,7 @@ import com.autonext.code.autonext_server.dto.BookCheckDTO;
 import com.autonext.code.autonext_server.dto.BookingDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.autonext.code.autonext_server.dto.MapBookingDTO;
+import com.autonext.code.autonext_server.exceptions.AuthorizationException;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.OverlappingBookingException;
@@ -96,6 +97,8 @@ public class BookingController {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Ha superado el limite de reservas diarias");
     } catch (OverlappingBookingException obe) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya has hecho una reserva en ese horario");
+    } catch (AuthorizationException e){
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     } catch (IllegalArgumentException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     } catch (Exception e) {
