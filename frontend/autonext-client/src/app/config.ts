@@ -55,4 +55,4 @@ export const TOGGLE_ROLE = (id: number) =>  `${API_BASE_URL}admin/user/toggle-ad
 export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/update-job-position/${id}`;
 export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/update-work-center/${id}`;
 
-export const SPACE_BOOKINGS = (id: number) =>  `${API_BASE_URL}admin/space/bookings${id}`;
+export const SPACE_BOOKINGS = (id: number) =>  `${API_BASE_URL}admin/space/bookings/${id}`;

@@ -9,6 +9,7 @@ import java.util.List;
 
 
 import com.autonext.code.autonext_server.models.enums.Direction;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.models.enums.PlugType;
 
 import jakarta.persistence.Table;
@@ -46,6 +47,9 @@ public class ParkingSpace {
     @Column(nullable = false)
     public boolean blocked;
 
+    @Column()
+    public JobPosition jobPosition;
+
     @OneToMany(mappedBy = "parkingSpace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
@@ -64,6 +68,7 @@ public class ParkingSpace {
         this.plugType = plugType ;
         this.parkingLevel = parkingLevel;
         this.blocked= false;
+        this.jobPosition= JobPosition.Branch_Head;
     }
 
     public ParkingSpace(String name, int x, int y, Direction direction, PlugType plugType, ParkingLevel parkingLevel, boolean blocked) {

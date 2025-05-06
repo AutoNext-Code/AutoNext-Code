@@ -13,6 +13,8 @@ import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.enums.BookingStatus;
 import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
+import com.autonext.code.autonext_server.models.enums.PlugType;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
 
@@ -42,6 +44,12 @@ public class SpaceService {
             parkingSpaceRepository.save(parkingSpace);
 
         }
+
+    }
+
+    public void updateSpaceData(int id, PlugType plugType, JobPosition jobPosition){
+        ParkingSpace parkingSpace = parkingSpaceRepository.findById(id)
+        .orElseThrow(() -> new ParkingSpaceNotExistsException("Plaza no encontrada"));
 
     }
 

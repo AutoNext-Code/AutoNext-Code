@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
+import com.autonext.code.autonext_server.dto.SpaceEditRequest;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.services.SpaceService;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +50,23 @@ public class AdminSpaceController {
     }
 
 
+    @PutMapping("/update")
+    public ResponseEntity<String> getBookingsBySpace(@RequestBody SpaceEditRequest request) {
+
+
+        try {
+
+            // spaceService.updateSpaceData(0, false) ;
+
+            return ResponseEntity.ok("Plaza Actualizada Correctamente") ;
+        } catch (Error e) {
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar") ;
+        }
+
+            
+    }
+
     @GetMapping("/bookings/{id}")
     public Page<BookingDTO>  getBookingsBySpace(@PathVariable int id, @RequestParam(defaultValue = "0") int page) {
 
@@ -61,10 +81,7 @@ public class AdminSpaceController {
 
         return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
             
-
-
     }
-
 
     private PageRequest buildPageRequest(int page, boolean ascending) {
         Sort sort = ascending ? Sort.by("date").ascending() : Sort.by("date").descending();
