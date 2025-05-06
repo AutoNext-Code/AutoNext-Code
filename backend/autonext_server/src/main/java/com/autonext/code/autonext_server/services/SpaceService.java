@@ -3,6 +3,9 @@ package com.autonext.code.autonext_server.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
@@ -41,4 +44,24 @@ public class SpaceService {
         }
 
     }
+
+
+
+    public Page<Booking> getBookingPage(Pageable pageable, int parkingSpaceId) {
+        
+        List<Booking> list= bookingRepository.findConfirmedPendingBySpace(parkingSpaceId ,BookingStatus.Active,  BookingStatus.Pending);
+
+        return listToPage(list, pageable);
+    }
+
+    public Page<Booking> listToPage(List<Booking> list, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+        List<Booking> sublist = list.subList(start, end);
+
+        return new PageImpl<>(sublist, pageable, list.size());
+    }
+
+
+    
 }
