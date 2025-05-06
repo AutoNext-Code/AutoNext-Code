@@ -47,7 +47,7 @@ public class AdminSpaceController {
     }
 
 
-    @GetMapping("/bookings{id}")
+    @GetMapping("/bookings/{id}")
     public Page<BookingDTO>  getBookingsBySpace(@PathVariable int id, @RequestParam(defaultValue = "0") int page) {
 
         PageRequest pageable = buildPageRequest(page, true);
