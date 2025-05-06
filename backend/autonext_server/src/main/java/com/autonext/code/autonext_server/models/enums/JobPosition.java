@@ -5,5 +5,6 @@ public enum JobPosition {
     Product_Owner,
     Scrum_Master,
     Developer,
+    PEM,
     Branch_Head
 }
