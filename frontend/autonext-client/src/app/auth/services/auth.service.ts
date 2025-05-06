@@ -18,6 +18,7 @@ export class AuthService {
 
   private role: string | null = null;
   private name: string | null = null;
+  private id: number | null = null;
 
   constructor() {
     if (this.tokenSubject.value) {
@@ -45,11 +46,16 @@ export class AuthService {
     return this.name;
   }
 
+  public getId(): number | null {
+    return this.id;
+  }
+
   public logout(): void {
     clearStorage();
     this.tokenSubject.next(null);
     this.role = null;
     this.name = null;
+    this.id = null;
   }
 
 
@@ -70,6 +76,7 @@ export class AuthService {
     if (!token) {
       this.role = null;
       this.name = null;
+      this.id = null;
       return;
     }
 
@@ -77,10 +84,12 @@ export class AuthService {
       const decoded: any = jwtDecode(token);
       this.role = decoded?.role || null;
       this.name = decoded?.name || null;
+      this.id = decoded?.id || null;
     } catch (error) {
       console.error('Error decoding token:', error);
       this.role = null;
       this.name = null;
+      this.id = null;
     }
   }
 

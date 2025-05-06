@@ -5,6 +5,7 @@ import { Component, effect, inject, Input, Signal } from '@angular/core';
 import { AppComponent } from '../../../app.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { JobPosition } from '@admin/enums/jobPosition.enum';
+import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'admin-users-data',
@@ -16,6 +17,7 @@ export class UsersDataComponent {
 
   private adminService = inject(AdminService);
   private appComponent = inject(AppComponent);
+  private authService = inject(AuthService);
 
   @Input() emailSignal!: Signal<string>;
 
@@ -27,12 +29,13 @@ export class UsersDataComponent {
     name: key === 'Undefined' ? 'Sin asignación' : key.replace(/_/g, ' ')
   }));
 
+  idUser = this.authService.getId();
+
   constructor() {
     effect(() => {
       const email = this.emailSignal();
       this.loadUsers(email);
     });
-    console.log(this.jobPositions)
   }
 
   getWorkCenterValue(workCenter: string | null): number {
@@ -80,8 +83,21 @@ export class UsersDataComponent {
         }));
       },
       error: (error: HttpErrorResponse) => {
-        console.error('ERROR AL AAAA al cargar usuarios:', error);
         this.appComponent.showToast('error', 'Error al obtener usuarios. ', error.error, 3000);
+      },
+    });
+  }
+
+  toggleRole(user: any) {
+    console.log('Toggling role for user:', user.id);
+    this.adminService.toggleAdminRole(user.id).subscribe({
+      next: () => {
+        this.appComponent.showToast('success', 'Rol actualizado', '', 3000, 80);
+        this.loadUsers(this.emailSignal());
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('ERROR AL TOGGLEAR ROL:', error);
+        this.appComponent.showToast('error', 'Error al actualizar rol. ', error.error, 3000);
       },
     });
   }
