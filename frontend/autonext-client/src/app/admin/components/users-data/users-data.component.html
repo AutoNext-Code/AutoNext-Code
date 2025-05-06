@@ -13,7 +13,16 @@
                 </div>
                 <label class="block">
                     <span class="font-semibold">Puesto:</span>
-                    <input type="text" class="mx-2 p-1 max-w-[150px]" value="{{user.jobPosition}}">
+                    <select [value]="getJobPositionValue(user.jobPosition)">
+                        <option value="0">Sin puesto</option>
+                        <option value="1">Intern</option>
+                        <option value="2">Product Owner</option>
+                        <option value="3">Scrum Master</option>
+                        <option value="4">Developer</option>
+                        <option value="5">PEM</option>
+                        <option value="6">Branch Head</option>
+                      </select>
+                      
                 </label>
                 <label class="block">
                     <span class="font-semibold">Delegación:</span>
