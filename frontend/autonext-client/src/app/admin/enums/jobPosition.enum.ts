@@ -1,6 +1,4 @@
-package com.autonext.code.autonext_server.models.enums;
-
-public enum JobPosition {
+export enum JobPosition {
     Undefined,
     Intern,
     Product_Owner,
