@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AdminHttpService } from './admin-http.service';
 import { UserForAdmin } from '@admin/interfaces/user-for-admin.interface';
+import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -34,24 +35,21 @@ export class AdminService {
     );
   }
 
-  updateJobPosition(id: number): Observable<string> {
-    return this.adminHttp.updateJobPosition(id).pipe(
+  updateSpaceState(id: number, blocked: boolean): Observable<string> {
+    return this.adminHttp.updateSpaceState(id, blocked).pipe(
       catchError((error) => {
-        console.error('Error al actualizar el puesto de trabajo:', error);
-        return throwError(
-          () => new Error('No se pudo actualizar el puesto de trabajo.')
-        );
+        console.error('Error al actualizar el estado del espacio:', error);
+        return throwError(() => new Error('No se pudo actualizar el estado del espacio.'));
       })
     );
   }
-
-  updateWorkCenter(id: number): Observable<string> {
-    return this.adminHttp.updateWorkCenter(id).pipe(
+  
+/* TODO Mirar si funciona, si no cambiarlo */
+  getAdminBooking(params: { id: number; page?: number }): Observable<{ content: BookingDTO[]; totalElements: number }> {
+    return this.adminHttp.getAdminBooking(params).pipe(
       catchError((error) => {
-        console.error('Error al actualizar el centro de trabajo:', error);
-        return throwError(
-          () => new Error('No se pudo actualizar el centro de trabajo.')
-        );
+        console.error('Error al obtener reservas por espacio:', error);
+        return throwError(() => new Error('No se pudieron obtener las reservas por espacio'));
       })
     );
   }

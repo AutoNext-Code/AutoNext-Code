@@ -50,7 +50,12 @@ export const DASHBOARD_YEARS = `${API_BASE_URL}dashboard/years`;
 
 /* ENDPOINTS PARA ADMINISTRADOR */
 
+/* USERS */
 export const GET_USERS = `${API_BASE_URL}admin/user/get-users`;
 export const TOGGLE_ROLE = (id: number) =>  `${API_BASE_URL}admin/user/toggle-admin-role/${id}`;
 export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/update-job-position/${id}`;
 export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/update-work-center/${id}`;
+
+/* SPACES */
+export const UPDATE_SPACE_STATE = `${API_BASE_URL}admin/space/state`;
+export const ADMIN_BOOKING = (id: number) =>`${API_BASE_URL}admin/space/bookings/${id}`;
