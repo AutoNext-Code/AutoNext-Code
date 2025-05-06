@@ -33,4 +33,26 @@ export class AdminService {
       })
     );
   }
+
+  updateJobPosition(id: number): Observable<string> {
+    return this.adminHttp.updateJobPosition(id).pipe(
+      catchError((error) => {
+        console.error('Error al actualizar el puesto de trabajo:', error);
+        return throwError(
+          () => new Error('No se pudo actualizar el puesto de trabajo.')
+        );
+      })
+    );
+  }
+
+  updateWorkCenter(id: number): Observable<string> {
+    return this.adminHttp.updateWorkCenter(id).pipe(
+      catchError((error) => {
+        console.error('Error al actualizar el centro de trabajo:', error);
+        return throwError(
+          () => new Error('No se pudo actualizar el centro de trabajo.')
+        );
+      })
+    );
+  }
 }
