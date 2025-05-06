@@ -51,6 +51,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>, JpaS
 
         List<Booking> findByParkingSpaceAndConfirmationStatus(ParkingSpace parkingSpace, ConfirmationStatus confirmationStatus);
 
+        List<Booking> findByUser(User user);
+
 
         @Query("SELECT b FROM Booking b WHERE b.parkingSpace.id= :parkingSpaceId AND (b.status = :active OR b.status = :pending)")
         List<Booking> findConfirmedPendingBySpace(
