@@ -58,6 +58,17 @@ public class SpaceService {
         parkingSpace.setPlugType(plugType);
         parkingSpace.setJobPosition(jobPosition);
 
+        List<Booking> listBookings = parkingSpace.getBookings() ;
+
+        for (Booking booking : listBookings) {
+            if (booking.getStatus() == BookingStatus.Pending) {
+                booking.setStatus(BookingStatus.Cancelled) ;
+            }
+        }
+
+        parkingSpace.setBookings(listBookings) ;
+        
+
         parkingSpaceRepository.save(parkingSpace) ;
 
     }

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autonext.code.autonext_server.exceptions.InvalidParkingLimitException;
 import com.autonext.code.autonext_server.services.ConfigAdminService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-
 @RestController
 @RequestMapping("/api/admin/config")
 public class ConfigAdminController {
