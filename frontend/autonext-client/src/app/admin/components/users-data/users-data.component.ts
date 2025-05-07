@@ -72,6 +72,9 @@ export class UsersDataComponent {
   }
 
   formatJobPosition(jobPosition: string): string {
+    if (jobPosition === 'Undefined') {
+      return 'Sin asignación';
+    }
     return jobPosition.replace(/_/g, ' ');
   }
 
