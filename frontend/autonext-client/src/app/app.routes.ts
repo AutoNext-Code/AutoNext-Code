@@ -85,8 +85,8 @@ export const routes: Routes = [
             loadComponent: () => import('./admin/pages/place-management-page/place-management-page.component').then(m => m.PlaceManagementPageComponent),
           },
           {
-            path: 'delegation-management',
-            loadComponent: () => import('./admin/pages/delegation-management-page/delegation-management-page.component').then(m => m.DelegationManagementPageComponent),
+            path: 'booking-management',
+            loadComponent: () => import('./admin/pages/booking-management-page/booking-management-page.component').then(m => m.BookingManagementPageComponent),
           },
           {
             path: 'user-management',

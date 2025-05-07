@@ -50,9 +50,11 @@ public class ParkingService {
     ParkingLevel level = parkingLevelRepository.findById(levelId)
         .orElseThrow(() -> new RuntimeException("No se ha encontrado el nivel con id: " + levelId));
 
+        //TODO añadir a spec que compruebe que el jobPos del user y la plaza sean el mismo
     Specification<ParkingSpace> spec = Specification
         .where(ParkingSpaceSpecifications.isElectric())
-        .and(ParkingSpaceSpecifications.hasLevel(levelId));
+        .and(ParkingSpaceSpecifications.hasLevel(levelId))
+        .and(ParkingSpaceSpecifications.jobPositionAllowed(user.getJobPosition()));
 
     List<ParkingSpace> spaces = parkingSpaceRepository.findAll(spec);
 
