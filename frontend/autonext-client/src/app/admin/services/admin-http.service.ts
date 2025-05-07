@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { UserForAdmin } from '@admin/interfaces/user-for-admin.interface';
 import {
+  CONFIG_PARKING_LIMIT,
+  CONFIG_UPDATE_PARKING_LIMIT,
   GET_USERS,
   TOGGLE_ROLE,
   UPDATE_JOB_POSITION,
@@ -50,4 +52,14 @@ export class AdminHttpService {
       { params, responseType: 'text' }
     );
   }
+
+  getConfigParkingLimit(): Observable<number> {
+    return this.http.get<number>(CONFIG_PARKING_LIMIT);
+  }
+
+  updateConfigParkingLimit(limit: number): Observable<string> {
+    const params = new HttpParams().set('parkingLimit', limit.toString());
+    return this.http.put<string>(CONFIG_UPDATE_PARKING_LIMIT, {}, { params,  responseType: 'text' as 'json' });
+  }
+
 }
