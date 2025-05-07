@@ -1,3 +1,4 @@
+import { JobPosition } from "@admin/enums/jobPosition.enum";
 import { Direction } from "@maps/enums/direction.enum";
 import { PlugType } from "@maps/enums/plugType.enum";
 import { State } from "@maps/enums/state.enum";
@@ -11,4 +12,5 @@ export interface Space  {
   state: State;
   startTime?: string;
   endTime?: string;
+  jobPosition?: JobPosition;
 }

@@ -21,25 +21,33 @@ export class AdminService {
     );
   }
 
-  updateJobPosition(id: number): Observable<string> {
-    return this.adminHttp.updateJobPosition(id).pipe(
+  updateJobPosition(id: number, jobPosition: string): Observable<string> {
+    return this.adminHttp.updateJobPosition(id, jobPosition).pipe(
+      catchError((error) => throwError(() => error))
+    );
+  }
+
+  updateWorkCenter(id: number, workCenter: number): Observable<string> {
+    return this.adminHttp.updateWorkCenter(id, workCenter).pipe(
+      catchError((error) => throwError(() => error))
+    );
+  }
+  updateSpaceState(id: number, blocked: boolean): Observable<string> {
+    return this.adminHttp.updateSpaceState(id, blocked).pipe(
       catchError((error) => {
-        console.error('Error al actualizar el puesto de trabajo:', error);
-        return throwError(
-          () => new Error('No se pudo actualizar el puesto de trabajo.')
-        );
+        console.error('Error al actualizar el estado del espacio:', error);
+        return throwError(() => new Error('No se pudo actualizar el estado del espacio.'));
       })
     );
   }
 
-  updateWorkCenter(id: number): Observable<string> {
-    return this.adminHttp.updateWorkCenter(id).pipe(
-      catchError((error) => {
-        console.error('Error al actualizar el centro de trabajo:', error);
-        return throwError(
-          () => new Error('No se pudo actualizar el centro de trabajo.')
-        );
-      })
-    );
+  getParkingLimit(): Observable<number> {
+    return this.adminHttp.getConfigParkingLimit();
   }
+
+  updateParkingLimit(limit : number): Observable<string> {
+    return this.adminHttp.updateConfigParkingLimit(limit);
+  }
+
+
 }

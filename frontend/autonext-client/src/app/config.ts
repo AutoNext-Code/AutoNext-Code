@@ -52,11 +52,17 @@ export const DASHBOARD_YEARS = `${API_BASE_URL}dashboard/years`;
 
 /* ENDPOINTS PARA ADMINISTRADOR */
 
+/* USERS */
 export const GET_USERS = `${API_BASE_URL}admin/user/get-users`;
 export const TOGGLE_ROLE = (id: number) =>  `${API_BASE_URL}admin/user/toggle-admin-role/${id}`;
-export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/update-job-position/${id}`;
-export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/update-work-center/${id}`;
+export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/user/update-job-position/${id}`;
+export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/user/update-work-center/${id}`;
 
-export const SPACE_BOOKINGS = (id: number) =>  `${API_BASE_URL}admin/space/bookings${id}`;
-
+/* SPACES */
 export const ADMIN_MAP = `${API_BASE_URL}admin/space/level`;
+export const UPDATE_SPACE_STATE = `${API_BASE_URL}admin/space/state`;
+export const SPACE_BOOKINGS = (id: number) =>`${API_BASE_URL}admin/space/bookings/${id}`;
+
+/* CONFIG */
+export const CONFIG_PARKING_LIMIT = `${API_BASE_URL}admin/config/parking-limit`;
+export const CONFIG_UPDATE_PARKING_LIMIT = `${API_BASE_URL}admin/config/update-parking-limit`;

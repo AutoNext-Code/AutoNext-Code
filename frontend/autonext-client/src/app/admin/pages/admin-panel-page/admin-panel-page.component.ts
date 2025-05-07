@@ -17,8 +17,8 @@ export class AdminPanelPageComponent {
     this.menuItems = [
       { content: 'Métricas Y estadisticas', url: '/admin-home/dashboard', title: 'Dashboard', icon: 'dashboard' },
       { content: 'Gestión de Reportes y Eventos', url: '/admin-home/incidents', title: 'Incidencias', icon: 'report_problem' },
-      { content: 'Configurar y Administrar las plazas', url: '/admin-home/place-management', title: 'Gestión de plazas', icon: 'ev_station' },
-      { content: 'Configurar y Administrar los Delegaciones', url: '/admin-home/delegation-management', title: 'Gestión de delegaciones', icon: 'roofing' },
+      { content: 'Configurar y Administrar las Plazas', url: '/admin-home/place-management', title: 'Gestión de plazas', icon: 'ev_station' },
+      { content: 'Configurar y Administrar las Reservas', url: '/admin-home/booking-management', title: 'Gestión de reservas', icon: 'roofing' },
       { content: 'Configurar y Administrar los Usuarios', url: '/admin-home/user-management', title: 'Gestión de usuarios', icon: 'supervised_user_circle' }
     ]
   }

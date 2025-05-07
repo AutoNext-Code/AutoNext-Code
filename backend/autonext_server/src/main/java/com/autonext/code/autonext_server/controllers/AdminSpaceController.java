@@ -18,6 +18,8 @@ import com.autonext.code.autonext_server.dto.ParkingLevelMapDTO;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.services.ParkingService;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
+import com.autonext.code.autonext_server.models.enums.PlugType;
 import com.autonext.code.autonext_server.services.SpaceService;
 
 
@@ -51,6 +53,21 @@ public class AdminSpaceController {
         }
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<String> changeBookingsBySpace(@RequestParam int id, @RequestParam PlugType plugType, @RequestParam JobPosition jobPosition) {
+
+        try {
+
+            spaceService.updateSpaceData(id, plugType, jobPosition) ;
+
+            return ResponseEntity.ok("Plaza Actualizada Correctamente") ;
+        } catch (Error e) {
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar") ;
+        }
+
+            
+    }
 
     @GetMapping("/bookings/{id}")
     public Page<BookingDTO>  getBookingsBySpace(@PathVariable int id, @RequestParam(defaultValue = "0") int page) {
@@ -66,10 +83,7 @@ public class AdminSpaceController {
 
         return new PageImpl<>(bookingDTOs, pageable, bookings.getTotalElements());
             
-
-
     }
-
 
     private PageRequest buildPageRequest(int page, boolean ascending) {
         Sort sort = ascending ? Sort.by("date").ascending() : Sort.by("date").descending();
