@@ -52,6 +52,8 @@ public class SpaceService {
 
     public void updateSpaceData(int id, PlugType plugType, JobPosition jobPosition){
         
+        System.out.println(plugType);
+
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(id)
             .orElseThrow(() -> new ParkingSpaceNotExistsException("Plaza no encontrada"));
 
@@ -70,6 +72,7 @@ public class SpaceService {
 
         parkingSpace.setBookings(listBookings) ;
         
+        System.out.println(parkingSpace.getPlugType());
 
         parkingSpaceRepository.save(parkingSpace) ;
 
