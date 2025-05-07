@@ -1,0 +1,37 @@
+<h1 class="my-10 text-4xl text-center font-semibold">
+  Configuración de Reservas
+</h1>
+
+<div class="px-4">
+  <div class="w-full max-w-2xl mx-auto rounded-lg shadow-md overflow-hidden border-card">
+    <div class="bg-mylightblue p-3">
+      <h2 class="text-center text-black font-semibold text-lg">Modificación de reservas al día</h2>
+    </div>
+
+    <div class="p-4 space-y-2">
+      <label class="block text-sm font-medium mb-1" for="delegation">
+        Cantidad de reservas realizables al día
+      </label>
+      <shared-input
+        type="text"
+        icon="schedule"
+        placeholder="Mínimo 1"
+      ></shared-input>
+
+      <div class="flex justify-between pt-4">
+        <button
+          class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md"
+        >
+          <span class="material-icons">edit</span>
+          <span>Guardar</span>
+        </button>
+        <button
+          class="flex items-center space-x-1 bg-myred text-white px-4 py-2 rounded-md"
+        >
+          <span class="material-icons">delete</span>
+          <span>Cancelar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

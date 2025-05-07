@@ -3,10 +3,12 @@ package com.autonext.code.autonext_server.services;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,7 @@ import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsExcepti
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.Booking;
 import com.autonext.code.autonext_server.models.Car;
+import com.autonext.code.autonext_server.models.Config;
 import com.autonext.code.autonext_server.models.ParkingSpace;
 import com.autonext.code.autonext_server.models.User;
 import com.autonext.code.autonext_server.models.WorkCenter;
@@ -31,6 +34,7 @@ import com.autonext.code.autonext_server.models.enums.ConfirmationStatus;
 import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.repositories.BookingRepository;
 import com.autonext.code.autonext_server.repositories.CarRepository;
+import com.autonext.code.autonext_server.repositories.ConfigRepository;
 import com.autonext.code.autonext_server.repositories.ParkingSpaceRepository;
 import com.autonext.code.autonext_server.repositories.UserRepository;
 import com.autonext.code.autonext_server.services.helpers.BookingValidators;
@@ -57,11 +61,16 @@ public class BookingService {
   @Autowired
   private ParkingSpaceRepository parkingSpaceRepository;
 
+  @Autowired
+  private ConfigRepository configRepository;
+
   public Page<Booking> getFilteredBookingsPaged(Pageable pageable, LocalDate date, Integer workCenterId, Integer carId) {
     int userId = getAuthenticatedUserId();
     Specification<Booking> spec = buildBookingFilter(userId, date, workCenterId, carId);
     return bookingRepository.findAll(spec, pageable);
   }
+
+
 
   private Specification<Booking> buildBookingFilter(
       int userId,
@@ -206,40 +215,64 @@ public class BookingService {
 
   public String checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
 
-    final int LIMITE_DIARIO = 2;
+    Config config = configRepository.findById(1).orElseThrow( () -> new IllegalStateException("No se ha encontrado la configuración del sistema"));
+
+    if (config == null) {
+        throw new IllegalStateException("No se ha encontrado la configuración del sistema");
+    }
+
+    int daily_limit = config.getDailyLimit();
 
     int userId = getAuthenticatedUserId();
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-    int reservasHoy = bookingRepository.countByUserAndDate(user, date);
-    
-    if (reservasHoy >= LIMITE_DIARIO) {
+    int bookingsToday = bookingRepository.countByUserAndDate(user, date);
 
-      Locale spanish = new Locale("es", "ES");
+    if (bookingsToday >= daily_limit) {
+        Locale spanish = new Locale("es", "ES");
 
-      DateTimeFormatter fmt = DateTimeFormatter
-          .ofPattern("d 'de' MMMM 'de' uuuu", spanish);
-      String fechaFormateada = date.format(fmt);
-      
-        return "Ha superado el límite de " + LIMITE_DIARIO + " reservas para el día " + fechaFormateada ;
-        
+        DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("d 'de' MMMM 'de' uuuu", spanish);
+        String formattedDate = date.format(formatter);
+
+        return "Ha superado el límite de " + daily_limit + " reservas para el día " + formattedDate;
     }
 
-    boolean solapa = bookingRepository.existsOverlappingBooking(
-      user,
-      date,
-      startHour,
-      endHour
+    boolean isOverlapping = bookingRepository.existsOverlappingBooking(
+        user,
+        date,
+        startHour,
+        endHour
     );
-  
-    if (solapa) {
-      return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour ;
+
+    if (isOverlapping) {
+        return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour;
     }
 
     return "";
+}
 
+
+  public Page<Booking> listToPage(List<Booking> list, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+        List<Booking> sublist = list.subList(start, end);
+
+        return new PageImpl<>(sublist, pageable, list.size());
+  
   }
+
+  public Page<Booking> getBookingPageUser(Pageable pageable, int userId) {
+
+    User user = userRepository.findById(userId)
+    .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        
+    List<Booking> list= bookingRepository.findByUser(user);
+
+    return listToPage(list, pageable);
+}
 
 }
 
