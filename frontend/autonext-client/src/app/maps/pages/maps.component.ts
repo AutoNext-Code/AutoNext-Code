@@ -57,15 +57,15 @@ export class MapsComponent implements OnInit {
   formData!: SpaceData;
 
   private justClosed = false;
-  
+
   @Input() chart: any;
   @Input({required: true}) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
-  
+
   @Output() mapLoaded = new EventEmitter<boolean>();
-  
+
   @ViewChild('svgElement') svgElement!: ElementRef;
-  
+
   userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
   canBook: CanBookResponse = {message: ""};
@@ -75,8 +75,8 @@ export class MapsComponent implements OnInit {
   bookingList!: BookingList ;
   spaceEditedId!: number ;
   carData!: SpaceData;
-  
-  editPlugType!: PlugType ; 
+
+  editPlugType!: PlugType ;
 
   private bookingListService: BookingListService = inject(BookingListService) ;
   public dataRequestService = inject(DataRequestService);
@@ -171,7 +171,7 @@ export class MapsComponent implements OnInit {
       parkingSpaceId: spaceId,
       plugType: plugType,
     };
-    
+
     this.userCanBook = this.mapService.checkUserCanBook(this.carData.date, this.carData.startTime, this.carData.endTime) ;
 
     this.userCanBook.subscribe({
@@ -182,7 +182,7 @@ export class MapsComponent implements OnInit {
         console.error('Error al verificar la disponibilidad:', error);
       }
     });
-        
+
     this.modal = false;
   }
 
@@ -268,6 +268,17 @@ export class MapsComponent implements OnInit {
     }else{
       return 'Bloqueado por el sistema';
     }
+
+  }
+
+  spaceNoType(plugType: PlugType):boolean{
+    let number: number = 0;
+
+    if (typeof plugType === 'string') {
+      number = PlugType[plugType as keyof typeof PlugType];
+    }
+
+    return number === PlugType.NoType
 
   }
 }

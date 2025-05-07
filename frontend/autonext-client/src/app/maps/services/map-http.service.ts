@@ -7,7 +7,7 @@ import { CentersMaps } from "@maps/interfaces/CentersMaps.interface";
 
 import { AuthService } from "@auth/services/auth.service";
 
-import { BOOKINGS_USER_CHECK, CENTERS_LEVELS, MAP_ENDPOINT } from "../../config";
+import { ADMIN_MAP, BOOKINGS_USER_CHECK, CENTERS_LEVELS, MAP_ENDPOINT } from "../../config";
 
 import { Observable } from "rxjs";
 import { CanBookResponse } from "@maps/interfaces/CanBookResponse";
@@ -50,6 +50,12 @@ export class MapHttpService{
 
   getFormMapById(id: number): Observable<Chart>{
     return this.http.get<any>(`${MAP_ENDPOINT}/${id}`);
+  }
+
+  getAdminMapById(id:number): Observable<Chart>{
+    console.log("hola")
+    console.log((`${ADMIN_MAP}/${id}`))
+    return this.http.get<any>(`${ADMIN_MAP}/${id}`);
   }
 
   getCentersLevels(): Observable<CentersMaps[]>{

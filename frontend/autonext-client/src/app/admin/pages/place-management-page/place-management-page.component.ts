@@ -16,16 +16,24 @@ export class PlaceManagementPageComponent {
 
   selectedMap: number = 1 ;
   chart:any ;
-  
+
   changeMap(newMap: number) {
     this.selectedMap = newMap ;
     this.chartLoad();
   }
-  
+
   chartLoad() {
 
     if(this.selectedMap){
-      this.mapService.formMapLoadById(this.selectedMap).subscribe((response) => {
+      this.mapService.formAdminMapById(this.selectedMap).subscribe((response) => {
+        this.chart = response;
+      });
+    }
+  }
+
+  adminChartLoad(){
+    if(this.selectedMap){
+      this.mapService.formAdminMapById(this.selectedMap).subscribe((response) => {
         this.chart = response;
       });
     }
