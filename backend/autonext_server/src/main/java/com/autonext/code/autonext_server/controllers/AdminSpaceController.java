@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
-import com.autonext.code.autonext_server.dto.SpaceEditRequest;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
+import com.autonext.code.autonext_server.models.enums.PlugType;
 import com.autonext.code.autonext_server.services.SpaceService;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,14 +48,13 @@ public class AdminSpaceController {
         }
     }
 
-
     @PutMapping("/update")
-    public ResponseEntity<String> getBookingsBySpace(@RequestBody SpaceEditRequest request) {
-
+    public ResponseEntity<String> changeBookingsBySpace(@RequestParam int id, @RequestParam PlugType plugType, @RequestParam JobPosition jobPosition) {
+        System.out.println("\u001B[31m"+id+", "+plugType+", "+jobPosition+"\u001B[0m");
 
         try {
 
-            // spaceService.updateSpaceData(0, false) ;
+            spaceService.updateSpaceData(id, plugType, jobPosition) ;
 
             return ResponseEntity.ok("Plaza Actualizada Correctamente") ;
         } catch (Error e) {

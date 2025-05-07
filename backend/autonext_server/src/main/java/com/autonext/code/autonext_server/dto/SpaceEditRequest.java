@@ -1,39 +1,47 @@
 package com.autonext.code.autonext_server.dto;
 
-import com.autonext.code.autonext_server.models.enums.ParkingState;
+import com.autonext.code.autonext_server.models.enums.JobPosition;
+import com.autonext.code.autonext_server.models.enums.PlugType;
 
 public class SpaceEditRequest {
     
     private int id;
-    private int plugTypeId;
-    private ParkingState status;
+    private PlugType plugType;
+    private JobPosition jobPosition;
 
     
     public SpaceEditRequest() { }
 
-    public SpaceEditRequest(int id, int plugTypeId, ParkingState status) {
+    public SpaceEditRequest(int id, PlugType plugType, JobPosition jobPosition) {
         this.id = id;
-        this.plugTypeId = plugTypeId;
-        this.status = status;
+        this.plugType = plugType;
+        this.jobPosition = jobPosition;
     }
-
-    
+ 
     public int getId() {
         return id;
     }
     public void setId(int id) {
         this.id = id;
     }
-    public int getPlugTypeId() {
-        return plugTypeId;
+    public PlugType getPlugType() {
+        return plugType;
     }
-    public void setPlugTypeId(int plugTypeId) {
-        this.plugTypeId = plugTypeId;
+    public void setPlugType(PlugType plugType) {
+        this.plugType = plugType;
     }
-    public ParkingState getStatus() {
-        return status;
+    public JobPosition getJobPosition() {
+        return jobPosition;
     }
-    public void setStatus(ParkingState status) {
-        this.status = status;
+    public void setJobPosition(JobPosition jobPosition) {
+        this.jobPosition = jobPosition;
     }
+
+    @Override
+    public String toString() {
+        return "SpaceEditRequest [id=" + id + ", plugType=" + plugType + ", jobPosition=" + jobPosition + "]";
+    }
+
+    
+
 }
