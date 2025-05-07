@@ -5,3 +5,7 @@
 .bg-mydarkblue {
     background-color: var(--dark-blue);
 }
+
+.bg-mylightblue {
+    background-color: var(--light-blue);
+}

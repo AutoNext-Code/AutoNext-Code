@@ -52,7 +52,7 @@ export const DASHBOARD_YEARS = `${API_BASE_URL}dashboard/years`;
 
 export const GET_USERS = `${API_BASE_URL}admin/user/get-users`;
 export const TOGGLE_ROLE = (id: number) =>  `${API_BASE_URL}admin/user/toggle-admin-role/${id}`;
-export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/update-job-position/${id}`;
-export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/update-work-center/${id}`;
+export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/user/update-job-position/${id}`;
+export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/user/update-work-center/${id}`;
 
 export const SPACE_BOOKINGS = (id: number) =>  `${API_BASE_URL}admin/space/bookings${id}`;
