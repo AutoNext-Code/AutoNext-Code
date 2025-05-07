@@ -20,6 +20,8 @@ export const RESET_PASSWORD = (token: string) => `${API_BASE_URL}auth/reset-pass
 
 export const MAP_ENDPOINT = `${API_BASE_URL}parking/level`;
 
+
+
 export const CENTERS_LEVELS = `${API_BASE_URL}parking/centers`
 
 /* ENDPOINTS DE BOOKINGS */
@@ -57,6 +59,7 @@ export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/user/up
 export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/user/update-work-center/${id}`;
 
 /* SPACES */
+export const ADMIN_MAP = `${API_BASE_URL}admin/space/level`;
 export const UPDATE_SPACE_STATE = `${API_BASE_URL}admin/space/state`;
 export const SPACE_BOOKINGS = (id: number) =>`${API_BASE_URL}admin/space/bookings/${id}`;
 

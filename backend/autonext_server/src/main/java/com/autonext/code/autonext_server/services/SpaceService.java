@@ -31,22 +31,25 @@ public class SpaceService {
     private EmailTemplateService emailTemplateService;
 
 
-    public void updateActiveStatus(int id, boolean blocked){
+    public void updateActiveStatus(int id){
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(id)
         .orElseThrow(() -> new ParkingSpaceNotExistsException("Plaza no encontrada"));
 
-        if(blocked!=parkingSpace.isBlocked()){
+        if(parkingSpace.isBlocked()){
+            
+            parkingSpace.setBlocked(false);
 
-            if(blocked){
-                List<Booking> bookings = bookingRepository.findByParkingSpaceAndConfirmationStatus(parkingSpace, ConfirmationStatus.Inactive);
-                bookings.forEach(b -> {b.setConfirmationStatus(ConfirmationStatus.Expired);b.setStatus(BookingStatus.Cancelled);});
-                bookingRepository.saveAll(bookings);
-            }
+        }else{
 
-            parkingSpace.setBlocked(blocked);
-            parkingSpaceRepository.save(parkingSpace);
+            List<Booking> bookings = bookingRepository.findByParkingSpaceAndConfirmationStatus(parkingSpace, ConfirmationStatus.Inactive);
+            bookings.forEach(b -> {b.setConfirmationStatus(ConfirmationStatus.Expired);b.setStatus(BookingStatus.Cancelled);});
+            bookingRepository.saveAll(bookings);
+
+            parkingSpace.setBlocked(true);
 
         }
+
+        parkingSpaceRepository.save(parkingSpace);
 
     }
 
