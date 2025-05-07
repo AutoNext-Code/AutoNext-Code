@@ -18,7 +18,7 @@ public class ConfigAdminController {
     @Autowired
     private ConfigAdminService configAdminService;
 
-    @PutMapping("/parking-limit")
+    @PutMapping("/update-parking-limit")
     public ResponseEntity<String> updateParkingLimit(@RequestParam Integer parkingLimit) {
         try {
             configAdminService.updateParkingLimit(parkingLimit);
