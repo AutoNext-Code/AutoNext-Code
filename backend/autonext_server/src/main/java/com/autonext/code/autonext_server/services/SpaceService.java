@@ -1,6 +1,7 @@
 package com.autonext.code.autonext_server.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,13 +54,22 @@ public class SpaceService {
 
     }
 
-    public void updateSpaceData(int id, PlugType plugType, JobPosition jobPosition){
+    public void updateSpaceData(int id, Optional<PlugType> plugType, Optional<JobPosition> jobPosition){
         
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(id)
             .orElseThrow(() -> new ParkingSpaceNotExistsException("Plaza no encontrada"));
 
-        parkingSpace.setPlugType(plugType);
-        parkingSpace.setJobPosition(jobPosition);
+        if (!plugType.isEmpty()) {
+            parkingSpace.setPlugType(plugType.get());
+            System.out.println(plugType);
+            System.out.println(parkingSpace.getPlugType());
+        }
+
+        if (!jobPosition.isEmpty()) {
+            parkingSpace.setJobPosition(jobPosition.get());
+            System.out.println(jobPosition);
+            System.out.println(parkingSpace.getJobPosition());
+        }
 
         List<Booking> listBookings = parkingSpace.getBookings() ;
 
@@ -72,12 +82,10 @@ public class SpaceService {
         }
 
         parkingSpace.setBookings(listBookings) ;
-        
 
         parkingSpaceRepository.save(parkingSpace) ;
 
     }
-
 
 
     public Page<Booking> getBookingPage(Pageable pageable, int parkingSpaceId) {

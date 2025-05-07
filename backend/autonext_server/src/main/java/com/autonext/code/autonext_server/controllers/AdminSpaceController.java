@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,12 @@ public class AdminSpaceController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> changeBookingsBySpace(@RequestParam int id, @RequestParam PlugType plugType, @RequestParam JobPosition jobPosition) {
+    public ResponseEntity<String> changeBookingsBySpace
+    (
+        @RequestParam int id, 
+        @RequestParam Optional<PlugType> plugType, 
+        @RequestParam Optional<JobPosition>  jobPosition
+    ) {
 
         try {
 
