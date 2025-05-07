@@ -1,107 +1,108 @@
 @if (isLoaded) {
 
-  <div class="lg:flex lg:justify-center w-full overflow-x-auto">
-    <svg #svgElement width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
-      <image
-        [attr.href]="imageUrl"
-        width="800"
-        height="600"
-      />
+<div class="lg:flex lg:justify-center w-full overflow-x-auto">
+  <svg
+    #svgElement
+    width="800"
+    height="600"
+    viewBox="0 0 800 600"
+    class="w-[800px] block"
+  >
+    <image [attr.href]="imageUrl" width="800" height="600" />
 
-      @for (space of spaces; track $index) {
+    @for (space of spaces; track $index) { @if(spaceTaken(space) && !adminView){
+    <g
+      class="tooltip-space"
+      [attr.transform]="
+        'translate(' + (space.x - 23) + ',' + (space.y - 25) + ')'
+      "
+    >
+      <g [attr.transform]="'rotate(' + space.direction + ', 17, 22)'">
+        <use
+          xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+          width="35"
+          height="44"
+          [attr.filter]="space.state"
+        ></use>
+      </g>
 
-        @if(spaceTaken(space) && !adminView){
-          <g class="tooltip-space" [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ')'">
+      <g class="tooltip-group">
+        <rect class="tooltip-bg"></rect>
 
-            <g
-              [attr.transform]="'rotate(' + space.direction + ', 17, 22)'"
+        <text class="tooltip-text" x="15" y="-18">
+          {{ getTooltipText(space) }}
+        </text>
+      </g>
+    </g>
 
-            >
-              <use
-                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-                width="35" height="44"
-                [attr.filter]="space.state">
-              </use>
+    }@else { @if(statusSpace(space)){
 
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleModal(space.id, space.plugType.toString())"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
 
-            </g>
+    }@else if(adminView){
 
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleAdmin(space.id)"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
 
-            <g class="tooltip-group">
-              <rect
-                class="tooltip-bg"
-
-              ></rect>
-
-              <text
-                class="tooltip-text"
-                x="15"
-                y="-18"
-              >
-              {{getTooltipText(space)}}
-              </text>
-
-            </g>
-
-
-          </g>
-
-
-
-
-        }@else {
-
-          @if(statusSpace(space)){
-
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleModal(space.id, space.plugType.toString())"
-            class="cursor-pointer"
-            >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
-          </g>
-
-
-
-          }@else if(adminView){
-
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleAdmin(space.id)"
-            class="cursor-pointer"
-            >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
-          </g>
-
-
-
-          }@else {
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-
-
-          >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="unusable">
-            </use>
-          </g>
-          }
-
-        }
-
-      }
-    </svg>
-  </div>
+    }@else {
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="unusable"
+      ></use>
+    </g>
+    } } }
+  </svg>
+</div>
 
 }
 
@@ -125,53 +126,51 @@
     class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
     id="modal"
   >
+    <ng-template #content>
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center">
+        <booking-list
+          [bookingList]="bookingList"
+          (pageChanger)="loadPastBookings($event)"
+        />
+      </div>
+    </ng-template>
 
-  <ng-template #content>
-    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center" >
+    <ng-template #buttons>
+      <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+        <app-custom-button
+          color="gray"
+          icon="close"
+          label="Cancelar"
+          class="m-4 rounded"
+          (onClick)="closeAdmin()"
+        >
+        </app-custom-button>
+        <app-custom-button
+          color="red"
+          icon="shield"
+          label="Bloquear"
+          class="m-4 rounded"
+        >
+        </app-custom-button>
+        <app-custom-button
+          color="green"
+          icon="edit"
+          label="Editar"
+          class="m-4 rounded"
+          (onClick)="toggleEdit()"
+        >
+        </app-custom-button>
+      </div>
+    </ng-template>
 
-      <booking-list 
-        [bookingList]="bookingList"
-        (pageChanger)="loadPastBookings($event)"
-      />
-
-    </div>
-  
-  </ng-template>
-  
-  
-  <ng-template #buttons>
-    <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
-      <app-custom-button
-        color="gray"
-        icon="close"
-        label="Cancelar"
-        class="m-4 rounded"
-        (onClick)="closeAdmin()">
-      </app-custom-button>
-      <app-custom-button
-        color="red"
-        icon="shield"
-        label="Bloquear"
-        class="m-4 rounded">
-      </app-custom-button>
-      <app-custom-button
-        color="green"
-        icon="edit"
-        label="Editar"
-        class="m-4 rounded"
-        (onClick)="toggleEdit()">
-      </app-custom-button>
-    </div>
-  </ng-template>
-  
-  <shared-custom-modal
-    [title]="'Configuración De Plaza - '+ spaceEditedId"
-    [container]="content"
-    [buttons]="buttons"
-    [visible]="true"
-    class="z-0"
-  ></shared-custom-modal>
-
+    <shared-custom-modal
+      [title]="'Configuración De Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      [widthClass]="'w-[90vw] sm:w-[800px]'"
+      class="z-0"
+    ></shared-custom-modal>
   </div>
 </ng-container>
 
@@ -180,43 +179,39 @@
     class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
     id="modal"
   >
+    <ng-template #content>
+      <div class="flex flex-col space-y-6 p-5">
+        <maps-select-plug-type [(ngModel)]="editPlugType" />
+      </div>
+    </ng-template>
 
-  <ng-template #content>
-    <div class="flex flex-col space-y-6 p-5">
-      <maps-select-plug-type 
-        [(ngModel)]="editPlugType"
-      />
-    </div>
-  
-  </ng-template>
-  
-  
-  <ng-template #buttons>
-    <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
-      <app-custom-button
-        color="gray"
-        icon="close"
-        label="Cancelar"
-        class="m-4 rounded"
-        (onClick)="closeAdmin()">
-      </app-custom-button>
-      <div></div>
-      <app-custom-button
-        color="dark-blue"
-        icon="book"
-        label="Guardar"
-        class="m-4 rounded">
-      </app-custom-button>
-    </div>
-  </ng-template>
-  
-  <shared-custom-modal
-    [title]="'Editar Plaza - '+ spaceEditedId"
-    [container]="content"
-    [buttons]="buttons"
-    [visible]="true"
-    class="z-99"
-  ></shared-custom-modal>
+    <ng-template #buttons>
+      <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+        <app-custom-button
+          color="gray"
+          icon="close"
+          label="Cancelar"
+          class="m-4 rounded"
+          (onClick)="closeAdmin()"
+        >
+        </app-custom-button>
+        <div></div>
+        <app-custom-button
+          color="dark-blue"
+          icon="book"
+          label="Guardar"
+          class="m-4 rounded"
+        >
+        </app-custom-button>
+      </div>
+    </ng-template>
 
+    <shared-custom-modal
+      [title]="'Editar Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      class="z-99"
+    ></shared-custom-modal>
   </div>
 </ng-container>
