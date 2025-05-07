@@ -12,21 +12,27 @@
       <label class="block text-sm font-medium mb-1" for="delegation">
         Cantidad de reservas realizables al día
       </label>
+
+      <!-- Input vinculado a newLimit -->
       <shared-input
-        type="text"
+        type="number"
         icon="schedule"
         placeholder="Mínimo 1"
+        [(ngModel)]="newLimit"
       ></shared-input>
 
       <div class="flex justify-between pt-4">
         <button
           class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md"
+          (click)="saveNewLimit()"
         >
           <span class="material-icons">edit</span>
           <span>Guardar</span>
         </button>
+
         <button
           class="flex items-center space-x-1 bg-myred text-white px-4 py-2 rounded-md"
+          (click)="newLimit = parkingLimit"
         >
           <span class="material-icons">delete</span>
           <span>Cancelar</span>
