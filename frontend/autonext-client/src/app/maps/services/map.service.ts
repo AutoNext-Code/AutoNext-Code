@@ -34,6 +34,12 @@ export class MapService {
       .pipe(map((response) => response as Chart));
   }
 
+  formAdminMapById(id:number){
+    return this.maphttp
+    .getAdminMapById(id)
+    .pipe(map((response) => response as Chart));
+  }
+
   centersLevelsLoad() {
     this.maphttp
       .getCentersLevels()

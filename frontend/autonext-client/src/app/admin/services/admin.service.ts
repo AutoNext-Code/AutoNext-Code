@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { AdminHttpService } from './admin-http.service';
 import { UserForAdmin } from '@admin/interfaces/user-for-admin.interface';
-import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +21,17 @@ export class AdminService {
     );
   }
 
+  updateJobPosition(id: number, jobPosition: string): Observable<string> {
+    return this.adminHttp.updateJobPosition(id, jobPosition).pipe(
+      catchError((error) => throwError(() => error))
+    );
+  }
+
+  updateWorkCenter(id: number, workCenter: number): Observable<string> {
+    return this.adminHttp.updateWorkCenter(id, workCenter).pipe(
+      catchError((error) => throwError(() => error))
+    );
+  }
   updateSpaceState(id: number, blocked: boolean): Observable<string> {
     return this.adminHttp.updateSpaceState(id, blocked).pipe(
       catchError((error) => {

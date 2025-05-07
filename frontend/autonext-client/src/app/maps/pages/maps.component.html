@@ -51,7 +51,43 @@
 
         }@else {
 
-          @if(statusSpace(space)){
+
+          @if(adminView){
+
+            @if(spaceNoType(space.plugType)){
+
+              <g
+              [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+              (click)="toggleAdmin(space)"
+              class="cursor-pointer"
+              >
+              <use
+                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+                width="35" height="44"
+                [attr.filter]="unusable">
+              </use>
+              </g>
+
+
+            }@else{
+
+
+              <g
+                [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
+                (click)="toggleAdmin(space)"
+                class="cursor-pointer"
+                >
+                <use
+                  xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
+                  width="35" height="44"
+                  [attr.filter]="space.state">
+                </use>
+              </g>
+
+            }
+
+
+          }@else if(statusSpace(space)){
 
             <g
             [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
@@ -65,36 +101,6 @@
             </use>
           </g>
 
-
-
-          }@else if(adminView){
-
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleAdmin(space)"
-            class="cursor-pointer"
-            >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
-          </g>
-
-
-
-          }@else {
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-
-
-          >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="unusable">
-            </use>
-          </g>
           }
 
         }
@@ -129,16 +135,16 @@
   <ng-template #content>
     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center" >
 
-      <booking-list 
+      <booking-list
         [bookingList]="bookingList"
         (pageChanger)="loadPastBookings($event)"
       />
 
     </div>
-  
+
   </ng-template>
-  
-  
+
+
   <ng-template #buttons>
     <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
       <app-custom-button
@@ -163,7 +169,7 @@
       </app-custom-button>
     </div>
   </ng-template>
-  
+
   <shared-custom-modal
     [title]="'Configuración De Plaza - '+ spaceEditedId"
     [container]="content"
@@ -215,10 +221,10 @@
     </label>
 
     </div>
-  
+
   </ng-template>
-  
-  
+
+
   <ng-template #buttons>
     <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
       <app-custom-button
@@ -238,7 +244,7 @@
       </app-custom-button>
     </div>
   </ng-template>
-  
+
   <shared-custom-modal
     [title]="'Editar Plaza - '+ spaceEditedId"
     [container]="content"

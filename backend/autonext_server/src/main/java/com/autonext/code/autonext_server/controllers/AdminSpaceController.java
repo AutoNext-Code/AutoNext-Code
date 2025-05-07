@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autonext.code.autonext_server.dto.BookingDTO;
+import com.autonext.code.autonext_server.dto.ParkingLevelMapDTO;
 import com.autonext.code.autonext_server.mapper.BookingMapper;
 import com.autonext.code.autonext_server.models.Booking;
+import com.autonext.code.autonext_server.services.ParkingService;
 import com.autonext.code.autonext_server.models.enums.JobPosition;
 import com.autonext.code.autonext_server.models.enums.PlugType;
 import com.autonext.code.autonext_server.services.SpaceService;
+
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,11 +38,13 @@ public class AdminSpaceController {
     @Autowired
     private SpaceService spaceService;
 
+    @Autowired ParkingService parkingService;
+
     @PutMapping("/state")
-    public ResponseEntity<String> spaceState(@RequestParam int id, @RequestParam boolean blocked) {
+    public ResponseEntity<String> spaceState(@RequestParam int id) {
         try{
 
-            spaceService.updateActiveStatus(id, blocked);
+            spaceService.updateActiveStatus(id);
 
 
             return ResponseEntity.ok("Plaza actualizada correctamente");
@@ -89,6 +94,21 @@ public class AdminSpaceController {
     private PageRequest buildPageRequest(int page, boolean ascending) {
         Sort sort = ascending ? Sort.by("date").ascending() : Sort.by("date").descending();
         return PageRequest.of(page, 6, sort);
+    }
+
+
+    @GetMapping("/level/{id}")
+    public ResponseEntity<?> getLevelWithAvailability(
+        @PathVariable int id) {
+
+        try {
+        ParkingLevelMapDTO dto = parkingService.adminLevelMap(id);
+        return ResponseEntity.ok(dto);
+        } catch (RuntimeException e) {
+        return ResponseEntity.status(404).body("No se encontró el mapa con id " + id + ": " + e.getMessage());
+        } catch (Exception e) {
+        return ResponseEntity.status(500).body("Error inesperado al obtener el mapa: " + e.getMessage());
+        }
     }
     
     
