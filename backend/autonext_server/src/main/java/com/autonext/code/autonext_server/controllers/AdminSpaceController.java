@@ -38,10 +38,10 @@ public class AdminSpaceController {
     @Autowired ParkingService parkingService;
 
     @PutMapping("/state")
-    public ResponseEntity<String> spaceState(@RequestParam int id, @RequestParam boolean blocked) {
+    public ResponseEntity<String> spaceState(@RequestParam int id) {
         try{
 
-            spaceService.updateActiveStatus(id, blocked);
+            spaceService.updateActiveStatus(id);
 
 
             return ResponseEntity.ok("Plaza actualizada correctamente");
