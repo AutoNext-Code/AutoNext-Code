@@ -50,7 +50,6 @@ public class AdminSpaceController {
 
     @PutMapping("/update")
     public ResponseEntity<String> changeBookingsBySpace(@RequestParam int id, @RequestParam PlugType plugType, @RequestParam JobPosition jobPosition) {
-        System.out.println("\u001B[31m"+id+", "+plugType+", "+jobPosition+"\u001B[0m");
 
         try {
 

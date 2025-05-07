@@ -27,6 +27,9 @@ public class SpaceService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private EmailTemplateService emailTemplateService;
+
 
     public void updateActiveStatus(int id, boolean blocked){
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(id)
@@ -48,15 +51,25 @@ public class SpaceService {
     }
 
     public void updateSpaceData(int id, PlugType plugType, JobPosition jobPosition){
-        System.out.println("\u001B[31m"+"Hola"+"\u001B[0m");
         
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(id)
             .orElseThrow(() -> new ParkingSpaceNotExistsException("Plaza no encontrada"));
-        
-        System.out.println("\u001B[31m"+"Hola"+"\u001B[0m");
 
         parkingSpace.setPlugType(plugType);
         parkingSpace.setJobPosition(jobPosition);
+
+        List<Booking> listBookings = parkingSpace.getBookings() ;
+
+        for (Booking booking : listBookings) {
+            if (booking.getStatus() == BookingStatus.Pending) {
+
+                emailTemplateService.notifyUserOnAdminCancellation(booking) ;
+                booking.setStatus(BookingStatus.Cancelled) ;
+            }
+        }
+
+        parkingSpace.setBookings(listBookings) ;
+        
 
         parkingSpaceRepository.save(parkingSpace) ;
 
