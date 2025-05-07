@@ -30,4 +30,14 @@ export class AdminService {
       })
     );
   }
+
+  getParkingLimit(): Observable<number> {
+    return this.adminHttp.getConfigParkingLimit();
+  }
+
+  updateParkingLimit(limit : number): Observable<string> {
+    return this.adminHttp.updateConfigParkingLimit(limit);
+  }
+
+
 }
