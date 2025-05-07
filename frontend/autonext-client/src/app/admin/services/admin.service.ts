@@ -1,9 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { AdminHttpService } from './admin-http.service';
 import { UserForAdmin } from '@admin/interfaces/user-for-admin.interface';
-import { JobPosition } from '@admin/enums/jobPosition.enum';
-import { BookingDTO } from '@booking/interfaces/bookingDTO.interface';
 
 @Injectable({
   providedIn: 'root',
