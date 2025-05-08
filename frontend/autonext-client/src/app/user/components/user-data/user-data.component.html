@@ -9,7 +9,7 @@
           {{ user?.name }} {{ user?.surname }}
         </p>
         <p>Correo electrónico: {{ user?.email }}</p>
-        <p>Puesto: {{ user?.jobPosition }}</p>
+        <p>Puesto: {{ user?.jobPosition | underscoreToSpace }}</p>
         <p>Delegación: {{ user?.delegation }}</p>
         <p *ngIf="user?.strikes">Strikes: {{ user?.strikes }}</p>
       </div>
@@ -62,13 +62,13 @@
 <div
   class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
 >
-  <password-changer 
-    [hidden]="passwdModal" 
+  <password-changer
+    [hidden]="passwdModal"
     (warningEmitter)="cancelChanges()"
     (modalEmitter)="closeModal()">
   </password-changer>
 
-  <edit-profile 
+  <edit-profile
     [hidden]="edModal"
     [originalName]="user?.name || ''"
     [originalSurname]="user?.surname || ''"
