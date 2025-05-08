@@ -81,7 +81,16 @@
       ></use>
     </g>
 
-    }@else {
+    <g class="tooltip-group">
+      <rect class="tooltip-bg"></rect>
+
+      <text class="tooltip-text" x="15" y="-18">
+        {{ getTooltipText(space) }}
+      </text>
+    </g>
+
+    }@else { @if(adminView){ @if(spaceNoType(space.plugType)){
+
     <g
       [attr.transform]="
         'translate(' +
@@ -92,6 +101,8 @@
         space.direction +
         ', 17, 22)'
       "
+      (click)="toggleAdmin(space)"
+      class="cursor-pointer"
     >
       <use
         xlink:href="./assets/svg/CarIcon.svg#custom-marker"
@@ -100,6 +111,53 @@
         [attr.filter]="unusable"
       ></use>
     </g>
+
+    }@else{
+
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleAdmin(space)"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
+
+    } }@else if(statusSpace(space)){
+
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleModal(space.id, space.plugType.toString())"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
+
     } } }
   </svg>
 </div>
@@ -181,7 +239,42 @@
   >
     <ng-template #content>
       <div class="flex flex-col space-y-6 p-5">
-        <maps-select-plug-type [(ngModel)]="editPlugType" />
+        <label class="block">
+          <span class="block text-sm font-medium mb-1 text-gray-500"
+            >Puesto:</span
+          >
+          <select
+            value="0"
+            [(ngModel)]="editPlugType"
+            class="w-[300px] h-11 border border-gray-400 text-gray-700 rounded px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-mydarkblue"
+          >
+            <option value="0">NoType</option>
+            <option value="1">Undefined</option>
+            <option value="2">Schuko</option>
+            <option value="3">Type1</option>
+            <option value="4">Type2</option>
+            <option value="5">CCS</option>
+            <option value="6">CHAdeMO</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-sm font-medium mb-1 text-gray-500"
+            >Puesto:</span
+          >
+          <select
+            value="0"
+            [(ngModel)]="jobPosition"
+            class="w-[300px] h-11 border border-gray-400 text-gray-700 rounded px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-mydarkblue"
+          >
+            <option value="0">Sin puesto</option>
+            <option value="1">Intern</option>
+            <option value="2">Product Owner</option>
+            <option value="3">Scrum Master</option>
+            <option value="4">Developer</option>
+            <option value="5">PEM</option>
+            <option value="6">Branch Head</option>
+          </select>
+        </label>
       </div>
     </ng-template>
 
@@ -201,10 +294,19 @@
           icon="book"
           label="Guardar"
           class="m-4 rounded"
+          (click)="updateSpace(spaceEditedId, jobPosition)"
         >
         </app-custom-button>
       </div>
     </ng-template>
+
+    <shared-custom-modal
+      [title]="'Editar Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      class="z-99"
+    ></shared-custom-modal>
 
     <shared-custom-modal
       [title]="'Editar Plaza - ' + spaceEditedId"
