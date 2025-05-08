@@ -88,10 +88,42 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 spaces.add(new ParkingSpace("MAD1-44", 155, 330, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace("MAD1-45", 190, 330, Direction.Down, PlugType.NoType, madrid1));
                 spaces.add(new ParkingSpace("MAD1-46", 225, 330, Direction.Down, PlugType.CHAdeMO, madrid1));
-                spaces.add(new ParkingSpace("MAD1-47", 255, 330, Direction.Down, PlugType.CHAdeMO, madrid1));
+                spaces.add(new ParkingSpace("MAD1-47", 260, 330, Direction.Down, PlugType.CHAdeMO, madrid1));
                 spaces.add(new ParkingSpace("MAD1-48", 290, 330, Direction.Down, PlugType.CHAdeMO, madrid1));
                 spaces.add(new ParkingSpace("MAD1-49", 325, 330, Direction.Down, PlugType.NoType, madrid1));
-                spaces.add(new ParkingSpace("MAD1-50", 355, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-50", 360, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-51", 395, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-52", 425, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-53", 455, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-54", 485, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-55", 523, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-56", 555, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-57", 590, 330, Direction.Down, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace("MAD1-58", 620, 330, Direction.Down, PlugType.NoType, madrid1));
+
+                spaces.add(new ParkingSpace( "MAD1-59", 65, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-60", 30, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-61", 95, 470, Direction.Up, PlugType.CHAdeMO, madrid1, true));
+                spaces.add(new ParkingSpace( "MAD1-62", 125, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-63", 155, 470, Direction.Up, PlugType.CHAdeMO, madrid1, JobPosition.Intern));
+                spaces.add(new ParkingSpace( "MAD1-64", 190, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-65", 225, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-66", 255, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-67", 290, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-68", 325, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-69", 355, 470, Direction.Up, PlugType.Schuko, madrid1,JobPosition.Branch_Head, true));
+                spaces.add(new ParkingSpace( "MAD1-70", 390, 470, Direction.Up, PlugType.Schuko, madrid1, JobPosition.Branch_Head));
+                spaces.add(new ParkingSpace( "MAD1-71", 425, 470, Direction.Up, PlugType.Schuko, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-72", 455, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-73", 490, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-74", 525, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-75", 555, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-76", 585, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-77", 620, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-78", 650, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-79", 690, 470, Direction.Up, PlugType.NoType, madrid1));
+                spaces.add(new ParkingSpace( "MAD1-80", 720, 470, Direction.Up, PlugType.NoType, madrid1));
+         
                 
                 System.out.println("Madrid-01 places seeder used");
             }else{
