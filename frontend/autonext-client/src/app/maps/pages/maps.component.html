@@ -131,7 +131,9 @@
     id="modal"
   >
     <ng-template #content>
-      <div class="flex flex-col w-full max-w-[100vw] sm:max-w-[800px] overflow-hidden">
+      <div
+        class="flex flex-col w-full max-w-[100vw] sm:max-w-[800px] overflow-hidden"
+      >
         <div class="px-4 sm:px-6">
           <booking-list
             [bookingList]="bookingList"
@@ -193,14 +195,13 @@
     </ng-template>
 
     <shared-custom-modal
-    [title]="'Configuración De Plaza - ' + spaceEditedId"
-    [container]="content"
-    [buttons]="buttons"
-    [visible]="true"
-    [widthClass]="'w-[90vw] sm:w-[800px]'"
-    class="z-0"
-  ></shared-custom-modal>
-  
+      [title]="'Configuración De Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      [widthClass]="'w-[90vw] sm:w-[800px]'"
+      class="z-0"
+    ></shared-custom-modal>
   </div>
 </ng-container>
 
@@ -252,9 +253,9 @@
 
     <ng-template #buttons>
       <div
-        class="bg-gray-200 px-4 py-3 grid gap-3"
+        class="bg-gray-200 px-4 py-3 grid gap-3 justify-items-center"
         [ngClass]="{
-          'grid-cols-1 sm:grid-cols-3': true
+          'grid-cols-1 sm:grid-cols-2': true
         }"
       >
         <app-custom-button
@@ -265,9 +266,7 @@
           (onClick)="closeAdmin()"
         >
         </app-custom-button>
-    
-        <div></div>
-    
+
         <app-custom-button
           color="dark-blue"
           icon="book"
@@ -278,7 +277,6 @@
         </app-custom-button>
       </div>
     </ng-template>
-    
 
     <shared-custom-modal
       [title]="'Editar Plaza - ' + spaceEditedId"
