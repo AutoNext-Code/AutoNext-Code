@@ -19,6 +19,8 @@ export class UsersDataComponent {
   private appComponent = inject(AppComponent);
   private authService = inject(AuthService);
 
+  public SUPER_ADMIN_ID = 1;
+
   @Input() emailSignal!: Signal<string>;
 
   users: UserForAdmin[] = [];
@@ -112,9 +114,9 @@ export class UsersDataComponent {
   saveChanges(user: UserForAdmin) {
     const selectedJobPositionIndex = (document.querySelector(`select[name="jobPosition"][value="${user.id}"]`) as HTMLSelectElement)?.value;
     const selectedWorkCenter = (document.querySelector(`select[name="workCenter"][value="${user.id}"]`) as HTMLSelectElement)?.value;
-  
+
     const selectedJobPosition = JobPosition[+selectedJobPositionIndex];
-  
+
     this.adminService.updateJobPosition(user.id, selectedJobPosition).subscribe({
       next: () => {
         this.adminService.updateWorkCenter(user.id, +selectedWorkCenter).subscribe({
@@ -133,6 +135,10 @@ export class UsersDataComponent {
       },
     });
   }
-  
+
+  showTemporalToast() {
+    this.appComponent.showToast('warn', 'No implementado!', "", 3000);
+  }
+
 
 }

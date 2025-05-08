@@ -1,82 +1,109 @@
 <div class="flex flex-wrap justify-center my-5">
-
-    <div *ngFor="let user of users">
-        <div class="flex justify-between gap-7 shadow-md rounded-2xl p-6 border-card m-5 min-w-[400px]">
-
-            <form class="space-y-4 text-sm text-gray-800">
-                <p><span class="font-semibold">Email:</span> {{user.email}}</p>
-                <p><span class="font-semibold">Nombre:</span> {{user.name}}</p>
-                <p><span class="font-semibold">Apellidos:</span> {{user.surname}}</p>
-                <div class="flex flex-wrap gap-4 text-sm">
-                    <p><span class="font-semibold">Strike:</span> {{user.strikes}}</p>
-                    <p><span class="font-semibold">Rol:</span> {{user.role}}</p>
-                </div>
-                <label class="block">
-                    <span class="font-semibold">Puesto:</span>
-                    <ng-container *ngIf="isEditing[user.id]; else viewMode">
-                        <select [value]="getJobPositionValue(user.jobPosition)" name="jobPosition"
-                            [attr.value]="user.id">
-                            <option value="0">Sin puesto</option>
-                            <option value="1">Intern</option>
-                            <option value="2">Product Owner</option>
-                            <option value="3">Scrum Master</option>
-                            <option value="4">Developer</option>
-                            <option value="5">PEM</option>
-                            <option value="6">Branch Head</option>
-                        </select>
-                    </ng-container>
-                    <ng-template #viewMode>
-                        {{ formatJobPosition(user.jobPosition) }}
-                    </ng-template>
-                </label>
-                <label class="block">
-                    <span class="font-semibold">Delegación:</span>
-                    <ng-container *ngIf="isEditing[user.id]; else viewModeDelegation">
-                        <select [value]="getWorkCenterValue(user.workCenter)" name="workCenter" [attr.value]="user.id">
-                            <option value="0">Sin delegación</option>
-                            <option value="1">Madrid</option>
-                            <option value="2">Málaga</option>
-                        </select>
-                    </ng-container>
-                    <ng-template #viewModeDelegation>
-                        {{ getWorkCenterValue(user.workCenter) == 0 ? 'Sin delegación' :
-                        getWorkCenterValue(user.workCenter) == 1 ? 'Madrid' : 'Málaga' }}
-                    </ng-template>
-                </label>
-            </form>
-
-            <div class="flex flex-col justify-between gap-2">
-                <button
-                    class="bg-mylightblue text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
-                    Reservas
-                    <span class="material-icons">calendar_month</span>
-                </button>
-                <button [ngClass]="isEditing[user.id] ? 'bg-red-500' : 'bg-mydarkblue'"
-                    class="text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
-                    (click)="toggleEdit(user.id)">
-                    {{ isEditing[user.id] ? 'Cancelar' : 'Editar' }}
-                    <span class="material-icons">{{ isEditing[user.id] ? 'cancel' : 'edit' }}</span>
-                </button>
-                <button *ngIf="isEditing[user.id]"
-                    class="bg-green-600 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
-                    (click)="saveChanges(user)">
-                    Guardar
-                    <span class="material-icons">save</span>
-                </button>
-                <button
-                    class="bg-red-500 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
-                    Banear
-                    <span class="material-icons">block</span>
-                </button>
-                @if (idUser == 1) {
-                <button (click)="toggleRole(user)"
-                    class="bg-gray-700 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer">
-                    {{ user.role != 'Admin' ? 'Admin' : 'User' }}
-                    <span class="material-icons">
-                        {{ user.role != 'Admin' ? 'manage_accounts' : 'person' }}
-                    </span>
-                </button>
-                }
-            </div>
+  <div *ngFor="let user of users">
+    <div
+      class="flex justify-between gap-7 shadow-md rounded-2xl p-6 border-card m-5 min-w-[400px]"
+    >
+      <form class="space-y-4 text-sm text-gray-800">
+        <p><span class="font-semibold">Email:</span> {{ user.email }}</p>
+        <p><span class="font-semibold">Nombre:</span> {{ user.name }}</p>
+        <p><span class="font-semibold">Apellidos:</span> {{ user.surname }}</p>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <p><span class="font-semibold">Strike:</span> {{ user.strikes }}</p>
+          <p><span class="font-semibold">Rol:</span> {{ user.role }}</p>
         </div>
+        <label class="block">
+          <span class="font-semibold">Puesto:</span>
+          <ng-container *ngIf="isEditing[user.id]; else viewMode">
+            <select
+              [value]="getJobPositionValue(user.jobPosition)"
+              name="jobPosition"
+              [attr.value]="user.id"
+            >
+              <option value="0">Sin puesto</option>
+              <option value="1">Intern</option>
+              <option value="2">Product Owner</option>
+              <option value="3">Scrum Master</option>
+              <option value="4">Developer</option>
+              <option value="5">PEM</option>
+              <option value="6">Branch Head</option>
+            </select>
+          </ng-container>
+          <ng-template #viewMode>
+            {{ formatJobPosition(user.jobPosition) }}
+          </ng-template>
+        </label>
+        <label class="block">
+          <span class="font-semibold">Delegación:</span>
+          <ng-container *ngIf="isEditing[user.id]; else viewModeDelegation">
+            <select
+              [value]="getWorkCenterValue(user.workCenter)"
+              name="workCenter"
+              [attr.value]="user.id"
+            >
+              <option value="0">Sin delegación</option>
+              <option value="1">Madrid</option>
+              <option value="2">Málaga</option>
+            </select>
+          </ng-container>
+          <ng-template #viewModeDelegation>
+            {{
+              getWorkCenterValue(user.workCenter) == 0
+                ? "Sin delegación"
+                : getWorkCenterValue(user.workCenter) == 1
+                ? "Madrid"
+                : "Málaga"
+            }}
+          </ng-template>
+        </label>
+      </form>
+
+      <div class="flex flex-col flex-wrap justify-start gap-4">
+        @if (user.id != SUPER_ADMIN_ID || idUser == SUPER_ADMIN_ID) {
+        <button
+          (click)="showTemporalToast()"
+          class="bg-mylightblue text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
+        >
+          Reservas
+          <span class="material-icons">calendar_month</span>
+        </button>
+        <button
+          [ngClass]="isEditing[user.id] ? 'bg-red-500' : 'bg-mydarkblue'"
+          class="text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
+          (click)="toggleEdit(user.id)"
+        >
+          {{ isEditing[user.id] ? "Cancelar" : "Editar" }}
+          <span class="material-icons">{{
+            isEditing[user.id] ? "cancel" : "edit"
+          }}</span>
+        </button>
+        <button
+          *ngIf="isEditing[user.id]"
+          class="bg-green-600 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
+          (click)="saveChanges(user)"
+        >
+          Guardar
+          <span class="material-icons">save</span>
+        </button>
+        @if (user.id != SUPER_ADMIN_ID) {
+        <button
+          (click)="showTemporalToast()"
+          class="bg-red-500 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
+        >
+          Banear
+          <span class="material-icons">block</span>
+        </button>
+        } @if (idUser == SUPER_ADMIN_ID && user.id != SUPER_ADMIN_ID) {
+        <button
+          (click)="toggleRole(user)"
+          class="bg-gray-700 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
+        >
+          {{ user.role != "Admin" ? "Admin" : "User" }}
+          <span class="material-icons">
+            {{ user.role != "Admin" ? "manage_accounts" : "person" }}
+          </span>
+        </button>
+        } }
+      </div>
     </div>
+  </div>
+</div>
