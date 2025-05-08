@@ -313,7 +313,7 @@ export class MapsComponent implements OnInit {
 
   updateSpace(id: number, jobPosition: JobPosition): void {
     console.log(this.editPlugType);
-
+  
     this.editingSpaceService
       .spaceEdit(id, PlugType[this.editPlugType], jobPosition)
       .subscribe({
@@ -325,6 +325,7 @@ export class MapsComponent implements OnInit {
         },
       });
   }
+  
 
   spaceNoType(plugType: PlugType): boolean {
     let number: number = 0;
@@ -386,4 +387,10 @@ export class MapsComponent implements OnInit {
     if (!space) return false;
     return space.state === State.Blocked;
   }
+
+  isMobile(): boolean {
+    return window.innerWidth < 1024;
+  }
+  
+
 }

@@ -131,59 +131,61 @@
     id="modal"
   >
     <ng-template #content>
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center">
-        <booking-list
-          [bookingList]="bookingList"
-          (pageChanger)="loadPastBookings($event)"
-        />
+      <div class="flex flex-col w-full max-w-[100vw] sm:max-w-[800px] overflow-hidden">
+        <div class="px-4 sm:px-6">
+          <booking-list
+            [bookingList]="bookingList"
+            (pageChanger)="loadPastBookings($event)"
+          />
+        </div>
       </div>
     </ng-template>
 
     <ng-template #buttons>
       <div
-        class="bg-gray-200 px-4 py-3 grid"
+        class="bg-gray-200 px-4 py-3 grid gap-3"
         [ngClass]="{
-          'grid-cols-3': isBlockable,
-          'grid-cols-2 justify-center': !isBlockable
+          'grid-cols-1 sm:grid-cols-3': isBlockable,
+          'grid-cols-1 sm:grid-cols-2 sm:justify-center': !isBlockable
         }"
       >
         <app-custom-button
           color="gray"
           icon="close"
           label="Cancelar"
-          class="m-4 rounded w-[160px] h-[48px] flex items-center justify-center"
+          class="rounded w-full max-w-[140px] h-12 mx-auto order-3 sm:order-1"
           (onClick)="closeAdmin()"
         >
         </app-custom-button>
 
-        <!-- CONTENEDOR SOLO SI ES BLOQUEABLE -->
-        <div *ngIf="isBlockable" class="relative m-4 w-[160px] h-[48px]">
+        <div
+          *ngIf="isBlockable"
+          class="relative w-full max-w-[140px] h-12 mx-auto order-1 sm:order-2"
+        >
           <app-custom-button
-            class="absolute inset-0 rounded w-full h-full transition-opacity duration-150 flex items-center justify-center"
+            class="absolute inset-0 w-full h-full transition-opacity duration-150 rounded"
             [style.opacity]="isBlocked ? 0 : 1"
             (onClick)="updateSpaceState(spaceEditedId)"
             color="red"
             icon="shield"
             label="Bloquear"
-          >
-          </app-custom-button>
+          ></app-custom-button>
 
           <app-custom-button
-            class="absolute inset-0 rounded w-full h-full transition-opacity duration-150 flex items-center justify-center"
+            class="absolute inset-0 w-full h-full transition-opacity duration-150 text-xs rounded"
             [style.opacity]="isBlocked ? 1 : 0"
             (onClick)="updateSpaceState(spaceEditedId)"
             color="green"
             icon="shield"
             label="Desbloquear"
-          >
-          </app-custom-button>
+          ></app-custom-button>
         </div>
 
         <app-custom-button
           color="green"
           icon="edit"
           label="Editar"
-          class="m-4 rounded w-[160px] h-[48px] flex items-center justify-center"
+          class="rounded w-full max-w-[140px] h-12 mx-auto order-2 sm:order-3"
           (onClick)="toggleEdit()"
         >
         </app-custom-button>
@@ -191,13 +193,14 @@
     </ng-template>
 
     <shared-custom-modal
-      [title]="'Configuración De Plaza - ' + spaceEditedId"
-      [container]="content"
-      [buttons]="buttons"
-      [visible]="true"
-      [widthClass]="'w-[90vw] sm:w-[800px]'"
-      class="z-0"
-    ></shared-custom-modal>
+    [title]="'Configuración De Plaza - ' + spaceEditedId"
+    [container]="content"
+    [buttons]="buttons"
+    [visible]="true"
+    [widthClass]="'w-[90vw] sm:w-[800px]'"
+    class="z-0"
+  ></shared-custom-modal>
+  
   </div>
 </ng-container>
 
@@ -207,10 +210,10 @@
     id="modal"
   >
     <ng-template #content>
-      <div class="flex flex-col space-y-6 p-5">
+      <div class="flex flex-col items-center space-y-6 p-5 w-full">
         <label class="block">
           <span class="block text-sm font-medium mb-1 text-gray-500"
-            >Puesto:</span
+            >Tipo de cargador:</span
           >
           <select
             value="0"
@@ -248,26 +251,34 @@
     </ng-template>
 
     <ng-template #buttons>
-      <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+      <div
+        class="bg-gray-200 px-4 py-3 grid gap-3"
+        [ngClass]="{
+          'grid-cols-1 sm:grid-cols-3': true
+        }"
+      >
         <app-custom-button
           color="gray"
           icon="close"
           label="Cancelar"
-          class="m-4 rounded"
+          class="rounded w-full max-w-[140px] h-12 mx-auto order-2"
           (onClick)="closeAdmin()"
         >
         </app-custom-button>
+    
         <div></div>
+    
         <app-custom-button
           color="dark-blue"
           icon="book"
           label="Guardar"
-          class="m-4 rounded"
+          class="rounded w-full max-w-[140px] h-12 mx-auto order-1"
           (click)="updateSpace(spaceEditedId, jobPosition)"
         >
         </app-custom-button>
       </div>
     </ng-template>
+    
 
     <shared-custom-modal
       [title]="'Editar Plaza - ' + spaceEditedId"
