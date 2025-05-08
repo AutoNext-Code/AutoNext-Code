@@ -45,6 +45,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuOpen = !this.menuOpen;
   }
 
+  showAdmin(): boolean {
+    return this.authService.getRole()?.toLowerCase() === 'admin'
+  }
+
   public navigate(path: string): void {
     this.router.navigate([path]);
   }
