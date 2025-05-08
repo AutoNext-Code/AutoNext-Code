@@ -10,33 +10,35 @@ export class AdminService {
   private adminHttp = inject(AdminHttpService);
 
   getUsers(email?: string): Observable<UserForAdmin[]> {
-    return this.adminHttp.getUsers(email).pipe(
-      catchError((error) => throwError(() => error))
-    );
+    return this.adminHttp
+      .getUsers(email)
+      .pipe(catchError((error) => throwError(() => error)));
   }
 
   toggleAdminRole(id: number): Observable<string> {
-    return this.adminHttp.toggleAdminRole(id).pipe(
-      catchError((error) => throwError(() => error))
-    );
+    return this.adminHttp
+      .toggleAdminRole(id)
+      .pipe(catchError((error) => throwError(() => error)));
   }
 
   updateJobPosition(id: number, jobPosition: string): Observable<string> {
-    return this.adminHttp.updateJobPosition(id, jobPosition).pipe(
-      catchError((error) => throwError(() => error))
-    );
+    return this.adminHttp
+      .updateJobPosition(id, jobPosition)
+      .pipe(catchError((error) => throwError(() => error)));
   }
 
   updateWorkCenter(id: number, workCenter: number): Observable<string> {
-    return this.adminHttp.updateWorkCenter(id, workCenter).pipe(
-      catchError((error) => throwError(() => error))
-    );
+    return this.adminHttp
+      .updateWorkCenter(id, workCenter)
+      .pipe(catchError((error) => throwError(() => error)));
   }
-  updateSpaceState(id: number, blocked: boolean): Observable<string> {
-    return this.adminHttp.updateSpaceState(id, blocked).pipe(
+  updateSpaceState(id: number): Observable<string> {
+    return this.adminHttp.updateSpaceState(id).pipe(
       catchError((error) => {
         console.error('Error al actualizar el estado del espacio:', error);
-        return throwError(() => new Error('No se pudo actualizar el estado del espacio.'));
+        return throwError(
+          () => new Error('No se pudo actualizar el estado del espacio.')
+        );
       })
     );
   }
@@ -45,9 +47,7 @@ export class AdminService {
     return this.adminHttp.getConfigParkingLimit();
   }
 
-  updateParkingLimit(limit : number): Observable<string> {
+  updateParkingLimit(limit: number): Observable<string> {
     return this.adminHttp.updateConfigParkingLimit(limit);
   }
-
-
 }

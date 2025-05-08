@@ -2,13 +2,13 @@
   *ngIf="visible"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
 >
-  <!-- Contenedor del modal -->
   <div
-    class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle"
+    [ngClass]="widthClass"
     role="dialog"
     aria-modal="true"
   >
-    <!-- Cabecera azul -->
+    <!-- Cabecera -->
     <div class="bg-mydarkblue px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <h1 class="text-white text-center text-3xl">
         {{ title }}

@@ -1,34 +1,79 @@
-@if (bookingList && bookingList.content.length > 0 ) {
-    <table class="table-fixed border-collapse mb-5">
-
-        <tr>
-            <th class="border border-gray-400 bg-blue-200">Date</th>
-            <th class="border border-gray-400 bg-blue-200">User</th>
-            <th class="border border-gray-400 bg-blue-200">Start Time</th>
-            <th class="border border-gray-400 bg-blue-200">End Time</th>
-            <th class="border border-gray-400 bg-blue-200">Status</th>
-        </tr>
-
-        @for ( booking of bookingList.content; track $index) {
-            <tr>
-
-                    <td class="border border-gray-300 p-0.5">{{booking.date  | date : "dd/MM/yyyy" }}</td>
-                    <td class="border border-gray-300 p-0.5">{{booking.userName}}</td>
-                    <td class="border border-gray-300 p-0.5">{{booking.startTime.split(':').slice(0, 2).join(':')}}</td>
-                    <td class="border border-gray-300 p-0.5">{{booking.endTime.split(':').slice(0, 2).join(':')}}</td>
-                    <td class="border border-gray-300 p-0.5">{{booking.status}}</td>
-
+@if (bookingList && bookingList.content.length > 0) {
+    <div>
+      <table class="divide-y divide-gray-200 border border-gray-300 rounded-lg shadow-sm mx-auto my-10">
+        <thead class="headertable">
+          <tr class="text-black uppercase text-sm tracking-wider">
+            <th class="px-4 py-2 text-center">Fecha</th>
+            <th class="px-6 py-2 text-center">Usuario</th>
+            <th class="px-4 py-2 text-center">Hora de la reserva</th>
+            <th class="px-4 py-2 text-center">Estado</th>
+            <th class="px-4 py-2 text-center">Cancelar reserva</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (booking of bookingList.content; track $index) {
+            <tr class="bgtable divide-y divide-gray-200">
+              <td class="px-6 py-2 text-center">
+                {{ booking.date | date: "dd/MM/yyyy" }}
+              </td>
+              <td class="px-4 py-2 text-center">{{ booking.userName }}</td>
+              <td class="px-4 py-2 text-center">
+                {{ booking.startTime | slice: 0 : -3 }} a
+                {{ booking.endTime | slice: 0 : -3 }}
+              </td>
+              <td
+                class="px-4 py-2 font-semibold text-center"
+                [ngClass]="{
+                  'color-green': booking.status === 'Active',
+                  'color-lightblue': booking.status === 'Pending',
+                  'color-red': booking.status === 'Cancelled' || booking.status === 'Strike',
+                  'color-gray': booking.status === 'Completed',
+                  'color-black': booking.status === 'Blocked'
+                }"
+              >
+                {{ getStatusLabel(booking.status) }}
+              </td>
+              <td class="px-4 py-2 text-center">
+                <!-- <div class="flex justify-center items-center">
+                  <button
+                    *ngIf="booking.status === 'Pending'"
+                    class="text-red-600 text-lg cursor-pointer"
+                    (click)="openCancelModal(booking.id)"
+                  >
+                    <i class="material-icons text-base">close</i>
+                  </button>
+                </div> -->
+              </td>
             </tr>
-            
-        } 
-    </table>
-
-    <pagination 
+          }
+        </tbody>
+      </table>
+  
+      <pagination
         [currentPage]="currentPage"
         [totalPages]="bookingList.totalPages"
         (pageChange)="pageChange($event)"
-    />
-
-} @else {
+      ></pagination>
+  
+      <ng-template #cancelContent>
+        <p>¿Estás seguro de que deseas cancelar esta reserva?</p>
+      </ng-template>
+  
+      <ng-template #cancelButtons>
+        <button class="bg-red-600 px-4 py-2 rounded text-white" (click)="handleModalConfirm()">Eliminar</button>
+        <button class="bg-gray-400 px-4 py-2 rounded text-black" (click)="handleModalCancel()">Cancelar</button>
+      </ng-template>
+  
+      <shared-custom-modal
+        [title]="'Confirmar cancelación'"
+        [visible]="modalVisible"
+        [container]="cancelContent"
+        [buttons]="cancelButtons"
+        (confirm)="handleModalConfirm()"
+        (cancel)="handleModalCancel()"
+      />
+    </div>
+  } @else {
     <p>No hay reservas</p>
-}
+  }
+  

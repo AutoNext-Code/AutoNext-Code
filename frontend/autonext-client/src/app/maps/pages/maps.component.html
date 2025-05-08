@@ -1,114 +1,113 @@
 @if (isLoaded) {
+<div class="lg:flex lg:justify-center w-full overflow-x-auto">
+  <svg
+    #svgElement
+    width="800"
+    height="600"
+    viewBox="0 0 800 600"
+    class="w-[800px] block"
+  >
+    <image [attr.href]="imageUrl" width="800" height="600" />
 
-  <div class="lg:flex lg:justify-center w-full overflow-x-auto">
-    <svg #svgElement width="800" height="600" viewBox="0 0 800 600" class="w-[800px] block">
-      <image
-        [attr.href]="imageUrl"
-        width="800"
-        height="600"
-      />
-
-      @for (space of spaces; track $index) {
-
-        @if(spaceTaken(space) && !adminView){
-          <g class="tooltip-space" [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ')'">
-
-            <g
-              [attr.transform]="'rotate(' + space.direction + ', 17, 22)'"
-
-            >
-              <use
-                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-                width="35" height="44"
-                [attr.filter]="space.state">
-              </use>
-
-
-            </g>
-
-
-            <g class="tooltip-group">
-              <rect
-                class="tooltip-bg"
-
-              ></rect>
-
-              <text
-                class="tooltip-text"
-                x="15"
-                y="-18"
-              >
-              {{getTooltipText(space)}}
-              </text>
-
-            </g>
-
-
-          </g>
-
-
-
-
-        }@else {
-
-
-          @if(adminView){
-
-            @if(spaceNoType(space.plugType)){
-
-              <g
-              [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-              (click)="toggleAdmin(space)"
-              class="cursor-pointer"
-              >
-              <use
-                xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-                width="35" height="44"
-                [attr.filter]="unusable">
-              </use>
-              </g>
-
-
-            }@else{
-
-
-              <g
-                [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-                (click)="toggleAdmin(space)"
-                class="cursor-pointer"
-                >
-                <use
-                  xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-                  width="35" height="44"
-                  [attr.filter]="space.state">
-                </use>
-              </g>
-
-            }
-
-
-          }@else if(statusSpace(space)){
-
-            <g
-            [attr.transform]="'translate(' + ((space.x) - 23) + ',' + (space.y - 25) + ') rotate(' + space.direction + ', 17, 22)'"
-            (click)="toggleModal(space.id, space.plugType.toString())"
-            class="cursor-pointer"
-            >
-            <use
-              xlink:href= "./assets/svg/CarIcon.svg#custom-marker"
-              width="35" height="44"
-              [attr.filter]="space.state">
-            </use>
-          </g>
-
-          }
-
-        }
-
-      }
-    </svg>
-  </div>
-
+    @for (space of spaces; track $index) { @if (spaceTaken(space) && !adminView)
+    {
+    <!-- Plaza tomada por otro usuario -->
+    <g
+      class="tooltip-space"
+      [attr.transform]="
+        'translate(' + (space.x - 23) + ',' + (space.y - 25) + ')'
+      "
+    >
+      <g [attr.transform]="'rotate(' + space.direction + ', 17, 22)'">
+        <use
+          xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+          width="35"
+          height="44"
+          [attr.filter]="space.state"
+        ></use>
+      </g>
+      <g class="tooltip-group">
+        <rect class="tooltip-bg"></rect>
+        <text class="tooltip-text" x="15" y="-18">
+          {{ getTooltipText(space) }}
+        </text>
+      </g>
+    </g>
+    } @else if (adminView && spaceNoType(space.plugType)) {
+    <!-- Plaza sin tipo, vista admin -->
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleAdmin(space)"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="unusable"
+      ></use>
+    </g>
+    } @else if (adminView) {
+    <!-- Plaza válida, vista admin -->
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleAdmin(space)"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
+    <g class="tooltip-group">
+      <rect class="tooltip-bg"></rect>
+      <text class="tooltip-text" x="15" y="-18">
+        {{ getTooltipText(space) }}
+      </text>
+    </g>
+    } @else if (statusSpace(space)) {
+    <!-- Plaza activa seleccionable por usuario -->
+    <g
+      [attr.transform]="
+        'translate(' +
+        (space.x - 23) +
+        ',' +
+        (space.y - 25) +
+        ') rotate(' +
+        space.direction +
+        ', 17, 22)'
+      "
+      (click)="toggleModal(space.id, space.plugType.toString())"
+      class="cursor-pointer"
+    >
+      <use
+        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
+        width="35"
+        height="44"
+        [attr.filter]="space.state"
+      ></use>
+    </g>
+    } }
+  </svg>
+</div>
 }
 
 <ng-container *ngIf="!modal && carData">
@@ -131,53 +130,74 @@
     class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
     id="modal"
   >
+    <ng-template #content>
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center">
+        <booking-list
+          [bookingList]="bookingList"
+          (pageChanger)="loadPastBookings($event)"
+        />
+      </div>
+    </ng-template>
 
-  <ng-template #content>
-    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex justify-center" >
+    <ng-template #buttons>
+      <div
+        class="bg-gray-200 px-4 py-3 grid"
+        [ngClass]="{
+          'grid-cols-3': isBlockable,
+          'grid-cols-2 justify-center': !isBlockable
+        }"
+      >
+        <app-custom-button
+          color="gray"
+          icon="close"
+          label="Cancelar"
+          class="m-4 rounded w-[160px] h-[48px] flex items-center justify-center"
+          (onClick)="closeAdmin()"
+        >
+        </app-custom-button>
 
-      <booking-list
-        [bookingList]="bookingList"
-        (pageChanger)="loadPastBookings($event)"
-      />
+        <!-- CONTENEDOR SOLO SI ES BLOQUEABLE -->
+        <div *ngIf="isBlockable" class="relative m-4 w-[160px] h-[48px]">
+          <app-custom-button
+            class="absolute inset-0 rounded w-full h-full transition-opacity duration-150 flex items-center justify-center"
+            [style.opacity]="isBlocked ? 0 : 1"
+            (onClick)="updateSpaceState(spaceEditedId)"
+            color="red"
+            icon="shield"
+            label="Bloquear"
+          >
+          </app-custom-button>
 
-    </div>
+          <app-custom-button
+            class="absolute inset-0 rounded w-full h-full transition-opacity duration-150 flex items-center justify-center"
+            [style.opacity]="isBlocked ? 1 : 0"
+            (onClick)="updateSpaceState(spaceEditedId)"
+            color="green"
+            icon="shield"
+            label="Desbloquear"
+          >
+          </app-custom-button>
+        </div>
 
-  </ng-template>
+        <app-custom-button
+          color="green"
+          icon="edit"
+          label="Editar"
+          class="m-4 rounded w-[160px] h-[48px] flex items-center justify-center"
+          (onClick)="toggleEdit()"
+        >
+        </app-custom-button>
+      </div>
+    </ng-template>
 
-
-  <ng-template #buttons>
-    <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
-      <app-custom-button
-        color="gray"
-        icon="close"
-        label="Cancelar"
-        class="m-4 rounded"
-        (onClick)="closeAdmin()">
-      </app-custom-button>
-      <app-custom-button
-        color="red"
-        icon="shield"
-        label="Bloquear"
-        class="m-4 rounded">
-      </app-custom-button>
-      <app-custom-button
-        color="green"
-        icon="edit"
-        label="Editar"
-        class="m-4 rounded"
-        (onClick)="toggleEdit()">
-      </app-custom-button>
-    </div>
-  </ng-template>
-
-  <shared-custom-modal
-    [title]="'Configuración De Plaza - '+ spaceEditedId"
-    [container]="content"
-    [buttons]="buttons"
-    [visible]="true"
-    class="z-0"
-  ></shared-custom-modal>
-
+    <shared-custom-modal
+      [title]="'Configuración De Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      [widthClass]="'w-[90vw] sm:w-[800px]'"
+      class="z-0"
+    ></shared-custom-modal>
   </div>
 </ng-container>
 
@@ -186,14 +206,17 @@
     class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
     id="modal"
   >
-
-  <ng-template #content>
-    <div class="flex flex-col space-y-6 p-5">
-      <label class="block">
-        <span class="block text-sm font-medium mb-1 text-gray-500">Puesto:</span>
-        <select value="0" [(ngModel)]="editPlugType"
+    <ng-template #content>
+      <div class="flex flex-col space-y-6 p-5">
+        <label class="block">
+          <span class="block text-sm font-medium mb-1 text-gray-500"
+            >Puesto:</span
+          >
+          <select
+            value="0"
+            [(ngModel)]="editPlugType"
             class="w-[300px] h-11 border border-gray-400 text-gray-700 rounded px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-mydarkblue"
-        >
+          >
             <option value="0">NoType</option>
             <option value="1">Undefined</option>
             <option value="2">Schuko</option>
@@ -202,13 +225,16 @@
             <option value="5">CCS</option>
             <option value="6">CHAdeMO</option>
           </select>
-          
-    </label>
-      <label class="block">
-        <span class="block text-sm font-medium mb-1 text-gray-500">Puesto:</span>
-        <select value="0" [(ngModel)]="jobPosition"
+        </label>
+        <label class="block">
+          <span class="block text-sm font-medium mb-1 text-gray-500"
+            >Puesto:</span
+          >
+          <select
+            value="0"
+            [(ngModel)]="jobPosition"
             class="w-[300px] h-11 border border-gray-400 text-gray-700 rounded px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-mydarkblue"
-        >
+          >
             <option value="0">Sin puesto</option>
             <option value="1">Intern</option>
             <option value="2">Product Owner</option>
@@ -217,41 +243,46 @@
             <option value="5">PEM</option>
             <option value="6">Branch Head</option>
           </select>
-          
-    </label>
+        </label>
+      </div>
+    </ng-template>
 
-    </div>
+    <ng-template #buttons>
+      <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+        <app-custom-button
+          color="gray"
+          icon="close"
+          label="Cancelar"
+          class="m-4 rounded"
+          (onClick)="closeAdmin()"
+        >
+        </app-custom-button>
+        <div></div>
+        <app-custom-button
+          color="dark-blue"
+          icon="book"
+          label="Guardar"
+          class="m-4 rounded"
+          (click)="updateSpace(spaceEditedId, jobPosition)"
+        >
+        </app-custom-button>
+      </div>
+    </ng-template>
 
-  </ng-template>
+    <shared-custom-modal
+      [title]="'Editar Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      class="z-99"
+    ></shared-custom-modal>
 
-
-  <ng-template #buttons>
-    <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
-      <app-custom-button
-        color="gray"
-        icon="close"
-        label="Cancelar"
-        class="m-4 rounded"
-        (onClick)="closeAdmin()">
-      </app-custom-button>
-      <div></div>
-      <app-custom-button
-        color="dark-blue"
-        icon="book"
-        label="Guardar"
-        class="m-4 rounded"
-        (click)="updateSpace(spaceEditedId, jobPosition)">
-      </app-custom-button>
-    </div>
-  </ng-template>
-
-  <shared-custom-modal
-    [title]="'Editar Plaza - '+ spaceEditedId"
-    [container]="content"
-    [buttons]="buttons"
-    [visible]="true"
-    class="z-99"
-  ></shared-custom-modal>
-
+    <shared-custom-modal
+      [title]="'Editar Plaza - ' + spaceEditedId"
+      [container]="content"
+      [buttons]="buttons"
+      [visible]="true"
+      class="z-99"
+    ></shared-custom-modal>
   </div>
 </ng-container>

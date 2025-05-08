@@ -42,16 +42,15 @@ export class AdminHttpService {
     return this.http.put(`${UPDATE_WORK_CENTER(id)}?workCenterId=${workCenter}`, {}, { responseType: 'text' });
   }  
 
-  updateSpaceState(id: number, blocked: boolean): Observable<string> {
-    const params = new HttpParams()
-      .set('id', id.toString())
-      .set('blocked', blocked.toString());
+  updateSpaceState(id: number): Observable<string> {
+    const params = new HttpParams().set('id', id.toString());
     return this.http.put(
       UPDATE_SPACE_STATE,
       {},
       { params, responseType: 'text' }
     );
   }
+  
 
   getConfigParkingLimit(): Observable<number> {
     return this.http.get<number>(CONFIG_PARKING_LIMIT);
