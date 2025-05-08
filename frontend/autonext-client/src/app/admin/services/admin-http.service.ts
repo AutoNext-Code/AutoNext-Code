@@ -32,15 +32,15 @@ export class AdminHttpService {
 
   toggleAdminRole(id: number): Observable<string> {
     return this.http.put(TOGGLE_ROLE(id), {}, { responseType: 'text' });
-  }
+  }  
+  
+  updateJobPosition(id: number, jobPosition: string): Observable<string> {
+    return this.http.put(`${UPDATE_JOB_POSITION(id)}?jobPosition=${jobPosition}`, {}, { responseType: 'text' });
+}
 
-  updateJobPosition(id: number): Observable<string> {
-    return this.http.put(UPDATE_JOB_POSITION(id), {}, { responseType: 'text' });
-  }
-
-  updateWorkCenter(id: number): Observable<string> {
-    return this.http.put(UPDATE_WORK_CENTER(id), {}, { responseType: 'text' });
-  }
+  updateWorkCenter(id: number, workCenter: number): Observable<string> {
+    return this.http.put(`${UPDATE_WORK_CENTER(id)}?workCenterId=${workCenter}`, {}, { responseType: 'text' });
+  }  
 
   updateSpaceState(id: number, blocked: boolean): Observable<string> {
     const params = new HttpParams()

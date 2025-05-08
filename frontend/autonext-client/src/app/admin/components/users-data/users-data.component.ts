@@ -30,6 +30,7 @@ export class UsersDataComponent {
   }));
 
   idUser = this.authService.getId();
+  isEditing: { [key: number]: boolean } = {};
 
   constructor() {
     effect(() => {
@@ -71,6 +72,9 @@ export class UsersDataComponent {
   }
 
   formatJobPosition(jobPosition: string): string {
+    if (jobPosition === 'Undefined') {
+      return 'Sin asignación';
+    }
     return jobPosition.replace(/_/g, ' ');
   }
 
@@ -89,7 +93,6 @@ export class UsersDataComponent {
   }
 
   toggleRole(user: any) {
-    console.log('Toggling role for user:', user.id);
     this.adminService.toggleAdminRole(user.id).subscribe({
       next: () => {
         this.appComponent.showToast('success', 'Rol actualizado', '', 3000, 80);
@@ -98,6 +101,35 @@ export class UsersDataComponent {
       error: (error: HttpErrorResponse) => {
         console.error('ERROR AL TOGGLEAR ROL:', error);
         this.appComponent.showToast('error', 'Error al actualizar rol. ', error.error, 3000);
+      },
+    });
+  }
+
+  toggleEdit(userId: number) {
+    this.isEditing[userId] = !this.isEditing[userId];
+  }
+
+  saveChanges(user: UserForAdmin) {
+    const selectedJobPositionIndex = (document.querySelector(`select[name="jobPosition"][value="${user.id}"]`) as HTMLSelectElement)?.value;
+    const selectedWorkCenter = (document.querySelector(`select[name="workCenter"][value="${user.id}"]`) as HTMLSelectElement)?.value;
+  
+    const selectedJobPosition = JobPosition[+selectedJobPositionIndex];
+  
+    this.adminService.updateJobPosition(user.id, selectedJobPosition).subscribe({
+      next: () => {
+        this.adminService.updateWorkCenter(user.id, +selectedWorkCenter).subscribe({
+          next: () => {
+            this.appComponent.showToast('success', 'Centro  y puesto de trabajo actualizados', '', 3000, 80);
+            this.isEditing[user.id] = false;
+            this.loadUsers(this.emailSignal());
+          },
+          error: (error: HttpErrorResponse) => {
+            this.appComponent.showToast('error', 'Error al guardar cambios en centro de trabajo.', error.error, 3000);
+          },
+        });
+      },
+      error: (error: HttpErrorResponse) => {
+        this.appComponent.showToast('error', 'Error al guardar cambios en puesto de trabajo.', error.error, 3000);
       },
     });
   }

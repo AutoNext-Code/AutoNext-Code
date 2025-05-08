@@ -18,22 +18,27 @@ import { MapService } from '@maps/services/map.service';
 import { Space } from '@maps/interfaces/Space.interface';
 import { CanBookResponse } from '@maps/interfaces/CanBookResponse';
 import { DataRequestService } from '@maps/services/data-request.service';
+import { BookingListService } from '@maps/services/booking-list.service';
+import { BookingList } from '@maps/interfaces/bookingList.interface';
+import { EditingSpaceService } from '@maps/services/editingSpace.service';
+
+import { JobPosition } from '@admin/enums/jobPosition.enum';
 
 import { SpaceDataComponent } from '@booking/components/space-data/space-data.component';
 import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 import { AuthService } from '@auth/services/auth.service';
+
 import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
 import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
 
 import { AppComponent } from '../../app.component';
 
 import { SelectPlugTypeComponent } from "../components/select-plug-type/select-plug-type.component";
+import { BookingListComponent } from "../components/booking-list/booking-list.component";
 
 import { Observable } from 'rxjs';
-import { BookingListService } from '@maps/services/booking-list.service';
-import { BookingList } from '@maps/interfaces/bookingList.interface';
-import { BookingListComponent } from "../components/booking-list/booking-list.component";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-maps',
@@ -42,7 +47,6 @@ import { BookingListComponent } from "../components/booking-list/booking-list.co
     CommonModule,
     CustomModalComponent,
     CustomButtonComponent,
-    SelectPlugTypeComponent,
     FormsModule,
     BookingListComponent
 ],
@@ -57,15 +61,15 @@ export class MapsComponent implements OnInit {
   formData!: SpaceData;
 
   private justClosed = false;
-  
+
   @Input() chart: any;
   @Input({required: true}) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
-  
+
   @Output() mapLoaded = new EventEmitter<boolean>();
-  
+
   @ViewChild('svgElement') svgElement!: ElementRef;
-  
+
   userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
   canBook: CanBookResponse = {message: ""};
@@ -74,10 +78,13 @@ export class MapsComponent implements OnInit {
   adminModal: boolean = false;
   bookingList!: BookingList ;
   spaceEditedId!: number ;
+  jobPosition: number = 0 ;
   carData!: SpaceData;
   
-  editPlugType!: PlugType ; 
+  editPlugType!: number ; 
 
+  private appComponent: AppComponent = inject(AppComponent);
+  private editingSpaceService: EditingSpaceService = inject(EditingSpaceService) ;
   private bookingListService: BookingListService = inject(BookingListService) ;
   public dataRequestService = inject(DataRequestService);
   private mapService = inject(MapService);
@@ -171,7 +178,7 @@ export class MapsComponent implements OnInit {
       parkingSpaceId: spaceId,
       plugType: plugType,
     };
-    
+
     this.userCanBook = this.mapService.checkUserCanBook(this.carData.date, this.carData.startTime, this.carData.endTime) ;
 
     this.userCanBook.subscribe({
@@ -182,7 +189,7 @@ export class MapsComponent implements OnInit {
         console.error('Error al verificar la disponibilidad:', error);
       }
     });
-        
+
     this.modal = false;
   }
 
@@ -202,10 +209,11 @@ export class MapsComponent implements OnInit {
     this.adminModal = false ;
   }
 
-  toggleAdmin(id: number): void {
-    this.spaceEditedId = id ;
-    this.adminModal = true ;
-    this.loadPastBookings(1) ;
+  toggleAdmin(space: Space): void {
+    this.spaceEditedId = space.id;
+    this.editPlugType = (PlugType as any)[space.plugType];        
+    this.adminModal = true;
+    this.loadPastBookings(1);
   }
 
   toggleEdit(): void {
@@ -268,6 +276,32 @@ export class MapsComponent implements OnInit {
     }else{
       return 'Bloqueado por el sistema';
     }
+  }
+
+  updateSpace(id: number, jobPosition: JobPosition):void {
+
+    console.log(this.editPlugType)
+
+    this.editingSpaceService.spaceEdit(id, PlugType[this.editPlugType], jobPosition).subscribe({
+      next: (response) => {
+        this.appComponent.showToast('success', response,"");
+      },
+      error: (error: HttpErrorResponse) => {
+        this.appComponent.showToast('error', error.message , "");
+      },
+      
+  }) ;
+
+  }
+
+  spaceNoType(plugType: PlugType):boolean{
+    let number: number = 0;
+
+    if (typeof plugType === 'string') {
+      number = PlugType[plugType as keyof typeof PlugType];
+    }
+
+    return number === PlugType.NoType
 
   }
 }

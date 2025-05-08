@@ -20,6 +20,8 @@ export const RESET_PASSWORD = (token: string) => `${API_BASE_URL}auth/reset-pass
 
 export const MAP_ENDPOINT = `${API_BASE_URL}parking/level`;
 
+
+
 export const CENTERS_LEVELS = `${API_BASE_URL}parking/centers`
 
 /* ENDPOINTS DE BOOKINGS */
@@ -53,11 +55,13 @@ export const DASHBOARD_YEARS = `${API_BASE_URL}dashboard/years`;
 /* USERS */
 export const GET_USERS = `${API_BASE_URL}admin/user/get-users`;
 export const TOGGLE_ROLE = (id: number) =>  `${API_BASE_URL}admin/user/toggle-admin-role/${id}`;
-export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/update-job-position/${id}`;
-export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/update-work-center/${id}`;
+export const UPDATE_JOB_POSITION = (id: number) => `${API_BASE_URL}admin/user/update-job-position/${id}`;
+export const UPDATE_WORK_CENTER = (id: number) => `${API_BASE_URL}admin/user/update-work-center/${id}`;
 
 /* SPACES */
+export const ADMIN_MAP = `${API_BASE_URL}admin/space/level`;
 export const UPDATE_SPACE_STATE = `${API_BASE_URL}admin/space/state`;
+export const UPDATE_SPACE_PLUG_JOB = `${API_BASE_URL}admin/space/update`;
 export const SPACE_BOOKINGS = (id: number) =>`${API_BASE_URL}admin/space/bookings/${id}`;
 
 /* CONFIG */

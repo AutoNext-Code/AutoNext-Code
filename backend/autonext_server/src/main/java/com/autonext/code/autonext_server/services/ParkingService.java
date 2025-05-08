@@ -50,7 +50,6 @@ public class ParkingService {
     ParkingLevel level = parkingLevelRepository.findById(levelId)
         .orElseThrow(() -> new RuntimeException("No se ha encontrado el nivel con id: " + levelId));
 
-        //TODO añadir a spec que compruebe que el jobPos del user y la plaza sean el mismo
     Specification<ParkingSpace> spec = Specification
         .where(ParkingSpaceSpecifications.isElectric())
         .and(ParkingSpaceSpecifications.hasLevel(levelId))
@@ -63,6 +62,20 @@ public class ParkingService {
         .toList();
 
     return new ParkingLevelMapDTO(level, imageBaseUrl, spaceDTOs);
+  }
+
+  public ParkingLevelMapDTO adminLevelMap(int levelId){
+    ParkingLevel level = parkingLevelRepository.findById(levelId)
+        .orElseThrow(() -> new RuntimeException("No se ha encontrado el nivel con id: " + levelId));
+
+    List<ParkingSpace> spaces = parkingSpaceRepository.findByParkingLevel(level);
+
+    List<ParkingLevelMapDTO.Space> spaceDTOs = spaces.stream()
+    .map(space -> ParkingSpaceMapper.toSpaceDTO(space, null, null,  null, null))
+    .toList();
+
+    return new ParkingLevelMapDTO(level, imageBaseUrl, spaceDTOs);
+
   }
 
   public Map<Integer, String> getWorkCenters() {
