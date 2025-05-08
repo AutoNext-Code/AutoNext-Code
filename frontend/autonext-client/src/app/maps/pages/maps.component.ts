@@ -29,16 +29,17 @@ import { SpaceData } from '@booking/interfaces/spaceData.interface';
 
 import { AuthService } from '@auth/services/auth.service';
 
-import { CustomModalComponent } from "@shared/components/custom-modal/custom-modal.component";
-import { CustomButtonComponent } from "@shared/components/ui/custom-button/custom-button.component";
+import { CustomModalComponent } from '@shared/components/custom-modal/custom-modal.component';
+import { CustomButtonComponent } from '@shared/components/ui/custom-button/custom-button.component';
 
 import { AppComponent } from '../../app.component';
 
-import { SelectPlugTypeComponent } from "../components/select-plug-type/select-plug-type.component";
-import { BookingListComponent } from "../components/booking-list/booking-list.component";
+import { SelectPlugTypeComponent } from '../components/select-plug-type/select-plug-type.component';
+import { BookingListComponent } from '../components/booking-list/booking-list.component';
 
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AdminService } from '@admin/services/admin.service';
 
 @Component({
   selector: 'app-maps',
@@ -48,8 +49,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     CustomModalComponent,
     CustomButtonComponent,
     FormsModule,
-    BookingListComponent
-],
+    BookingListComponent,
+  ],
   templateUrl: './maps.component.html',
   styleUrl: './maps.component.css',
 })
@@ -63,8 +64,9 @@ export class MapsComponent implements OnInit {
   private justClosed = false;
 
   @Input() chart: any;
-  @Input({required: true}) adminView: boolean = false;
+  @Input({ required: true }) adminView: boolean = false;
   @Input() plugType: PlugType = PlugType.Undefined;
+  @Input() noType: PlugType = PlugType.NoType;
 
   @Output() mapLoaded = new EventEmitter<boolean>();
 
@@ -72,21 +74,27 @@ export class MapsComponent implements OnInit {
 
   userCanBook?: Observable<CanBookResponse>;
   isLoaded: boolean = false;
-  canBook: CanBookResponse = {message: ""};
+  canBook: CanBookResponse = { message: '' };
   modal: boolean = true;
   edit: boolean = false;
   adminModal: boolean = false;
-  bookingList!: BookingList ;
-  spaceEditedId!: number ;
-  jobPosition: number = 0 ;
+  bookingList!: BookingList;
+  spaceEditedId!: number;
+  jobPosition: number = 0;
   carData!: SpaceData;
-  
-  editPlugType!: number ; 
+
+  editPlugType!: number;
+
+  public blockButtonColor: 'red' | 'green' = 'red';
+  public blockButtonLabel: 'Bloquear' | 'Desbloquear' = 'Bloquear';
+  public blockButtonIcon: 'shield' | 'unlock' = 'shield';
 
   private appComponent: AppComponent = inject(AppComponent);
-  private editingSpaceService: EditingSpaceService = inject(EditingSpaceService) ;
-  private bookingListService: BookingListService = inject(BookingListService) ;
+  private editingSpaceService: EditingSpaceService =
+    inject(EditingSpaceService);
+  private bookingListService: BookingListService = inject(BookingListService);
   public dataRequestService = inject(DataRequestService);
+  private adminService = inject(AdminService);
   private mapService = inject(MapService);
   private authService = inject(AuthService);
   private appComponente = inject(AppComponent);
@@ -167,10 +175,14 @@ export class MapsComponent implements OnInit {
       return;
     }
 
-    if(this.authService.isUserPenalized()) {
-      this.appComponente.showToast("error",   "Acceso restringido",
-        "No puedes realizar reservas porque estás penalizado actualmente.", 1600);
-      return
+    if (this.authService.isUserPenalized()) {
+      this.appComponente.showToast(
+        'error',
+        'Acceso restringido',
+        'No puedes realizar reservas porque estás penalizado actualmente.',
+        1600
+      );
+      return;
     }
 
     this.carData = {
@@ -179,15 +191,19 @@ export class MapsComponent implements OnInit {
       plugType: plugType,
     };
 
-    this.userCanBook = this.mapService.checkUserCanBook(this.carData.date, this.carData.startTime, this.carData.endTime) ;
+    this.userCanBook = this.mapService.checkUserCanBook(
+      this.carData.date,
+      this.carData.startTime,
+      this.carData.endTime
+    );
 
     this.userCanBook.subscribe({
       next: (data) => {
-        this.canBook = data ;
+        this.canBook = data;
       },
       error: (error) => {
         console.error('Error al verificar la disponibilidad:', error);
-      }
+      },
     });
 
     this.modal = false;
@@ -205,19 +221,19 @@ export class MapsComponent implements OnInit {
   }
 
   closeAdmin(): void {
-    this.edit = false ;
-    this.adminModal = false ;
+    this.edit = false;
+    this.adminModal = false;
   }
 
   toggleAdmin(space: Space): void {
     this.spaceEditedId = space.id;
-    this.editPlugType = (PlugType as any)[space.plugType];        
+    this.editPlugType = (PlugType as any)[space.plugType];
     this.adminModal = true;
     this.loadPastBookings(1);
   }
 
   toggleEdit(): void {
-    this.edit = true ;
+    this.edit = true;
   }
 
   stateColorMap: Record<string, string> = {
@@ -233,8 +249,8 @@ export class MapsComponent implements OnInit {
       return;
     }
 
-    if(this.adminView) {
-      return ;
+    if (this.adminView) {
+      return;
     }
 
     const mapParams = {
@@ -256,52 +272,118 @@ export class MapsComponent implements OnInit {
     });
   }
 
-  loadPastBookings(page: number) {
+  private reloadSpacesFromChart(): void {
+    if (!this.chart) return;
 
-    this.bookingListService.getAllBookingBySpace(this.spaceEditedId, page).subscribe({
-      next: (listData) => {
-        this.bookingList = listData ;
-      },
-      error: (err) => {
-        console.error('Error while loading map:', err);
-      },
-    });
+    this.spaces = this.chart.spaces.map((space: any) => ({
+      ...space,
+      direction:
+        typeof space.direction === 'string'
+          ? Direction[space.direction as keyof typeof Direction]
+          : space.direction,
+      state:
+        typeof space.state === 'string'
+          ? State[space.state as keyof typeof State]
+          : space.state,
+    }));
+  }
+
+  loadPastBookings(page: number) {
+    this.bookingListService
+      .getAllBookingBySpace(this.spaceEditedId, page)
+      .subscribe({
+        next: (listData) => {
+          this.bookingList = listData;
+        },
+        error: (err) => {
+          console.error('Error while loading map:', err);
+        },
+      });
   }
 
   getTooltipText(space: Space): string {
     if (space.state === State.Own_Reservation) {
-      return 'Reserva de '+ space.startTime + ' a ' + space.endTime;
-    } else if(space.state === State.Occupied){
-      return 'Ocupado de ' + space.startTime +' a ' + space.endTime;
-    }else{
+      return 'Reserva de ' + space.startTime + ' a ' + space.endTime;
+    } else if (space.state === State.Occupied) {
+      return 'Ocupado de ' + space.startTime + ' a ' + space.endTime;
+    } else {
       return 'Bloqueado por el sistema';
     }
   }
 
-  updateSpace(id: number, jobPosition: JobPosition):void {
+  updateSpace(id: number, jobPosition: JobPosition): void {
+    console.log(this.editPlugType);
 
-    console.log(this.editPlugType)
-
-    this.editingSpaceService.spaceEdit(id, PlugType[this.editPlugType], jobPosition).subscribe({
-      next: (response) => {
-        this.appComponent.showToast('success', response,"");
-      },
-      error: (error: HttpErrorResponse) => {
-        this.appComponent.showToast('error', error.message , "");
-      },
-      
-  }) ;
-
+    this.editingSpaceService
+      .spaceEdit(id, PlugType[this.editPlugType], jobPosition)
+      .subscribe({
+        next: (response) => {
+          this.appComponent.showToast('success', response, '');
+        },
+        error: (error: HttpErrorResponse) => {
+          this.appComponent.showToast('error', error.message, '');
+        },
+      });
   }
 
-  spaceNoType(plugType: PlugType):boolean{
+  spaceNoType(plugType: PlugType): boolean {
     let number: number = 0;
 
     if (typeof plugType === 'string') {
       number = PlugType[plugType as keyof typeof PlugType];
     }
 
-    return number === PlugType.NoType
+    return number === PlugType.NoType;
+  }
 
+  updateSpaceState(id: number): void {
+    this.adminService.updateSpaceState(id).subscribe({
+      next: (response) => {
+        this.appComponent.showToast('success', response, '');
+  
+        if (this.adminView) {
+          const space = this.getSpaceById(id);
+          if (space) {
+            space.state = space.state === State.Blocked ? State.Available : State.Blocked;
+  
+            // 🔁 Actualiza propiedades visuales para el botón
+            const isNowBlocked = space.state === State.Blocked;
+            this.blockButtonColor = isNowBlocked ? 'green' : 'red';
+            this.blockButtonLabel = isNowBlocked ? 'Desbloquear' : 'Bloquear';
+            this.blockButtonIcon = isNowBlocked ? 'unlock' : 'shield';
+          }
+        } else {
+          this.refreshMap();
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.appComponent.showToast('error', error.message, '');
+      },
+    });
+  }
+  
+
+  getSpaceById(id: number): Space | undefined {
+    return this.spaces.find((space) => space.id === id);
+  }
+
+  get isBlockable(): boolean {
+    const space = this.getSpaceById(this.spaceEditedId);
+    if (!space) return false;
+
+    const plugTypeValue =
+      typeof space.plugType === 'string'
+        ? PlugType[space.plugType as keyof typeof PlugType]
+        : space.plugType;
+
+    const isValid = plugTypeValue !== PlugType.NoType;
+
+    return isValid;
+  }
+
+  get isBlocked(): boolean {
+    const space = this.getSpaceById(this.spaceEditedId);
+    if (!space) return false;
+    return space.state === State.Blocked;
   }
 }

@@ -53,8 +53,6 @@ export class MapHttpService{
   }
 
   getAdminMapById(id:number): Observable<Chart>{
-    console.log("hola")
-    console.log((`${ADMIN_MAP}/${id}`))
     return this.http.get<any>(`${ADMIN_MAP}/${id}`);
   }
 

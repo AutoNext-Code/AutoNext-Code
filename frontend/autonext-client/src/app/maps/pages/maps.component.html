@@ -1,5 +1,4 @@
 @if (isLoaded) {
-
 <div class="lg:flex lg:justify-center w-full overflow-x-auto">
   <svg
     #svgElement
@@ -10,7 +9,9 @@
   >
     <image [attr.href]="imageUrl" width="800" height="600" />
 
-    @for (space of spaces; track $index) { @if(spaceTaken(space) && !adminView){
+    @for (space of spaces; track $index) { @if (spaceTaken(space) && !adminView)
+    {
+    <!-- Plaza tomada por otro usuario -->
     <g
       class="tooltip-space"
       [attr.transform]="
@@ -25,72 +26,15 @@
           [attr.filter]="space.state"
         ></use>
       </g>
-
       <g class="tooltip-group">
         <rect class="tooltip-bg"></rect>
-
         <text class="tooltip-text" x="15" y="-18">
           {{ getTooltipText(space) }}
         </text>
       </g>
     </g>
-
-    }@else { @if(statusSpace(space)){
-
-    <g
-      [attr.transform]="
-        'translate(' +
-        (space.x - 23) +
-        ',' +
-        (space.y - 25) +
-        ') rotate(' +
-        space.direction +
-        ', 17, 22)'
-      "
-      (click)="toggleModal(space.id, space.plugType.toString())"
-      class="cursor-pointer"
-    >
-      <use
-        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-        width="35"
-        height="44"
-        [attr.filter]="space.state"
-      ></use>
-    </g>
-
-    }@else if(adminView){
-
-    <g
-      [attr.transform]="
-        'translate(' +
-        (space.x - 23) +
-        ',' +
-        (space.y - 25) +
-        ') rotate(' +
-        space.direction +
-        ', 17, 22)'
-      "
-      (click)="toggleAdmin(space.id)"
-      class="cursor-pointer"
-    >
-      <use
-        xlink:href="./assets/svg/CarIcon.svg#custom-marker"
-        width="35"
-        height="44"
-        [attr.filter]="space.state"
-      ></use>
-    </g>
-
-    <g class="tooltip-group">
-      <rect class="tooltip-bg"></rect>
-
-      <text class="tooltip-text" x="15" y="-18">
-        {{ getTooltipText(space) }}
-      </text>
-    </g>
-
-    }@else { @if(adminView){ @if(spaceNoType(space.plugType)){
-
+    } @else if (adminView && spaceNoType(space.plugType)) {
+    <!-- Plaza sin tipo, vista admin -->
     <g
       [attr.transform]="
         'translate(' +
@@ -111,9 +55,8 @@
         [attr.filter]="unusable"
       ></use>
     </g>
-
-    }@else{
-
+    } @else if (adminView) {
+    <!-- Plaza válida, vista admin -->
     <g
       [attr.transform]="
         'translate(' +
@@ -134,9 +77,14 @@
         [attr.filter]="space.state"
       ></use>
     </g>
-
-    } }@else if(statusSpace(space)){
-
+    <g class="tooltip-group">
+      <rect class="tooltip-bg"></rect>
+      <text class="tooltip-text" x="15" y="-18">
+        {{ getTooltipText(space) }}
+      </text>
+    </g>
+    } @else if (statusSpace(space)) {
+    <!-- Plaza activa seleccionable por usuario -->
     <g
       [attr.transform]="
         'translate(' +
@@ -157,11 +105,9 @@
         [attr.filter]="space.state"
       ></use>
     </g>
-
-    } } }
+    } }
   </svg>
 </div>
-
 }
 
 <ng-container *ngIf="!modal && carData">
@@ -194,27 +140,50 @@
     </ng-template>
 
     <ng-template #buttons>
-      <div class="bg-gray-200 px-4 py-3 grid grid-cols-3 z-99">
+      <div
+        class="bg-gray-200 px-4 py-3 grid"
+        [ngClass]="{
+          'grid-cols-3': isBlockable,
+          'grid-cols-2 justify-center': !isBlockable
+        }"
+      >
         <app-custom-button
           color="gray"
           icon="close"
           label="Cancelar"
-          class="m-4 rounded"
+          class="m-4 rounded w-[160px] h-[48px] flex items-center justify-center"
           (onClick)="closeAdmin()"
         >
         </app-custom-button>
-        <app-custom-button
-          color="red"
-          icon="shield"
-          label="Bloquear"
-          class="m-4 rounded"
-        >
-        </app-custom-button>
+
+        <!-- CONTENEDOR SOLO SI ES BLOQUEABLE -->
+        <div *ngIf="isBlockable" class="relative m-4 w-[160px] h-[48px]">
+          <app-custom-button
+            class="absolute inset-0 rounded w-full h-full transition-opacity duration-150 flex items-center justify-center"
+            [style.opacity]="isBlocked ? 0 : 1"
+            (onClick)="updateSpaceState(spaceEditedId)"
+            color="red"
+            icon="shield"
+            label="Bloquear"
+          >
+          </app-custom-button>
+
+          <app-custom-button
+            class="absolute inset-0 rounded w-full h-full transition-opacity duration-150 flex items-center justify-center"
+            [style.opacity]="isBlocked ? 1 : 0"
+            (onClick)="updateSpaceState(spaceEditedId)"
+            color="green"
+            icon="shield"
+            label="Desbloquear"
+          >
+          </app-custom-button>
+        </div>
+
         <app-custom-button
           color="green"
           icon="edit"
           label="Editar"
-          class="m-4 rounded"
+          class="m-4 rounded w-[160px] h-[48px] flex items-center justify-center"
           (onClick)="toggleEdit()"
         >
         </app-custom-button>
