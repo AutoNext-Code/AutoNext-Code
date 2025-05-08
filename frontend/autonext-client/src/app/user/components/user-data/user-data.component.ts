@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../services/profile.service';
 import { PasswordChangerComponent } from "../password-changer/password-changer.component";
 import { EditProfileComponent } from "../edit-profile/edit-profile.component";
+import { UnderscoreToSpacePipe } from '../../../pipes/underscore-to-space.pipe';
 
 @Component({
   selector: 'profile-user-data',
-  imports: [CommonModule, PasswordChangerComponent, EditProfileComponent],
+  imports: [CommonModule, PasswordChangerComponent, EditProfileComponent, UnderscoreToSpacePipe],
   templateUrl: './user-data.component.html',
   styleUrls: ['./user-data.component.css']
 })
@@ -19,7 +20,7 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
   private ngZone: NgZone = inject(NgZone);
   private appComponent: AppComponent = inject(AppComponent);
   private profileService: ProfileService = inject(ProfileService);
-  
+
 
   user: UserDto | null = null;
 
@@ -45,13 +46,13 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
       },
     });
   }
-  
+
   public passwordModal(): void {
 
     this.passwdModal = false ;
 
   }
-  
+
   public editModal(): void {
 
     this.edModal = false ;
@@ -69,7 +70,7 @@ export class UserDataComponent implements OnInit, AfterViewInit, OnDestroy {
     this.passwdModal = true ;
     this.edModal = true ;
   }
-    
+
 
   ngAfterViewInit() {
     this.checkScreenSize();
