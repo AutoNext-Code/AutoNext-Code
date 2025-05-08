@@ -34,7 +34,6 @@ import { CustomButtonComponent } from '@shared/components/ui/custom-button/custo
 
 import { AppComponent } from '../../app.component';
 
-import { SelectPlugTypeComponent } from '../components/select-plug-type/select-plug-type.component';
 import { BookingListComponent } from '../components/booking-list/booking-list.component';
 
 import { Observable } from 'rxjs';
@@ -340,12 +339,12 @@ export class MapsComponent implements OnInit {
     this.adminService.updateSpaceState(id).subscribe({
       next: (response) => {
         this.appComponent.showToast('success', response, '');
-  
+
         if (this.adminView) {
           const space = this.getSpaceById(id);
           if (space) {
             space.state = space.state === State.Blocked ? State.Available : State.Blocked;
-  
+
             // 🔁 Actualiza propiedades visuales para el botón
             const isNowBlocked = space.state === State.Blocked;
             this.blockButtonColor = isNowBlocked ? 'green' : 'red';
@@ -361,7 +360,7 @@ export class MapsComponent implements OnInit {
       },
     });
   }
-  
+
 
   getSpaceById(id: number): Space | undefined {
     return this.spaces.find((space) => space.id === id);
