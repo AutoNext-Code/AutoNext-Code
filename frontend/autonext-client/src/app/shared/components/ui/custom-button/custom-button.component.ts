@@ -28,7 +28,7 @@ export class CustomButtonComponent {
   @Input() iconSize?: string = '24px';
   @Input() iconPosition: 'left' | 'right' = 'left';
 
-  @Input() class: string = '';
+  @Input() customClass: string = '';
 
   @Output() onClick = new EventEmitter<Event>();
 
@@ -44,7 +44,7 @@ export class CustomButtonComponent {
     const baseClasses =
       'px-4 py-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none text-white';
     const clickClass = !this.disabled ? 'cursor-pointer' : '';
-    return `${baseClasses} ${clickClass} ${this.class}`.trim();
+    return `${baseClasses} ${clickClass} ${this.customClass}`.trim();
   }
 
   get buttonStyle() {
