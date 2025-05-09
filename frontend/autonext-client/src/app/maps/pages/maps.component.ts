@@ -83,6 +83,7 @@ export class MapsComponent implements OnInit {
   carData!: SpaceData;
 
   editPlugType!: number;
+  editJobPosition!: number;
 
   public blockButtonColor: 'red' | 'green' = 'red';
   public blockButtonLabel: 'Bloquear' | 'Desbloquear' = 'Bloquear';
@@ -142,7 +143,6 @@ export class MapsComponent implements OnInit {
   chartLoad() {
     if (this.chart) {
       this.imageUrl = this.chart.imageUrl;
-
       this.spaces = this.chart.spaces.map((space: any) => ({
         ...space,
         direction:
@@ -153,6 +153,10 @@ export class MapsComponent implements OnInit {
           typeof space.state === 'string'
             ? State[space.state as keyof typeof State]
             : space.state,
+        jobPosition:
+          typeof space.jobPosition === 'string'
+            ? JobPosition[space.jobPosition as keyof typeof JobPosition]
+            : space.jobPosition ?? 0, 
       }));
 
       this.checkImageLoad();
@@ -227,8 +231,10 @@ export class MapsComponent implements OnInit {
   toggleAdmin(space: Space): void {
     this.spaceEditedId = space.id;
     this.editPlugType = (PlugType as any)[space.plugType];
-    this.adminModal = true;
+    this.editJobPosition = space.jobPosition ?? 0;
     this.loadPastBookings(1);
+
+    this.adminModal = true;
   }
 
   toggleEdit(): void {
@@ -310,6 +316,11 @@ export class MapsComponent implements OnInit {
     }
   }
 
+  getAdminTooltip(space: Space): string {
+    return `ID: ${space.id}`;
+  }
+  
+
   private reloadAdminMap(): void {
     this.mapService.formAdminMapById(this.chart.id).subscribe({
       next: (newChart) => {
@@ -331,14 +342,13 @@ export class MapsComponent implements OnInit {
           this.mapService.formAdminMapById(this.chart.id).subscribe({
             next: (newChart) => {
               this.reloadAdminMap();
-            },
-            error: (error) => {
-              console.error('Error recargando mapa admin tras editar:', error);
+              this.closeAdmin();
             },
           });
         },
         error: (error: HttpErrorResponse) => {
           this.appComponent.showToast('error', error.message, '');
+          this.closeAdmin();
         },
       });
   }
@@ -360,7 +370,7 @@ export class MapsComponent implements OnInit {
 
         if (this.adminView) {
           this.reloadAdminMap();
-          this.loadPastBookings(1); 
+          this.loadPastBookings(1);
         }
       },
       error: (error: HttpErrorResponse) => {
