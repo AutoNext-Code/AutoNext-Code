@@ -95,4 +95,25 @@ export class BookingListComponent {
       this.selectedBookingId = null;
     }
   }
+
+  get isMobile(): boolean {
+    return window.innerWidth < 1024;
+  }
+  
+  get mobilePageSize(): number {
+    return 2;
+  }
+  
+  get mobilePaginatedContent(): BookingList['content'] {
+    const start = (this.currentPage - 1) * this.mobilePageSize;
+    return this.bookingList?.content.slice(start, start + this.mobilePageSize) || [];
+  }
+  
+  get mobileTotalPages(): number {
+    return Math.ceil((this.bookingList?.content.length || 0) / this.mobilePageSize);
+  }
+  
+  warningCancel(): void {
+    this.appComponent.showToast('warn', 'No implementado', 'Esta función no ha sido implementada');
+  }
 }

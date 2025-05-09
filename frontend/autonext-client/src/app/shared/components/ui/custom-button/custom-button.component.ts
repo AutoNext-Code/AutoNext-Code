@@ -16,12 +16,19 @@ export class CustomButtonComponent {
   @Input() label: string = 'Click';
   @Input() type: string = 'button';
   @Input() disabled?: boolean = false;
-  @Input() color: 'dark-blue' | 'light-blue' | 'gray' | 'red' | 'green' | 'light-gray' =
-    'dark-blue';
+  @Input() color:
+    | 'dark-blue'
+    | 'light-blue'
+    | 'gray'
+    | 'red'
+    | 'green'
+    | 'light-gray' = 'dark-blue';
   @Input() extraClasses?: string = '';
   @Input() icon?: string = '';
   @Input() iconSize?: string = '24px';
   @Input() iconPosition: 'left' | 'right' = 'left';
+
+  @Input() class: string = '';
 
   @Output() onClick = new EventEmitter<Event>();
 
@@ -30,14 +37,14 @@ export class CustomButtonComponent {
   }
 
   handleClick(event: Event) {
-      this.onClick.emit(event);
+    this.onClick.emit(event);
   }
 
   get buttonClasses() {
     const baseClasses =
       'px-4 py-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none text-white';
-      const clickClass = !this.disabled ? 'cursor-pointer' : '';
-    return `${baseClasses} ${this.extraClasses} ${clickClass}`;
+    const clickClass = !this.disabled ? 'cursor-pointer' : '';
+    return `${baseClasses} ${clickClass} ${this.class}`.trim();
   }
 
   get buttonStyle() {
