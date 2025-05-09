@@ -84,7 +84,7 @@
           Guardar
           <span class="material-icons">save</span>
         </button>
-        @if (user.id != SUPER_ADMIN_ID) {
+        @if (user.id != SUPER_ADMIN_ID && user.id != idUser) {
         <button
           (click)="showTemporalToast()"
           class="bg-red-500 text-white text-sm p-2 rounded-lg flex items-center justify-between gap-2 min-w-[110px] cursor-pointer"
