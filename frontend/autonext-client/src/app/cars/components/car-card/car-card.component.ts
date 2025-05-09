@@ -29,4 +29,10 @@ export class CarCardComponent {
       this.delete.emit(this.car.id);
     }
   }
+
+  getPlugLabel(value: string | undefined): string {
+    if (!value) return 'Sin especificar';
+    return value === 'Undefined' ? 'Sin especificar' : value;
+  }
+
 }

@@ -53,7 +53,7 @@ export class BookingListComponent {
     }
   }
 
-  // TODO CAMBIAR AL METODO DEL ADMIN CUANDO HAYA QUE IMPLEMENTARLO
+  // TODO: CAMBIAR AL METODO DEL ADMIN CUANDO HAYA QUE IMPLEMENTARLO
   cancelBooking(id: number) {
     this.bookingService.cancelBooking(id).subscribe({
       next: () => {

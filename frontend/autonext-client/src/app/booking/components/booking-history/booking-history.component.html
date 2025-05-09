@@ -145,6 +145,12 @@
   <!-- CARDS -->
   <div class="block lg:hidden space-y-4">
     <div
+      *ngIf="(bookings$ | async)?.length === 0"
+      class="block lg:hidden text-center py-6 text-gray-600"
+    >
+      No hay datos con estos filtros
+    </div>
+    <div
       *ngFor="let booking of bookings$ | async"
       class="border-card rounded-lg shadow-sm p-4"
     >
@@ -230,12 +236,22 @@
   <ng-template #cancelContent>
     <p>¿Estás seguro de que deseas cancelar esta reserva?</p>
   </ng-template>
-   
+
   <ng-template #cancelButtons>
-    <button class="bg-red-600 px-4 py-2 rounded text-white" (click)="handleModalConfirm()">Eliminar</button>
-    <button class="bg-gray-400 px-4 py-2 rounded text-black" (click)="handleModalCancel()">Cancelar</button>
+    <button
+      class="bg-red-600 px-4 py-2 rounded text-white"
+      (click)="handleModalConfirm()"
+    >
+      Eliminar
+    </button>
+    <button
+      class="bg-gray-400 px-4 py-2 rounded text-black"
+      (click)="handleModalCancel()"
+    >
+      Cancelar
+    </button>
   </ng-template>
-   
+
   <shared-custom-modal
     [title]="'Confirmar cancelación'"
     [visible]="modalVisible"

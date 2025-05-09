@@ -310,21 +310,38 @@ export class MapsComponent implements OnInit {
     }
   }
 
+  private reloadAdminMap(): void {
+    this.mapService.formAdminMapById(this.chart.id).subscribe({
+      next: (newChart) => {
+        this.chart = newChart;
+        this.reloadSpacesFromChart();
+      },
+      error: (error) => {
+        console.error('Error recargando mapa admin:', error);
+      },
+    });
+  }
+
   updateSpace(id: number, jobPosition: JobPosition): void {
-    console.log(this.editPlugType);
-  
     this.editingSpaceService
       .spaceEdit(id, PlugType[this.editPlugType], jobPosition)
       .subscribe({
         next: (response) => {
           this.appComponent.showToast('success', response, '');
+          this.mapService.formAdminMapById(this.chart.id).subscribe({
+            next: (newChart) => {
+              this.reloadAdminMap();
+            },
+            error: (error) => {
+              console.error('Error recargando mapa admin tras editar:', error);
+            },
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.appComponent.showToast('error', error.message, '');
         },
       });
   }
-  
 
   spaceNoType(plugType: PlugType): boolean {
     let number: number = 0;
@@ -342,18 +359,8 @@ export class MapsComponent implements OnInit {
         this.appComponent.showToast('success', response, '');
 
         if (this.adminView) {
-          const space = this.getSpaceById(id);
-          if (space) {
-            space.state = space.state === State.Blocked ? State.Available : State.Blocked;
-
-            // 🔁 Actualiza propiedades visuales para el botón
-            const isNowBlocked = space.state === State.Blocked;
-            this.blockButtonColor = isNowBlocked ? 'green' : 'red';
-            this.blockButtonLabel = isNowBlocked ? 'Desbloquear' : 'Bloquear';
-            this.blockButtonIcon = isNowBlocked ? 'unlock' : 'shield';
-          }
-        } else {
-          this.refreshMap();
+          this.reloadAdminMap();
+          this.loadPastBookings(1); 
         }
       },
       error: (error: HttpErrorResponse) => {
@@ -361,7 +368,6 @@ export class MapsComponent implements OnInit {
       },
     });
   }
-
 
   getSpaceById(id: number): Space | undefined {
     return this.spaces.find((space) => space.id === id);
@@ -390,6 +396,4 @@ export class MapsComponent implements OnInit {
   isMobile(): boolean {
     return window.innerWidth < 1024;
   }
-  
-
 }
