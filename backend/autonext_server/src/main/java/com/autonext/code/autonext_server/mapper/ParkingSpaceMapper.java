@@ -49,14 +49,17 @@ public class ParkingSpaceMapper {
     }
 
     return new ParkingLevelMapDTO.Space(
-        space.getId(),
-        space.getX(),
-        space.getY(),
-        space.getDirection().name(),
-        space.getPlugType().name(),
-        (space.isBlocked() ? ParkingState.Blocked.name() : status.name()),
-        bookingStartTime,
-        bookingEndTime);
+      space.getId(),
+      space.getX(),
+      space.getY(),
+      space.getDirection().name(),
+      space.getPlugType().name(),
+      (space.isBlocked() ? ParkingState.Blocked.name() : status.name()),
+      bookingStartTime,
+      bookingEndTime,
+      space.getJobPosition() != null ? space.getJobPosition().name() : null
+  );
+  
   }
 
   private static boolean overlaps(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
