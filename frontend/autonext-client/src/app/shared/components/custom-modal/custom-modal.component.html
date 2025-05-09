@@ -1,29 +1,30 @@
+<!-- Backdrop con scroll general -->
 <div
   *ngIf="visible"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+  class="fixed inset-0 z-50 bg-black/50 overflow-y-auto flex justify-center items-start p-4"
 >
+  <!-- Modal que crece con su contenido -->
   <div
-    class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle"
-    [ngClass]="widthClass"
+    class="bg-white rounded-lg shadow-xl transition-all w-full max-w-[90vw] sm:max-w-[800px] mt-20 mb-4"
     role="dialog"
     aria-modal="true"
   >
-    <!-- Cabecera -->
-    <div class="bg-mydarkblue px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-      <h1 class="text-white text-center text-3xl">
+    <!-- Header -->
+    <div class="bg-mydarkblue px-4 pt-4 pb-3 sm:px-6">
+      <h1 class="text-white text-center text-2xl sm:text-3xl break-words">
         {{ title }}
       </h1>
     </div>
 
-    <!-- Cuerpo -->
-    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 text-[17px] text-center items-center justify-center">
+    <!-- Cuerpo adaptable -->
+    <div class="px-4 py-4 sm:px-6 sm:py-6 text-[17px] text-center">
       <ng-container *ngIf="container">
         <ng-template [ngTemplateOutlet]="container"></ng-template>
       </ng-container>
     </div>
 
     <!-- Botones -->
-    <div class="bg-gray-200 px-4 py-3 flex justify-center space-x-40">
+    <div class="bg-gray-200 px-4 py-3 flex justify-center flex-wrap gap-4">
       <ng-container *ngIf="buttons">
         <ng-template [ngTemplateOutlet]="buttons"></ng-template>
       </ng-container>

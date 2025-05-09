@@ -24,3 +24,7 @@
 .color-lightgray {
   color: var(--light-gray);
 }
+
+.border-card {
+  border: 2px solid var(--dark-blue);
+}

@@ -24,4 +24,9 @@ export class CustomModalComponent {
   onCancel() {
     this.cancel.emit();
   }
+  
+  isMobileView(): boolean {
+    return window.innerWidth < 1024;
+  }
+  
 }

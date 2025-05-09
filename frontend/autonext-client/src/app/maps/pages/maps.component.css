@@ -34,3 +34,12 @@ h1 {
   display: block;
 }
 
+@media (max-width: 1023px) {
+  .modal-fixed-height {
+    max-height: calc(100vh - 64px) !important; 
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+}
+
