@@ -290,7 +290,7 @@ public class ParkingSpaceSeeder implements CommandLineRunner{
                 spaces.add(new ParkingSpace("MAL1-9", 365, 140, Direction.Down, PlugType.Schuko, malaga1, JobPosition.Product_Owner));
                 spaces.add(new ParkingSpace("MAL1-10", 400, 140, Direction.Down, PlugType.Type1, malaga1));
                 spaces.add(new ParkingSpace("MAL1-11", 437, 140, Direction.Down, PlugType.Type1, malaga1));
-                spaces.add(new ParkingSpace("MAL1-12", 474, 140, Direction.Down, PlugType.Type2, malaga1, JobPosition.Intern));
+                spaces.add(new ParkingSpace("MAL1-12", 474, 140, Direction.Down, PlugType.Type2, malaga1));
                 spaces.add(new ParkingSpace("MAL1-13", 510, 140, Direction.Down, PlugType.CCS, malaga1, JobPosition.Scrum_Master));
                 spaces.add(new ParkingSpace("MAL1-14", 545, 140, Direction.Down, PlugType.CCS, malaga1));
                 spaces.add(new ParkingSpace("MAL1-15", 583, 140, Direction.Down, PlugType.CHAdeMO, malaga1, true));
