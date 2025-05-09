@@ -1,22 +1,36 @@
-<div class="flex flex-col gap-20 p-20 md:justify-center">
+<div class="flex flex-col sm:gap-15 gap-10 px-4 py-10 sm:px-10 sm:py-12 lg:p-20 md:justify-center">
   <div class="flex flex-col md:flex-row items-center gap-10">
     <div>
       <img src="/assets/logo.png" alt="logo" class="object-contain" />
     </div>
     <div class="lg:w-1/2">
-      <div class="flex flex-col gap-3 text-left md:text-left lg:text-[20px] md:text-[16px] max-sm:text-[25px]">
+      <div
+        class="flex flex-col gap-3 text-left text-[16px] sm:text-[18px] lg:text-[20px]"
+      >
         <p class="text-4xl text-center md:text-left font-bold pb-1">
           {{ user?.name }} {{ user?.surname }}
         </p>
-        <p>Correo electrónico: {{ user?.email }}</p>
-        <p>Puesto: {{ user?.jobPosition | underscoreToSpace }}</p>
-        <p>Delegación: {{ user?.delegation }}</p>
-        <p *ngIf="user?.strikes">Strikes: {{ user?.strikes }}</p>
+        <p class="break-words text-center md:text-left">
+          <span class="font-semibold">Correo electrónico:</span>
+          {{ user?.email }}
+        </p>
+        <p>
+          <span class="font-semibold">Puesto:</span>
+          {{ user?.jobPosition | underscoreToSpace }}
+        </p>
+        <p>
+          <span class="font-semibold">Delegación:</span> {{ user?.delegation }}
+        </p>
+        <p *ngIf="user?.strikes">
+          <span class="font-semibold">Strikes:</span> {{ user?.strikes }}
+        </p>
       </div>
     </div>
   </div>
 
-  <div class="flex flex-col md:flex-row text-center items-center gap-7 w-full">
+  <div
+    class="grid gap-6 w-full px-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+  >
     <button
       class="h-14 md:h-10 max-sm:w-full md:min-w-[168px] rounded-lg bg-[#0067B8] text-white flex items-center justify-center gap-2 px-6 cursor-pointer"
       (click)="editModal()"
@@ -59,13 +73,12 @@
   </div>
 </div>
 
-<div
-  class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30"
->
+<div class="fixed z-10 overflow-y-auto top-0 w-full left-0 max-sm:my-30">
   <password-changer
     [hidden]="passwdModal"
     (warningEmitter)="cancelChanges()"
-    (modalEmitter)="closeModal()">
+    (modalEmitter)="closeModal()"
+  >
   </password-changer>
 
   <edit-profile
@@ -73,6 +86,7 @@
     [originalName]="user?.name || ''"
     [originalSurname]="user?.surname || ''"
     [originalEmail]="user?.email || ''"
-    (warningEmitter)="cancelChanges()">
+    (warningEmitter)="cancelChanges()"
+  >
   </edit-profile>
 </div>

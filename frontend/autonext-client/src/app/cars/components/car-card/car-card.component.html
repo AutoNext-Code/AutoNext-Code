@@ -1,11 +1,11 @@
-<div class="md:w-[400px] w-[350px] rounded-lg shadow-md overflow-hidden border-card md:m-20">
+<div class="md:w-[400px] w-[350px] rounded-lg shadow-md overflow-hidden border-card">
   <div class="bg-mylightblue p-3">
     <h2 class="text-center text-black font-semibold text-lg">Nombre: {{car?.name}}</h2>
   </div>
 
   <div class="p-4 space-y-2">
     <p class="text-black">Matrícula: {{car?.carPlate}}</p>
-    <p class="text-black">Enchufe: {{car?.plugType}}</p>
+    <p class="text-black">Enchufe: {{ getPlugLabel(car?.plugType) }}</p>
 
     <div class="flex justify-between pt-4">
       <button class="flex items-center space-x-1 bg-mydarkblue text-white px-4 py-2 rounded-md" (click)="openModalEdit()" style="cursor: pointer;">
