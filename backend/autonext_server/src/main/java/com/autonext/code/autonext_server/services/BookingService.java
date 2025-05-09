@@ -20,7 +20,6 @@ import com.autonext.code.autonext_server.exceptions.AuthorizationException;
 import com.autonext.code.autonext_server.exceptions.BookingNotFoundException;
 import com.autonext.code.autonext_server.exceptions.CarNotExistsException;
 import com.autonext.code.autonext_server.exceptions.OverlappingBookingException;
-import com.autonext.code.autonext_server.exceptions.ParkingLimitOverpassException;
 import com.autonext.code.autonext_server.exceptions.ParkingSpaceNotExistsException;
 import com.autonext.code.autonext_server.exceptions.UserNotFoundException;
 import com.autonext.code.autonext_server.models.Booking;
@@ -64,13 +63,12 @@ public class BookingService {
   @Autowired
   private ConfigRepository configRepository;
 
-  public Page<Booking> getFilteredBookingsPaged(Pageable pageable, LocalDate date, Integer workCenterId, Integer carId) {
+  public Page<Booking> getFilteredBookingsPaged(Pageable pageable, LocalDate date, Integer workCenterId,
+      Integer carId) {
     int userId = getAuthenticatedUserId();
     Specification<Booking> spec = buildBookingFilter(userId, date, workCenterId, carId);
     return bookingRepository.findAll(spec, pageable);
   }
-
-
 
   private Specification<Booking> buildBookingFilter(
       int userId,
@@ -87,34 +85,38 @@ public class BookingService {
     return bookingRepository.findById(id).orElse(null);
   }
 
-
   public void createBooking(MapBookingDTO dto) throws Exception {
-
+    // sE USA EN EL CONTROLADOR
     int userId = getAuthenticatedUserId();
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-    int reservasHoy = bookingRepository.countByUserAndDate(user, dto.getDate());
-    
+        int bookingsToday = bookingRepository.countByUserAndDateExcludingStatus(user, dto.getDate(), BookingStatus.Cancelled);
+
     boolean solapa = bookingRepository.existsOverlappingBooking(
-      user,
-      dto.getDate(),
-      dto.getStartTime(),  
-      dto.getEndTime()   
-  );
-  
+        user,
+        dto.getDate(),
+        dto.getStartTime(),
+        dto.getEndTime(),
+        BookingStatus.Cancelled);
+
     if (solapa) {
       throw new OverlappingBookingException(
           "Ya existe una reserva que cruza con el horario solicitado: "
-          + dto.getStartTime() + " – " + dto.getEndTime()
-      );
+              + dto.getStartTime() + " – " + dto.getEndTime());
     }
 
-    final int LIMITE_DIARIO = 2;
-    if (reservasHoy >= LIMITE_DIARIO) {
-        throw new ParkingLimitOverpassException(
-            "Ha superado el límite de " + LIMITE_DIARIO + " reservas para el día " + dto.getDate()
-        );
+    Config config = configRepository.findById(1)
+        .orElseThrow(() -> new IllegalStateException("No se ha encontrado la configuración del sistema"));
+
+    if (config == null) {
+      throw new IllegalStateException("No se ha encontrado la configuración del sistema");
+    }
+
+    int daily_limit = config.getDailyLimit();
+
+    if (bookingsToday >= daily_limit) {
+      throw new IllegalStateException("Se sobrepaso el limite de reservas diarias.");
     }
 
     Car car = carRepository.findById(dto.getCarId())
@@ -124,7 +126,8 @@ public class BookingService {
     bookingValidators.validate(dto, space);
     WorkCenter wc = space.getParkingLevel().getWorkCenter();
 
-    if((!space.getJobPosition().equals(JobPosition.Undefined))&&(!space.getJobPosition().equals(user.getJobPosition()))){
+    if ((!space.getJobPosition().equals(JobPosition.Undefined))
+        && (!space.getJobPosition().equals(user.getJobPosition()))) {
       throw new AuthorizationException("El ususuario no tiene permiso a reservar esta plaza");
     }
 
@@ -133,8 +136,7 @@ public class BookingService {
         dto.getEndTime(),
         dto.getDate(),
         user,
-        car
-    );
+        car);
     booking.setParkingSpace(space);
     booking.setWorkCenter(wc);
     bookingRepository.save(booking);
@@ -215,10 +217,11 @@ public class BookingService {
 
   public String checkIfUserCanBook(LocalDate date, LocalTime startHour, LocalTime endHour) {
 
-    Config config = configRepository.findById(1).orElseThrow( () -> new IllegalStateException("No se ha encontrado la configuración del sistema"));
+    Config config = configRepository.findById(1)
+        .orElseThrow(() -> new IllegalStateException("No se ha encontrado la configuración del sistema"));
 
     if (config == null) {
-        throw new IllegalStateException("No se ha encontrado la configuración del sistema");
+      throw new IllegalStateException("No se ha encontrado la configuración del sistema");
     }
 
     int daily_limit = config.getDailyLimit();
@@ -227,70 +230,66 @@ public class BookingService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-    int bookingsToday = bookingRepository.countByUserAndDate(user, date);
+    int bookingsToday = bookingRepository.countByUserAndDateExcludingStatus(user, date, BookingStatus.Cancelled);
 
     if (bookingsToday >= daily_limit) {
-        Locale spanish = new Locale("es", "ES");
+      Locale spanish = new Locale("es", "ES");
 
-        DateTimeFormatter formatter = DateTimeFormatter
-            .ofPattern("d 'de' MMMM 'de' uuuu", spanish);
-        String formattedDate = date.format(formatter);
+      DateTimeFormatter formatter = DateTimeFormatter
+          .ofPattern("d 'de' MMMM 'de' uuuu", spanish);
+      String formattedDate = date.format(formatter);
 
-        return "Ha superado el límite de " + daily_limit + " reservas para el día " + formattedDate;
+      return "Ha superado el límite de " + daily_limit + " reservas para el día " + formattedDate;
     }
 
     boolean isOverlapping = bookingRepository.existsOverlappingBooking(
         user,
         date,
         startHour,
-        endHour
-    );
+        endHour,
+        BookingStatus.Cancelled);
 
     if (isOverlapping) {
-        return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour;
+      return "Ya existe una reserva que cruza con el horario solicitado: " + startHour + " – " + endHour;
     }
 
     return "";
-}
-
+  }
 
   public Page<Booking> listToPage(List<Booking> list, Pageable pageable) {
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), list.size());
-        List<Booking> sublist = list.subList(start, end);
+    int start = (int) pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), list.size());
+    List<Booking> sublist = list.subList(start, end);
 
-        return new PageImpl<>(sublist, pageable, list.size());
-  
+    return new PageImpl<>(sublist, pageable, list.size());
+
   }
 
   public Page<Booking> getBookingPageUser(Pageable pageable, int userId) {
 
     User user = userRepository.findById(userId)
-    .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
 
-        
-    List<Booking> list= bookingRepository.findByUser(user);
+    List<Booking> list = bookingRepository.findByUser(user);
 
     return listToPage(list, pageable);
-}
+  }
 
 }
 
-  
-  /*
-   * GUARDADO PARA EL ADMIN
-   * public void updateBookingState(int id, int userId, BookingStatus
-   * bookingStatus) throws Exception {
-   * Booking booking = bookingRepository.findById(id)
-   * .orElseThrow(() -> new BookingNotFoundException("Reserva no encontrada"));
-   * 
-   * if (booking.getUser().getId() != userId) {
-   * throw new UserNotFoundException("Usuario no encontrado");
-   * }
-   * 
-   * booking.setStatus(bookingStatus);
-   * bookingRepository.save(booking);
-   * 
-   * }
-   */
-
+/*
+ * GUARDADO PARA EL ADMIN
+ * public void updateBookingState(int id, int userId, BookingStatus
+ * bookingStatus) throws Exception {
+ * Booking booking = bookingRepository.findById(id)
+ * .orElseThrow(() -> new BookingNotFoundException("Reserva no encontrada"));
+ * 
+ * if (booking.getUser().getId() != userId) {
+ * throw new UserNotFoundException("Usuario no encontrado");
+ * }
+ * 
+ * booking.setStatus(bookingStatus);
+ * bookingRepository.save(booking);
+ * 
+ * }
+ */
